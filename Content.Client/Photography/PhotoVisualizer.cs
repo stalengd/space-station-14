@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.Photography;
 using Robust.Client.GameObjects;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
 namespace Content.Client.Photography;
@@ -170,10 +171,8 @@ public sealed class PhotoVisualizer : EntitySystem
             if (entityDesc.Appearance is not null)
             {
                 var appearanceComp = EnsureComp<AppearanceComponent>(entity);
-                foreach (var appearanceData in entityDesc.Appearance.Data)
-                {
-                    _appearance.SetData(entity, appearanceData.Key, appearanceData.Value, appearanceComp);
-                }
+                var ev = new ComponentHandleState(entityDesc.Appearance, null);
+                EntityManager.EventBus.RaiseComponentEvent(appearanceComp, ref ev);
             }
         }
 

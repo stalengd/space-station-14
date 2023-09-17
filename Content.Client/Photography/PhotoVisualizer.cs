@@ -172,6 +172,9 @@ public sealed class PhotoVisualizer : EntitySystem
 
             _transform.SetWorldRotation(xform, entityDesc.PosRot.Item2);
 
+            if (TryComp<RotationVisualsComponent>(entity, out var rotationVisualsComp))
+                rotationVisualsComp.AnimationTime = 0;
+
             // Handle appearance state
             if (entityDesc.Appearance is not null)
             {

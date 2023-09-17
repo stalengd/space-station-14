@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Client.Rotation;
+using Content.Shared.Humanoid;
 using Content.Shared.Photography;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameStates;
@@ -13,7 +15,6 @@ public sealed class PhotoVisualizer : EntitySystem
 
     private EyeSystem _eye = default!;
     private SharedTransformSystem _transform = default!;
-    private AppearanceSystem _appearance = default!;
     private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
 
     private Dictionary<string, PhotoVisualisation> _currentlyVisualized = new();
@@ -27,7 +28,6 @@ public sealed class PhotoVisualizer : EntitySystem
 
         _eye = EntityManager.System<EyeSystem>();
         _transform = EntityManager.System<SharedTransformSystem>();
-        _appearance = EntityManager.System<AppearanceSystem>();
 
         SubscribeNetworkEvent<PhotoDataRequestResponse>(OnPhotoDataReceived);
     }
@@ -124,11 +124,12 @@ public sealed class PhotoVisualizer : EntitySystem
 
         var camera = Spawn(null, origin);
         eye = EnsureComp<EyeComponent>(camera);
-        _eye.SetDrawFov(camera, false, eye);
+        //_eye.SetDrawFov(camera, false, eye);
         _eye.SetZoom(camera, Vector2.One, eye);
         var cameraXform = EnsureComp<TransformComponent>(camera);
         _transform.SetWorldPosition(cameraXform, data.CameraPos);
 
+        // Add grids
         foreach (var gridDesc in data.Grids)
         {
             var grid = _mapMan.CreateGrid(mapId);
@@ -143,10 +144,12 @@ public sealed class PhotoVisualizer : EntitySystem
             }
         }
 
+        // Add entities
         foreach (var entityDesc in data.Entities)
         {
             var worldPos = entityDesc.PosRot.Item1;
 
+            // Make sure entities are parented to grids
             EntityUid parent;
             if (_mapMan.TryFindGridAt(mapId, entityDesc.PosRot.Item1, out var gridUid, out _))
             {
@@ -168,11 +171,37 @@ public sealed class PhotoVisualizer : EntitySystem
 
             _transform.SetWorldRotation(xform, entityDesc.PosRot.Item2);
 
+            // Handle appearance state
             if (entityDesc.Appearance is not null)
             {
                 var appearanceComp = EnsureComp<AppearanceComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Appearance, null);
                 EntityManager.EventBus.RaiseComponentEvent(appearanceComp, ref ev);
+            }
+
+            // TODO: deduplicate
+            // Handle humanoid appearance state
+            if (entityDesc.HumanoidAppearance is not null)
+            {
+                var humanoidAppearanceComp = EnsureComp<HumanoidAppearanceComponent>(entity);
+                var ev = new ComponentHandleState(entityDesc.HumanoidAppearance, null);
+                EntityManager.EventBus.RaiseComponentEvent(humanoidAppearanceComp, ref ev);
+            }
+
+            // Handle point light state
+            if (entityDesc.PointLight is not null)
+            {
+                var pointLightComp = EnsureComp<PointLightComponent>(entity);
+                var ev = new ComponentHandleState(entityDesc.PointLight, null);
+                EntityManager.EventBus.RaiseComponentEvent(pointLightComp, ref ev);
+            }
+
+            // Handle occluder state
+            if (entityDesc.Occluder is not null)
+            {
+                var occluderComp = EnsureComp<OccluderComponent>(entity);
+                var ev = new ComponentHandleState(entityDesc.Occluder, null);
+                EntityManager.EventBus.RaiseComponentEvent(occluderComp, ref ev);
             }
         }
 

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -24,14 +25,26 @@ public enum PhotoUiKey
 public sealed class PhotoEntityData
 {
     public string PrototypeId { get; }
-    public AppearanceComponentState? Appearance { get; }
     public (Vector2, Angle) PosRot { get; }
+    public AppearanceComponentState? Appearance { get; }
+    public HumanoidAppearanceState? HumanoidAppearance { get; }
+    public PointLightComponentState? PointLight { get; }
+    public OccluderComponent.OccluderComponentState? Occluder { get; }
 
-    public PhotoEntityData(string prototypeId, (Vector2, Angle) posrot, AppearanceComponentState? appearance = null)
+    public PhotoEntityData(
+        string prototypeId,
+        (Vector2, Angle) posrot,
+        AppearanceComponentState? appearance = null,
+        HumanoidAppearanceState? humanoidAppearance = null,
+        PointLightComponentState? pointLight = null,
+        OccluderComponent.OccluderComponentState? occluder = null)
     {
         PrototypeId = prototypeId;
         Appearance = appearance;
         PosRot = posrot;
+        HumanoidAppearance = humanoidAppearance;
+        PointLight = pointLight;
+        Occluder = occluder;
     }
 }
 

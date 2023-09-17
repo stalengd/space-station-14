@@ -1,5 +1,7 @@
 using System.Numerics;
+using Content.Shared.Humanoid;
 using Content.Shared.Photography;
+using Robust.Server.GameObjects;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -16,7 +18,6 @@ public sealed class PhotoManager : EntitySystem
     [Dependency] private readonly IMapManager _mapManager = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
-    private EntityQueryEnumerator<MapGridComponent, TransformComponent> _gridQueryEnumerator = default!;
     private Dictionary<string, PhotoData> _photos = new();
     private float _pvsRange = 10;
     private ISawmill _sawmill = Logger.GetSawmill("photo-manager");
@@ -32,7 +33,6 @@ public sealed class PhotoManager : EntitySystem
         _transform = EntityManager.System<SharedTransformSystem>();
         _entityLookup = EntityManager.System<EntityLookupSystem>();
         _gridQuery = EntityManager.GetEntityQuery<MapGridComponent>();
-        _gridQueryEnumerator = EntityManager.EntityQueryEnumerator<MapGridComponent, TransformComponent>();
 
         SubscribeNetworkEvent<PhotoDataRequest>(OnPhotoDataRequest);
     }
@@ -88,6 +88,8 @@ public sealed class PhotoManager : EntitySystem
 
             var posrot = _transform.GetWorldPositionRotation(entXform);
 
+            // TODO: deduplicate
+            // Appearance state
             AppearanceComponentState? appearanceState = null;
             if (TryComp<AppearanceComponent>(entity, out var appearance))
             {
@@ -98,7 +100,46 @@ public sealed class PhotoManager : EntitySystem
                 }
             }
 
-            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState);
+            // Humanoid appearance state
+            HumanoidAppearanceState? humanoidAppearanceState = null;
+            if (TryComp<HumanoidAppearanceComponent>(entity, out var humanoidAppearance))
+            {
+                var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, humanoidAppearance, null, GameTick.Zero);
+                if (maybe_state is HumanoidAppearanceState state)
+                {
+                    humanoidAppearanceState = state;
+                }
+            }
+
+            // Point light state
+            PointLightComponentState? pointLightState = null;
+            if (TryComp<PointLightComponent>(entity, out var pointLight))
+            {
+                // not networked, have to do it like this otherwise crashes in debug
+                pointLightState = new PointLightComponentState()
+                {
+                    Color = pointLight.Color,
+                    Energy = pointLight.Energy,
+                    Softness = pointLight.Softness,
+                    CastShadows = pointLight.CastShadows,
+                    Enabled = pointLight.Enabled,
+                    Radius = pointLight.Radius,
+                    Offset = pointLight.Offset
+                };
+            }
+
+            // Occluder state
+            OccluderComponent.OccluderComponentState? occluderState = null;
+            if (TryComp<OccluderComponent>(entity, out var occluder))
+            {
+                var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, occluder, null, GameTick.Zero);
+                if (maybe_state is OccluderComponent.OccluderComponentState state)
+                {
+                    occluderState = state;
+                }
+            }
+
+            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState, humanoidAppearanceState, pointLightState, occluderState);
             data.Entities.Add(ent_data);
 
             ent_count++;

@@ -1,6 +1,5 @@
 using Content.Client.Photography.UI;
 using Content.Shared.Photography;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Content.Client.Photography;
 

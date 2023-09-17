@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -20,15 +21,32 @@ public enum PhotoUiKey
 }
 
 [Serializable, NetSerializable]
-public sealed class EntityData
+public sealed class PhotoEntityData
 {
     public string PrototypeId { get; }
     public AppearanceComponentState? Appearance { get; }
+    public (Vector2, Angle) PosRot { get; }
 
-    public EntityData(string prototypeId, AppearanceComponentState? appearance = null)
+    public PhotoEntityData(string prototypeId, (Vector2, Angle) posrot, AppearanceComponentState? appearance = null)
     {
         PrototypeId = prototypeId;
         Appearance = appearance;
+        PosRot = posrot;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class PhotoGridData
+{
+    public List<(Vector2i, int)> Tiles;
+    public Vector2 Position;
+    public Angle Rotation;
+
+    public PhotoGridData(Vector2 pos, Angle rot)
+    {
+        Position = pos;
+        Rotation = rot;
+        Tiles = new();
     }
 }
 
@@ -37,17 +55,40 @@ public sealed class PhotoData
 {
     public string Id { get; }
     public Vector2i PhotoSize { get; }
-    public HashSet<EntityData> Entities { get; }
+    public HashSet<PhotoEntityData> Entities { get; }
+    public HashSet<PhotoGridData> Grids { get; }
+    public Vector2 CameraPos { get; }
 
-    public PhotoData(string id, Vector2i photoSize)
+    public PhotoData(string id, Vector2i photoSize, Vector2 cameraPos)
     {
         Id = id;
         PhotoSize = photoSize;
+        CameraPos = cameraPos;
         Entities = new();
+        Grids = new();
     }
+}
 
-    public void AddEntity(EntityData entityData)
+[Serializable, NetSerializable]
+public sealed class PhotoDataRequest : EntityEventArgs
+{
+    public string Id { get; }
+
+    public PhotoDataRequest(string id)
     {
-        Entities.Add(entityData);
+        Id = id;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class PhotoDataRequestResponse : EntityEventArgs
+{
+    public readonly PhotoData? Data;
+    public readonly string Id;
+
+    public PhotoDataRequestResponse(PhotoData? data, string id)
+    {
+        Data = data;
+        Id = id;
     }
 }

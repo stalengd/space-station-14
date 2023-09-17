@@ -39,7 +39,7 @@ public sealed class PhotoCameraSystem : EntitySystem
         var photoComp = EnsureComp<PhotoComponent>(photoEntity.Value);
 
         // capture
-        var id = _photoManager.TryCapture(xform.MapPosition, component.SelectedPhotoDimensions);
+        var id = _photoManager.TryCapture(xform, component.SelectedPhotoDimensions);
         if (id != null)
         {
             photoComp.PhotoID = id;

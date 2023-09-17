@@ -19,7 +19,7 @@ public sealed partial class PhotoCameraComponent : Component
     /// Dimensions of a photo, in tiles. X is Width, Y is Height.
     /// </summary>
     [DataField]
-    public Vector2i SelectedPhotoDimension = new(5, 5);
+    public Vector2i SelectedPhotoDimensions = new(5, 5);
 
     /// <summary>
     /// Available dimensions of a photo, can be switched via context menu of a camera.

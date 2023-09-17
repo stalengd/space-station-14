@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.Damage;
 using Content.Shared.Humanoid;
 using Content.Shared.Photography;
 using Robust.Server.GameObjects;
@@ -139,7 +140,18 @@ public sealed class PhotoManager : EntitySystem
                 }
             }
 
-            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState, humanoidAppearanceState, pointLightState, occluderState);
+            // Damageable state
+            DamageableComponentState? damageableState = null;
+            if (TryComp<DamageableComponent>(entity, out var damageable))
+            {
+                var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, damageable, null, GameTick.Zero);
+                if (maybe_state is DamageableComponentState state)
+                {
+                    damageableState = state;
+                }
+            }
+
+            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState, humanoidAppearanceState, pointLightState, occluderState, damageableState);
             data.Entities.Add(ent_data);
 
             ent_count++;

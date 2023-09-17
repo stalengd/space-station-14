@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Client.Rotation;
+using Content.Shared.Damage;
 using Content.Shared.Humanoid;
 using Content.Shared.Photography;
 using Robust.Client.GameObjects;
@@ -202,6 +203,14 @@ public sealed class PhotoVisualizer : EntitySystem
                 var occluderComp = EnsureComp<OccluderComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Occluder, null);
                 EntityManager.EventBus.RaiseComponentEvent(occluderComp, ref ev);
+            }
+
+            // Handle damageable state
+            if (entityDesc.Damageable is not null)
+            {
+                var damageableComp = EnsureComp<DamageableComponent>(entity);
+                var ev = new ComponentHandleState(entityDesc.Damageable, null);
+                EntityManager.EventBus.RaiseComponentEvent(damageableComp, ref ev);
             }
         }
 

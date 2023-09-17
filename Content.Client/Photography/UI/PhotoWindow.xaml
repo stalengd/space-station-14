@@ -10,13 +10,16 @@
         <PanelContainer StyleClasses="AngleRect" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="6">
             <TextureButton Name="CloseButton" StyleClasses="windowCloseButton"/>
         </PanelContainer>
-        <Control VerticalExpand="True" HorizontalExpand="True" Margin="5 5 5 5" Name="CameraViewBox">
-            <viewport:ScalingViewport Name="CameraView"
-                                      VerticalExpand="True"
-                                      HorizontalExpand="True"
-                                      MinSize="500 500"
-                                      MouseFilter="Ignore" />
-            <!-- <TextureRect VerticalExpand="True" HorizontalExpand="True" MinSize="500 500" Name="CameraViewBackground" /> -->
-        </Control>
+
+        <PanelContainer Name="PhotoBackground" StyleClasses="PaperDefaultBorder" VerticalExpand="True" HorizontalExpand="True">
+            <Control VerticalExpand="True" HorizontalExpand="True" Margin="5 5 5 5" Name="PhotoViewBox">
+                <viewport:ScalingViewport Name="PhotoView"
+                                        VerticalExpand="True"
+                                        HorizontalExpand="True"
+                                        MinSize="500 500"
+                                        MouseFilter="Ignore" />
+                <TextureRect VerticalExpand="True" HorizontalExpand="True" MinSize="500 500" Name="CameraViewBackground" />
+            </Control>
+        </PanelContainer>
     </BoxContainer>
 </ui:PhotoWindow>

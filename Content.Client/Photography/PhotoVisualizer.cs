@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Client.Decals;
 using Content.Client.Hands.Systems;
 using Content.Client.Rotation;
 using Content.Shared.Damage;
@@ -20,6 +21,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
     private SharedTransformSystem _transform = default!;
     private InventorySystem _inventory = default!;
     private HandsSystem _hands = default!;
+    private DecalSystem _decal = default!;
     private EyeSystem _eye = default!;
     private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
 
@@ -32,6 +34,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
 
         _eye = _sysMan.GetEntitySystem<EyeSystem>();
         _hands = _sysMan.GetEntitySystem<HandsSystem>();
+        _decal = _sysMan.GetEntitySystem<DecalSystem>();
         _inventory = _sysMan.GetEntitySystem<InventorySystem>();
         _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
 
@@ -83,6 +86,11 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var tile = new Tile(tileType);
                 grid.SetTile(indices, tile);
+            }
+
+            foreach (var decal in gridDesc.Decals)
+            {
+                //Todo: fuck i can't add decals clientside
             }
         }
 

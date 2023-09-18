@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.Decals;
 using Content.Server.Hands.Systems;
 using Content.Shared.Damage;
 using Content.Shared.GameTicking;
@@ -17,13 +18,14 @@ namespace Content.Server.Photography;
 
 public sealed class PhotoManager : EntitySystem
 {
+    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IMapManager _map = default!;
-    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     private EntityLookupSystem _entityLookup = default!;
     private SharedTransformSystem _transform = default!;
     private InventorySystem _inventory = default!;
     private HandsSystem _hands = default!;
+    private DecalSystem _decal = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
@@ -44,6 +46,7 @@ public sealed class PhotoManager : EntitySystem
         _entityLookup = _sysMan.GetEntitySystem<EntityLookupSystem>();
         _inventory = _sysMan.GetEntitySystem<InventorySystem>();
         _hands = _sysMan.GetEntitySystem<HandsSystem>();
+        _decal = _sysMan.GetEntitySystem<DecalSystem>();
 
         _gridQuery = EntityManager.GetEntityQuery<MapGridComponent>();
 
@@ -244,6 +247,11 @@ public sealed class PhotoManager : EntitySystem
                 var indices = tile.GridIndices;
                 var tileType = tile.Tile.TypeId;
                 gridData.Tiles.Add((indices, tileType));
+            }
+
+            foreach (var decal in _decal.GetDecalsIntersecting(grid.Owner, worldArea))
+            {
+                gridData.Decals.Add(decal.Decal);
             }
 
             data.Grids.Add(gridData);

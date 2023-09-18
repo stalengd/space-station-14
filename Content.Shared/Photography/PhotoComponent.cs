@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.Damage;
+using Content.Shared.Decals;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
@@ -53,6 +54,7 @@ public sealed class PhotoEntityData
 public sealed class PhotoGridData
 {
     public List<(Vector2i, int)> Tiles;
+    public List<Decal> Decals;
     public Vector2 Position;
     public Angle Rotation;
 
@@ -61,6 +63,7 @@ public sealed class PhotoGridData
         Position = pos;
         Rotation = rot;
         Tiles = new();
+        Decals = new();
     }
 }
 
@@ -69,8 +72,8 @@ public sealed class PhotoData
 {
     public string Id { get; }
     public Vector2i PhotoSize { get; }
-    public HashSet<PhotoEntityData> Entities { get; }
-    public HashSet<PhotoGridData> Grids { get; }
+    public List<PhotoEntityData> Entities { get; }
+    public List<PhotoGridData> Grids { get; }
     public Vector2 CameraPosition { get; }
     public Angle CameraRotation { get; }
 

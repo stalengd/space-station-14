@@ -1,5 +1,7 @@
 using System.Numerics;
+using Content.Server.Hands.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Photography;
@@ -20,6 +22,7 @@ public sealed class PhotoManager : EntitySystem
     private EntityLookupSystem _entityLookup = default!;
     private SharedTransformSystem _transform = default!;
     private InventorySystem _inventory = default!;
+    private HandsSystem _hands = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
@@ -37,6 +40,8 @@ public sealed class PhotoManager : EntitySystem
         _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
         _entityLookup = _sysMan.GetEntitySystem<EntityLookupSystem>();
         _inventory = _sysMan.GetEntitySystem<InventorySystem>();
+        _hands = _sysMan.GetEntitySystem<HandsSystem>();
+
         _gridQuery = EntityManager.GetEntityQuery<MapGridComponent>();
 
         SubscribeNetworkEvent<PhotoDataRequest>(OnPhotoDataRequest);
@@ -155,25 +160,56 @@ public sealed class PhotoManager : EntitySystem
                 }
             }
 
-            // Inventory
-            Dictionary<string, string>? inventory = null;
-            if (TryComp(entity, out InventoryComponent? inventoryComp))
+            // Hands state
+            HandsComponentState? handsState = null;
+            if (TryComp<HandsComponent>(entity, out var handsComp))
             {
+                var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, handsComp, null, GameTick.Zero);
+                if (maybe_state is HandsComponentState state)
+                {
+                    handsState = state;
+                }
+            }
+
+            // Inventory & Hands
+            Dictionary<string, string>? inventory = null;
+            Dictionary<string, string>? hands = null;
+
+            var haveHands = handsComp != null;
+            if (haveHands)
+                hands = new();
+
+            var haveInventory = TryComp(entity, out InventoryComponent? inventoryComp);
+            if (haveInventory)
                 inventory = new();
+
+            if (haveHands || haveInventory)
+            {
                 foreach (var item in _inventory.GetHandOrInventoryEntities(entity))
                 {
                     var proto = MetaData(item).EntityPrototype?.ID;
                     if (proto is null)
                         continue;
 
-                    if (!_inventory.TryGetContainingSlot(item, out var slot))
-                        continue;
+                    if (haveInventory && _inventory.TryGetContainingSlot(item, out var slot))
+                    {
+                        inventory!.Add(slot.Name, proto);
+                    }
+                    else if (haveHands && _hands.IsHolding(entity, item, out var hand, handsComp))
+                    {
+                        foreach (var handEntry in handsComp!.Hands)
+                        {
+                            if (handEntry.Value != hand)
+                                continue;
 
-                    inventory.Add(slot.Name, proto);
+                            hands!.Add(handEntry.Key, proto);
+                            break;
+                        }
+                    }
                 }
             }
 
-            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState, humanoidAppearanceState, pointLightState, occluderState, damageableState, inventory);
+            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState, humanoidAppearanceState, pointLightState, occluderState, damageableState, handsState, inventory, hands);
             data.Entities.Add(ent_data);
 
             ent_count++;

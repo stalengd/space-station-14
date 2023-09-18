@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.Damage;
+using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
@@ -32,7 +33,9 @@ public sealed class PhotoEntityData
     public PointLightComponentState? PointLight { get; }
     public OccluderComponent.OccluderComponentState? Occluder { get; }
     public DamageableComponentState? Damageable { get; }
+    public HandsComponentState? Hands { get; }
     public Dictionary<string, string>? Inventory { get; }
+    public Dictionary<string, string>? HandsContents { get; }
 
     public PhotoEntityData(
         string prototypeId,
@@ -42,7 +45,9 @@ public sealed class PhotoEntityData
         PointLightComponentState? pointLight = null,
         OccluderComponent.OccluderComponentState? occluder = null,
         DamageableComponentState? damageable = null,
-        Dictionary<string, string>? inventory = null)
+        HandsComponentState? hands = null,
+        Dictionary<string, string>? inventory = null,
+        Dictionary<string, string>? handsContents = null)
     {
         PrototypeId = prototypeId;
         Appearance = appearance;
@@ -51,7 +56,9 @@ public sealed class PhotoEntityData
         PointLight = pointLight;
         Occluder = occluder;
         Damageable = damageable;
+        Hands = hands;
         Inventory = inventory;
+        HandsContents = handsContents;
     }
 }
 

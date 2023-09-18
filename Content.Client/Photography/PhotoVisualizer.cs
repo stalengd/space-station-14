@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Client.Hands.Systems;
 using Content.Client.Rotation;
 using Content.Shared.Damage;
+using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Photography;
@@ -17,6 +19,7 @@ public sealed class PhotoVisualizer : EntitySystem
     [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     private SharedTransformSystem _transform = default!;
     private InventorySystem _inventory = default!;
+    private HandsSystem _hands = default!;
     private EyeSystem _eye = default!;
     private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
 
@@ -30,8 +33,9 @@ public sealed class PhotoVisualizer : EntitySystem
         IoCManager.InjectDependencies(this);
 
         _eye = _sysMan.GetEntitySystem<EyeSystem>();
-        _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
+        _hands = _sysMan.GetEntitySystem<HandsSystem>();
         _inventory = _sysMan.GetEntitySystem<InventorySystem>();
+        _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
 
         SubscribeNetworkEvent<PhotoDataRequestResponse>(OnPhotoDataReceived);
     }
@@ -219,13 +223,39 @@ public sealed class PhotoVisualizer : EntitySystem
                 EntityManager.EventBus.RaiseComponentEvent(damageableComp, ref ev);
             }
 
+            // Handle hands state
+            if (entityDesc.Hands is not null)
+            {
+                var handsComp = EnsureComp<HandsComponent>(entity);
+                var ev = new ComponentHandleState(entityDesc.Hands, null);
+                EntityManager.EventBus.RaiseComponentEvent(handsComp, ref ev);
+            }
+
             // Handle inventory
             if (entityDesc.Inventory is not null)
             {
                 var inventoryComp = EnsureComp<InventoryComponent>(entity);
                 foreach (var slotEntry in entityDesc.Inventory)
                 {
+                    if (_inventory.TryUnequip(entity, slotEntry.Key, out var item, true, true, false, inventoryComp))
+                        QueueDel(item);
                     _inventory.SpawnItemInSlot(entity, slotEntry.Key, slotEntry.Value, true, true, inventoryComp);
+                }
+            }
+
+            // Handle hands
+            if (entityDesc.HandsContents is not null)
+            {
+                var handsComp = EnsureComp<HandsComponent>(entity);
+
+                foreach (var handEntry in entityDesc.HandsContents)
+                {
+                    if (!_hands.TryGetHand(entity, handEntry.Key, out var hand, handsComp))
+                        continue;
+
+                    var inhandEntity = EntityManager.SpawnEntity(handEntry.Value, coords);
+                    if (!_hands.TryPickup(entity, inhandEntity, hand, false, false, handsComp))
+                        QueueDel(inhandEntity);
                 }
             }
         }

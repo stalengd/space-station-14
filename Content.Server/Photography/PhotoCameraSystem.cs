@@ -8,8 +8,6 @@ public sealed class PhotoCameraSystem : EntitySystem
 {
     private PhotoManager _photoManager = default!;
 
-    private const string PHOTO_PROTO_ID = "Photo";
-
     public override void Initialize()
     {
         base.Initialize();
@@ -40,7 +38,7 @@ public sealed class PhotoCameraSystem : EntitySystem
         if (id is null)
             return false;
 
-        photoEntity = Spawn(PHOTO_PROTO_ID, xform.MapPosition);
+        photoEntity = Spawn(component.PhotoPrototypeId, xform.MapPosition);
         var photoComp = EnsureComp<PhotoComponent>(photoEntity.Value);
         photoComp.PhotoID = id;
         Dirty(photoEntity.Value, photoComp);

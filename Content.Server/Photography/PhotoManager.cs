@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Server.Hands.Systems;
 using Content.Shared.Damage;
+using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -26,8 +27,10 @@ public sealed class PhotoManager : EntitySystem
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
-    private float _pvsRange = 10;
     private ISawmill _sawmill = Logger.GetSawmill("photo-manager");
+
+    private float _pvsRange = 10;
+    public const float MAX_PHOTO_RADIUS = 20;
 
     public override void Initialize()
     {
@@ -45,6 +48,7 @@ public sealed class PhotoManager : EntitySystem
         _gridQuery = EntityManager.GetEntityQuery<MapGridComponent>();
 
         SubscribeNetworkEvent<PhotoDataRequest>(OnPhotoDataRequest);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
     public override void Shutdown()
@@ -52,6 +56,11 @@ public sealed class PhotoManager : EntitySystem
         base.Shutdown();
         _photos.Clear();
         _conf.UnsubValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged);
+    }
+
+    public void OnRoundRestart(RoundRestartCleanupEvent args)
+    {
+        _photos.Clear();
     }
 
     private void OnPvsRangeChanged(float value) => _pvsRange = value;
@@ -75,7 +84,7 @@ public sealed class PhotoManager : EntitySystem
         var cameraCoords = cameraXform.MapPosition;
         var cameraWorldPos = _transform.GetWorldPosition(cameraXform);
 
-        var radius = 10;
+        var radius = MathF.Min(_pvsRange, MAX_PHOTO_RADIUS); //cap because scary
         var range = new Vector2(radius, radius);
         var worldArea = new Box2(cameraWorldPos - range, cameraWorldPos + range);
 

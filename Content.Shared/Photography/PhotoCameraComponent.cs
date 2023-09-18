@@ -1,3 +1,5 @@
+using Robust.Shared.Prototypes;
+
 namespace Content.Shared.Photography;
 
 [RegisterComponent]
@@ -35,6 +37,9 @@ public sealed partial class PhotoCameraComponent : Component
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan PrintingTime = TimeSpan.FromSeconds(3);
+
+    [DataField]
+    public ProtoId<EntityPrototype> PhotoPrototypeId = "Photo";
 
     /// <summary>
     /// The time photo was taken at, is used to find out whether camera finished printing or not

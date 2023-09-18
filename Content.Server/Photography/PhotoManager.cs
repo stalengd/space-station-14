@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Humanoid;
+using Content.Shared.Inventory;
 using Content.Shared.Photography;
 using Robust.Server.GameObjects;
 using Robust.Shared;
@@ -14,9 +15,11 @@ namespace Content.Server.Photography;
 public sealed class PhotoManager : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _conf = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     private EntityLookupSystem _entityLookup = default!;
     private SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    private InventorySystem _inventory = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
@@ -31,8 +34,9 @@ public sealed class PhotoManager : EntitySystem
         _conf.OnValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged, true);
         _pvsRange = _conf.GetCVar(CVars.NetMaxUpdateRange);
 
-        _transform = EntityManager.System<SharedTransformSystem>();
-        _entityLookup = EntityManager.System<EntityLookupSystem>();
+        _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
+        _entityLookup = _sysMan.GetEntitySystem<EntityLookupSystem>();
+        _inventory = _sysMan.GetEntitySystem<InventorySystem>();
         _gridQuery = EntityManager.GetEntityQuery<MapGridComponent>();
 
         SubscribeNetworkEvent<PhotoDataRequest>(OnPhotoDataRequest);
@@ -151,7 +155,25 @@ public sealed class PhotoManager : EntitySystem
                 }
             }
 
-            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState, humanoidAppearanceState, pointLightState, occluderState, damageableState);
+            // Inventory
+            Dictionary<string, string>? inventory = null;
+            if (TryComp(entity, out InventoryComponent? inventoryComp))
+            {
+                inventory = new();
+                foreach (var item in _inventory.GetHandOrInventoryEntities(entity))
+                {
+                    var proto = MetaData(item).EntityPrototype?.ID;
+                    if (proto is null)
+                        continue;
+
+                    if (!_inventory.TryGetContainingSlot(item, out var slot))
+                        continue;
+
+                    inventory.Add(slot.Name, proto);
+                }
+            }
+
+            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState, humanoidAppearanceState, pointLightState, occluderState, damageableState, inventory);
             data.Entities.Add(ent_data);
 
             ent_count++;

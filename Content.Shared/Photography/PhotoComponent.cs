@@ -32,6 +32,7 @@ public sealed class PhotoEntityData
     public PointLightComponentState? PointLight { get; }
     public OccluderComponent.OccluderComponentState? Occluder { get; }
     public DamageableComponentState? Damageable { get; }
+    public Dictionary<string, string>? Inventory { get; }
 
     public PhotoEntityData(
         string prototypeId,
@@ -40,7 +41,8 @@ public sealed class PhotoEntityData
         HumanoidAppearanceState? humanoidAppearance = null,
         PointLightComponentState? pointLight = null,
         OccluderComponent.OccluderComponentState? occluder = null,
-        DamageableComponentState? damageable = null)
+        DamageableComponentState? damageable = null,
+        Dictionary<string, string>? inventory = null)
     {
         PrototypeId = prototypeId;
         Appearance = appearance;
@@ -49,6 +51,7 @@ public sealed class PhotoEntityData
         PointLight = pointLight;
         Occluder = occluder;
         Damageable = damageable;
+        Inventory = inventory;
     }
 }
 

@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Client.Rotation;
 using Content.Shared.Damage;
 using Content.Shared.Humanoid;
+using Content.Shared.Inventory;
 using Content.Shared.Photography;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameStates;
@@ -13,9 +14,10 @@ namespace Content.Client.Photography;
 public sealed class PhotoVisualizer : EntitySystem
 {
     [Dependency] private readonly IMapManager _mapMan = default!;
-
-    private EyeSystem _eye = default!;
+    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     private SharedTransformSystem _transform = default!;
+    private InventorySystem _inventory = default!;
+    private EyeSystem _eye = default!;
     private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
 
     private Dictionary<string, PhotoVisualisation> _currentlyVisualized = new();
@@ -27,8 +29,9 @@ public sealed class PhotoVisualizer : EntitySystem
         base.Initialize();
         IoCManager.InjectDependencies(this);
 
-        _eye = EntityManager.System<EyeSystem>();
-        _transform = EntityManager.System<SharedTransformSystem>();
+        _eye = _sysMan.GetEntitySystem<EyeSystem>();
+        _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
+        _inventory = _sysMan.GetEntitySystem<InventorySystem>();
 
         SubscribeNetworkEvent<PhotoDataRequestResponse>(OnPhotoDataReceived);
     }
@@ -214,6 +217,16 @@ public sealed class PhotoVisualizer : EntitySystem
                 var damageableComp = EnsureComp<DamageableComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Damageable, null);
                 EntityManager.EventBus.RaiseComponentEvent(damageableComp, ref ev);
+            }
+
+            // Handle inventory
+            if (entityDesc.Inventory is not null)
+            {
+                var inventoryComp = EnsureComp<InventoryComponent>(entity);
+                foreach (var slotEntry in entityDesc.Inventory)
+                {
+                    _inventory.SpawnItemInSlot(entity, slotEntry.Key, slotEntry.Value, true, true, inventoryComp);
+                }
             }
         }
 

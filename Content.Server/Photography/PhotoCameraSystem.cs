@@ -35,16 +35,15 @@ public sealed class PhotoCameraSystem : EntitySystem
         if (!TryComp<TransformComponent>(uid, out var xform))
             return false;
 
-        photoEntity = Spawn(PHOTO_PROTO_ID, xform.MapPosition);
-        var photoComp = EnsureComp<PhotoComponent>(photoEntity.Value);
-
         // capture
         var id = _photoManager.TryCapture(xform, component.SelectedPhotoDimensions);
-        if (id != null)
-        {
-            photoComp.PhotoID = id;
-            Dirty(photoEntity.Value, photoComp);
-        }
+        if (id is null)
+            return false;
+
+        photoEntity = Spawn(PHOTO_PROTO_ID, xform.MapPosition);
+        var photoComp = EnsureComp<PhotoComponent>(photoEntity.Value);
+        photoComp.PhotoID = id;
+        Dirty(photoEntity.Value, photoComp);
 
         return true;
     }

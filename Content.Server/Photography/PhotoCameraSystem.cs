@@ -1,17 +1,24 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Interaction;
 using Content.Shared.Photography;
+using Robust.Shared.Map;
 
 namespace Content.Server.Photography;
 
 public sealed class PhotoCameraSystem : EntitySystem
 {
-    private PhotoManager _photoManager = default!;
+    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
+    [Dependency] private readonly IMapManager _map = default!;
+    private PhotoManager _photo = default!;
+
+    private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _photoManager = EntityManager.System<PhotoManager>();
+        IoCManager.InjectDependencies(this);
+        _photo = _sysMan.GetEntitySystem<PhotoManager>();
+        _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
 
         SubscribeLocalEvent<PhotoCameraComponent, ActivateInWorldEvent>(OnActivate);
     }
@@ -24,7 +31,6 @@ public sealed class PhotoCameraSystem : EntitySystem
 
     private bool TryPhoto(EntityUid uid, PhotoCameraComponent component, [NotNullWhen(true)] out EntityUid? photoEntity)
     {
-        // gib me entity
         photoEntity = null;
 
         if (component.FilmLeft <= 0)
@@ -33,8 +39,13 @@ public sealed class PhotoCameraSystem : EntitySystem
         if (!TryComp<TransformComponent>(uid, out var xform))
             return false;
 
-        // capture
-        var id = _photoManager.TryCapture(xform, component.SelectedPhotoDimensions);
+        Angle cameraRotation;
+        if (_map.TryFindGridAt(xform.MapID, _transform.GetWorldPosition(xform), out var gridEntityToAllignWith, out _))
+            cameraRotation = _transform.GetWorldRotation(gridEntityToAllignWith);
+        else
+            cameraRotation = _transform.GetWorldRotation(xform);
+
+        var id = _photo.TryCapture(xform.MapPosition, cameraRotation, component.SelectedPhotoDimensions);
         if (id is null)
             return false;
 

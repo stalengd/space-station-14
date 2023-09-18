@@ -71,13 +71,15 @@ public sealed class PhotoData
     public Vector2i PhotoSize { get; }
     public HashSet<PhotoEntityData> Entities { get; }
     public HashSet<PhotoGridData> Grids { get; }
-    public Vector2 CameraPos { get; }
+    public Vector2 CameraPosition { get; }
+    public Angle CameraRotation { get; }
 
-    public PhotoData(string id, Vector2i photoSize, Vector2 cameraPos)
+    public PhotoData(string id, Vector2i photoSize, Vector2 cameraPos, Angle cameraRot)
     {
         Id = id;
         PhotoSize = photoSize;
-        CameraPos = cameraPos;
+        CameraPosition = cameraPos;
+        CameraRotation = cameraRot;
         Entities = new();
         Grids = new();
     }

@@ -17,8 +17,8 @@ namespace Content.Server.Photography;
 
 public sealed class PhotoManager : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _conf = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IMapManager _map = default!;
     [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     private EntityLookupSystem _entityLookup = default!;
     private SharedTransformSystem _transform = default!;
@@ -37,8 +37,8 @@ public sealed class PhotoManager : EntitySystem
         base.Initialize();
         IoCManager.InjectDependencies(this);
 
-        _conf.OnValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged, true);
-        _pvsRange = _conf.GetCVar(CVars.NetMaxUpdateRange);
+        _cfg.OnValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged, true);
+        _pvsRange = _cfg.GetCVar(CVars.NetMaxUpdateRange);
 
         _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
         _entityLookup = _sysMan.GetEntitySystem<EntityLookupSystem>();
@@ -55,7 +55,7 @@ public sealed class PhotoManager : EntitySystem
     {
         base.Shutdown();
         _photos.Clear();
-        _conf.UnsubValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged);
+        _cfg.UnsubValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged);
     }
 
     public void OnRoundRestart(RoundRestartCleanupEvent args)
@@ -78,20 +78,19 @@ public sealed class PhotoManager : EntitySystem
         RaiseNetworkEvent(ev, sender);
     }
 
-    public string? TryCapture(TransformComponent cameraXform, Vector2i captureSize)
+    public string? TryCapture(MapCoordinates focusCoords, Angle cameraRotation, Vector2i captureSize)
     {
         var id = Guid.NewGuid().ToString();
-        var cameraCoords = cameraXform.MapPosition;
-        var cameraWorldPos = _transform.GetWorldPosition(cameraXform);
+        var focusWorldPos = focusCoords.Position;
 
         var radius = MathF.Min(_pvsRange, MAX_PHOTO_RADIUS); //cap because scary
         var range = new Vector2(radius, radius);
-        var worldArea = new Box2(cameraWorldPos - range, cameraWorldPos + range);
+        var worldArea = new Box2(focusWorldPos - range, focusWorldPos + range);
 
-        var data = new PhotoData(id, captureSize, _transform.GetWorldPosition(cameraXform));
+        var data = new PhotoData(id, captureSize, focusWorldPos, cameraRotation);
 
         // Get entities in range
-        foreach (var entity in _entityLookup.GetEntitiesInRange(cameraCoords, radius, LookupFlags.Uncontained))
+        foreach (var entity in _entityLookup.GetEntitiesInRange(focusCoords, radius, LookupFlags.Uncontained))
         {
             var protoId = MetaData(entity).EntityPrototype?.ID;
             if (protoId is null)
@@ -232,7 +231,7 @@ public sealed class PhotoManager : EntitySystem
         }
 
         // Get grids in range
-        var intersectingGrids = _mapManager.FindGridsIntersecting(cameraXform.MapID, worldArea);
+        var intersectingGrids = _map.FindGridsIntersecting(focusCoords.MapId, worldArea);
         foreach (var grid in intersectingGrids)
         {
             if (!TryComp<TransformComponent>(grid.Owner, out var gridXform))

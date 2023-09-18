@@ -62,11 +62,14 @@ public sealed partial class PhotoVisualizer : EntitySystem
         var origin = new MapCoordinates(Vector2.Zero, mapId);
 
         var camera = Spawn(null, origin);
+
         eye = EnsureComp<EyeComponent>(camera);
-        //_eye.SetDrawFov(camera, false, eye);
         _eye.SetZoom(camera, Vector2.One, eye);
+        //Align with grid by subtracting grid angle (I have no idea why, but it works)
+        _eye.SetRotation(camera, -data.CameraRotation, eye);
+
         var cameraXform = EnsureComp<TransformComponent>(camera);
-        _transform.SetWorldPosition(cameraXform, data.CameraPos);
+        _transform.SetWorldPosition(cameraXform, data.CameraPosition);
 
         // Add grids
         foreach (var gridDesc in data.Grids)

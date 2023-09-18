@@ -26,39 +26,26 @@ public enum PhotoUiKey
 [Serializable, NetSerializable]
 public sealed class PhotoEntityData
 {
-    public string PrototypeId { get; }
-    public (Vector2, Angle) PosRot { get; }
-    public AppearanceComponentState? Appearance { get; }
-    public HumanoidAppearanceState? HumanoidAppearance { get; }
-    public PointLightComponentState? PointLight { get; }
-    public OccluderComponent.OccluderComponentState? Occluder { get; }
-    public DamageableComponentState? Damageable { get; }
-    public HandsComponentState? Hands { get; }
-    public Dictionary<string, string>? Inventory { get; }
-    public Dictionary<string, string>? HandsContents { get; }
+    public readonly string PrototypeId;
+    public Vector2 Position;
+    public Angle Rotation;
+    public AppearanceComponentState? Appearance;
+    public HumanoidAppearanceState? HumanoidAppearance;
+    public PointLightComponentState? PointLight;
+    public OccluderComponent.OccluderComponentState? Occluder;
+    public DamageableComponentState? Damageable;
+    public HandsComponentState? Hands;
+    public Dictionary<string, string>? Inventory;
+    public Dictionary<string, string>? HandsContents;
 
     public PhotoEntityData(
         string prototypeId,
-        (Vector2, Angle) posrot,
-        AppearanceComponentState? appearance = null,
-        HumanoidAppearanceState? humanoidAppearance = null,
-        PointLightComponentState? pointLight = null,
-        OccluderComponent.OccluderComponentState? occluder = null,
-        DamageableComponentState? damageable = null,
-        HandsComponentState? hands = null,
-        Dictionary<string, string>? inventory = null,
-        Dictionary<string, string>? handsContents = null)
+        Vector2 position,
+        Angle rotation)
     {
         PrototypeId = prototypeId;
-        Appearance = appearance;
-        PosRot = posrot;
-        HumanoidAppearance = humanoidAppearance;
-        PointLight = pointLight;
-        Occluder = occluder;
-        Damageable = damageable;
-        Hands = hands;
-        Inventory = inventory;
-        HandsContents = handsContents;
+        Position = position;
+        Rotation = rotation;
     }
 }
 

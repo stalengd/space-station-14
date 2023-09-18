@@ -91,7 +91,6 @@ public sealed class PhotoManager : EntitySystem
         var data = new PhotoData(id, captureSize, _transform.GetWorldPosition(cameraXform));
 
         // Get entities in range
-        var ent_count = 0;
         foreach (var entity in _entityLookup.GetEntitiesInRange(cameraCoords, radius, LookupFlags.Uncontained))
         {
             var protoId = MetaData(entity).EntityPrototype?.ID;
@@ -105,7 +104,7 @@ public sealed class PhotoManager : EntitySystem
             if (!TryComp<TransformComponent>(entity, out var entXform))
                 continue;
 
-            var posrot = _transform.GetWorldPositionRotation(entXform);
+            var (position, rotation) = _transform.GetWorldPositionRotation(entXform);
 
             // TODO: deduplicate
             // Appearance state
@@ -218,19 +217,24 @@ public sealed class PhotoManager : EntitySystem
                 }
             }
 
-            var ent_data = new PhotoEntityData(protoId, posrot, appearanceState, humanoidAppearanceState, pointLightState, occluderState, damageableState, handsState, inventory, hands);
+            var ent_data = new PhotoEntityData(protoId, position, rotation)
+            {
+                Appearance = appearanceState,
+                HumanoidAppearance = humanoidAppearanceState,
+                PointLight = pointLightState,
+                Occluder = occluderState,
+                Damageable = damageableState,
+                Hands = handsState,
+                Inventory = inventory,
+                HandsContents = hands
+            };
             data.Entities.Add(ent_data);
-
-            ent_count++;
         }
 
         // Get grids in range
-        var grid_count = 0;
         var intersectingGrids = _mapManager.FindGridsIntersecting(cameraXform.MapID, worldArea);
         foreach (var grid in intersectingGrids)
         {
-            grid_count++;
-
             if (!TryComp<TransformComponent>(grid.Owner, out var gridXform))
                 continue;
 
@@ -247,7 +251,7 @@ public sealed class PhotoManager : EntitySystem
         }
 
         _photos.Add(id, data);
-        _sawmill.Debug("Photo taken! Entity count: " + ent_count + ", Grid count: " + grid_count + ", ID: " + id);
+        _sawmill.Debug("Photo taken! Entity count: " + data.Entities.Count + ", Grid count: " + data.Grids.Count + ", ID: " + id);
 
         return id;
     }

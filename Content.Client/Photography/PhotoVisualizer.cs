@@ -86,11 +86,11 @@ public sealed partial class PhotoVisualizer : EntitySystem
         // Add entities
         foreach (var entityDesc in data.Entities)
         {
-            var worldPos = entityDesc.PosRot.Item1;
+            var worldPos = entityDesc.Position;
 
             // Make sure entities are parented to grids
             EntityUid parent;
-            if (_mapMan.TryFindGridAt(mapId, entityDesc.PosRot.Item1, out var gridUid, out _))
+            if (_mapMan.TryFindGridAt(mapId, entityDesc.Position, out var gridUid, out _))
             {
                 parent = gridUid;
             }
@@ -108,7 +108,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             var entity = Spawn(entityDesc.PrototypeId, coords);
             var xform = EnsureComp<TransformComponent>(entity);
 
-            _transform.SetWorldRotation(xform, entityDesc.PosRot.Item2);
+            _transform.SetWorldRotation(xform, entityDesc.Rotation);
 
             if (TryComp<RotationVisualsComponent>(entity, out var rotationVisualsComp))
                 rotationVisualsComp.AnimationTime = 0;

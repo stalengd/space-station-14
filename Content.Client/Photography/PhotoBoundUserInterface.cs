@@ -9,25 +9,28 @@ public sealed class PhotoBoundUserInterface : BoundUserInterface
 
     private PhotoWindow? _window;
     private readonly PhotoVisualizer _photoVisualizer;
-    private string? _photoId;
+    private PhotoEyeRequest? _photoEyeRequest;
 
     public PhotoBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
         IoCManager.InjectDependencies(this);
         _photoVisualizer = _entityMgr.System<PhotoVisualizer>();
-        _callback = new(OnPhotoDataReceived);
+        _initCallback = new(OnPhotoDataReceived);
+        _disposeCallback = new(OnVisualizationDisposed);
     }
 
-    private PhotoDataRequestCallback _callback;
+    private PhotoEyeRequest.OnVisualizationInitCallback _initCallback;
+    private PhotoEyeRequest.OnDisposeCallback _disposeCallback;
 
-    private void OnPhotoDataReceived(string id)
+    private void OnPhotoDataReceived(EyeComponent eye)
     {
-        Logger.DebugS("PHOTO", "DEETA RECEIVED!");
-        if (_photoVisualizer.TryGetVisualization(id, out var eye))
-        {
-            Logger.DebugS("PHOTO", "EYE RECEIVED!");
-            _window?.SetVisuals(eye);
-        }
+        _window?.SetVisuals(eye);
+    }
+
+    private void OnVisualizationDisposed()
+    {
+        _window?.SetVisuals(null);
+        _photoEyeRequest = null;
     }
 
     /// <inheritdoc/>
@@ -40,8 +43,12 @@ public sealed class PhotoBoundUserInterface : BoundUserInterface
 
         if (_entityMgr.TryGetComponent<PhotoComponent>(Owner, out var photo))
         {
-            _photoId = photo.PhotoID;
-            _photoVisualizer.RequestPhotoData(photo.PhotoID, _callback);
+            _photoEyeRequest = new(photo.PhotoID)
+            {
+                OnVisualizationInit = _initCallback,
+                OnDispose = _disposeCallback
+            };
+            _photoVisualizer.RequestPhotoEye(_photoEyeRequest);
         }
 
         _window.OpenCentered();
@@ -53,8 +60,7 @@ public sealed class PhotoBoundUserInterface : BoundUserInterface
         if (disposing)
         {
             _window?.Dispose();
-            if (_photoId is not null)
-                _photoVisualizer.DisposePhotoDataRequestCallback(_photoId, _callback);
+            _photoEyeRequest?.Dispose();
         }
     }
 }

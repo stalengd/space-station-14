@@ -13,7 +13,7 @@ using Robust.Shared.Map;
 
 namespace Content.Client.Photography;
 
-public sealed class PhotoVisualizer : EntitySystem
+public sealed partial class PhotoVisualizer : EntitySystem
 {
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IEntitySystemManager _sysMan = default!;
@@ -24,8 +24,6 @@ public sealed class PhotoVisualizer : EntitySystem
     private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
 
     private Dictionary<string, PhotoVisualisation> _currentlyVisualized = new();
-    private Dictionary<string, PhotoDataRequestDesc> _demandedPhotos = new();
-    private Dictionary<string, PhotoData> _photoDataCache = new();
 
     public override void Initialize()
     {
@@ -37,74 +35,7 @@ public sealed class PhotoVisualizer : EntitySystem
         _inventory = _sysMan.GetEntitySystem<InventorySystem>();
         _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
 
-        SubscribeNetworkEvent<PhotoDataRequestResponse>(OnPhotoDataReceived);
-    }
-
-    private void OnPhotoDataReceived(PhotoDataRequestResponse args)
-    {
-        if (!_demandedPhotos.TryGetValue(args.Id, out var desc) || desc.State == PhotoDataRequestState.Completed)
-            return;
-
-        if (args.Data is not { } data)
-        {
-            _sawmill.Warning("Received PhotoDataRequestResponse with ID " + args.Id + " but Data is null! A bad request was sent?");
-            _demandedPhotos.Remove(args.Id);
-            return;
-        }
-
-        _photoDataCache.Add(args.Id, data);
-        desc.State = PhotoDataRequestState.Completed;
-
-        _sawmill.Info("Received PhotoDataRequestResponse for a photo with ID " + args.Id);
-
-        foreach (var callback in desc.Callbacks)
-        {
-            try
-            {
-                callback.Invoke(args.Id);
-            }
-            catch (Exception e)
-            {
-                _sawmill.Error($"PhotoData request callback failed! Exception: {e}");
-            }
-        }
-
-        desc.Callbacks.Clear();
-    }
-
-    public bool RequestPhotoData(string id, PhotoDataRequestCallback callback)
-    {
-        if (string.IsNullOrEmpty(id))
-            return false;
-
-        if (_demandedPhotos.TryGetValue(id, out var existingDesc) && existingDesc.State == PhotoDataRequestState.Completed)
-        {
-            callback.Invoke(id);
-            return true;
-        }
-
-        var desc = new PhotoDataRequestDesc();
-        desc.Callbacks.Add(callback);
-        _demandedPhotos.Add(id, desc);
-
-        var ev = new PhotoDataRequest(id);
-        RaiseNetworkEvent(ev);
-
-        return true;
-    }
-
-    public void DisposePhotoDataRequestCallback(string id, PhotoDataRequestCallback callback)
-    {
-        if (!_demandedPhotos.TryGetValue(id, out var desc))
-            return;
-
-        desc.Callbacks.Remove(callback);
-    }
-
-    private void DisposePhotoDataRequest(string id)
-    {
-        _demandedPhotos.Remove(id);
-        _photoDataCache.Remove(id);
+        InitializeCache();
     }
 
     public bool TryGetVisualization(string id, [NotNullWhen(true)] out EyeComponent? eye)
@@ -262,40 +193,19 @@ public sealed class PhotoVisualizer : EntitySystem
 
         var photoVisDesc = new PhotoVisualisation(mapId, camera, origin, eye);
         _currentlyVisualized.Add(data.Id, photoVisDesc);
+        _sawmill.Debug("Created map for visualization of the photo " + data.Id);
 
         return true;
     }
 
-    public void DisposeVisualization(PhotoData data)
-    {
-        DisposeVisualization(data.Id);
-    }
-
     public void DisposeVisualization(string id)
     {
-        if (!_currentlyVisualized.ContainsKey(id))
+        if (!_currentlyVisualized.TryGetValue(id, out var photoVisualisation))
             return;
+
+        _mapMan.DeleteMap(photoVisualisation.MapId);
+        _currentlyVisualized.Remove(id);
     }
-}
-
-public delegate void PhotoDataRequestCallback(string id);
-
-internal sealed class PhotoDataRequestDesc
-{
-    public PhotoDataRequestState State;
-    public HashSet<PhotoDataRequestCallback> Callbacks;
-
-    public PhotoDataRequestDesc(PhotoDataRequestState state = PhotoDataRequestState.Awaiting)
-    {
-        State = state;
-        Callbacks = new();
-    }
-}
-
-internal enum PhotoDataRequestState
-{
-    Awaiting,
-    Completed,
 }
 
 public sealed class PhotoVisualisation

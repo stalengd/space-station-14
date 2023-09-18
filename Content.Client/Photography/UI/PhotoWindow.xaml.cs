@@ -20,9 +20,12 @@ public sealed partial class PhotoWindow : BaseWindow
         PhotoView.ViewportSize = new Vector2i(500, 500);
     }
 
-    public void SetVisuals(EyeComponent eye)
+    public void SetVisuals(EyeComponent? eye)
     {
-        PhotoView.Eye = eye.Eye;
+        if (eye != null)
+            PhotoView.Eye = eye.Eye;
+        else
+            PhotoView.Eye = _defaultEye;
     }
 
     // Drag by grabbing anywhere

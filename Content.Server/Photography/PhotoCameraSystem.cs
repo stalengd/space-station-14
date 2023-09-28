@@ -7,18 +7,13 @@ namespace Content.Server.Photography;
 
 public sealed class PhotoCameraSystem : EntitySystem
 {
-    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     [Dependency] private readonly IMapManager _map = default!;
-    private PhotoManager _photo = default!;
-
-    private SharedTransformSystem _transform = default!;
+    [Dependency] private readonly PhotoManager _photo = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        IoCManager.InjectDependencies(this);
-        _photo = _sysMan.GetEntitySystem<PhotoManager>();
-        _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
 
         SubscribeLocalEvent<PhotoCameraComponent, ActivateInWorldEvent>(OnActivate);
     }
@@ -27,6 +22,8 @@ public sealed class PhotoCameraSystem : EntitySystem
     {
         if (!TryPhoto(uid, component, out var photo))
             return;
+
+        // TODO: cooldown & film charges
     }
 
     private bool TryPhoto(EntityUid uid, PhotoCameraComponent component, [NotNullWhen(true)] out EntityUid? photoEntity)

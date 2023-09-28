@@ -17,26 +17,18 @@ namespace Content.Client.Photography;
 public sealed partial class PhotoVisualizer : EntitySystem
 {
     [Dependency] private readonly IMapManager _mapMan = default!;
-    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
-    private SharedTransformSystem _transform = default!;
-    private InventorySystem _inventory = default!;
-    private HandsSystem _hands = default!;
-    private DecalSystem _decal = default!;
-    private EyeSystem _eye = default!;
-    private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private readonly DecalSystem _decal = default!;
+    [Dependency] private readonly EyeSystem _eye = default!;
 
+    private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
     private Dictionary<string, PhotoVisualisation> _currentlyVisualized = new();
 
     public override void Initialize()
     {
         base.Initialize();
-        IoCManager.InjectDependencies(this);
-
-        _eye = _sysMan.GetEntitySystem<EyeSystem>();
-        _hands = _sysMan.GetEntitySystem<HandsSystem>();
-        _decal = _sysMan.GetEntitySystem<DecalSystem>();
-        _inventory = _sysMan.GetEntitySystem<InventorySystem>();
-        _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
 
         InitializeCache();
     }
@@ -61,6 +53,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
         }
 
         var mapId = _mapMan.CreateMap();
+        _mapMan.SetMapPaused(mapId, true);
         _mapMan.AddUninitializedMap(mapId);
         var origin = new MapCoordinates(Vector2.Zero, mapId);
 

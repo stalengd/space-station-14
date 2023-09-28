@@ -18,14 +18,13 @@ namespace Content.Server.Photography;
 
 public sealed class PhotoManager : EntitySystem
 {
-    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IMapManager _map = default!;
-    private EntityLookupSystem _entityLookup = default!;
-    private SharedTransformSystem _transform = default!;
-    private InventorySystem _inventory = default!;
-    private HandsSystem _hands = default!;
-    private DecalSystem _decal = default!;
+    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private readonly DecalSystem _decal = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
@@ -37,16 +36,9 @@ public sealed class PhotoManager : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        IoCManager.InjectDependencies(this);
 
         _cfg.OnValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged, true);
         _pvsRange = _cfg.GetCVar(CVars.NetMaxUpdateRange);
-
-        _transform = _sysMan.GetEntitySystem<SharedTransformSystem>();
-        _entityLookup = _sysMan.GetEntitySystem<EntityLookupSystem>();
-        _inventory = _sysMan.GetEntitySystem<InventorySystem>();
-        _hands = _sysMan.GetEntitySystem<HandsSystem>();
-        _decal = _sysMan.GetEntitySystem<DecalSystem>();
 
         _gridQuery = EntityManager.GetEntityQuery<MapGridComponent>();
 

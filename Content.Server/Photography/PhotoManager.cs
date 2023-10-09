@@ -113,14 +113,10 @@ public sealed class PhotoManager : EntitySystem
             }
 
             // Humanoid appearance state
-            HumanoidAppearanceState? humanoidAppearanceState = null;
+            ComponentState? humanoidAppearanceState = null;
             if (TryComp<HumanoidAppearanceComponent>(entity, out var humanoidAppearance))
             {
-                var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, humanoidAppearance, null, GameTick.Zero);
-                if (maybe_state is HumanoidAppearanceState state)
-                {
-                    humanoidAppearanceState = state;
-                }
+                humanoidAppearanceState = EntityManager.GetComponentState(EntityManager.EventBus, humanoidAppearance, null, GameTick.Zero);
             }
 
             // Point light state

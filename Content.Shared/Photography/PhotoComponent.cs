@@ -31,7 +31,7 @@ public sealed class PhotoEntityData
     public Vector2 Position;
     public Angle Rotation;
     public AppearanceComponentState? Appearance;
-    public HumanoidAppearanceState? HumanoidAppearance;
+    public ComponentState? HumanoidAppearance;
     public PointLightComponentState? PointLight;
     public OccluderComponent.OccluderComponentState? Occluder;
     public DamageableComponentState? Damageable;

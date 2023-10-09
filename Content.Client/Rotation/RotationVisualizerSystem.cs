@@ -58,6 +58,12 @@ public sealed class RotationVisualizerSystem : VisualizerSystem<RotationVisualsC
             AnimationSystem.Stop(animationComp, animationKey);
         }
 
+        if (animationTime <= 0)
+        {
+            spriteComp.Rotation = rotation;
+            return;
+        }
+
         var animation = new Animation
         {
             Length = TimeSpan.FromSeconds(animationTime),

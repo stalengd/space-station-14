@@ -1,0 +1,28 @@
+- type: entity
+  parent: BaseItem
+  id: Photo
+  name: photo
+  description: some very original desc (Ask ChatGPT?)
+  components:
+  - type: Photo
+  - type: ActivatableUI
+    key: enum.PhotoUiKey.Key
+    closeOnHandDeselect: false
+  - type: UserInterface
+    interfaces:
+    - key: enum.PhotoUiKey.Key
+      type: PhotoBoundUserInterface
+  - type: Sprite
+    sprite: Objects/Devices/photography.rsi
+    state: photo
+
+- type: entity
+  parent: BaseItem
+  id: PhotoCamera
+  name: camera
+  description: some very original desc (Ask ChatGPT?)
+  components:
+  - type: PhotoCamera
+  - type: Sprite
+    sprite: Objects/Devices/photography.rsi
+    state: camera_base

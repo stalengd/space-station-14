@@ -38,8 +38,9 @@ public sealed class PhotoCameraSystem : EntitySystem
             return false;
 
         Angle cameraRotation;
-        if (_map.TryFindGridAt(xform.MapID, _transform.GetWorldPosition(xform), out var gridEntityToAllignWith, out _))
-            cameraRotation = _transform.GetWorldRotation(gridEntityToAllignWith);
+
+        if (xform.GridUid is { } gridToAllignWith)
+            cameraRotation = _transform.GetWorldRotation(gridToAllignWith);
         else
             cameraRotation = _transform.GetWorldRotation(xform);
 

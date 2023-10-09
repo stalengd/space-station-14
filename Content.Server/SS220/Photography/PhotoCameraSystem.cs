@@ -1,10 +1,10 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Interaction;
-using Content.Shared.Photography;
+using Content.Shared.SS220.Photography;
 using Robust.Shared.Map;
 
-namespace Content.Server.Photography;
+namespace Content.Server.SS220.Photography;
 
 public sealed class PhotoCameraSystem : EntitySystem
 {

@@ -7,7 +7,7 @@ using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.Photography;
+namespace Content.Shared.SS220.Photography;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class PhotoComponent : Component

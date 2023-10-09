@@ -6,7 +6,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 
-namespace Content.Client.Photography.UI;
+namespace Content.Client.SS220.Photography.UI;
 [GenerateTypedNameReferences]
 public sealed partial class PhotoWindow : BaseWindow
 {

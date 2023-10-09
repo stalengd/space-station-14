@@ -8,12 +8,12 @@ using Content.Shared.Damage;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
-using Content.Shared.Photography;
+using Content.Shared.SS220.Photography;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
-namespace Content.Client.Photography;
+namespace Content.Client.SS220.Photography;
 
 public sealed partial class PhotoVisualizer : EntitySystem
 {

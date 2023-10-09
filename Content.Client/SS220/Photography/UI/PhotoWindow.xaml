@@ -1,7 +1,7 @@
 <!-- © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt -->
 <ui:PhotoWindow xmlns="https://spacestation14.io"
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                xmlns:ui="clr-namespace:Content.Client.Photography.UI"
+                xmlns:ui="clr-namespace:Content.Client.SS220.Photography.UI"
                 xmlns:viewport="clr-namespace:Content.Client.Viewport"
 
                 MouseFilter="Stop"

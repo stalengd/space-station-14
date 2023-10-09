@@ -1,8 +1,8 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Shared.GameTicking;
-using Content.Shared.Photography;
+using Content.Shared.SS220.Photography;
 
-namespace Content.Client.Photography;
+namespace Content.Client.SS220.Photography;
 
 public sealed partial class PhotoVisualizer : EntitySystem
 {

@@ -1,3 +1,4 @@
+# © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 - type: entity
   parent: BaseItem
   id: Photo
@@ -13,7 +14,7 @@
     - key: enum.PhotoUiKey.Key
       type: PhotoBoundUserInterface
   - type: Sprite
-    sprite: Objects/Devices/photography.rsi
+    sprite: SS220/Objects/Devices/photography.rsi
     state: photo
 
 - type: entity
@@ -24,5 +25,5 @@
   components:
   - type: PhotoCamera
   - type: Sprite
-    sprite: Objects/Devices/photography.rsi
+    sprite: SS220/Objects/Devices/photography.rsi
     state: camera_base

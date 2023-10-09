@@ -7,7 +7,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
-using Content.Shared.Photography;
+using Content.Shared.SS220.Photography;
 using Robust.Server.GameObjects;
 using Robust.Shared;
 using Robust.Shared.Configuration;
@@ -15,7 +15,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Server.Photography;
+namespace Content.Server.SS220.Photography;
 
 public sealed class PhotoManager : EntitySystem
 {

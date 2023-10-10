@@ -74,18 +74,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
         }
 
         var origin = new MapCoordinates(Vector2.Zero, _reservedMap.Value);
-
-        var camera = Spawn(null, origin);
-
-        eye = EnsureComp<EyeComponent>(camera);
-        _eye.SetZoom(camera, Vector2.One, eye);
-        //Align with grid by subtracting grid angle (I have no idea why, but it works)
-        _eye.SetRotation(camera, -data.CameraRotation, eye);
-
-        var cameraXform = EnsureComp<TransformComponent>(camera);
-        _transform.SetWorldPosition(cameraXform, data.CameraPosition);
-
-        var entities = new List<EntityUid>(4096) { camera };
+        var entities = new List<EntityUid>(4096);
 
         // Add grids
         foreach (var gridDesc in data.Grids)
@@ -108,6 +97,20 @@ public sealed partial class PhotoVisualizer : EntitySystem
                 //Todo: fuck i can't add decals clientside
             }
         }
+
+
+        // Create and setup camera
+        var camera = Spawn(null, origin);
+        entities.Add(camera);
+
+        var cameraXform = EnsureComp<TransformComponent>(camera);
+        _transform.SetWorldPosition(cameraXform, data.CameraPosition);
+
+        eye = EnsureComp<EyeComponent>(camera);
+        _eye.SetZoom(camera, Vector2.One, eye);
+        //Align with grid by subtracting grid angle (I have no idea why, but it works)
+        _eye.SetRotation(camera, -data.CameraRotation, eye);
+
 
         // Add entities
         foreach (var entityDesc in data.Entities)
@@ -132,11 +135,10 @@ public sealed partial class PhotoVisualizer : EntitySystem
             EntityCoordinates coords = new(parent, _transform.GetInvWorldMatrix(parent).Transform(worldPos));
 
             var entity = Spawn(entityDesc.PrototypeId, coords);
-            var xform = EnsureComp<TransformComponent>(entity);
-
-            _transform.SetWorldRotation(xform, entityDesc.Rotation);
-
             entities.Add(entity);
+
+            var xform = EnsureComp<TransformComponent>(entity);
+            _transform.SetWorldRotation(xform, entityDesc.Rotation);
 
             if (TryComp<RotationVisualsComponent>(entity, out var rotationVisualsComp))
                 rotationVisualsComp.AnimationTime = 0;

@@ -26,12 +26,25 @@ public sealed partial class PhotoVisualizer : EntitySystem
 
     private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
     private Dictionary<string, PhotoVisualisation> _currentlyVisualized = new();
+    private MapId? _reservedMap;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeNetworkEvent<PhotoReservedMapMessage>(OnMapReserved);
         InitializeCache();
+
+        // Request a map, just in case it was already created
+        // Needed for mid-round joins
+        var ev = new PhotoRequestMapMessage();
+        RaiseNetworkEvent(ev);
+    }
+
+    private void OnMapReserved(PhotoReservedMapMessage args)
+    {
+        _sawmill.Debug($"Reserved map received. MapId: {args.Map}");
+        _reservedMap = args.Map;
     }
 
     public bool TryGetVisualization(string id, [NotNullWhen(true)] out EyeComponent? eye)
@@ -53,10 +66,14 @@ public sealed partial class PhotoVisualizer : EntitySystem
             return true;
         }
 
-        var mapId = _mapMan.CreateMap();
-        _mapMan.SetMapPaused(mapId, true);
-        _mapMan.AddUninitializedMap(mapId);
-        var origin = new MapCoordinates(Vector2.Zero, mapId);
+        if (!_reservedMap.HasValue || !_mapMan.MapExists(_reservedMap.Value))
+        {
+            _sawmill.Debug($"Visualisation has not been loaded. Reason: No reserved map!");
+            eye = null;
+            return false;
+        }
+
+        var origin = new MapCoordinates(Vector2.Zero, _reservedMap.Value);
 
         var camera = Spawn(null, origin);
 
@@ -68,11 +85,15 @@ public sealed partial class PhotoVisualizer : EntitySystem
         var cameraXform = EnsureComp<TransformComponent>(camera);
         _transform.SetWorldPosition(cameraXform, data.CameraPosition);
 
+        var entities = new List<EntityUid>(4096) { camera };
+
         // Add grids
         foreach (var gridDesc in data.Grids)
         {
-            var grid = _mapMan.CreateGrid(mapId);
-            var gridXform = EnsureComp<TransformComponent>(grid.Owner);
+            var grid = _mapMan.CreateGrid(_reservedMap.Value);
+            var gridEnt = grid.Owner;
+            var gridXform = EnsureComp<TransformComponent>(gridEnt);
+            entities.Add(gridEnt);
 
             _transform.SetWorldPositionRotation(gridXform, gridDesc.Position, gridDesc.Rotation);
 
@@ -95,11 +116,11 @@ public sealed partial class PhotoVisualizer : EntitySystem
 
             // Make sure entities are parented to grids
             EntityUid parent;
-            if (_mapMan.TryFindGridAt(mapId, entityDesc.Position, out var gridUid, out _))
+            if (_mapMan.TryFindGridAt(_reservedMap.Value, entityDesc.Position, out var gridUid, out _))
             {
                 parent = gridUid;
             }
-            else if (_mapMan.GetMapEntityId(mapId) is { Valid: true } mapEnt)
+            else if (_mapMan.GetMapEntityId(_reservedMap.Value) is { Valid: true } mapEnt)
             {
                 parent = mapEnt;
             }
@@ -114,6 +135,8 @@ public sealed partial class PhotoVisualizer : EntitySystem
             var xform = EnsureComp<TransformComponent>(entity);
 
             _transform.SetWorldRotation(xform, entityDesc.Rotation);
+
+            entities.Add(entity);
 
             if (TryComp<RotationVisualsComponent>(entity, out var rotationVisualsComp))
                 rotationVisualsComp.AnimationTime = 0;
@@ -196,7 +219,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             }
         }
 
-        var photoVisDesc = new PhotoVisualisation(mapId, camera, origin, eye);
+        var photoVisDesc = new PhotoVisualisation(_reservedMap.Value, camera, origin, eye, entities);
         _currentlyVisualized.Add(data.Id, photoVisDesc);
         _sawmill.Debug("Created map for visualization of the photo " + data.Id);
 
@@ -208,8 +231,12 @@ public sealed partial class PhotoVisualizer : EntitySystem
         if (!_currentlyVisualized.TryGetValue(id, out var photoVisualisation))
             return;
 
-        _mapMan.DeleteMap(photoVisualisation.MapId);
+        //_mapMan.DeleteMap(photoVisualisation.MapId);
         _currentlyVisualized.Remove(id);
+        foreach (var entity in photoVisualisation.Entities)
+        {
+            EntityManager.DeleteEntity(entity);
+        }
     }
 }
 
@@ -219,12 +246,14 @@ public sealed class PhotoVisualisation
     public readonly EntityUid Camera;
     public readonly EyeComponent Eye;
     public readonly MapCoordinates Origin;
+    public readonly List<EntityUid> Entities;
 
-    public PhotoVisualisation(MapId mapId, EntityUid camera, MapCoordinates origin, EyeComponent eye)
+    public PhotoVisualisation(MapId mapId, EntityUid camera, MapCoordinates origin, EyeComponent eye, List<EntityUid> entities)
     {
         MapId = mapId;
         Origin = origin;
         Camera = camera;
         Eye = eye;
+        Entities = entities;
     }
 }

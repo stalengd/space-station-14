@@ -24,6 +24,13 @@
                         HorizontalExpand="True"
                         MinSize="500 500"
                         MouseFilter="Ignore"/>
+                    <TextureRect
+                        Name="PhotoViewStatic"
+                        VerticalExpand="True"
+                        HorizontalExpand="True"
+                        MinSize="500 500"
+                        MouseFilter="Ignore"
+                        Visible="False"/>
                 </Control>
                 <RichTextLabel
                     Name="BackText"

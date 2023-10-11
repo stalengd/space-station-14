@@ -6,7 +6,13 @@ namespace Content.Client.SS220.Photography;
 
 public sealed partial class PhotoVisualizer : EntitySystem
 {
+    // QUEUED_MODE
+    // true = single map, so use photo rendering queue
+    // false = multiple maps, no queue. Only when client-side maps are implemented (currently having issues with MapId conflicts)
+    private static readonly bool QUEUED_MODE = true;
+
     private Dictionary<string, HashSet<PhotoEyeRequest>> _eyeRequests = new();
+    private Queue<PhotoEyeRequest> _eyeRequestQueue = new();
     private Dictionary<string, PhotoData> _photoDataCache = new();
 
     private void InitializeCache()
@@ -22,20 +28,72 @@ public sealed partial class PhotoVisualizer : EntitySystem
             foreach (var request in requests)
                 request.Dispose(); // slower than could be but not too bad
         }
+
+        _eyeRequestQueue.Clear();
     }
 
     private void OnPhotoDataReceived(PhotoDataRequestResponse args)
     {
-        if (args.Data is not { } data)
+        if (!_eyeRequests.TryGetValue(args.Id, out var requestsSet) || requestsSet.Count == 0)
             return;
 
-        if (!_eyeRequests.TryGetValue(data.Id, out var requestsSet) || requestsSet.Count == 0)
+        if (args.Data is not { } data || !data.Valid)
+        {
+            _sawmill.Warning($"Photo data with ID {args.Id} was invalid. Disposing requests.");
+            foreach (var request in requestsSet)
+            {
+                request.Dispose();
+            }
             return;
+        }
 
         _photoDataCache.Add(data.Id, data);
-        if (TryGetVisualization(data, out var eye))
+
+        if (QUEUED_MODE)
         {
-            foreach (var request in requestsSet)
+            UpdateQueue();
+        }
+        else
+        {
+            if (TryGetVisualization(data, out var eye))
+            {
+                foreach (var request in requestsSet)
+                {
+                    request.OnVisualizationInit?.Invoke(eye);
+                }
+            }
+        }
+    }
+
+    public void UpdateQueue()
+    {
+        var runNext = true;
+
+        while (runNext)
+        {
+            runNext = false;
+
+            if (!_eyeRequestQueue.TryPeek(out var request))
+                return;
+
+            // just clean up and do next if request was already disposed
+            if (request.Disposed)
+            {
+                _eyeRequestQueue.Dequeue();
+                runNext = true;
+                continue;
+            }
+
+            if (!_photoDataCache.TryGetValue(request.PhotoId, out var photoData))
+                return; //we wait
+
+            if (!photoData.Valid)
+            {
+                request.Dispose();
+                return;
+            }
+
+            if (TryGetVisualization(photoData, out var eye))
             {
                 request.OnVisualizationInit?.Invoke(eye);
             }
@@ -74,21 +132,35 @@ public sealed partial class PhotoVisualizer : EntitySystem
 
         requestSet.Add(request);
 
-        if (_currentlyVisualized.TryGetValue(request.PhotoId, out var photoVis))
+        if (!QUEUED_MODE)
         {
-            request.OnVisualizationInit?.Invoke(photoVis.Eye);
-            return;
+            if (_currentlyVisualized.TryGetValue(request.PhotoId, out var photoVis))
+            {
+                request.OnVisualizationInit?.Invoke(photoVis.Eye);
+                return;
+            }
         }
+
+        _eyeRequestQueue.Enqueue(request);
+        _sawmill.Debug($"Queued a photo render request. Queue length now: {_eyeRequestQueue.Count}");
 
         if (_photoDataCache.TryGetValue(request.PhotoId, out var photoData))
         {
-            if (TryGetVisualization(photoData, out var eye))
-                request.OnVisualizationInit?.Invoke(eye);
+            if (!QUEUED_MODE)
+            {
+                if (TryGetVisualization(photoData, out var eye))
+                    request.OnVisualizationInit?.Invoke(eye);
+            }
+            else
+            {
+                UpdateQueue();
+            }
             return;
         }
 
         var ev = new PhotoDataRequest(request.PhotoId);
         RaiseNetworkEvent(ev);
+        _sawmill.Debug($"Sending data request for ID {request.PhotoId}");
     }
 }
 
@@ -97,6 +169,7 @@ public sealed class PhotoEyeRequest
     public readonly string PhotoId;
     public OnVisualizationInitCallback? OnVisualizationInit;
     public OnDisposeCallback? OnDispose;
+    public bool Disposed { get; private set; } = false;
 
     public PhotoEyeRequest(string photoId)
     {
@@ -105,10 +178,14 @@ public sealed class PhotoEyeRequest
 
     public void Dispose()
     {
+        Disposed = true;
         OnDispose?.Invoke();
         var sysMan = IoCManager.Resolve<IEntitySystemManager>();
         var photoVisualizer = sysMan.GetEntitySystem<PhotoVisualizer>();
         photoVisualizer.ForgetRequestAndCleanup(this);
+
+        //giga evil recursion when disposed from UpdateQueue, but should be OK unless player opens a fuckton of photos
+        photoVisualizer.UpdateQueue();
     }
 
     public delegate void OnVisualizationInitCallback(EyeComponent eye);

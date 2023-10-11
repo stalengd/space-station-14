@@ -15,6 +15,7 @@ public sealed partial class PhotoWindow : BaseWindow
     [Dependency] private readonly IClyde _displayManager = default!;
 
     private readonly FixedEye _defaultEye = new();
+    public Action? ScreenshotComplete;
 
     public PhotoWindow()
     {
@@ -24,8 +25,8 @@ public sealed partial class PhotoWindow : BaseWindow
         CloseButton.OnPressed += _ => Close();
 
         PhotoView.Eye = _defaultEye;
+        PhotoView.Visible = false;
         PhotoView.ViewportSize = new Vector2i(500, 500);
-        SetVisuals(null);
 
         BackText.SetMarkup("Written on the back:\n[italic]Test test test[/italic]");
     }
@@ -37,6 +38,7 @@ public sealed partial class PhotoWindow : BaseWindow
         PhotoViewStatic.Visible = true;
         PhotoView.Visible = false;
         PhotoView.Eye = null;
+        ScreenshotComplete?.Invoke();
     }
 
     public void SetVisuals(EyeComponent? eye)
@@ -49,7 +51,10 @@ public sealed partial class PhotoWindow : BaseWindow
             PhotoView.Screenshot(PostScreenshot);
         }
         else
+        {
             PhotoView.Eye = _defaultEye;
+            LoadingTextLabel.Text = "Не удалось загрузить фотографию.";
+        }
     }
 
     // Drag by grabbing anywhere

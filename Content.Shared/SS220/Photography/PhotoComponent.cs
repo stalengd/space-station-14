@@ -3,7 +3,6 @@ using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Decals;
 using Content.Shared.Hands.Components;
-using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -77,8 +76,9 @@ public sealed class PhotoData
     public List<PhotoGridData> Grids { get; }
     public Vector2 CameraPosition { get; }
     public Angle CameraRotation { get; }
+    public bool Valid { get; } = true;
 
-    public PhotoData(string id, Vector2i photoSize, Vector2 cameraPos, Angle cameraRot)
+    public PhotoData(string id, Vector2i photoSize, Vector2 cameraPos, Angle cameraRot, bool valid = true)
     {
         Id = id;
         PhotoSize = photoSize;
@@ -86,6 +86,7 @@ public sealed class PhotoData
         CameraRotation = cameraRot;
         Entities = new();
         Grids = new();
+        Valid = valid;
     }
 }
 

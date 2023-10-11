@@ -41,6 +41,10 @@ public sealed class PhotoBoundUserInterface : BoundUserInterface
 
         _window = new PhotoWindow();
         _window.OnClose += Close;
+        _window.ScreenshotComplete += () =>
+        {
+            _photoEyeRequest?.Dispose();
+        };
 
         if (_entityMgr.TryGetComponent<PhotoComponent>(Owner, out var photo))
         {

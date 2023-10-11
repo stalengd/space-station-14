@@ -68,6 +68,7 @@ public sealed class PhotoManager : EntitySystem
         if (!_photos.TryGetValue(message.Id, out var photoData))
         {
             _sawmill.Warning("Player " + sender.Name + " requested data of a photo with ID " + message.Id + " but it doesn't exist!");
+            photoData = new PhotoData(message.Id, Vector2i.One, Vector2.Zero, 0, false);
         }
 
         var ev = new PhotoDataRequestResponse(photoData, message.Id);

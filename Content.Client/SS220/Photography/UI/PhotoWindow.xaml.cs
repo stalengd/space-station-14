@@ -53,7 +53,7 @@ public sealed partial class PhotoWindow : BaseWindow
         else
         {
             PhotoView.Eye = _defaultEye;
-            LoadingTextLabel.Text = "Не удалось загрузить фотографию.";
+            LoadingTextLabel.Text = Loc.GetString("photo-failed-text-label");
         }
     }
 

@@ -78,11 +78,11 @@
   - type: Machine
     board: HydroponicsTrayMachineCircuitboard
   - type: TTS # Corvax-TTS
-    voice: TrainingRobot
+    voice: adventure_core
   - type: WiresPanel
   - type: Wires
-    BoardName: wires-board-name-hydroponicstray
-    LayoutId: HydroponicsTray
+    boardName: wires-board-name-hydroponicstray
+    layoutId: HydroponicsTray
   - type: AmbientSound
     volume: -9
     range: 5

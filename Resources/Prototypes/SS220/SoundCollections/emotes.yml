@@ -27,3 +27,17 @@
     - /Audio/SS220/Emotes/critgasp/choke_male_1.ogg
     - /Audio/SS220/Emotes/critgasp/choke_male_2.ogg
     - /Audio/SS220/Emotes/critgasp/choke_male_3.ogg
+
+- type: soundCollection
+  id: LizardGiggle
+  files:
+    - /Audio/SS220/Emotes/lizardgiggle/lizard_giggle.ogg
+    - /Audio/SS220/Emotes/lizardgiggle/lizard_giggle_lower.ogg
+
+- type: soundCollection
+  id: LizardHiss
+  files:
+    - /Audio/SS220/Emotes/lizardhissing/lizard_hissing_1.ogg
+    - /Audio/SS220/Emotes/lizardhissing/lizard_hissing_2.ogg
+    - /Audio/SS220/Emotes/lizardhissing/lizard_hissing_3.ogg
+    - /Audio/SS220/Emotes/lizardhissing/lizard_hissing_4.ogg

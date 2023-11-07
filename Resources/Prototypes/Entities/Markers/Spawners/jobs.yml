@@ -504,6 +504,18 @@
     layers:
       - state: green
       - state: seniorofficer
+      
+- type: entity
+  id: SpawnPointPilot
+  parent: SpawnPointJobBase
+  name: Пилот
+  components:
+  - type: SpawnPoint
+    job_id: SecurityPilot
+  - type: Sprite
+    layers:
+      - state: green
+      - state: security_officer
 
 - type: entity
   id: SpawnPointSecurityOfficer

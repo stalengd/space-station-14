@@ -83,6 +83,6 @@ public sealed class RotationVisualizerSystem : VisualizerSystem<RotationVisualsC
             }
         };
 
-        AnimationSystem.Play(animationComp, animation, animationKey);
+        AnimationSystem.Play((uid, animationComp), animation, animationKey);
     }
 }

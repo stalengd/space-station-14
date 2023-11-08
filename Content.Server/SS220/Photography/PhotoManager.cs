@@ -27,6 +27,7 @@ public sealed class PhotoManager : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private readonly DecalSystem _decal = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
@@ -109,11 +110,22 @@ public sealed class PhotoManager : EntitySystem
 
             if (TryComp<DecalGridComponent>(gridUid, out var decalGrid))
             {
-                var maybe_decals = EntityManager.GetComponentState(EntityManager.EventBus, decalGrid, null, GameTick.Zero);
-                if (maybe_decals is DecalGridState decals)
+                var (_, _, matrix) = gridXform.GetWorldPositionRotationInvMatrix();
+                var localPos = matrix.Transform(focusWorldPos);
+                var localAABB = new Box2(localPos - range, localPos + range);
+                var chunkDict = new Dictionary<Vector2i, DecalGridComponent.DecalChunk>();
+                var chunks = new ChunkIndicesEnumerator(localAABB, DecalSystem.ChunkSize);
+                var chunkCollection = decalGrid.ChunkCollection.ChunkCollection;
+
+                while (chunks.MoveNext(out var chunkOrigin))
                 {
-                    gridData.DecalGridState = decals;
+                    if (!chunkCollection.TryGetValue(chunkOrigin.Value, out var chunk))
+                        continue;
+
+                    chunkDict.Add(chunkOrigin.Value, chunk);
                 }
+
+                gridData.DecalGridState = new DecalGridState(chunkDict);
             }
 
             gridIdMap.Add(gridUid, data.Grids.Count);

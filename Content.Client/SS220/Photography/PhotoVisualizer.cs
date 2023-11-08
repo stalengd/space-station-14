@@ -23,7 +23,6 @@ public sealed partial class PhotoVisualizer : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly DecalSystem _decal = default!;
     [Dependency] private readonly EyeSystem _eye = default!;
     [Dependency] private readonly MapSystem _map = default!;
 

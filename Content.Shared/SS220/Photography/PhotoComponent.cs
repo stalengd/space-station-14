@@ -29,6 +29,7 @@ public sealed class PhotoEntityData
 {
     public readonly string PrototypeId;
     public Vector2 Position;
+    public int? GridIndex = null;
     public Angle Rotation;
     public AppearanceComponentState? Appearance;
     public ComponentState? HumanoidAppearance;

@@ -12,6 +12,7 @@ using Content.Shared.SS220.Photography;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
+using Robust.Shared.Utility;
 
 namespace Content.Client.SS220.Photography;
 
@@ -74,17 +75,23 @@ public sealed partial class PhotoVisualizer : EntitySystem
         }
 
         var origin = new MapCoordinates(Vector2.Zero, _reservedMap.Value);
-        var entities = new List<EntityUid>(4096);
+        var entities = new List<EntityUid>(data.Entities.Count + data.Grids.Count + 1);
+        List<EntityUid> grids = new(data.Grids.Count);
 
         // Add grids
-        foreach (var gridDesc in data.Grids)
+        for (var i = 0; i < data.Grids.Count; i++)
         {
+            var gridDesc = data.Grids[i];
             var grid = _mapMan.CreateGrid(_reservedMap.Value);
             var gridEnt = grid.Owner;
             var gridXform = EnsureComp<TransformComponent>(gridEnt);
             entities.Add(gridEnt);
+            grids.Add(gridEnt);
 
-            _transform.SetWorldPositionRotation(gridXform, gridDesc.Position, gridDesc.Rotation);
+            _transform.SetParent(gridEnt, _mapMan.GetMapEntityId(_reservedMap.Value));
+            _transform.SetLocalRotationNoLerp(gridEnt, gridDesc.Rotation);
+            _transform.SetLocalPositionNoLerp(gridEnt, gridDesc.Position);
+            //_transform.SetWorldPositionRotation(gridXform, gridDesc.Position, gridDesc.Rotation);
 
             foreach (var (indices, tileType) in gridDesc.Tiles)
             {
@@ -115,13 +122,12 @@ public sealed partial class PhotoVisualizer : EntitySystem
         // Add entities
         foreach (var entityDesc in data.Entities)
         {
-            var worldPos = entityDesc.Position;
-
-            // Make sure entities are parented to grids
+            // Make sure entity transforms are parented
             EntityUid parent;
-            if (_mapMan.TryFindGridAt(_reservedMap.Value, entityDesc.Position, out var gridUid, out _))
+
+            if (entityDesc.GridIndex.HasValue && grids.TryGetValue(entityDesc.GridIndex.Value, out var maybeParent))
             {
-                parent = gridUid;
+                parent = maybeParent;
             }
             else if (_mapMan.GetMapEntityId(_reservedMap.Value) is { Valid: true } mapEnt)
             {
@@ -132,13 +138,13 @@ public sealed partial class PhotoVisualizer : EntitySystem
                 continue;
             }
 
-            EntityCoordinates coords = new(parent, _transform.GetInvWorldMatrix(parent).Transform(worldPos));
+            EntityCoordinates coords = new(parent, entityDesc.Position);
 
             var entity = Spawn(entityDesc.PrototypeId, coords);
             entities.Add(entity);
 
             var xform = EnsureComp<TransformComponent>(entity);
-            _transform.SetWorldRotation(xform, entityDesc.Rotation);
+            _transform.SetLocalRotationNoLerp(entity, entityDesc.Rotation, xform);
 
             if (TryComp<RotationVisualsComponent>(entity, out var rotationVisualsComp))
                 rotationVisualsComp.AnimationTime = 0;

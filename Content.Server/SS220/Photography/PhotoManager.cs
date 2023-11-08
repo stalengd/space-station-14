@@ -86,6 +86,35 @@ public sealed class PhotoManager : EntitySystem
 
         var data = new PhotoData(id, captureSize, focusWorldPos, cameraRotation);
 
+        // Get grids in range
+        var intersectingGrids = _map.FindGridsIntersecting(focusCoords.MapId, worldArea);
+        Dictionary<EntityUid, int> gridIdMap = new();
+
+        foreach (var grid in intersectingGrids)
+        {
+            var gridUid = grid.Owner;
+
+            if (!TryComp<TransformComponent>(gridUid, out var gridXform))
+                continue;
+
+            var gridPosRot = _transform.GetWorldPositionRotation(gridXform);
+            var gridData = new PhotoGridData(gridPosRot.WorldPosition, gridPosRot.WorldRotation);
+            foreach (var tile in grid.GetTilesIntersecting(worldArea))
+            {
+                var indices = tile.GridIndices;
+                var tileType = tile.Tile.TypeId;
+                gridData.Tiles.Add((indices, tileType));
+            }
+
+            foreach (var decal in _decal.GetDecalsIntersecting(gridUid, worldArea))
+            {
+                gridData.Decals.Add(decal.Decal);
+            }
+
+            gridIdMap.Add(gridUid, data.Grids.Count);
+            data.Grids.Add(gridData);
+        }
+
         // Get entities in range
         foreach (var entity in _entityLookup.GetEntitiesInRange(focusCoords, radius, LookupFlags.Uncontained))
         {
@@ -100,7 +129,18 @@ public sealed class PhotoManager : EntitySystem
             if (!TryComp<TransformComponent>(entity, out var entXform))
                 continue;
 
-            var (position, rotation) = _transform.GetWorldPositionRotation(entXform);
+            Vector2 position;
+            Angle rotation;
+            int? gridKey = null;
+
+            if (entXform.GridUid is { } gridUid && gridIdMap.TryGetValue(gridUid, out var gridKeyMaybe))
+            {
+                gridKey = gridKeyMaybe;
+                position = entXform.LocalPosition;
+                rotation = entXform.LocalRotation;
+            }
+            else
+                (position, rotation) = _transform.GetWorldPositionRotation(entXform);
 
             // TODO: deduplicate
             // Appearance state
@@ -211,6 +251,7 @@ public sealed class PhotoManager : EntitySystem
 
             var ent_data = new PhotoEntityData(protoId, position, rotation)
             {
+                GridIndex = gridKey,
                 Appearance = appearanceState,
                 HumanoidAppearance = humanoidAppearanceState,
                 PointLight = pointLightState,
@@ -221,30 +262,6 @@ public sealed class PhotoManager : EntitySystem
                 HandsContents = hands
             };
             data.Entities.Add(ent_data);
-        }
-
-        // Get grids in range
-        var intersectingGrids = _map.FindGridsIntersecting(focusCoords.MapId, worldArea);
-        foreach (var grid in intersectingGrids)
-        {
-            if (!TryComp<TransformComponent>(grid.Owner, out var gridXform))
-                continue;
-
-            var gridPosRot = _transform.GetWorldPositionRotation(gridXform);
-            var gridData = new PhotoGridData(gridPosRot.WorldPosition, gridPosRot.WorldRotation);
-            foreach (var tile in grid.GetTilesIntersecting(worldArea))
-            {
-                var indices = tile.GridIndices;
-                var tileType = tile.Tile.TypeId;
-                gridData.Tiles.Add((indices, tileType));
-            }
-
-            foreach (var decal in _decal.GetDecalsIntersecting(grid.Owner, worldArea))
-            {
-                gridData.Decals.Add(decal.Decal);
-            }
-
-            data.Grids.Add(gridData);
         }
 
         _photos.Add(id, data);

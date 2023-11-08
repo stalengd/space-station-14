@@ -55,16 +55,15 @@ public sealed class PhotoEntityData
 public sealed class PhotoGridData
 {
     public List<(Vector2i, int)> Tiles;
-    public List<Decal> Decals;
     public Vector2 Position;
     public Angle Rotation;
+    public DecalGridState? DecalGridState;
 
     public PhotoGridData(Vector2 pos, Angle rot)
     {
         Position = pos;
         Rotation = rot;
         Tiles = new();
-        Decals = new();
     }
 }
 

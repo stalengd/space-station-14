@@ -5,6 +5,7 @@ using Content.Client.Decals;
 using Content.Client.Hands.Systems;
 using Content.Client.Rotation;
 using Content.Shared.Damage;
+using Content.Shared.Decals;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -92,7 +93,6 @@ public sealed partial class PhotoVisualizer : EntitySystem
             _transform.SetParent(gridEnt, gridXform, _mapMan.GetMapEntityId(_reservedMap.Value));
             _transform.SetLocalRotationNoLerp(gridEnt, gridDesc.Rotation, gridXform);
             _transform.SetLocalPositionNoLerp(gridEnt, gridDesc.Position, gridXform);
-            //_transform.SetWorldPositionRotation(gridXform, gridDesc.Position, gridDesc.Rotation);
 
             foreach (var (indices, tileType) in gridDesc.Tiles)
             {
@@ -100,9 +100,12 @@ public sealed partial class PhotoVisualizer : EntitySystem
                 _map.SetTile(gridEnt, grid, indices, tile);
             }
 
-            foreach (var decal in gridDesc.Decals)
+            // Handle decal state
+            if (gridDesc.DecalGridState is not null)
             {
-                //Todo: fuck i can't add decals clientside
+                var decalGrid = EnsureComp<DecalGridComponent>(gridEnt);
+                var ev = new ComponentHandleState(gridDesc.DecalGridState, null);
+                EntityManager.EventBus.RaiseComponentEvent(decalGrid, ref ev);
             }
         }
 

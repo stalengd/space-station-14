@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Server.Decals;
 using Content.Server.Hands.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Decals;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
@@ -26,7 +27,6 @@ public sealed class PhotoManager : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly DecalSystem _decal = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
@@ -107,9 +107,13 @@ public sealed class PhotoManager : EntitySystem
                 gridData.Tiles.Add((indices, tileType));
             }
 
-            foreach (var decal in _decal.GetDecalsIntersecting(gridUid, worldArea))
+            if (TryComp<DecalGridComponent>(gridUid, out var decalGrid))
             {
-                gridData.Decals.Add(decal.Decal);
+                var maybe_decals = EntityManager.GetComponentState(EntityManager.EventBus, decalGrid, null, GameTick.Zero);
+                if (maybe_decals is DecalGridState decals)
+                {
+                    gridData.DecalGridState = decals;
+                }
             }
 
             gridIdMap.Add(gridUid, data.Grids.Count);

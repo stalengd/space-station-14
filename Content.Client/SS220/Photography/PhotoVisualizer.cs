@@ -24,6 +24,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly DecalSystem _decal = default!;
     [Dependency] private readonly EyeSystem _eye = default!;
+    [Dependency] private readonly MapSystem _map = default!;
 
     private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
     private Dictionary<string, PhotoVisualisation> _currentlyVisualized = new();
@@ -88,15 +89,15 @@ public sealed partial class PhotoVisualizer : EntitySystem
             entities.Add(gridEnt);
             grids.Add(gridEnt);
 
-            _transform.SetParent(gridEnt, _mapMan.GetMapEntityId(_reservedMap.Value));
-            _transform.SetLocalRotationNoLerp(gridEnt, gridDesc.Rotation);
-            _transform.SetLocalPositionNoLerp(gridEnt, gridDesc.Position);
+            _transform.SetParent(gridEnt, gridXform, _mapMan.GetMapEntityId(_reservedMap.Value));
+            _transform.SetLocalRotationNoLerp(gridEnt, gridDesc.Rotation, gridXform);
+            _transform.SetLocalPositionNoLerp(gridEnt, gridDesc.Position, gridXform);
             //_transform.SetWorldPositionRotation(gridXform, gridDesc.Position, gridDesc.Rotation);
 
             foreach (var (indices, tileType) in gridDesc.Tiles)
             {
                 var tile = new Tile(tileType);
-                grid.SetTile(indices, tile);
+                _map.SetTile(gridEnt, grid, indices, tile);
             }
 
             foreach (var decal in gridDesc.Decals)

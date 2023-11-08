@@ -20,7 +20,8 @@ namespace Content.Server.SS220.Photography;
 public sealed class PhotoManager : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IMapManager _map = default!;
+    [Dependency] private readonly IMapManager _mapMan = default!;
+    [Dependency] private readonly MapSystem _mapSys = default!;
     [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
@@ -87,7 +88,7 @@ public sealed class PhotoManager : EntitySystem
         var data = new PhotoData(id, captureSize, focusWorldPos, cameraRotation);
 
         // Get grids in range
-        var intersectingGrids = _map.FindGridsIntersecting(focusCoords.MapId, worldArea);
+        var intersectingGrids = _mapMan.FindGridsIntersecting(focusCoords.MapId, worldArea);
         Dictionary<EntityUid, int> gridIdMap = new();
 
         foreach (var grid in intersectingGrids)
@@ -99,7 +100,7 @@ public sealed class PhotoManager : EntitySystem
 
             var gridPosRot = _transform.GetWorldPositionRotation(gridXform);
             var gridData = new PhotoGridData(gridPosRot.WorldPosition, gridPosRot.WorldRotation);
-            foreach (var tile in grid.GetTilesIntersecting(worldArea))
+            foreach (var tile in _mapSys.GetTilesIntersecting(gridUid, grid, worldArea, true))
             {
                 var indices = tile.GridIndices;
                 var tileType = tile.Tile.TypeId;

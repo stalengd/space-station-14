@@ -8,7 +8,6 @@ namespace Content.Server.SS220.Photography;
 
 public sealed class PhotoCameraSystem : EntitySystem
 {
-    [Dependency] private readonly IMapManager _map = default!;
     [Dependency] private readonly PhotoManager _photo = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
@@ -19,22 +18,22 @@ public sealed class PhotoCameraSystem : EntitySystem
         SubscribeLocalEvent<PhotoCameraComponent, ActivateInWorldEvent>(OnActivate);
     }
 
-    private void OnActivate(EntityUid uid, PhotoCameraComponent component, ActivateInWorldEvent args)
+    private void OnActivate(Entity<PhotoCameraComponent> entity, ref ActivateInWorldEvent args)
     {
-        if (!TryPhoto(uid, component, out var photo))
+        if (!TryPhoto(entity, out var photo))
             return;
 
         // TODO: cooldown & film charges
     }
 
-    private bool TryPhoto(EntityUid uid, PhotoCameraComponent component, [NotNullWhen(true)] out EntityUid? photoEntity)
+    private bool TryPhoto(Entity<PhotoCameraComponent> entity, [NotNullWhen(true)] out EntityUid? photoEntity)
     {
         photoEntity = null;
 
-        if (component.FilmLeft <= 0)
+        if (entity.Comp.FilmLeft <= 0)
             return false;
 
-        if (!TryComp<TransformComponent>(uid, out var xform))
+        if (!TryComp<TransformComponent>(entity, out var xform))
             return false;
 
         Angle cameraRotation;
@@ -44,11 +43,11 @@ public sealed class PhotoCameraSystem : EntitySystem
         else
             cameraRotation = _transform.GetWorldRotation(xform);
 
-        var id = _photo.TryCapture(xform.MapPosition, cameraRotation, component.SelectedPhotoDimensions);
+        var id = _photo.TryCapture(xform.MapPosition, cameraRotation, entity.Comp.SelectedPhotoDimensions);
         if (id is null)
             return false;
 
-        photoEntity = Spawn(component.PhotoPrototypeId, xform.MapPosition);
+        photoEntity = Spawn(entity.Comp.PhotoPrototypeId, xform.MapPosition);
         var photoComp = EnsureComp<PhotoComponent>(photoEntity.Value);
         photoComp.PhotoID = id;
         Dirty(photoEntity.Value, photoComp);

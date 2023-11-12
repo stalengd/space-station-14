@@ -3,19 +3,46 @@ using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Decals;
 using Content.Shared.Hands.Components;
+using Content.Shared.SS220.Photocopier;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.SS220.Photography;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class PhotoComponent : Component
+public sealed partial class PhotoComponent : Component, IPhotocopyableComponent
 {
     /// <summary>
     /// ID of a photo to receive from the server
     /// </summary>
     [DataField, AutoNetworkedField]
     public string PhotoID = "";
+
+    public IPhotocopiedComponentData GetPhotocopiedData()
+    {
+        return new PhotoPhotocopiedData()
+        {
+            PhotoID = PhotoID
+        };
+    }
+}
+
+[Serializable]
+public sealed class PhotoPhotocopiedData : IPhotocopiedComponentData
+{
+    public string PhotoID = "";
+
+    public void RestoreFromData(EntityUid uid, Component someComponent)
+    {
+        if (someComponent is not PhotoComponent component)
+            return;
+
+        var entSys = IoCManager.Resolve<IEntityManager>();
+        var changed = PhotoID != component.PhotoID;
+        component.PhotoID = PhotoID;
+        if (changed)
+            entSys.Dirty(uid, component);
+    }
 }
 
 [Serializable, NetSerializable]

@@ -9,6 +9,7 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.SS220.Photography;
+using Content.Shared.StatusEffect;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
@@ -198,6 +199,14 @@ public sealed partial class PhotoVisualizer : EntitySystem
                 var handsComp = EnsureComp<HandsComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Hands, null);
                 EntityManager.EventBus.RaiseComponentEvent(handsComp, ref ev);
+            }
+
+            // Status Effects
+            if (entityDesc.StatusEffects is not null)
+            {
+                var statusEffectsComp = EnsureComp<StatusEffectsComponent>(entity);
+                var ev = new ComponentHandleState(entityDesc.StatusEffects, null);
+                EntityManager.EventBus.RaiseComponentEvent(statusEffectsComp, ref ev);
             }
 
             // Handle inventory

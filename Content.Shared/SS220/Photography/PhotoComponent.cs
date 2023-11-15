@@ -4,6 +4,7 @@ using Content.Shared.Damage;
 using Content.Shared.Decals;
 using Content.Shared.Hands.Components;
 using Content.Shared.SS220.Photocopier;
+using Content.Shared.StatusEffect;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -64,6 +65,7 @@ public sealed class PhotoEntityData
     public OccluderComponent.OccluderComponentState? Occluder;
     public DamageableComponentState? Damageable;
     public HandsComponentState? Hands;
+    public StatusEffectsComponentState? StatusEffects;
     public Dictionary<string, string>? Inventory;
     public Dictionary<string, string>? HandsContents;
 

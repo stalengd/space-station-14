@@ -28,8 +28,11 @@ public sealed partial class PhotoWindow : BaseWindow
         PhotoView.Eye = _defaultEye;
         PhotoView.Visible = false;
         PhotoView.ViewportSize = new Vector2i(500, 500);
+    }
 
-        BackText.SetMarkup("Written on the back:\n[italic]Test test test[/italic]");
+    public void SetBackText(string? text)
+    {
+        BackText.SetMarkup(text ?? "");
     }
 
     public void PostScreenshot(Image<Rgba32> image)

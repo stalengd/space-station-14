@@ -56,6 +56,37 @@ public sealed class PhotoBoundUserInterface : BoundUserInterface
             _photoVisualizer.RequestPhotoEye(_photoEyeRequest);
         }
 
+        if (_entityMgr.TryGetComponent<MetaDataComponent>(Owner, out var metaData))
+        {
+            var protoName = metaData.EntityPrototype?.Name;
+            var entName = metaData.EntityName;
+
+            // 16.11.2023 there is no client-side label system/component, so using this hack instead
+            if (protoName != entName)
+            {
+                var labelPrefx = protoName + " (";
+                var start = entName.IndexOf(labelPrefx);
+                if (start != -1) // likely labeled - use whatever is in parentheses
+                {
+                    start += labelPrefx.Length;
+                    var end = entName.IndexOf(")");
+                    if (end == -1)
+                        end = entName.Length;
+
+                    var finalNameLen = end - start;
+                    if (finalNameLen > 0)
+                    {
+                        var finalName = entName.Substring(start, finalNameLen);
+                        _window.SetBackText(finalName);
+                    }
+                }
+                else // not labeled, but still different
+                {
+                    _window.SetBackText(entName);
+                }
+            }
+        }
+
         _window.OpenCentered();
     }
 

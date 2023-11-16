@@ -2,8 +2,8 @@
 - type: entity
   parent: BaseItem
   id: Photo
-  name: photo
-  description: some very original desc (Ask ChatGPT?)
+  name: фотография
+  description: Сделана фотоаппаратом с мгновенной печатью.
   components:
   - type: Photo
   - type: ActivatableUI
@@ -37,8 +37,8 @@
 - type: entity
   parent: BaseItem
   id: PhotoCamera
-  name: camera
-  description: some very original desc (Ask ChatGPT?)
+  name: фотоаппарат
+  description: Для того чтобы запечатлеть те самые яркие моменты вашей жизни. Имеет функцию мгновенной печати.
   components:
   - type: PhotoCamera
   - type: Sprite
@@ -49,3 +49,5 @@
     charges: 5
   - type: Item
     size: Normal
+  - type: UseDelay
+    delay: 2

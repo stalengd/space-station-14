@@ -1,4 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Server.Decals;
 using Content.Server.Hands.Systems;
@@ -33,15 +34,12 @@ public sealed class PhotoManager : EntitySystem
     private Dictionary<string, PhotoData> _photos = new();
     private ISawmill _sawmill = Logger.GetSawmill("photo-manager");
 
-    private float _pvsRange = 10;
+    private float _photoRange = 10; //10 is the radius of average powered light
     public const float MAX_PHOTO_RADIUS = 20;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _cfg.OnValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged, true);
-        _pvsRange = _cfg.GetCVar(CVars.NetMaxUpdateRange);
 
         _gridQuery = EntityManager.GetEntityQuery<MapGridComponent>();
 
@@ -53,15 +51,12 @@ public sealed class PhotoManager : EntitySystem
     {
         base.Shutdown();
         _photos.Clear();
-        _cfg.UnsubValueChanged(CVars.NetMaxUpdateRange, OnPvsRangeChanged);
     }
 
     public void OnRoundRestart(RoundRestartCleanupEvent args)
     {
         _photos.Clear();
     }
-
-    private void OnPvsRangeChanged(float value) => _pvsRange = value;
 
     private void OnPhotoDataRequest(PhotoDataRequest message, EntitySessionEventArgs eventArgs)
     {
@@ -77,12 +72,19 @@ public sealed class PhotoManager : EntitySystem
         RaiseNetworkEvent(ev, sender);
     }
 
-    public string? TryCapture(MapCoordinates focusCoords, Angle cameraRotation, float captureSize)
+    public bool TryCapture(
+        MapCoordinates focusCoords,
+        Angle cameraRotation,
+        float captureSize,
+        [NotNullWhen(true)] out string? id,
+        [NotNullWhen(true)] out List<string>? seenObjects)
     {
-        var id = Guid.NewGuid().ToString();
+        id = Guid.NewGuid().ToString();
+        seenObjects = new();
         var focusWorldPos = focusCoords.Position;
+        var captureSizeSquareHalf = (captureSize * captureSize) / 2; //for optimization purposes
 
-        var radius = MathF.Min(_pvsRange, MAX_PHOTO_RADIUS); //cap because scary
+        var radius = MathF.Min(_photoRange, MAX_PHOTO_RADIUS); //cap because scary
         var range = new Vector2(radius, radius);
         var worldArea = new Box2(focusWorldPos - range, focusWorldPos + range);
 
@@ -176,6 +178,9 @@ public sealed class PhotoManager : EntitySystem
             if (TryComp<HumanoidAppearanceComponent>(entity, out var humanoidAppearance))
             {
                 humanoidAppearanceState = EntityManager.GetComponentState(EntityManager.EventBus, humanoidAppearance, null, GameTick.Zero);
+
+                if ((_transform.GetWorldPosition(entity) - focusWorldPos).LengthSquared() < captureSizeSquareHalf)
+                    seenObjects.Add(Name(entity));
             }
 
             // Point light state
@@ -284,6 +289,6 @@ public sealed class PhotoManager : EntitySystem
         _photos.Add(id, data);
         _sawmill.Debug("Photo taken! Entity count: " + data.Entities.Count + ", Grid count: " + data.Grids.Count + ", ID: " + id);
 
-        return id;
+        return true;
     }
 }

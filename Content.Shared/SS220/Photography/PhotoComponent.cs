@@ -18,12 +18,15 @@ public sealed partial class PhotoComponent : Component, IPhotocopyableComponent
     /// </summary>
     [DataField, AutoNetworkedField]
     public string PhotoID = "";
+    [DataField, AutoNetworkedField]
+    public List<string> SeenObjects = new();
 
     public IPhotocopiedComponentData GetPhotocopiedData()
     {
         return new PhotoPhotocopiedData()
         {
-            PhotoID = PhotoID
+            PhotoID = PhotoID,
+            SeenObjects = SeenObjects
         };
     }
 }
@@ -32,17 +35,18 @@ public sealed partial class PhotoComponent : Component, IPhotocopyableComponent
 public sealed class PhotoPhotocopiedData : IPhotocopiedComponentData
 {
     public string PhotoID = "";
+    public List<string> SeenObjects = new();
 
     public void RestoreFromData(EntityUid uid, Component someComponent)
     {
         if (someComponent is not PhotoComponent component)
             return;
 
-        var entSys = IoCManager.Resolve<IEntityManager>();
-        var changed = PhotoID != component.PhotoID;
         component.PhotoID = PhotoID;
-        if (changed)
-            entSys.Dirty(uid, component);
+        component.SeenObjects = SeenObjects;
+
+        var entSys = IoCManager.Resolve<IEntityManager>();
+        entSys.Dirty(uid, component);
     }
 }
 

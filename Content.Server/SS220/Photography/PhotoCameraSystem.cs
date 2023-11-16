@@ -25,8 +25,18 @@ public sealed class PhotoCameraSystem : EntitySystem
         SubscribeLocalEvent<PhotoCameraComponent, UseInHandEvent>(OnCameraActivate);
         SubscribeLocalEvent<PhotoCameraComponent, GetVerbsEvent<Verb>>(OnVerb);
         SubscribeLocalEvent<PhotoCameraComponent, ExaminedEvent>(OnCameraExamine);
+        SubscribeLocalEvent<PhotoComponent, ExaminedEvent>(OnPhotoExamine);
         SubscribeLocalEvent<PhotoFilmComponent, AfterInteractEvent>(OnFilmUse);
         SubscribeLocalEvent<PhotoFilmComponent, ExaminedEvent>(OnFilmExamine);
+    }
+
+    private void OnPhotoExamine(Entity<PhotoComponent> entity, ref ExaminedEvent args)
+    {
+        if (entity.Comp.SeenObjects.Count == 0)
+            return;
+
+        var seenFormatted = string.Join(", ", entity.Comp.SeenObjects.ToArray());
+        args.PushMarkup(Loc.GetString("photo-component-seen-objects", ("seen", seenFormatted)));
     }
 
     private void OnVerb(Entity<PhotoCameraComponent> entity, ref GetVerbsEvent<Verb> args)
@@ -122,13 +132,13 @@ public sealed class PhotoCameraSystem : EntitySystem
         else
             cameraRotation = _transform.GetWorldRotation(xform);
 
-        var id = _photo.TryCapture(xform.MapPosition, cameraRotation, entity.Comp.SelectedPhotoDimensions);
-        if (id is null)
+        if (!_photo.TryCapture(xform.MapPosition, cameraRotation, entity.Comp.SelectedPhotoDimensions, out var id, out var seenObjects))
             return false;
 
         photoEntity = Spawn(entity.Comp.PhotoPrototypeId, xform.MapPosition);
         var photoComp = EnsureComp<PhotoComponent>(photoEntity.Value);
         photoComp.PhotoID = id;
+        photoComp.SeenObjects = seenObjects;
         Dirty(photoEntity.Value, photoComp);
 
         return true;

@@ -15,6 +15,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Server.SS220.Photography;
 
@@ -27,7 +28,6 @@ public sealed class PhotoManager : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly DecalSystem _decal = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
@@ -167,7 +167,7 @@ public sealed class PhotoManager : EntitySystem
                 var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, appearance, null, GameTick.Zero);
                 if (maybe_state is AppearanceComponentState state)
                 {
-                    appearanceState = state;
+                    appearanceState = new AppearanceComponentState(state.Data.ShallowClone());
                 }
             }
 

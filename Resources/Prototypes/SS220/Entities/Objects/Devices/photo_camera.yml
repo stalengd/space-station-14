@@ -37,7 +37,7 @@
   parent: BaseItem
   id: PhotoCamera
   name: фотоаппарат
-  description: Для того чтобы запечатлеть те самые яркие моменты вашей жизни. Имеет функцию мгновенной печати.
+  description: Для того, чтобы запечатлеть те самые яркие моменты вашей жизни. Имеет функцию мгновенной печати.
   components:
   - type: PhotoCamera
   - type: Sprite

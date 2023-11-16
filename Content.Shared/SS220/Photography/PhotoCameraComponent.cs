@@ -22,19 +22,13 @@ public sealed partial class PhotoCameraComponent : Component
     /// Dimensions of a photo, in tiles. X is Width, Y is Height.
     /// </summary>
     [DataField]
-    public Vector2i SelectedPhotoDimensions = new(5, 5);
+    public float SelectedPhotoDimensions = 5;
 
     /// <summary>
     /// Available dimensions of a photo, can be switched via context menu of a camera.
     /// </summary>
     [DataField]
-    public Vector2i[] AvailablePhotoDimensions = {
-        new(3,3),
-        new(4,4),
-        new(5,5),
-        new(6,6),
-        new(7,7)
-    };
+    public float[] AvailablePhotoDimensions = { 3, 5, 7 };
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan PrintingTime = TimeSpan.FromSeconds(3);

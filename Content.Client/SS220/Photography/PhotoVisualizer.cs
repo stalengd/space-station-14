@@ -238,7 +238,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             }
         }
 
-        var photoVisDesc = new PhotoVisualisation(_reservedMap.Value, camera, origin, eye, entities);
+        var photoVisDesc = new PhotoVisualisation(_reservedMap.Value, camera, origin, eye, entities, data.PhotoSize);
         _currentlyVisualized.Add(data.Id, photoVisDesc);
         _sawmill.Debug("Created map for visualization of the photo " + data.Id);
 
@@ -266,13 +266,15 @@ public sealed class PhotoVisualisation
     public readonly EyeComponent Eye;
     public readonly MapCoordinates Origin;
     public readonly List<EntityUid> Entities;
+    public readonly float Size;
 
-    public PhotoVisualisation(MapId mapId, EntityUid camera, MapCoordinates origin, EyeComponent eye, List<EntityUid> entities)
+    public PhotoVisualisation(MapId mapId, EntityUid camera, MapCoordinates origin, EyeComponent eye, List<EntityUid> entities, float size)
     {
         MapId = mapId;
         Origin = origin;
         Camera = camera;
         Eye = eye;
         Entities = entities;
+        Size = size;
     }
 }

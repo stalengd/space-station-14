@@ -7,6 +7,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.SS220.Photography;
+using Content.Shared.Verbs;
 
 namespace Content.Server.SS220.Photography;
 
@@ -22,8 +23,45 @@ public sealed class PhotoCameraSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<PhotoCameraComponent, UseInHandEvent>(OnCameraActivate);
+        SubscribeLocalEvent<PhotoCameraComponent, GetVerbsEvent<Verb>>(OnVerb);
+        SubscribeLocalEvent<PhotoCameraComponent, ExaminedEvent>(OnCameraExamine);
         SubscribeLocalEvent<PhotoFilmComponent, AfterInteractEvent>(OnFilmUse);
         SubscribeLocalEvent<PhotoFilmComponent, ExaminedEvent>(OnFilmExamine);
+    }
+
+    private void OnVerb(Entity<PhotoCameraComponent> entity, ref GetVerbsEvent<Verb> args)
+    {
+        // standard interaction checks
+        if (!args.CanAccess || !args.CanInteract || args.Hands == null)
+            return;
+
+        foreach (var size in entity.Comp.AvailablePhotoDimensions)
+        {
+            var verb = new Verb()
+            {
+                Text = GetPhotoSizeLoc(size),
+                Disabled = entity.Comp.SelectedPhotoDimensions == size,
+                Priority = (int) size, // sort them in ascending order
+                Category = VerbCategory.PhotoSize,
+                Act = () => SetPhotoSize(entity, entity.Comp, size)
+            };
+
+            args.Verbs.Add(verb);
+        }
+    }
+
+    public void SetPhotoSize(EntityUid entity, PhotoCameraComponent component, float size)
+    {
+        component.SelectedPhotoDimensions = size;
+        Dirty(entity, component);
+    }
+
+    private void OnCameraExamine(Entity<PhotoCameraComponent> entity, ref ExaminedEvent args)
+    {
+        args.PushMarkup(Loc.GetString(
+            "photo-film-component-selected-photo-size",
+            ("size", GetPhotoSizeLoc(entity.Comp.SelectedPhotoDimensions))
+        ));
     }
 
     private void OnFilmExamine(Entity<PhotoFilmComponent> entity, ref ExaminedEvent args)
@@ -60,6 +98,11 @@ public sealed class PhotoCameraSystem : EntitySystem
 
         _charges.UseCharge(entity, charges);
         args.Handled = true;
+    }
+
+    private string GetPhotoSizeLoc(float size)
+    {
+        return Loc.GetString("photo-camera-component-photo-size", ("size", size));
     }
 
     private bool TryPhoto(Entity<PhotoCameraComponent> entity, [NotNullWhen(true)] out EntityUid? photoEntity)

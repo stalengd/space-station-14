@@ -30,7 +30,8 @@
                         HorizontalExpand="True"
                         MinSize="500 500"
                         MouseFilter="Ignore"
-                        Visible="False"/>
+                        Visible="False"
+                        Stretch="Scale"/>
                 </Control>
                 <RichTextLabel
                     Name="BackText"

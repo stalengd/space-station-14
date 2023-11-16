@@ -89,5 +89,8 @@ namespace Content.Shared.Verbs
 
         public static readonly VerbCategory DeattachCart = new("verb-categories-deattach-cart", null);
         //SS220-Cart-system end
+
+        //SS220-Photography
+        public static readonly VerbCategory PhotoSize = new("verb-categories-photo-size", null);
     }
 }

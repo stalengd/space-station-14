@@ -23,14 +23,14 @@ public sealed class PhotoBoundUserInterface : BoundUserInterface
     private PhotoEyeRequest.OnVisualizationInitCallback _initCallback;
     private PhotoEyeRequest.OnDisposeCallback _disposeCallback;
 
-    private void OnPhotoDataReceived(EyeComponent eye)
+    private void OnPhotoDataReceived(EyeComponent eye, float size)
     {
-        _window?.SetVisuals(eye);
+        _window?.SetVisuals(eye, size);
     }
 
     private void OnVisualizationDisposed()
     {
-        _window?.SetVisuals(null);
+        _window?.SetVisuals(null, 5);
         _photoEyeRequest = null;
     }
 

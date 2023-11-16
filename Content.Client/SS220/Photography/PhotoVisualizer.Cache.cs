@@ -59,7 +59,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 foreach (var request in requestsSet)
                 {
-                    request.OnVisualizationInit?.Invoke(eye);
+                    request.OnVisualizationInit?.Invoke(eye, data.PhotoSize);
                 }
             }
         }
@@ -95,7 +95,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
 
             if (TryGetVisualization(photoData, out var eye))
             {
-                request.OnVisualizationInit?.Invoke(eye);
+                request.OnVisualizationInit?.Invoke(eye, photoData.PhotoSize);
             }
         }
     }
@@ -136,7 +136,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
         {
             if (_currentlyVisualized.TryGetValue(request.PhotoId, out var photoVis))
             {
-                request.OnVisualizationInit?.Invoke(photoVis.Eye);
+                request.OnVisualizationInit?.Invoke(photoVis.Eye, photoVis.Size);
                 return;
             }
         }
@@ -149,7 +149,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             if (!QUEUED_MODE)
             {
                 if (TryGetVisualization(photoData, out var eye))
-                    request.OnVisualizationInit?.Invoke(eye);
+                    request.OnVisualizationInit?.Invoke(eye, photoData.PhotoSize);
             }
             else
             {
@@ -188,6 +188,6 @@ public sealed class PhotoEyeRequest
         photoVisualizer.UpdateQueue();
     }
 
-    public delegate void OnVisualizationInitCallback(EyeComponent eye);
+    public delegate void OnVisualizationInitCallback(EyeComponent eye, float size);
     public delegate void OnDisposeCallback();
 }

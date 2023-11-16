@@ -100,14 +100,14 @@ public sealed class PhotoGridData
 public sealed class PhotoData
 {
     public string Id { get; }
-    public Vector2i PhotoSize { get; }
+    public float PhotoSize { get; }
     public List<PhotoEntityData> Entities { get; }
     public List<PhotoGridData> Grids { get; }
     public Vector2 CameraPosition { get; }
     public Angle CameraRotation { get; }
     public bool Valid { get; } = true;
 
-    public PhotoData(string id, Vector2i photoSize, Vector2 cameraPos, Angle cameraRot, bool valid = true)
+    public PhotoData(string id, float photoSize, Vector2 cameraPos, Angle cameraRot, bool valid = true)
     {
         Id = id;
         PhotoSize = photoSize;

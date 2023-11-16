@@ -21,3 +21,5 @@
   innerClothingSkirt: ClothingUniformJumpsuitJournalist
   satchel: ClothingBackpackSatchelFilled
   duffelbag: ClothingBackpackDuffelFilled
+  pocket1: PhotoCamera
+  pocket2: PhotoCameraFilm

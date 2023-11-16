@@ -74,7 +74,7 @@
       - id: PilotBriefing
       - id: YellowOxygenTankFilled
       - id: NitrogenTankFilled
-      
+
 - type: entity
   id: LockerSecurityFilled
   suffix: Filled
@@ -162,6 +162,9 @@
       - id: ClothingHandsGlovesForensic
       - id: RubberStampDetective
       - id: BookBusido # Corvax-Books
+      - id: PhotoCamera # SS220-Photography
+      - id: PhotoCameraFilm # SS220-Photography
+        amount: 3
 
 - type: entity
   id: ClosetBombFilled

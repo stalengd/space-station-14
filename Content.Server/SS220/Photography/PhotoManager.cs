@@ -3,11 +3,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Server.Decals;
 using Content.Server.Hands.Systems;
+using Content.Server.IdentityManagement;
 using Content.Shared.Damage;
 using Content.Shared.Decals;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Inventory;
 using Content.Shared.SS220.Photography;
 using Robust.Server.GameObjects;
@@ -29,6 +31,7 @@ public sealed class PhotoManager : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private readonly IdentitySystem _identity = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
     private Dictionary<string, PhotoData> _photos = new();
@@ -180,7 +183,10 @@ public sealed class PhotoManager : EntitySystem
                 humanoidAppearanceState = EntityManager.GetComponentState(EntityManager.EventBus, humanoidAppearance, null, GameTick.Zero);
 
                 if ((_transform.GetWorldPosition(entity) - focusWorldPos).LengthSquared() < captureSizeSquareHalf)
-                    seenObjects.Add(Name(entity));
+                {
+                    var identityEnt = Identity.Entity(entity, EntityManager);
+                    seenObjects.Add(Name(identityEnt));
+                }
             }
 
             // Point light state

@@ -25,7 +25,6 @@
   name: плёнка для фотоаппарата
   description: Новейшая разработка в области фототехники. Вы просто не знаете нюансов.
   components:
-  - type: PhotoCamera
   - type: Sprite
     sprite: SS220/Objects/Devices/photography.rsi
     state: film

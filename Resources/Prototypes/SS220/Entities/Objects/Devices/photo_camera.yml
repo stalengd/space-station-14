@@ -19,6 +19,19 @@
 
 - type: entity
   parent: BaseItem
+  id: PhotoCameraFilm
+  name: плёнка для фотоаппарата
+  description: Новейшая разработка в области фототехники. Вы просто не знаете нюансов.
+  components:
+  - type: PhotoCamera
+  - type: Sprite
+    sprite: SS220/Objects/Devices/photography.rsi
+    state: film
+  - type: PhotoFilm
+    charges: 5
+
+- type: entity
+  parent: BaseItem
   id: PhotoCamera
   name: camera
   description: some very original desc (Ask ChatGPT?)
@@ -27,3 +40,6 @@
   - type: Sprite
     sprite: SS220/Objects/Devices/photography.rsi
     state: camera_base
+  - type: LimitedCharges
+    maxCharges: 5
+    charges: 5

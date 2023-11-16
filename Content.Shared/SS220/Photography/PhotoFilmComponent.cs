@@ -8,5 +8,5 @@ public sealed partial class PhotoFilmComponent : Component
     /// How many charges of film it adds to a camera when used
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public uint Charges = 10;
+    public int Charges = 5;
 }

@@ -10,6 +10,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.SS220.Photography;
 using Content.Shared.Verbs;
+using Robust.Shared.Player;
 
 namespace Content.Server.SS220.Photography;
 
@@ -20,6 +21,7 @@ public sealed class PhotoCameraSystem : EntitySystem
     [Dependency] private readonly SharedChargesSystem _charges = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {
@@ -114,7 +116,9 @@ public sealed class PhotoCameraSystem : EntitySystem
             if (_hands.TryGetEmptyHand(args.User, out var emptyHand, hands))
                 _hands.TryPickup(args.User, photo.Value, emptyHand, checkActionBlocker: false, handsComp: hands);
         }
+
         _charges.UseCharge(entity, charges);
+        _audio.PlayPvs(entity.Comp.ShotSound, entity);
         args.Handled = true;
     }
 

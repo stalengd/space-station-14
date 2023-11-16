@@ -1,5 +1,7 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.SS220.Photography;
 
@@ -35,6 +37,9 @@ public sealed partial class PhotoCameraComponent : Component
 
     [DataField]
     public ProtoId<EntityPrototype> PhotoPrototypeId = "Photo";
+
+    [DataField]
+    public SoundSpecifier ShotSound = new SoundPathSpecifier("/Audio/SS220/Items/polaroid.ogg");
 
     /// <summary>
     /// The time photo was taken at, is used to find out whether camera finished printing or not

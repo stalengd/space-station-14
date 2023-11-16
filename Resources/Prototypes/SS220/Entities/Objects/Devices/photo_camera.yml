@@ -16,6 +16,8 @@
   - type: Sprite
     sprite: SS220/Objects/Devices/photography.rsi
     state: photo
+  - type: Item
+    size: Tiny
 
 - type: entity
   parent: BaseItem
@@ -29,6 +31,8 @@
     state: film
   - type: PhotoFilm
     charges: 5
+  - type: Item
+    size: Small
 
 - type: entity
   parent: BaseItem
@@ -43,3 +47,5 @@
   - type: LimitedCharges
     maxCharges: 5
     charges: 5
+  - type: Item
+    size: Normal

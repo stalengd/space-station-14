@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Charges.Components;
 using Content.Shared.Charges.Systems;
 using Content.Shared.Examine;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
@@ -17,6 +19,7 @@ public sealed class PhotoCameraSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedChargesSystem _charges = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {
@@ -106,6 +109,11 @@ public sealed class PhotoCameraSystem : EntitySystem
         if (!TryPhoto(entity, out var photo))
             return;
 
+        if (TryComp<HandsComponent>(args.User, out var hands))
+        {
+            if (_hands.TryGetEmptyHand(args.User, out var emptyHand, hands))
+                _hands.TryPickup(args.User, photo.Value, emptyHand, checkActionBlocker: false, handsComp: hands);
+        }
         _charges.UseCharge(entity, charges);
         args.Handled = true;
     }

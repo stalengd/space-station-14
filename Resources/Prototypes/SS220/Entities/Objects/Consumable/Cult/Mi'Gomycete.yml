@@ -5,7 +5,7 @@
   parent: FoodProduceBase
   id: FoodMi'GomyceteCult
   description: Мистическая субстанция взывающая к полгощению и рвотные позывы.
-    components:
+  components:
   - type: FlavorProfile
     flavors:
       - mushroom

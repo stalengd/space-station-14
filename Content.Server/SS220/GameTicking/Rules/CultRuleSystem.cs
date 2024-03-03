@@ -48,7 +48,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         SubscribeLocalEvent<RoundStartAttemptEvent>(OnStartAttempt);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
-        //SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
         //SubscribeLocalEvent<PendingZombieComponent, PukeShroomSelfActionEvent>(PukeShroom);
     }
     private void OnStartAttempt(RoundStartAttemptEvent ev)
@@ -78,50 +77,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     }
     private void OnRoundEndText(RoundEndTextAppendEvent ev)
     {
-        foreach (var zombie in EntityQuery<ZombieRuleComponent>())
-        {
-            // This is just the general condition thing used for determining the win/lose text
-            var fraction = GetInfectedFraction(true, true);
 
-            if (fraction <= 0)
-                ev.AddLine(Loc.GetString("zombie-round-end-amount-none"));
-            else if (fraction <= 0.25)
-                ev.AddLine(Loc.GetString("zombie-round-end-amount-low"));
-            else if (fraction <= 0.5)
-                ev.AddLine(Loc.GetString("zombie-round-end-amount-medium", ("percent", Math.Round((fraction * 100), 2).ToString(CultureInfo.InvariantCulture))));
-            else if (fraction < 1)
-                ev.AddLine(Loc.GetString("zombie-round-end-amount-high", ("percent", Math.Round((fraction * 100), 2).ToString(CultureInfo.InvariantCulture))));
-            else
-                ev.AddLine(Loc.GetString("zombie-round-end-amount-all"));
-
-            ev.AddLine(Loc.GetString("zombie-round-end-initial-count", ("initialCount", zombie.InitialInfectedNames.Count)));
-            foreach (var player in zombie.InitialInfectedNames)
-            {
-                ev.AddLine(Loc.GetString("zombie-round-end-user-was-initial",
-                    ("name", player.Key),
-                    ("username", player.Value)));
-            }
-
-            var healthy = GetHealthyHumans();
-            // Gets a bunch of the living players and displays them if they're under a threshold.
-            // InitialInfected is used for the threshold because it scales with the player count well.
-            if (healthy.Count <= 0 || healthy.Count > 2 * zombie.InitialInfectedNames.Count)
-                continue;
-            ev.AddLine("");
-            ev.AddLine(Loc.GetString("zombie-round-end-survivor-count", ("count", healthy.Count)));
-            foreach (var survivor in healthy)
-            {
-                var meta = MetaData(survivor);
-                var username = string.Empty;
-                if (_mindSystem.TryGetMind(survivor, out _, out var mind) && mind.Session != null)
-                {
-                    username = mind.Session.Name;
-                }
-
-                ev.AddLine(Loc.GetString("zombie-round-end-user-was-survivor",
-                    ("name", meta.EntityName),
-                    ("username", username)));
-            }
-        }
     }
 }

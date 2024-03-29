@@ -48,5 +48,5 @@ public sealed partial class CultRuleComponent : Component
     ///     Path to cultist alert sound.
     /// </summary>
     [DataField]
-    public SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/SS220/Ambience/Antag/сult_start.ogg");
+    public SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/SS220/Ambience/Antag/cult_start.ogg");
 }

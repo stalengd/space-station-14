@@ -1,101 +1,52 @@
-// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Content.Server.NPC.Components;
+using Content.Shared.Dataset;
+using Content.Shared.Random;
 using Content.Shared.Roles;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using Content.Server.SS220.GameTicking.Rules;
 
 namespace Content.Server.SS220.GameTicking.Rules.Components;
 
 [RegisterComponent, Access(typeof(CultRuleSystem))]
 public sealed partial class CultRuleComponent : Component
 {
-    [DataField("initialCultistsNames")]
-    public Dictionary<string, string> InitialCultistsNames = new();
+    public readonly List<EntityUid> CultistMinds = new();
 
-    [DataField("CultistPrototypeId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]
-    public string CultistPrototypeId = "InitialCultist";
+    [DataField]
+    public ProtoId<AntagPrototype> TraitorPrototypeId = "Cultist";
 
-    /// <summary>
-    /// Whether or not the initial infected have been chosen.
-    /// </summary>
-    [DataField("CultistsChosen")]
-    public bool CultistsChosen;
+    [DataField]
+    public ProtoId<NpcFactionPrototype> NanoTrasenFaction = "NanoTrasen";
 
-    /// <summary>
-    /// When the round will next check for round end.
-    /// </summary>
-    [DataField("nextRoundEndCheck", customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan NextRoundEndCheck;
+    [DataField]
+    public ProtoId<NpcFactionPrototype> CultFaction = "Cult";
 
-    /// <summary>
-    /// The amount of time between each check for the end of the round.
-    /// </summary>
-    [DataField("endCheckDelay")]
-    public TimeSpan EndCheckDelay = TimeSpan.FromSeconds(30);
+    [DataField]
+    public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultObjectiveGroups";
+
+    public int TotalTraitors => CultistMinds.Count;
+    public enum SelectionState
+    {
+        WaitingForSpawn = 0,
+        ReadyToStart = 1,
+        Started = 2,
+    }
 
     /// <summary>
-    /// The time at which the initial infected will be chosen.
+    /// Current state of the rule
     /// </summary>
-    [DataField("startTime", customTypeSerializer: typeof(TimeOffsetSerializer)), ViewVariables(VVAccess.ReadWrite)]
-    public TimeSpan? StartTime;
+    public SelectionState SelectionStatus = SelectionState.WaitingForSpawn;
 
     /// <summary>
-    /// The minimum amount of time after the round starts that the initial infected will be chosen.
+    /// When should traitors be selected and the announcement made
     /// </summary>
-    [DataField("minStartDelay")]
-    public TimeSpan MinStartDelay = TimeSpan.FromMinutes(10);
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), ViewVariables(VVAccess.ReadWrite)]
+    public TimeSpan? AnnounceAt;
 
     /// <summary>
-    /// The maximum amount of time after the round starts that the initial infected will be chosen.
+    ///     Path to cultist alert sound.
     /// </summary>
-    [DataField("maxStartDelay")]
-    public TimeSpan MaxStartDelay = TimeSpan.FromMinutes(15);
-
-    /// <summary>
-    /// The sound that plays when someone becomes an initial infected.
-    /// todo: this should have a unique sound instead of reusing the zombie one.
-    /// </summary>
-    [DataField("initialCultistSound")]
-    public SoundSpecifier InitialInfectedSound = new SoundPathSpecifier("/Audio/Ambience/Antag/zombie_start.ogg");
-
-    /// <summary>
-    /// The minimum amount of time initial infected have before they start taking infection damage.
-    /// </summary>
-    [DataField("minInitialInfectedGrace")]
-    public TimeSpan MinInitialInfectedGrace = TimeSpan.FromMinutes(12.5f);
-
-    /// <summary>
-    /// The maximum amount of time initial infected have before they start taking damage.
-    /// </summary>
-    [DataField("maxInitialInfectedGrace")]
-    public TimeSpan MaxInitialInfectedGrace = TimeSpan.FromMinutes(15f);
-
-    /// <summary>
-    /// How many players for each initial infected.
-    /// </summary>
-    [DataField("playersPerInfected")]
-    public int PlayersPerInfected = 10;
-
-    /// <summary>
-    /// The maximum number of initial infected.
-    /// </summary>
-    [DataField("maxInitialInfected")]
-    public int MaxInitialInfected = 6;
-
-    /// <summary>
-    /// After this amount of the crew become zombies, the shuttle will be automatically called.
-    /// </summary>
-    [DataField("zombieShuttleCallPercentage")]
-    public float ZombieShuttleCallPercentage = 0.7f;
-
-    /// <summary>
-    /// Have we called the evac shuttle yet?
-    /// </summary>
-    [DataField("shuttleCalled")]
-    public bool ShuttleCalled;
-
-    [ValidatePrototypeId<EntityPrototype>]
-    public const string PukeShroomSelfActionPrototype = "ActionPukeShroom";
+    [DataField]
+    public SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/SS220/Ambience/Antag/сult_start.ogg");
 }

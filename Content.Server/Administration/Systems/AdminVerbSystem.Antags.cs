@@ -7,6 +7,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
+using Content.Server.SS220.GameTicking.Rules;
 
 namespace Content.Server.Administration.Systems;
 
@@ -18,6 +19,7 @@ public sealed partial class AdminVerbSystem
     [Dependency] private readonly NukeopsRuleSystem _nukeopsRule = default!;
     [Dependency] private readonly PiratesRuleSystem _piratesRule = default!;
     [Dependency] private readonly RevolutionaryRuleSystem _revolutionaryRule = default!;
+    [Dependency] private readonly CultRuleSystem _cultRule = default!;
 
     // All antag verbs have names so invokeverb works.
     private void AddAntagVerbs(GetVerbsEvent<Verb> args)
@@ -120,5 +122,21 @@ public sealed partial class AdminVerbSystem
             Message = Loc.GetString("admin-verb-make-thief"),
         };
         args.Verbs.Add(thief);
+
+        //SS220 Cult start
+        Verb cultist = new()
+        {
+            Text = Loc.GetString("admin-verb-text-make-cultist"),
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Texture(new("/Textures/SS220/Interface/Actions/cultist-turn.png")),
+            Act = () =>
+            {
+                _cultRule.MakeCultistAdmin(args.Target);
+            },
+            Impact = LogImpact.High,
+            Message = Loc.GetString("admin-verb-make-cultist"),
+        };
+        args.Verbs.Add(cultist);
+        //SS220 Cult end
     }
 }

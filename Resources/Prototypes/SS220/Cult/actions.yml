@@ -1,11 +1,24 @@
 - type: entity
   id: ActionCultAstral
   name: Астрал
-  description: Уход в астрал.
+  description: Выход за пределы нашего изменерия.
   noSpawn: true
   components:
   - type: InstantAction
-    event: !type:ReaperMaterializeEvent
+    event: !type:CultAstralEvent
+    itemIconStyle: NoItem
+    icon: { sprite: SS220/DemonRofler/dark_reaper.rsi, state: jnecexit }
+    useDelay: 15
+
+
+- type: entity
+  id: ActionCultPukeShroom
+  name: Астрал
+  description: Извергнуть выращенный в желудке гриб.
+  noSpawn: true
+  components:
+  - type: InstantAction
+    event: !type:CultPukeShroomEvent
     itemIconStyle: NoItem
     icon: { sprite: SS220/DemonRofler/dark_reaper.rsi, state: jnecexit }
     useDelay: 15

@@ -36,10 +36,18 @@ public abstract class SharedCultSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CultComponent, ComponentStartup>(OnCompInit);
+
         // actions
         SubscribeLocalEvent<CultComponent, CultAstralEvent>(AstralAction);
         SubscribeLocalEvent<CultComponent, CultPukeShroomEvent>(Puke);
     }
+
+    protected virtual void OnCompInit(EntityUid uid, CultComponent comp, ComponentStartup args)
+    {
+
+    }
+
     private void AstralAction(EntityUid uid, CultComponent comp, CultAstralEvent args)
     {
         GoToAstral(uid, comp);

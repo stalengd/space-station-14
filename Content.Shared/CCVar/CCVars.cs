@@ -520,6 +520,18 @@ namespace Content.Shared.CCVar
             CVarDef.Create("nukeops.spawn_ghost_roles", false);
 
         /*
+         * SS220 Cult
+         */
+        public static readonly CVarDef<int> CultMinPlayers =
+            CVarDef.Create("cult.min_players", 40);
+
+        public static readonly CVarDef<int> CultMaxCultists =
+            CVarDef.Create("cult.max_cultists", 12); // Assuming average server maxes somewhere from like 50-80 people
+
+        public static readonly CVarDef<int> CultSacrificialsCount =
+            CVarDef.Create("cult.sacrificial_count", 4);
+
+        /*
          * Tips
          */
 

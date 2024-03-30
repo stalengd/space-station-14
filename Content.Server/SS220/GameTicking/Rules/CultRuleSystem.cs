@@ -57,6 +57,15 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
         //SubscribeLocalEvent<PendingZombieComponent, PukeShroomSelfActionEvent>(PukeShroom);
     }
+
+    //Set min players on game rule
+    protected override void Added(EntityUid uid, CultRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
+    {
+        base.Added(uid, component, gameRule, args);
+
+        gameRule.MinPlayers = _cfg.GetCVar(CCVars.TraitorMinPlayers);
+    }
+
     private void OnStartAttempt(RoundStartAttemptEvent ev)
     {
         var query = EntityQueryEnumerator<ZombieRuleComponent, GameRuleComponent>();

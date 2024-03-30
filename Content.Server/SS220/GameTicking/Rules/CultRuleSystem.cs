@@ -49,6 +49,10 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+
+    private int StartedCultists => _cfg.GetCVar(CCVars.CultStartedCultists);
     public override void Initialize()
     {
         base.Initialize();
@@ -63,7 +67,38 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     {
         base.Added(uid, component, gameRule, args);
 
-        gameRule.MinPlayers = _cfg.GetCVar(CCVars.TraitorMinPlayers);
+        gameRule.MinPlayers = _cfg.GetCVar(CCVars.CultMinPlayers);
+    }
+    protected override void Started(EntityUid uid, CultRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
+    {
+        base.Started(uid, component, gameRule, args);
+    }
+
+    protected override void ActiveTick(EntityUid uid, CultRuleComponent component, GameRuleComponent gameRule, float frameTime)
+    {
+        base.ActiveTick(uid, component, gameRule, frameTime);
+
+        if (component.SelectionStatus < CultRuleComponent.SelectionState.Started && component.AnnounceAt < _timing.CurTime)
+        {
+            //DoTraitorStart(component);
+            component.SelectionStatus = CultRuleComponent.SelectionState.Started;
+        }
+    }
+
+    private void DoCultStart(CultRuleComponent component)
+    {
+        var eligiblePlayers = _antagSelection.GetEligiblePlayers(_playerManager.Sessions, component.CultPrototypeId);
+
+        if (eligiblePlayers.Count == 0)
+            return;
+
+        // should we do calculation about amount of cultists?
+        //var cultistsToSelect = _antagSelection.CalculateAntagCount(_playerManager.PlayerCount, PlayersPerTraitor, StartedCultists); 
+
+        //var selectedCultists = _antagSelection.ChooseAntags(cultistsToSelect, eligiblePlayers);
+        var selectedCultists = _antagSelection.ChooseAntags(StartedCultists, eligiblePlayers);// started amount is 3
+
+        MakeCultist(selectedCultists, component);
     }
 
     private void OnStartAttempt(RoundStartAttemptEvent ev)
@@ -116,6 +151,15 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         var cultRule = StartGameRule();
         MakeCultist(entity, cultRule);
     }
+    public bool MakeCultist(List<EntityUid> cultist, CultRuleComponent component, bool giveUplink = true, bool giveObjectives = true)
+    {
+        foreach (var traitor in cultist)
+        {
+            MakeCultist(cultist, component, giveUplink, giveObjectives);
+        }
+
+        return true;
+    }
     public bool MakeCultist(EntityUid cultist, CultRuleComponent component)
     {
         //Grab the mind if it wasnt provided
@@ -140,7 +184,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             return false;
         }
 
-        _antagSelection.SendBriefing(cultist, "Хей", null, component.GreetSoundNotification);
+        _antagSelection.SendBriefing(cultist, Loc.GetString("traitor-role-greeting"), null, component.GreetSoundNotification); //доработать и добавить перечисление жертв, как в GenerateBriefing
 
         component.CultistMinds.Add(mindId);
 

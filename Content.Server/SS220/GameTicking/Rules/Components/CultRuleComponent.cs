@@ -14,7 +14,7 @@ public sealed partial class CultRuleComponent : Component
     public readonly List<EntityUid> CultistMinds = new();
 
     [DataField]
-    public ProtoId<AntagPrototype> TraitorPrototypeId = "Cultist";
+    public ProtoId<AntagPrototype> CultPrototypeId = "Cultist";
 
     [DataField]
     public ProtoId<NpcFactionPrototype> NanoTrasenFaction = "NanoTrasen";

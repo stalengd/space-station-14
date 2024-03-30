@@ -520,16 +520,22 @@ namespace Content.Shared.CCVar
             CVarDef.Create("nukeops.spawn_ghost_roles", false);
 
         /*
-         * SS220 Cult
+         * SS220 Cult start
          */
         public static readonly CVarDef<int> CultMinPlayers =
-            CVarDef.Create("cult.min_players", 40);
+            CVarDef.Create("cult.min_players", 40); //Assuming we have 12 cultists max and there ought to be some cult contestant
+
+        public static readonly CVarDef<int> CultStartedCultists =
+            CVarDef.Create("cult.start_cultists", 3);//amount of cultist which should be from start of the game
 
         public static readonly CVarDef<int> CultMaxCultists =
             CVarDef.Create("cult.max_cultists", 12); // Assuming average server maxes somewhere from like 50-80 people
 
         public static readonly CVarDef<int> CultSacrificialsCount =
-            CVarDef.Create("cult.sacrificial_count", 4);
+            CVarDef.Create("cult.sacrificial_count", 6); //amount of players that will have sacrificial mark.
+        /*
+         * SS220 Cult end
+         */
 
         /*
          * Tips

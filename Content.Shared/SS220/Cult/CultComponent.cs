@@ -3,7 +3,6 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
-
 namespace Content.Shared.SS220.Cult;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -14,8 +13,20 @@ public sealed partial class CultComponent : Component
     [DataField]
     public EntProtoId PukeShroomAction = "ActionCultPukeShroom";
 
+    [DataField]
+    public EntProtoId AscendingAction = "ActionCultAscending";
+
+    [DataField]
+    public EntProtoId CorruptItemAction = "ActionCultCorruptItem";
+
     [DataField, AutoNetworkedField]
     public EntityUid? PukeShroomActionEntity;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? CorruptItemActionEntity;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? AscendingActionEntity;
 
     /// <summary>
     /// Sound played while puking MiGoShroom
@@ -27,7 +38,7 @@ public sealed partial class CultComponent : Component
     });
 
     [ViewVariables, DataField, AutoNetworkedField]
-    public string PukedEntity = "FoodMi'GomyceteCult";
+    public string PukedEntity = "FoodMi'GomyceteCult"; //what we will puke out
 
     [ViewVariables, DataField, AutoNetworkedField]
     public string PukedLiquid = "PuddleVomit"; //maybe should be special liquid?

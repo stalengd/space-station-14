@@ -1,11 +1,12 @@
 # EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 - type: entity
-  name: Ми Го
+  name: МиГо
   parent: [ SimpleSpaceMobBase, FlyingMobBase]
   description: Дитя темного бога
-  id: Mi'GoCult
+  id: MiGoCult
   components:
+  - type: MiGo
   - type: MovementSpeedModifier
     baseWalkSpeed : 6
     baseSprintSpeed : 6

@@ -61,7 +61,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         SubscribeLocalEvent<RoundStartAttemptEvent>(OnStartAttempt);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
-        //SubscribeLocalEvent<PendingZombieComponent, PukeShroomSelfActionEvent>(PukeShroom);
     }
 
     //Set min players on game rule

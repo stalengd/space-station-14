@@ -28,7 +28,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.SS220.Cult;
 
-public abstract class SharedCultSystem : EntitySystem
+public abstract class SharedMiGoSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
@@ -37,21 +37,15 @@ public abstract class SharedCultSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CultComponent, ComponentStartup>(OnCompInit);
+        SubscribeLocalEvent<MiGoComponent, ComponentStartup>(OnCompInit);
 
         // actions
-        SubscribeLocalEvent<CultComponent, CultPukeShroomEvent>(PukeAction);
+        //SubscribeLocalEvent<MiGoComponent, MiGoEnslavementEvent>(PukeAction);
+        //SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(PukeAction);
+        //SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(PukeAction);
     }
 
-    protected virtual void OnCompInit(EntityUid uid, CultComponent comp, ComponentStartup args)
+    protected virtual void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
     {
     }
-
-    private void PukeAction(EntityUid uid, CultComponent comp, CultPukeShroomEvent args)
-    {
-        _entityManager.SpawnEntity(comp.PukedLiquid, Transform(uid).Coordinates);
-        _entityManager.SpawnEntity(comp.PukedEntity, Transform(uid).Coordinates);
-        _audio.PlayPredicted(comp.PukeSound, uid, uid);
-    }
-
 }

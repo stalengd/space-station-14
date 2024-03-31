@@ -1,24 +1,91 @@
+#Cultists actions
 - type: entity
   id: ActionCultCorruptItem
-  name: Астрал
-  description: Выход за пределы нашего изменерия.
+  name: Преобразование
+  description: Исказить предмет даровав ему форму заложенную создателем.
   noSpawn: true
   components:
   - type: InstantAction
     event: !type:CultCorruptItemEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/DemonRofler/dark_reaper.rsi, state: jnecexit }
+    icon: SS220/Interface/Cult/migopuke.png
     useDelay: 15
 
 
 - type: entity
   id: ActionCultPukeShroom
-  name: Астрал
+  name: Извергнуть
   description: Извергнуть выращенный в желудке гриб.
   noSpawn: true
   components:
   - type: InstantAction
+    useDelay: 15
     event: !type:CultPukeShroomEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/DemonRofler/dark_reaper.rsi, state: jnecexit }
+    icon: SS220/Interface/Cult/migopuke.png
+
+- type: entity
+  id: ActionCultAscending
+  name: Возвышение
+  description: Проявить свою истинную сущность.
+  noSpawn: true
+  components:
+  - type: InstantAction
     useDelay: 15
+    event: !type:CultAscendingEvent
+    itemIconStyle: NoItem
+    icon: SS220/Interface/Cult/migopuke.png
+
+#Mi'Go actions
+- type: entity
+  id: ActionMiGoEnslavement
+  name: Порабощение
+  description: Ввергни плоть в реки ваших мыслей и чувств.
+  noSpawn: true
+  components:
+  - type: InstantAction
+    useDelay: 15
+    event: !type:MiGoEnslavementEvent
+    itemIconStyle: NoItem
+    icon: SS220/Interface/Cult/migopuke.png
+
+- type: entity
+  id: ActionMiGoAstral
+  name: Выход в астрал
+  description: Войдите в междумирье.
+  noSpawn: true
+  components:
+  - type: InstantAction
+    useDelay: 15
+    event: !type:MiGoAstralEvent
+    itemIconStyle: NoItem
+    icon: SS220/Interface/Cult/migoastral.png
+
+
+- type: entity
+  id: ActionMiGoErect
+  name: Воздвигнуть
+  description: Воплотите основание великих алтарей.
+  noSpawn: true
+  components:
+  - type: InstantAction
+    useDelay: 15
+    event: !type:MiGoErectEvent
+    itemIconStyle: NoItem
+    icon: SS220/Interface/Cult/migoastral.png
+
+- type: entity
+  id: ActionMiGoSacrifice
+  name: Призыв
+  description: Принестите жертву и призовите своего хозяина.
+  noSpawn: true
+  components:
+  - type: InstantAction
+    useDelay: 15
+    event: !type:MiGoSacrificeEvent
+    itemIconStyle: NoItem
+    icon: SS220/Interface/Cult/migoastral.png
+
+
+
+

@@ -18,17 +18,17 @@ public sealed partial class CultComponent : Component
     public EntityUid? PukeShroomActionEntity;
 
     /// <summary>
-    /// Wheter the Cultist is currently in physical form or not.
-    /// </summary>
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
-    public bool PhysicalForm = false;
-
-    /// <summary>
-    /// Sound played whilepuking MiGoShroom
+    /// Sound played while puking MiGoShroom
     /// </summary>
     [ViewVariables, DataField, AutoNetworkedField]
-    public SoundSpecifier PukeSound = new SoundPathSpecifier("/Audio/SS220/DarkReaper/jnec_gate_close.ogg", new()
+    public SoundSpecifier PukeSound = new SoundPathSpecifier("/Audio/SS220/DarkReaper/jnec_gate_open.ogg", new()
     {
-        MaxDistance = 7
+        MaxDistance = 3
     });
+
+    [ViewVariables, DataField, AutoNetworkedField]
+    public string PukedEntity = "FoodMi'GomyceteCult";
+
+    [ViewVariables, DataField, AutoNetworkedField]
+    public string PukedLiquid = "PuddleVomit"; //maybe should be special liquid?
 }

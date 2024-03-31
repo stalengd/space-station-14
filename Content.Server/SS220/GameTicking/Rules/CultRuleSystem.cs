@@ -39,6 +39,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Server.Antag;
+using Content.Shared.SS220.Cult;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -51,6 +52,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
 
     private int StartedCultists => _cfg.GetCVar(CCVars.CultStartedCultists);
     public override void Initialize()
@@ -80,7 +82,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         if (component.SelectionStatus < CultRuleComponent.SelectionState.Started && component.AnnounceAt < _timing.CurTime)
         {
-            //DoTraitorStart(component);
+            DoCultStart(component);
             component.SelectionStatus = CultRuleComponent.SelectionState.Started;
         }
     }
@@ -99,6 +101,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         var selectedCultists = _antagSelection.ChooseAntags(StartedCultists, eligiblePlayers);// started amount is 3
 
         MakeCultist(selectedCultists, component);
+        //MakeSacraficials();//to do
     }
 
     private void OnStartAttempt(RoundStartAttemptEvent ev)
@@ -191,6 +194,8 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         // Change the faction
         _npcFaction.RemoveFaction(cultist, component.NanoTrasenFaction, false);
         _npcFaction.AddFaction(cultist, component.CultFaction);
+
+        _entityManager.AddComponent<CultComponent>(cultist);
 
         return true;
     }

@@ -25,6 +25,6 @@ public sealed class CultSystem : SharedCultSystem
     {
         base.OnCompInit(uid, comp, args);
 
-        //_actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);
+        _actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);
     }
 }

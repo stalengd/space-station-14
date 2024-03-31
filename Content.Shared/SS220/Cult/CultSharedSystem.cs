@@ -31,6 +31,7 @@ namespace Content.Shared.SS220.Cult;
 public abstract class SharedCultSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
 
     public override void Initialize()
     {
@@ -39,26 +40,24 @@ public abstract class SharedCultSystem : EntitySystem
         SubscribeLocalEvent<CultComponent, ComponentStartup>(OnCompInit);
 
         // actions
-        SubscribeLocalEvent<CultComponent, CultAstralEvent>(AstralAction);
-        SubscribeLocalEvent<CultComponent, CultPukeShroomEvent>(Puke);
+        SubscribeLocalEvent<CultComponent, CultCorruptItemEvent>(CorruptItemAction);
+        SubscribeLocalEvent<CultComponent, CultPukeShroomEvent>(PukeAction);
     }
 
     protected virtual void OnCompInit(EntityUid uid, CultComponent comp, ComponentStartup args)
     {
-
+        //_audio.PlayPredicted(comp.PukeSound, uid, uid);
     }
 
-    private void AstralAction(EntityUid uid, CultComponent comp, CultAstralEvent args)
+    private void CorruptItemAction(EntityUid uid, CultComponent comp, CultCorruptItemEvent args)
     {
-        GoToAstral(uid, comp);
-    }
-    protected void GoToAstral(EntityUid uid, CultComponent comp)
-    {
-
+        
     }
 
-    private void Puke(EntityUid uid, CultComponent comp, CultPukeShroomEvent args)
+    private void PukeAction(EntityUid uid, CultComponent comp, CultPukeShroomEvent args)
     {
+        _entityManager.SpawnEntity(comp.PukedLiquid, Transform(uid).Coordinates);
+        _entityManager.SpawnEntity(comp.PukedEntity, Transform(uid).Coordinates);
         _audio.PlayPredicted(comp.PukeSound, uid, uid);
     }
 

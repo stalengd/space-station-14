@@ -1,11 +1,11 @@
 - type: entity
-  id: ActionCultAstral
+  id: ActionCultCorruptItem
   name: Астрал
   description: Выход за пределы нашего изменерия.
   noSpawn: true
   components:
   - type: InstantAction
-    event: !type:CultAstralEvent
+    event: !type:CultCorruptItemEvent
     itemIconStyle: NoItem
     icon: { sprite: SS220/DemonRofler/dark_reaper.rsi, state: jnecexit }
     useDelay: 15

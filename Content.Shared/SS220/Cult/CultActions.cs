@@ -3,18 +3,10 @@ using Content.Shared.Actions;
 
 namespace Content.Shared.SS220.Cult;
 
-public sealed partial class CultAstralEvent : InstantActionEvent
-{
-}
-
 public sealed partial class CultPukeShroomEvent : InstantActionEvent
 {
 }
 
 public sealed partial class CultCorruptItemEvent : InstantActionEvent
-{
-}
-
-public sealed partial class MiGoHealEvent : EntityTargetActionEvent
 {
 }

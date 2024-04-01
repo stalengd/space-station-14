@@ -2,15 +2,16 @@
   id: BananaRain
   parent: BaseGameRule
   categories: [ GameRules ]
+  noSpawn: true
   components:
   - type: StationEvent
     startAnnouncement: station-event-banana-rain-announcement
     startAudio:
       path: /Audio/Announcements/attention.ogg
-    reoccurrenceDelay: 10
+    startDelay: 10
     earliestStart: 20
     minimumPlayers: 15
-    weight: 0
+    weight: 50
     duration: 60
   - type: CableRandomSpawnRule
     entries:

@@ -3,4 +3,4 @@
   name: roles-antag-cult-name
   antagonist: true
   setPreference: true
-  objective: roles-antag-thief-objective
+  objective: roles-antag-cult-objective

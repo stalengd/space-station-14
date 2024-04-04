@@ -5,6 +5,7 @@ using Content.Shared.StatusIcon.Components;
 using Content.Shared.Zombies;
 using Robust.Client.Player;
 using Robust.Shared.Prototypes;
+using Content.Shared.SS220.Cult;
 
 namespace Content.Client.Antag;
 
@@ -22,6 +23,7 @@ public sealed class AntagStatusIconSystem : SharedStatusIconSystem
         SubscribeLocalEvent<RevolutionaryComponent, GetStatusIconsEvent>(GetRevIcon);
         SubscribeLocalEvent<ZombieComponent, GetStatusIconsEvent>(GetIcon);
         SubscribeLocalEvent<HeadRevolutionaryComponent, GetStatusIconsEvent>(GetIcon);
+        SubscribeLocalEvent<CultComponent, GetStatusIconsEvent>(GetIcon);
     }
 
     /// <summary>

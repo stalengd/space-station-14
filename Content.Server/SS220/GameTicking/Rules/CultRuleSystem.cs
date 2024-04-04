@@ -40,6 +40,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Server.Antag;
 using Content.Shared.SS220.Cult;
+using Content.Shared.CombatMode.Pacification;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -99,7 +100,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         //var selectedCultists = _antagSelection.ChooseAntags(cultistsToSelect, eligiblePlayers);
         var selectedCultists = _antagSelection.ChooseAntags(StartedCultists, eligiblePlayers);// started amount is 3
 
-        MakeCultist(selectedCultists, component);
+        TryMakeCultist(selectedCultists, component);
         //MakeSacraficials();//to do
     }
 
@@ -151,18 +152,18 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     public void MakeCultistAdmin(EntityUid entity)
     {
         var cultRule = StartGameRule();
-        MakeCultist(entity, cultRule);
+        TryMakeCultist(entity, cultRule);
     }
-    public bool MakeCultist(List<EntityUid> cultist, CultRuleComponent component, bool giveUplink = true, bool giveObjectives = true)
+    public bool TryMakeCultist(List<EntityUid> cultist, CultRuleComponent component, bool giveUplink = true, bool giveObjectives = true)
     {
         foreach (var traitor in cultist)
         {
-            MakeCultist(cultist, component, giveUplink, giveObjectives);
+            TryMakeCultist(cultist, component);
         }
 
         return true;
     }
-    public bool MakeCultist(EntityUid cultist, CultRuleComponent component)
+    public bool TryMakeCultist(EntityUid cultist, CultRuleComponent component)
     {
         //Grab the mind if it wasnt provided
         if (!_mindSystem.TryGetMind(cultist, out var mindId, out var mind))
@@ -195,6 +196,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         _npcFaction.AddFaction(cultist, component.CultFaction);
 
         _entityManager.AddComponent<CultComponent>(cultist);
+        RemComp<PacifiedComponent>(cultist);
 
         return true;
     }

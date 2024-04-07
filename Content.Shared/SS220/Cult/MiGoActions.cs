@@ -7,7 +7,7 @@ public sealed partial class MiGoAstralEvent : InstantActionEvent
 {
 }
 
-public sealed partial class MiGoEnslavementEvent : InstantActionEvent
+public sealed partial class MiGoEnslavementEvent : EntityTargetActionEvent
 {
 }
 

@@ -146,24 +146,71 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     }
     private void OnRoundEndText(RoundEndTextAppendEvent ev)
     {
+        foreach (var cult in EntityQuery<CultRuleComponent>())
+        {
+            if (cult.Summoned)
+            {
+                ev.AddLine(Loc.GetString("cult-round-end-amount-win"));
+            }
+            else
+            {
+                var fraction = GetCultistsFraction();
+                if (fraction <= 0)
+                    ev.AddLine(Loc.GetString("cult-round-end-amount-none"));
+                else if (fraction <= 2)
+                    ev.AddLine(Loc.GetString("cult-round-end-amount-low"));
+                else if (fraction < 12)
+                    ev.AddLine(Loc.GetString("cult-round-end-amount-medium"));
+                else
+                    ev.AddLine(Loc.GetString("cult-round-end-amount-high"));
+            }
 
+            ev.AddLine(Loc.GetString("cult-round-end-initial-count", ("initialCount", cult.InitialCultistsNames.Count)));
+            foreach (var player in cult.InitialCultistsNames)
+            {
+                ev.AddLine(Loc.GetString("cult-round-end-user-was-initial",
+                    ("name", player.Key),
+                    ("username", player.Value)));
+            }
+
+            ev.AddLine(Loc.GetString("cult-round-end-initial-count", ("initialCount", cult.CultistsNames.Count)));
+            foreach (var player in cult.CultistsNames)
+            {
+                ev.AddLine(Loc.GetString("cult-round-end-user-was-enslaved",
+                    ("name", player.Key),
+                    ("username", player.Value)));
+            }
+        }
     }
 
+    private float GetCultistsFraction()//надо учесть МиГо
+    {
+        int cultistsCount = 0;
+        var query = EntityQueryEnumerator<HumanoidAppearanceComponent, CultComponent, MobStateComponent>();
+        while (query.MoveNext(out _, out _, out _, out var mob))
+        {
+            if (mob.CurrentState == MobState.Dead)
+                continue;
+            cultistsCount++;
+        }
+
+        return cultistsCount;
+    }
     public void MakeCultistAdmin(EntityUid entity)
     {
         var cultRule = StartGameRule();
         TryMakeCultist(entity, cultRule);
     }
-    public bool TryMakeCultist(List<EntityUid> cultist, CultRuleComponent component, bool giveUplink = true, bool giveObjectives = true)
+    public bool TryMakeCultist(List<EntityUid> cultistList, CultRuleComponent component)
     {
-        foreach (var traitor in cultist)
+        foreach (var cultist in cultistList)
         {
-            TryMakeCultist(cultist, component);
+            TryMakeCultist(cultist, component, true);
         }
 
         return true;
     }
-    public bool TryMakeCultist(EntityUid cultist, CultRuleComponent component)
+    public bool TryMakeCultist(EntityUid cultist, CultRuleComponent component, bool initial = false)
     {
         //Grab the mind if it wasnt provided
         if (!_mindSystem.TryGetMind(cultist, out var mindId, out var mind))
@@ -188,6 +235,14 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         }
 
         _antagSelection.SendBriefing(cultist, Loc.GetString("traitor-role-greeting"), null, component.GreetSoundNotification); //доработать и добавить перечисление жертв, как в GenerateBriefing
+
+        //Get names for the round end screen, incase they leave mid-round
+        var inCharacterName = MetaData(cultist).EntityName;
+        var accountName = mind.Session == null ? string.Empty : mind.Session.Name;
+
+        if (initial)
+            component.InitialCultistsNames.Add(inCharacterName, accountName);
+        else component.CultistsNames.Add(inCharacterName, accountName);
 
         component.CultistMinds.Add(mindId);
 

@@ -45,7 +45,7 @@ public sealed partial class CultComponent : Component, IAntagStatusIconComponent
     /// Sound played while puking MiGoShroom
     /// </summary>
     [ViewVariables, DataField, AutoNetworkedField]
-    public SoundSpecifier PukeSound = new SoundPathSpecifier("/Audio/SS220/DarkReaper/jnec_gate_open.ogg", new()
+    public SoundSpecifier PukeSound = new SoundPathSpecifier("/Audio/SS220/Cult/puke.ogg", new()
     {
         MaxDistance = 3
     });

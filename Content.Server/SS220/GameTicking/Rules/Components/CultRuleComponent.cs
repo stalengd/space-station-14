@@ -12,6 +12,12 @@ namespace Content.Server.SS220.GameTicking.Rules.Components;
 [RegisterComponent, Access(typeof(CultRuleSystem))]
 public sealed partial class CultRuleComponent : Component
 {
+    [DataField]
+    public Dictionary<string, string> InitialCultistsNames = new();//Who was cultist on the gamestart.
+
+    [DataField]
+    public Dictionary<string, string> CultistsNames = new();
+
     public readonly List<EntityUid> CultistMinds = new();
 
     [DataField]
@@ -25,6 +31,9 @@ public sealed partial class CultRuleComponent : Component
 
     [DataField]
     public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultObjectiveGroups";
+
+    [DataField]
+    public bool Summoned = false;
 
     public int TotalTraitors => CultistMinds.Count;
     public enum SelectionState

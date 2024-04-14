@@ -11,6 +11,7 @@ using Robust.Shared.Random;
 using Content.Server.Actions;
 using Content.Server.Polymorph.Systems;
 using Content.Shared.Popups;
+using Content.Server.SS220.GameTicking.Rules;
 
 namespace Content.Server.SS220.Cult;
 
@@ -19,11 +20,13 @@ public sealed class MiGoSystem : SharedMiGoSystem
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly PolymorphSystem _polymorphSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly CultRuleSystem _cultRule = default!;
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<MiGoComponent, MiGoAstralEvent>(MiGoAstral);
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslavementEvent>(MiGoEnslave);
 
     }
     protected override void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
@@ -32,13 +35,19 @@ public sealed class MiGoSystem : SharedMiGoSystem
 
 
         _actions.AddAction(uid, ref comp.MiGoAstralActionEntity, comp.MiGoAstralAction);
-        /*
+
         _actions.AddAction(uid, ref comp.MiGoEnslavementActionEntity, comp.MiGoEnslavementAction);
+        /*
         _actions.AddAction(uid, ref comp.MiGoErectActionEntity, comp.MiGoErectAction);
         */
     }
 
     private void MiGoAstral(EntityUid uid, MiGoComponent comp, MiGoAstralEvent args)
     {
+    }
+
+    private void MiGoEnslave(EntityUid uid, MiGoComponent comp, MiGoEnslavementEvent args)
+    {
+        //_cultRule.TryMakeCultist(args.Target, comp);
     }
 }

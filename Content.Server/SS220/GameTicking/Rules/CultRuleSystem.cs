@@ -251,6 +251,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         _npcFaction.AddFaction(cultist, component.CultFaction);
 
         _entityManager.AddComponent<CultComponent>(cultist);
+        _entityManager.AddComponent<ZombieImmuneComponent>(cultist);//they are practically mushrooms
         RemComp<PacifiedComponent>(cultist);
 
         return true;

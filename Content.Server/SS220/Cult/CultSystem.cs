@@ -35,7 +35,7 @@ public sealed class CultSystem : SharedCultSystem
         _actions.AddAction(uid, ref comp.AscendingActionEntity, comp.AscendingAction);
     }
 
-    private void CorruptItemAction(EntityUid uid, CultComponent comp, CultCorruptItemEvent args)
+    private void CorruptItemAction(EntityUid uid, CultComponent comp, CultCorruptItemEvent args)//ToDo some list of corruption
     {
         /*
         if (!EntityManager.TryGetComponent(player, out HandsComponent? handsComponent))
@@ -47,10 +47,11 @@ public sealed class CultSystem : SharedCultSystem
         var activeHand = handsComponent.ActiveHand;
         */
 
-        _polymorphSystem.PolymorphEntity(uid, "AdminBreadSmite");
+        _polymorphSystem.PolymorphEntity(args.Target, "AdminBreadSmite");
     }
 
     private void AscendingAction(EntityUid uid, CultComponent comp, CultAscendingEvent args)
     {
+        _polymorphSystem.PolymorphEntity(uid, "МиГо");//надо добавить взрыв оригинального тела.
     }
 }

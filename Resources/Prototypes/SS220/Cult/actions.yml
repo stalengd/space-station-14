@@ -5,10 +5,10 @@
   description: Исказить предмет даровав ему форму заложенную создателем.
   noSpawn: true
   components:
-  - type: InstantAction
+  - type: EntityTargetAction
     event: !type:CultCorruptItemEvent
     itemIconStyle: NoItem
-    icon: SS220/Interface/Cult/migopuke.png
+    icon: SS220/Interface/Cult/corrupt.png
     useDelay: 15
 
 

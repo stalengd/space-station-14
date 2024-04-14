@@ -48,6 +48,13 @@ public sealed class MiGoSystem : SharedMiGoSystem
 
     private void MiGoEnslave(EntityUid uid, MiGoComponent comp, MiGoEnslavementEvent args)
     {
-        //_cultRule.TryMakeCultist(args.Target, comp);
+        /*
+        if (!Resolve(args.Target, ref comp))
+            return;
+        */
+
+        //Start the rule if it has not already been started
+        var traitorRuleComponent = _cultRule.StartGameRule();
+        _cultRule.TryMakeCultist(args.Target, traitorRuleComponent);
     }
 }

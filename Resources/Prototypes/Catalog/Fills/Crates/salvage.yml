@@ -8,10 +8,14 @@
   - type: StorageFill
     contents:
       - id: ClothingOuterHardsuitSalvage
+        orGroup: Suit #SS220-Fashion-start
+      - id: ClothingOuterExosuitSalvage
+        orGroup: Suit #SS220-Fashion-end
       - id: ClothingMaskBreath
       - id: OxygenTankFilled
       - id: FireExtinguisher
       - id: ClothingShoesBootsMag
+      - id: HandHeldMassScanner
       - id: Pickaxe
       - id: Welder
       - id: Wrench
@@ -78,6 +82,8 @@
       - id: Skub
         prob: 0.001
       - id: ClothingHeadHatCatEars
+        prob: 0.01
+      - id: ClothingHeadHatDogEars
         prob: 0.01
         # TRAITOR EQUIPMENT (0.01%)
       - id: Telecrystal10

@@ -36,7 +36,7 @@
   - name: gloves
     slotTexture: gloves
     slotFlags: GLOVES
-    uiWindowPos: 2,2
+    uiWindowPos: 0,1
     strippingWindowPos: 2,2
     displayName: Gloves
     whitelist:
@@ -45,6 +45,7 @@
 
   - name: belt
     slotTexture: belt
+    fullTextureName: template_small
     slotFlags: BELT
     slotGroup: SecondHotbar
     stripTime: 6
@@ -57,6 +58,7 @@
 
   - name: pocket1
     slotTexture: pocket
+    fullTextureName: template_small
     slotFlags: POCKET
     slotGroup: MainHotbar
     stripTime: 3
@@ -70,6 +72,7 @@
   slots:
   - name: pocket1
     slotTexture: pocket
+    fullTextureName: template_small
     slotFlags: POCKET
     slotGroup: MainHotbar
     stripTime: 3
@@ -81,7 +84,7 @@
   - name: gloves
     slotTexture: gloves
     slotFlags: GLOVES
-    uiWindowPos: 2,2
+    uiWindowPos: 1,0
     strippingWindowPos: 2,2
     displayName: Gloves
     whitelist:

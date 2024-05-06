@@ -1,4 +1,4 @@
-﻿// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
@@ -8,6 +8,7 @@ using Content.Shared.Item;
 using Content.Shared.SS220.SwitchableWeapon;
 using Content.Shared.Toggleable;
 using Content.Shared.Weapons.Melee.Events;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.SS220.SwitchableWeapon;
 
@@ -58,7 +59,7 @@ public sealed class SwitchableWeaponSystem : EntitySystem
         if (TryComp<ItemComponent>(uid, out var item))
         {
             _item.SetSize(uid, comp.IsOpen ? comp.SizeOpened : comp.SizeClosed, item);
-            _item.SetHeldPrefix(uid, comp.IsOpen ? "on" : "off", item);
+            _item.SetHeldPrefix(uid, comp.IsOpen ? "on" : "off", component: item);
         }
 
         if (TryComp<AppearanceComponent>(uid, out var appearance))

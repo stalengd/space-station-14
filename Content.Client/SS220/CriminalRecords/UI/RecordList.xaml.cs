@@ -9,6 +9,7 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Content.Client.SS220.CriminalRecords.UI;
 
@@ -21,6 +22,7 @@ public sealed partial class RecordList : ScrollContainer
 
     private readonly Color _defaultEntryColor = Color.FromHex("#1C1C21");
     private readonly Color _altEntryColor = Color.FromHex("#151519");
+    private readonly Regex _recordNameRegex = new Regex(@"(?i)ё");
 
     public string Filter = "";
     public List<string> ExtraFilters = new();
@@ -31,7 +33,7 @@ public sealed partial class RecordList : ScrollContainer
     private readonly IPrototypeManager _prototype;
     private readonly SpriteSystem _sprite;
 
-    private Dictionary<(NetEntity, uint), CriminalRecordShort> _records = new();
+    private Dictionary<uint, CriminalRecordShort> _records = new();
     private List<RecordListEntry> _itemPool = new();
     private RecordListEntry? _selected;
 
@@ -44,6 +46,7 @@ public sealed partial class RecordList : ScrollContainer
     private const string NoDeraptmentGroupId = "NoDepartment";
     private const string CryodGroupId = "Cryod";
     private const string CriminalGroupId = "Criminal";
+    private const string RecordNameReplacement = "е";
 
     private static readonly HashSet<string> DepartmentBlacklist = new()
     {
@@ -220,25 +223,30 @@ public sealed partial class RecordList : ScrollContainer
         if (string.IsNullOrWhiteSpace(filter))
             return true;
 
-        if (record.DNA.Contains(filter))
+        if (record.DNA.Contains(filter, StringComparison.OrdinalIgnoreCase))
         {
             match = FilterMatchType.DNA;
             return true;
         }
 
-        if (record.Fingerprints.Contains(filter))
+        if (record.Fingerprints.Contains(filter, StringComparison.OrdinalIgnoreCase))
         {
             match = FilterMatchType.Fingerprint;
             return true;
         }
 
-        if (record.Name.Contains(filter))
+        // YEAH IT'S REGEX TIME!!!
+        // We are replacing any matching "ё" by a "е" character in both filter and record.Name and then check if it passes.
+        // May be inefficient because of regex, but it'll work.
+        var convertedRecordName = _recordNameRegex.Replace(record.Name, RecordNameReplacement);
+        var convertedFilter = _recordNameRegex.Replace(filter, RecordNameReplacement);
+        if (convertedRecordName.Contains(convertedFilter, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;
     }
 
-    public void SetItems(Dictionary<(NetEntity, uint), CriminalRecordShort>? listing, (NetEntity, uint)? selected)
+    public void SetItems(Dictionary<uint, CriminalRecordShort>? listing, uint? selected)
     {
         _records = listing ?? new();
         EnsurePoolSize(_records.Count);
@@ -247,7 +255,7 @@ public sealed partial class RecordList : ScrollContainer
 
     public void RebuildList()
     {
-        (NetEntity, uint)? selectionKey;
+        uint? selectionKey;
         if (_selected != null && _selected.Metadata is RecordMetadata cast)
             selectionKey = cast.Key;
         else
@@ -276,11 +284,10 @@ public sealed partial class RecordList : ScrollContainer
         return department.ID;
     }
 
-    public void RebuildList((NetEntity, uint)? newSelection)
+    public void RebuildList(uint? selectionKey)
     {
         IsPopulating = true;
 
-        (NetEntity, uint)? selectionKey = newSelection;
         if (selectionKey == null && _selected != null)
             TryDeselect(_selected);
 
@@ -360,10 +367,10 @@ public sealed partial class RecordList : ScrollContainer
 
     public struct RecordMetadata
     {
-        public (NetEntity, uint) Key;
+        public uint Key;
         public CriminalRecordShort Record;
 
-        public RecordMetadata((NetEntity, uint) key, CriminalRecordShort record)
+        public RecordMetadata(uint key, CriminalRecordShort record)
         {
             Key = key;
             Record = record;

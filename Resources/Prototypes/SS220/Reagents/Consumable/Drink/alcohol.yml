@@ -1,0 +1,57 @@
+# EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+
+- type: reagent
+  id: Glintwine
+  name: reagent-name-glintwine 
+  parent: BaseAlcohol
+  desc: reagent-desc-glintwine
+  physicalDesc: reagent-physical-desc-piquant
+  flavor: fruity
+  color: "#821f1d"
+  recognizable: true
+  metamorphicSprite:
+    sprite: SS220/Objects/Consumable/Drinks/glintveinglass.rsi
+    state: icon
+  metabolisms:
+    Drink:
+      effects:
+      - !type:SatiateThirst
+        factor: 2
+      - !type:AdjustReagent
+        reagent: Ethanol
+        amount: 0.15
+
+#VodkaKazaki
+
+- type: reagent
+  id: VodkaKazaki
+  name: reagent-name-vodkakazaki
+  parent: BaseAlcohol
+  desc: reagent-desc-vodkakazaki
+  physicalDesc: reagent-physical-desc-strong-smelling
+  flavor: vodka
+  color: "#d1d1d155"
+  recognizable: true
+  metamorphicSprite:
+    sprite: Objects/Consumable/Drinks/ginvodkaglass.rsi
+    state: icon_empty
+  metamorphicMaxFillLevels: 4
+  metamorphicFillBaseName: fill-
+  metamorphicChangeColor: false
+  metabolisms:
+    Drink:
+      effects:
+      - !type:SatiateThirst
+        factor: 2
+      - !type:AdjustReagent
+        reagent: Ethanol
+        amount: 0.4
+    Medicine:
+      effects:
+      - !type:HealthChange
+        conditions:
+          - !type:ReagentThreshold
+            min: 10
+        damage:
+          types:
+            Radiation: -0.5

@@ -6,6 +6,7 @@ using Content.Client.SS220.TTS;
 using Content.Shared.SS220.TTS;
 using Content.Shared.Preferences;
 using Robust.Shared.Random;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Preferences.UI;
 
@@ -18,13 +19,24 @@ public sealed partial class HumanoidProfileEditor
         "Съешь же ещё этих мягких французских булок, да выпей чаю.",
         "Клоун, прекрати разбрасывать банановые кожурки офицерам под ноги!",
         "Капитан, вы уверены что хотите назначить клоуна на должность главы персонала?",
-        "Эс Бэ! Тут человек в сером костюме, с тулбоксом и в маске! Помогите!!"
+        "Эс Бэ! Тут человек в сером костюме, с тулбоксом и в маске! Помогите!!",
+        "Учёные, тут странная аномалия в баре! Она уже съела мима!",
+        "Я надеюсь что инженеры внимательно следят за сингулярностью...",
+        "Вы слышали эти странные крики в техах? Мне кажется туда ходить небезопасно.",
+        "Вы не видели Гамлета? Мне кажется он забегал к вам на кухню.",
+        "Здесь есть доктор? Человек умирает от отравленного пончика! Нужна помощь!",
+        "Вам нужно согласие и печать квартирмейстера, если вы хотите сделать заказ на партию дробовиков.",
+        "Возле эвакуационного шаттла разгерметизация! Инженеры, нам срочно нужна ваша помощь!",
+        "Бармен, налей мне самого крепкого вина, которое есть в твоих запасах!"
     };
 
     private void InitializeVoice()
     {
-        _ttsSys = _entMan.System<TTSSystem>();
-        _voiceList = _prototypeManager
+        var entMan = IoCManager.Resolve<IEntityManager>();
+        var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
+
+        _ttsSys = entMan.System<TTSSystem>();
+        _voiceList = prototypeManager
             .EnumeratePrototypes<TTSVoicePrototype>()
             .Where(o => o.RoundStart)
             .OrderBy(o => Loc.GetString(o.Name))
@@ -77,7 +89,7 @@ public sealed partial class HumanoidProfileEditor
 
     private void PlayTTS()
     {
-        if (_previewDummy is null || Profile is null)
+        if (Profile is null)
             return;
 
         _ttsSys.ResetQueuesAndEndStreams();

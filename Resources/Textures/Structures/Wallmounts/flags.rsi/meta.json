@@ -1,0 +1,30 @@
+{
+    "version": 1,
+    "license": "EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt",
+    "copyright": "Made by MIXnikita for SS220, based on sprites from TauCetiClassic at commit https://github.com/TauCetiStation/TauCetiClassic/commit/fd5cfd76acdf5bda9e46413c11006a6e825d51a9 and tgstation (NT_flag)",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "blank_flag",
+            "directions": 4
+        },
+        {
+            "name": "NT_flag",
+            "directions": 4
+        },
+        {
+            "name": "syndie_flag",
+            "directions": 4
+        },
+        {
+            "name": "lgbtq_flag"
+        },
+        {
+            "name": "pirate_flag",
+            "directions": 4
+        }
+    ]
+}

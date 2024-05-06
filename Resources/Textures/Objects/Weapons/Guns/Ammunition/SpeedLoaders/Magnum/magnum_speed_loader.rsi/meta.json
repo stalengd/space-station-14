@@ -5,7 +5,7 @@
         "y": 32
     },
     "license": "CC-BY-SA-3.0",
-    "copyright": "https://github.com/tgstation/tgstation/pull/1684/commits/19e51caef09e78ca1122d26455b539ff5968d334, https://github.com/tgstation/tgstation/blob/master/icons/obj/weapons/guns/ammo.dmi",
+    "copyright": "https://github.com/tgstation/tgstation/pull/1684/commits/19e51caef09e78ca1122d26455b539ff5968d334, https://github.com/tgstation/tgstation/blob/master/icons/obj/weapons/guns/ammo.dmi, modifed by Surani",
     "states": [
         {
             "name": "base"
@@ -32,6 +32,9 @@
             "name": "base-6"
         },
         {
+            "name": "practice"
+        },
+        {
             "name": "practice-1"
         },
         {
@@ -50,6 +53,9 @@
             "name": "practice-6"
         },
         {
+            "name": "rubber"
+        },
+        {
             "name": "rubber-1"
         },
         {
@@ -66,6 +72,48 @@
         },
         {
             "name": "rubber-6"
+        },
+        {
+            "name": "uranium"
+        },
+        {
+            "name": "uranium-1"
+        },
+        {
+            "name": "uranium-2"
+        },
+        {
+            "name": "uranium-3"
+        },
+        {
+            "name": "uranium-4"
+        },
+        {
+            "name": "uranium-5"
+        },
+        {
+            "name": "uranium-6"
+        },
+        {
+            "name": "piercing"
+        },
+        {
+            "name": "piercing-1"
+        },
+        {
+            "name": "piercing-2"
+        },
+        {
+            "name": "piercing-3"
+        },
+        {
+            "name": "piercing-4"
+        },
+        {
+            "name": "piercing-5"
+        },
+        {
+            "name": "piercing-6"
         }
     ]
 }

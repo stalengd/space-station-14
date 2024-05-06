@@ -12,7 +12,6 @@
   - type: Tag
     tags:
     - Sheet
-    - DroneUsable
   - type: Damageable
     damageContainer: Inorganic
   - type: Destructible
@@ -23,6 +22,10 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: SolutionContainerManager
+    solutions:
+      paper:
+        canReact: false
 
 - type: entity
   parent: SheetOtherBase
@@ -49,6 +52,15 @@
   - type: Item
     heldPrefix: paper
   - type: Appearance
+  - type: Extractable
+    grindableSolutionName: paper
+  - type: SolutionContainerManager
+    solutions:
+      paper:
+        reagents:
+        - ReagentId: Cellulose
+          Quantity: 3
+
 
 - type: entity
   parent: SheetPaper
@@ -73,18 +85,16 @@
       Plasma: 100
   - type: Stack
     stackType: Plasma
-# Corvax-Resprite-Start
-#    baseLayer: base
-#    layerStates:
-#    - plasma
-#    - plasma_2
-#    - plasma_3
+    baseLayer: base
+    layerStates:
+    - plasma
+    - plasma_2
+    - plasma_3
   - type: Sprite
-    state: plasma
-#    layers:
-#    - state: plasma_3
-#      map: ["base"]
-# Corvax-Resprite-End
+    state: plasma_3
+    layers:
+    - state: plasma_3
+      map: ["base"]
   - type: Item
     heldPrefix: plasma
   - type: Appearance
@@ -96,6 +106,7 @@
         reagents:
         - ReagentId: Plasma
           Quantity: 10
+        canReact: false
   - type: Tag
     tags:
     - Sheet
@@ -121,7 +132,6 @@
     tags:
     - Plastic
     - Sheet
-    - DroneUsable
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -141,6 +151,17 @@
   - type: Item
     heldPrefix: plastic
   - type: Appearance
+  - type: Extractable
+    grindableSolutionName: plastic
+  - type: SolutionContainerManager
+    solutions:
+      plastic:
+        reagents:
+        - ReagentId: Oil
+          Quantity: 5
+        - ReagentId: Phosphorus
+          Quantity: 5
+        canReact: false
 
 - type: entity
   parent: SheetPlastic
@@ -199,7 +220,10 @@
       food:
         reagents:
         - ReagentId: Uranium
-          Quantity: 10
+          Quantity: 8
+        - ReagentId: Radium
+          Quantity: 2
+        canReact: false
 
 - type: entity
   parent: SheetUranium
@@ -224,7 +248,6 @@
     - type: Tag
       tags:
       - Sheet
-      - DroneUsable
     - type: Material
     - type: PhysicalComposition
       materialComposition:
@@ -239,7 +262,17 @@
     - type: Item
       sprite: Objects/Materials/Sheets/meaterial.rsi
       heldPrefix: meat
-    - type: Appearance
+    - type: Extractable
+      grindableSolutionName: meatsheet
+    - type: SolutionContainerManager
+      solutions:
+        meatsheet:
+          reagents:
+          - ReagentId: Protein
+            Quantity: 7
+          - ReagentId: Fat
+            Quantity: 3
+          canReact: false
 
 - type: entity
   parent: MaterialSheetMeat

@@ -6,7 +6,7 @@
 
 - files: ["barratry.yml"]
   authors: Emogarbage, Scribbles0
- 
+
 - files: ["box.yml"]
   authors: ACJM, Emisse
 
@@ -24,6 +24,9 @@
 
 - files: ["kettle.yml"]
   authors: Checkraze
+
+- files: ["gemini.yml"]
+  authors: Checkraze, TsjipTsjip, Luckyshotpictures
 
 - files: ["marathon.yml"]
   authors: Emisse
@@ -51,3 +54,9 @@
 
 - files: ["nox.yml"]
   authors: Kit0vras, Glek3197
+
+- files: ["axioma.yml"]
+  authors: Vnoeg, Kit0vras, Surani
+
+- files: ["oasis.yml"]
+  authors: CptJeanLuc

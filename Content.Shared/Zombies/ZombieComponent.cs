@@ -1,3 +1,4 @@
+using Content.Shared.Antag;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
@@ -13,7 +14,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Shared.Zombies;
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class ZombieComponent : Component
+public sealed partial class ZombieComponent : Component, IAntagStatusIconComponent
 {
     /// <summary>
     /// The baseline infection chance you have if you are completely nude
@@ -93,8 +94,11 @@ public sealed partial class ZombieComponent : Component
     [DataField("nextTick", customTypeSerializer:typeof(TimeOffsetSerializer))]
     public TimeSpan NextTick;
 
-    [DataField("zombieStatusIcon", customTypeSerializer: typeof(PrototypeIdSerializer<StatusIconPrototype>))]
-    public string ZombieStatusIcon = "ZombieFaction";
+    [DataField("zombieStatusIcon")]
+    public ProtoId<StatusIconPrototype> StatusIcon { get; set; } = "ZombieFaction";
+
+    [DataField]
+    public bool IconVisibleToGhost { get; set; } = true;
 
     /// <summary>
     /// Healing each second
@@ -108,7 +112,9 @@ public sealed partial class ZombieComponent : Component
             { "Blunt", -1 },
             { "Slash", -1 },
             { "Piercing", -1 },
-            { "Heat", -0.5 }
+            { "Heat", -0.5 },
+            { "Shock", -0.5 },
+            { "Cold", -0.5 }
         }
         //SS220-zomb_reb
     };
@@ -132,6 +138,8 @@ public sealed partial class ZombieComponent : Component
             { "Slash", -10 },
             { "Piercing", -10 },
             { "Heat", -10 },
+            { "Shock", -10 },
+            { "Cold", -10 },
             { "Stamina", -25 }
         }
         //SS220-zomb_reb
@@ -142,6 +150,12 @@ public sealed partial class ZombieComponent : Component
     /// </summary>
     [DataField("greetSoundNotification")]
     public SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/Ambience/Antag/zombie_start.ogg");
+
+    /// <summary>
+    ///     Hit sound on zombie bite.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier BiteSound = new SoundPathSpecifier("/Audio/Effects/bite.ogg");
 
     /// <summary>
     /// The blood reagent of the humanoid to restore in case of cloning

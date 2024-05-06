@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared.Mind;
 using Content.Shared.Players;
 using Content.Shared.Players.PlayTimeTracking;
 using Robust.Shared.Player;
@@ -17,24 +18,20 @@ public abstract class SharedJobSystem : EntitySystem
     [Dependency] private readonly SharedPlayerSystem _playerSystem = default!;
 
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private readonly SharedMindSystem _mind = default!;
     private readonly Dictionary<string, string> _inverseTrackerLookup = new();
 
     public override void Initialize()
     {
         base.Initialize();
-        _protoManager.PrototypesReloaded += OnProtoReload;
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnProtoReload);
         SetupTrackerLookup();
-    }
-
-    public override void Shutdown()
-    {
-        base.Shutdown();
-        _protoManager.PrototypesReloaded -= OnProtoReload;
     }
 
     private void OnProtoReload(PrototypesReloadedEventArgs obj)
     {
-        SetupTrackerLookup();
+        if (obj.WasModified<JobPrototype>())
+            SetupTrackerLookup();
     }
 
     private void SetupTrackerLookup()
@@ -71,6 +68,30 @@ public abstract class SharedJobSystem : EntitySystem
         foreach (var department in departmentProtos)
         {
             if (department.Roles.Contains(jobProto))
+            {
+                departmentPrototype = department;
+                return true;
+            }
+        }
+
+        departmentPrototype = null;
+        return false;
+    }
+
+    /// <summary>
+    /// Like <see cref="TryGetDepartment"/> but ignores any non-primary departments.
+    /// For example, with CE it will return Engineering but with captain it will
+    /// not return anything, since Command is not a primary department.
+    /// </summary>
+    public bool TryGetPrimaryDepartment(string jobProto, [NotNullWhen(true)] out DepartmentPrototype? departmentPrototype)
+    {
+        // not sorting it since there should only be 1 primary department for a job.
+        // this is enforced by the job tests.
+        var departmentProtos = _protoManager.EnumeratePrototypes<DepartmentPrototype>();
+
+        foreach (var department in departmentProtos)
+        {
+            if (department.Primary && department.Roles.Contains(jobProto))
             {
                 departmentPrototype = department;
                 return true;
@@ -134,16 +155,5 @@ public abstract class SharedJobSystem : EntitySystem
             return true;
 
         return prototype.CanBeAntag;
-    }
-
-    public bool CanBeZombie(ICommonSession player)
-    {
-        if (_playerSystem.ContentData(player) is not { Mind: { } mindId })
-            return false;
-
-        if (!MindTryGetJob(mindId, out _, out var prototype))
-            return true;
-
-        return prototype.CanBeZombie;
     }
 }

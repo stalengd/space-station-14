@@ -1,0 +1,200 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: ShardCrystalBase
+  name: crystal shard
+  description:  A small piece of crystal.
+  components:
+  - type: Sharp
+  - type: Sprite
+    layers:
+      - sprite: Objects/Materials/Shards/crystal.rsi
+        state: shard1
+        map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: RandomSprite
+    available:
+      - enum.DamageStateVisualLayers.Base:
+          shard1: ""
+          shard2: ""
+          shard3: ""
+  - type: SpaceGarbage
+  - type: MeleeWeapon
+    wideAnimationRotation: -22.5
+    attackRate: 1.5
+    damage:
+      types:
+        Slash: 3.5
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Glass
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: StaticPrice
+    price: 50
+
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalCyan
+  name: cyan crystal shard
+  description: A small piece of crystal.
+  components:
+  - type: Sprite
+    color: "#7df9ff" #SS220-Mapping-Light-Fix, Электрик
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#7df9ff" #SS220-Mapping-Light-Fix, Электрик
+  - type: Tag
+    tags:
+      - Trash
+      - CrystalCyan
+
+- type: entity
+  parent: ShardCrystalBase
+  name: blue crystal shard
+  id: ShardCrystalBlue
+  components:
+  - type: Sprite
+    color: "#5555ff" #SS220-Mapping-Light-Fix, Неоновый синий
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#5555ff" #SS220-Mapping-Light-Fix, Неоновый синий
+  - type: Tag
+    tags:
+      - Trash
+      - CrystalBlue
+
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalOrange
+  name: orange crystal shard
+  components:
+  - type: Sprite
+    color: "#ffa420" #SS220-Mapping-Light-Fix, Люминесцентный оранжевый
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#ffa420" #SS220-Mapping-Light-Fix, Люминесцентный оранжевый
+  - type: Tag
+    tags:
+      - Trash
+      - CrystalOrange
+
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalPink
+  name: pink crystal shard
+  components:
+  - type: Sprite
+    color: "#fe019a" #SS220-Mapping-Light-Fix, Неоновый розовый
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#fe019a" #SS220-Mapping-Light-Fix, Неоновый розовый
+  - type: Tag
+    tags:
+      - Trash
+      - CrystalPink
+
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalGreen
+  name: green crystal shard
+  components:
+  - type: Sprite
+    color: "#39ff14" #SS220-Mapping-Light-Fix, Неоновый зелёный
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#39ff14" #SS220-Mapping-Light-Fix, Неоновый зелёный
+  - type: Tag
+    tags:
+      - Trash
+      - CrystalGreen
+
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalRed
+  name: red crystal shard
+  components:
+  - type: Sprite
+    color: "#ff073a" #SS220-Mapping-Light-Fix, Неоновый красный
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#ff073a" #SS220-Mapping-Light-Fix, Неоновый красный
+  - type: Tag
+    tags:
+      - Trash
+      - CrystalRed
+
+#SS220-New-Crystals-start
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalYellow
+  name: yellow crystal shard
+  components:
+  - type: Sprite
+    color: "#ffea19" #Неоновый жёлтый
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#ffea19" #Неоновый жёлтый
+  - type: Tag
+    tags:
+      - Trash
+      - CrystalYellow
+
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalPurple
+  name: purple crystal shard
+  components:
+  - type: Sprite
+    color: "#bc13fe" #Неоновый фиолетовый
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#bc13fe" #Неоновый фиолетовый
+  - type: Tag
+    tags:
+      - Trash
+      - CrystalPurple
+
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalWhite
+  name: white crystal shard
+  components:
+  - type: Sprite
+    color: "#ffffff" #Белый
+  - type: PointLight
+    radius: 2
+    energy: 2.5
+    color: "#ffffff" #Белый
+  - type: Tag
+    tags:
+      - Trash
+#SS220-New-Crystals-end
+
+- type: entity
+  parent: ShardCrystalBase
+  id: ShardCrystalRandom
+  name: random crystal shard
+  components:
+  - type: RandomSpawner
+    prototypes:
+      - ShardCrystalGreen
+      - ShardCrystalPink
+      - ShardCrystalOrange
+      - ShardCrystalBlue
+      - ShardCrystalCyan
+      - ShardCrystalRed
+    chance: 1

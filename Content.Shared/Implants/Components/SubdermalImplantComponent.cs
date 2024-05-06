@@ -51,7 +51,7 @@ public sealed partial class SubdermalImplantComponent : Component
     public EntityWhitelist? Blacklist;
 }
 
-public sealed partial class UseReagentCapsuleImplantEvent : InstantActionEvent
+public sealed partial class UseChemicalImplantEvent : InstantActionEvent
 {
 
 }
@@ -81,6 +81,11 @@ public sealed partial class ActivateImplantEvent : InstantActionEvent
 /// Used for opening the uplink implant via action.
 /// </summary>
 public sealed partial class OpenUplinkImplantEvent : InstantActionEvent
+{
+
+}
+
+public sealed partial class UseScramImplantEvent : InstantActionEvent
 {
 
 }

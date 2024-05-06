@@ -92,5 +92,11 @@ namespace Content.Shared.Verbs
 
         //SS220-Photography
         public static readonly VerbCategory PhotoSize = new("verb-categories-photo-size", null);
+
+        //SS220-SpecialSound-system start
+        public static readonly VerbCategory SetSoundMode = new("verb-categories-special-sounds", "/Textures/SS220/Interface/VerbIcons/special_emote.svg.192dpi.png");
+        //SS220-SpecialSound-system  end
+
+        public static readonly VerbCategory PowerLevel = new("verb-categories-power-level", null);
     }
 }

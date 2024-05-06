@@ -1,0 +1,39 @@
+- type: Tag
+  id: DeathNettle
+
+- type: Tag
+  id: DeusAmbrosia
+
+- type: Tag
+  id: MeatSlime
+
+- type: Tag
+  id: SecDogWearable
+
+- type: Tag
+  id: ReactionCleanable
+
+- type: Tag
+  id: GrenadeDusterArta
+
+- type: Tag
+  id: MagazineGrenadeArta
+
+# READD-VEHICLES
+- type: Tag
+  id: JanicartKeys
+
+- type: Tag
+  id: VehicleKey
+######
+
+# ss220 shlepi
+- type: Tag
+  id: ElWyccoAxe
+ 
+- type: Tag
+  id: Meatwheat
+
+# ss220 detective-camera
+- type: Tag
+  id: DetectiveCamera

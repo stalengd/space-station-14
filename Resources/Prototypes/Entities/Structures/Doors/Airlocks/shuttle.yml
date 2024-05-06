@@ -1,5 +1,5 @@
 - type: entity
-  parent: Airlock
+  parent: AirlockRCDResistant
   id: AirlockShuttle
   suffix: Docking
   name: external airlock
@@ -45,7 +45,6 @@
   - type: Wires
     layoutId: Docking
   - type: Door
-    bumpOpen: false
     closeTimeTwo: 0.4
     openTimeTwo: 0.4
     crushDamage:
@@ -58,13 +57,13 @@
     denySound:
       path: /Audio/Machines/airlock_deny.ogg
   - type: Airtight
-    fixVacuum: true
     noAirWhenFullyAirBlocked: false
   - type: Tag
     tags:
       - ForceNoFixRotations
   - type: PaintableAirlock
     group: Shuttle
+    department: null
   - type: Construction
     graph: AirlockShuttle
     node: airlock

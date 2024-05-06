@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from BlueMoon at https://github.com/BlueMoon-Labs/MOLOT-BlueMoon-Station/blob/d5c5b13eb15294de804dbcfc418d8f2c1fac1af7/icons/obj/vending.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "smartfridge_open"
+    },
+    {
+      "name": "smartfridge"
+    },
+    {
+      "name": "off"
+    },
+    {
+      "name": "broken"
+    },
+    {
+      "name": "smartfridge_door"
+    }
+  ]
+}

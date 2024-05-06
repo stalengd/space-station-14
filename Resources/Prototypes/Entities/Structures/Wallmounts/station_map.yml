@@ -12,7 +12,7 @@
       anchored: true
     - type: Sprite
       sprite: Structures/Machines/station_map.rsi
-      drawdepth: WallMountedItems
+      drawdepth: AboveFovOverlay #SS220 Perpective-wall-fov
       layers:
         - state: station_map_broken
     - type: Damageable
@@ -43,6 +43,7 @@
       anchored: true
     - type: Sprite
       sprite: Structures/Machines/station_map.rsi
+      drawdepth: AboveFovOverlay #SS220 Perpective-wall-fov
       layers:
       - map: ["computerLayerBody"]
         state: station_map0
@@ -59,7 +60,6 @@
         board: !type:Container
     - type: ApcPowerReceiver
       powerLoad: 200
-      priority: Low
     - type: WallMount
       arc: 360
     - type: ExtensionCableReceiver
@@ -87,7 +87,7 @@
               acts: [ "Destruction" ]
     - type: UserInterface
       interfaces:
-        - key: enum.StationMapUiKey.Key
+        enum.StationMapUiKey.Key:
           type: StationMapBoundUserInterface
 
 - type: entity
@@ -100,6 +100,7 @@
   - type: InteractionOutline
   - type: Sprite
     sprite: Structures/Machines/station_map.rsi
+    drawdepth: AboveFovOverlay #SS220 Perpective-wall-fov
     layers:
     - state: station_map_frame1
       map: [ "enum.ConstructionVisuals.Layer" ]

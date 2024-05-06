@@ -9,6 +9,8 @@ using Content.Shared.Radio.Components;
 using Content.Shared.Tools;
 using Content.Shared.Tools.Components;
 using Content.Shared.Wires;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -132,7 +134,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             return;
         }
 
-        if (component.KeyContainer.Insert(args.Used))
+        if (_container.Insert(args.Used, component.KeyContainer))
         {
             _popup.PopupClient(Loc.GetString("encryption-key-successfully-installed"), uid, args.User);
             _audio.PlayPredicted(component.KeyInsertionSound, args.Target, args.User);
@@ -213,6 +215,11 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         foreach (var id in channels)
         {
             proto = _protoManager.Index<RadioChannelPrototype>(id);
+
+            //SS220-synd_key_stealth begin
+            if (id != defaultChannel && proto.StealthChannel == true)
+                return;
+            //SS220-synd_key_stealth end
 
             var key = id == SharedChatSystem.CommonChannel
                 ? SharedChatSystem.RadioCommonPrefix.ToString()

@@ -28,7 +28,8 @@
   parent: BaseStorageItem
   components:
   - type: Storage
-    maxSlots: 4
+    grid:
+    - 0,0,4,1
     maxItemSize: Small
   - type: Item
     size: Large
@@ -53,7 +54,7 @@
       visible: false
       shader: unshaded
     - state: lock-closed
-      map: ["enum.StorageVisualLayers.Lock"]
+      map: ["enum.LockVisualLayers.Lock"]
       shader: unshaded
   - type: Appearance
   - type: EngraveNameOnOpen
@@ -69,7 +70,7 @@
         openIndicator:
           Open: { visible: true }
           Closed: { visible: false }
-        enum.StorageVisualLayers.Lock:
+        enum.LockVisualLayers.Lock:
           Open: { visible: false }
           Closed: { visible: true }
   - type: EntityStorageVisuals

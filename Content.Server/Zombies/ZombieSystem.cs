@@ -1,11 +1,9 @@
 using System.Linq;
+using Content.Server.Actions;
 using Content.Server.Body.Systems;
 using Content.Server.Chat;
 using Content.Server.Chat.Systems;
-using Content.Server.Cloning;
-using Content.Server.Drone.Components;
 using Content.Server.Emoting.Systems;
-using Content.Server.Inventory;
 using Content.Server.Speech.EntitySystems;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Cloning;
@@ -33,8 +31,8 @@ namespace Content.Server.Zombies
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
         [Dependency] private readonly DamageableSystem _damageable = default!;
-        [Dependency] private readonly ServerInventorySystem _inv = default!;
         [Dependency] private readonly ChatSystem _chat = default!;
+        [Dependency] private readonly ActionsSystem _actions = default!;
         [Dependency] private readonly AutoEmoteSystem _autoEmote = default!;
         [Dependency] private readonly EmoteOnDamageSystem _emoteOnDamage = default!;
         [Dependency] private readonly MetaDataSystem _metaData = default!;
@@ -44,13 +42,23 @@ namespace Content.Server.Zombies
 
         private const string ZombifyableTag = "ZombifyableByMelee";
 
+        public const SlotFlags ProtectiveSlots =
+            SlotFlags.FEET |
+            SlotFlags.HEAD |
+            SlotFlags.EYES |
+            SlotFlags.GLOVES |
+            SlotFlags.MASK |
+            SlotFlags.NECK |
+            SlotFlags.INNERCLOTHING |
+            SlotFlags.OUTERCLOTHING;
+
         public override void Initialize()
         {
             base.Initialize();
 
             SubscribeLocalEvent<ZombieComponent, ComponentStartup>(OnStartup);
             SubscribeLocalEvent<ZombieComponent, EmoteEvent>(OnEmote, before:
-                new []{typeof(VocalSystem), typeof(BodyEmotesSystem)});
+                new[] { typeof(VocalSystem), typeof(BodyEmotesSystem) });
 
             SubscribeLocalEvent<ZombieComponent, MeleeHitEvent>(OnMeleeHit);
             SubscribeLocalEvent<ZombieComponent, MobStateChangedEvent>(OnMobState);
@@ -65,7 +73,15 @@ namespace Content.Server.Zombies
 
         private void OnPendingMapInit(EntityUid uid, PendingZombieComponent component, MapInitEvent args)
         {
+            if (_mobState.IsDead(uid))
+            {
+                ZombifyEntity(uid);
+                return;
+            }
+
             component.NextTick = _timing.CurTime + TimeSpan.FromSeconds(1f);
+            component.GracePeriod = _random.Next(component.MinInitialInfectedGrace, component.MaxInitialInfectedGrace);
+            _actions.AddAction(uid, ref component.Action, component.ZombifySelfActionPrototype);
         }
 
         public override void Update(float frameTime)
@@ -170,10 +186,10 @@ namespace Content.Server.Zombies
 
         private float GetZombieInfectionChance(EntityUid uid, ZombieComponent component)
         {
-            var baseChance = component.MaxZombieInfectionChance;
+            var max = component.MaxZombieInfectionChance;
 
-            if (!TryComp<InventoryComponent>(uid, out var inventoryComponent))
-                return baseChance;
+            if (!_inventory.TryGetContainerSlotEnumerator(uid, out var enumerator, ProtectiveSlots))
+                return max;
 
             //SS220-zomb_reb
             DamageSpecifier ratingArmor = new()
@@ -189,11 +205,14 @@ namespace Content.Server.Zombies
             ratingArmor = ev.Damage;
             ratingArmor.DamageDict.TryGetValue("Slash", out var armorBonus);
 
-            var max = component.MaxZombieInfectionChance;
+            // Everyone knows that when it comes to zombies, socks & sandals provide just as much protection as an
+            // armored vest. Maybe these should be weighted per-item. I.e. some kind of coverage/protection component.
+            // Or at the very least different weights per slot.
+
             var min = component.MinZombieInfectionChance;
             //gets a value between the max and min based on how many items the entity is wearing
             var chance = max * (armorBonus.Float() / 100);
-            if(chance < min)
+            if (chance < min)
                 return min;
             return chance;
             //SS220-zomb_reb
@@ -212,7 +231,7 @@ namespace Content.Server.Zombies
                 if (args.User == entity)
                     continue;
 
-                if (!TryComp<MobStateComponent>(entity, out var mobState) || HasComp<DroneComponent>(entity))
+                if (!TryComp<MobStateComponent>(entity, out var mobState))
                     continue;
 
                 if(!_tag.HasTag(entity, ZombifyableTag))
@@ -238,6 +257,11 @@ namespace Content.Server.Zombies
                 }
                 else if (mobState.CurrentState == MobState.Alive) //heals when zombies bite live entities
                 {
+                    //SS220 no_heal_from_zombies start
+                    if (HasComp<ZombieComponent>(entity))
+                        continue;
+                    //SS220 no_heal_from_zombies end
+
                     _damageable.TryChangeDamage(uid, component.HealingOnBite, true, false);
                 }
             }
@@ -263,7 +287,7 @@ namespace Content.Server.Zombies
                 _humanoidAppearance.SetBaseLayerColor(target, layer, info.Color);
                 _humanoidAppearance.SetBaseLayerId(target, layer, info.Id);
             }
-            if(TryComp<HumanoidAppearanceComponent>(target, out var appcomp))
+            if (TryComp<HumanoidAppearanceComponent>(target, out var appcomp))
             {
                 appcomp.EyeColor = zombiecomp.BeforeZombifiedEyeColor;
             }

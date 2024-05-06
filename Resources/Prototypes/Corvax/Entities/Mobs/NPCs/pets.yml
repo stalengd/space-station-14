@@ -11,8 +11,8 @@
     - type: Strippable
     - type: UserInterface
       interfaces:
-      - key: enum.StrippingUiKey.Key
-        type: StrippableBoundUserInterface
+        enum.StrippingUiKey.Key:
+          type: StrippableBoundUserInterface
     - type: Hands
     - type: Body
       prototype: Primate
@@ -63,6 +63,9 @@
       successChance: 1
       interactSuccessString: petting-success-gorilla
       interactFailureString: petting-failure-gorilla
+      interactSuccessSpawn: EffectHearts
+      interactSuccessSound:
+        path: /Audio/Animals/ferret_happy.ogg
     - type: Speech
       speechSounds: Monkey
     - type: MonkeyAccent

@@ -15,11 +15,14 @@
     - type: Item
       size: Ginormous
     - type: Storage
-      maxSlots: 15
+      grid:
+      - 0,0,7,3
       quickInsert: true
       areaInsert: true
       whitelist:
         tags:
           - Book
           - Document
+    - type: UseDelay #SS220-BagsFix
+      delay: 0.5
     - type: Dumpable

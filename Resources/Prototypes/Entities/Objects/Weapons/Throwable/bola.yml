@@ -23,17 +23,16 @@
     - trigger:
         !type:DamageTrigger
         damage: 75
-        Stamina: 80
       behaviors:
         - !type:DoActsBehavior
           acts: [ "Destruction" ]
     - trigger:
         !type:DamageTrigger
         damage: 15
-        Stamina: 80
       behaviors:
       - !type:PlaySoundBehavior
-        sound: /Audio/Effects/metalbreak.ogg
+        sound:
+          collection: MetalBreak
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: DamageOnLand

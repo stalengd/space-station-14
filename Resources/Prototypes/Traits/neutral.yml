@@ -6,13 +6,6 @@
     - type: PirateAccent
 
 - type: trait
-  id: ArchaicAccent
-  name: trait-archaic-accent-name
-  description: trait-archaic-accent-desc
-  components:
-    - type: ArchaicAccent
-
-- type: trait
   id: Accentless
   name: trait-accentless-name
   description: trait-accentless-desc
@@ -20,12 +13,21 @@
   - type: Accentless
     removes:
     - type: LizardAccent
+    - type: OwOAccent
+    - type: MothAccent
     - type: ReplacementAccent
       accent: dwarf
 
-- type: trait
+- type: trait # SS220 Slavic-Accent
   id: SlavicAccent
   name: trait-slavic-accent-name
   description: trait-slavic-accent-desc
   components:
     - type: SlavicAccent
+
+- type: trait
+  id: Southern
+  name: trait-southern-name
+  description: trait-southern-desc
+  components:
+    - type: SouthernAccent

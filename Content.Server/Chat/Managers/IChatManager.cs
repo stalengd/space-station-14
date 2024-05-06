@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Administration;
 using Content.Shared.Chat;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -21,7 +22,7 @@ namespace Content.Server.Chat.Managers
         void TrySendOOCMessage(ICommonSession player, string message, OOCChatType type);
 
         void SendHookOOC(string sender, string message);
-        void SendAdminAnnouncement(string message);
+        void SendAdminAnnouncement(string message, AdminFlags? flagBlacklist = null, AdminFlags? flagWhitelist = null);
         void SendAdminAlert(string message);
         void SendAdminAlert(EntityUid player, string message);
 
@@ -41,5 +42,13 @@ namespace Content.Server.Chat.Managers
 
         [return: NotNullIfNotNull(nameof(author))]
         ChatUser? EnsurePlayer(NetUserId? author);
+
+        /// <summary>
+        /// Called when a player sends a chat message to handle rate limits.
+        /// Will update counts and do necessary actions if breached.
+        /// </summary>
+        /// <param name="player">The player sending a chat message.</param>
+        /// <returns>False if the player has violated rate limits and should be blocked from sending further messages.</returns>
+        bool HandleRateLimit(ICommonSession player);
     }
 }

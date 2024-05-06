@@ -1,7 +1,8 @@
 using Content.Client.Rotation;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
-using Content.Shared.Vehicle.Components;
+using Content.Shared.Rotation;
+using Content.Shared.SS220.Vehicle.Components;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Buckle;
@@ -25,8 +26,10 @@ internal sealed class BuckleSystem : SharedBuckleSystem
         if (!TryComp<SpriteComponent>(uid, out var ownerSprite))
             return;
 
+        // SS220 Readd-Vehicles begin
         if (HasComp<VehicleComponent>(component.LastEntityBuckledTo))
             return;
+        // SS220 Readd-Vehicles end
 
         // Adjust draw depth when the chair faces north so that the seat back is drawn over the player.
         // Reset the draw depth when rotated in any other direction.
@@ -56,17 +59,15 @@ internal sealed class BuckleSystem : SharedBuckleSystem
         if (!TryComp<RotationVisualsComponent>(uid, out var rotVisuals))
             return;
 
-        if (!Appearance.TryGetData<int>(uid, StrapVisuals.RotationAngle, out var angle, args.Component) ||
-            !Appearance.TryGetData<bool>(uid, BuckleVisuals.Buckled, out var buckled, args.Component) ||
+        if (!Appearance.TryGetData<bool>(uid, BuckleVisuals.Buckled, out var buckled, args.Component) ||
             !buckled ||
             args.Sprite == null)
         {
-            _rotationVisualizerSystem.SetHorizontalAngle(uid, rotVisuals.DefaultRotation, rotVisuals);
+            _rotationVisualizerSystem.SetHorizontalAngle((uid, rotVisuals), rotVisuals.DefaultRotation);
             return;
         }
 
         // Animate strapping yourself to something at a given angle
-        _rotationVisualizerSystem.SetHorizontalAngle(uid, Angle.FromDegrees(angle), rotVisuals);
         // TODO: Dump this when buckle is better
         _rotationVisualizerSystem.AnimateSpriteRotation(uid, args.Sprite, rotVisuals.HorizontalRotation, rotVisuals.AnimationTime);
     }

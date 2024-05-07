@@ -17,6 +17,7 @@ using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Map.Enumerators;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -177,7 +178,7 @@ public sealed class PhotoManager : EntitySystem
             }
 
             // Humanoid appearance state
-            ComponentState? humanoidAppearanceState = null;
+            IComponentState? humanoidAppearanceState = null;
             if (TryComp<HumanoidAppearanceComponent>(entity, out var humanoidAppearance))
             {
                 humanoidAppearanceState = EntityManager.GetComponentState(EntityManager.EventBus, humanoidAppearance, null, GameTick.Zero);

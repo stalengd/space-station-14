@@ -1,11 +1,12 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.SS220.Photography;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class PhotoCameraComponent : Component
 {
     /// <summary>
@@ -17,13 +18,13 @@ public sealed partial class PhotoCameraComponent : Component
     /// <summary>
     /// How many film charges left in camera (How many photos can be made until reloading is required)
     /// </summary>
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField, ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
     public uint FilmLeft = 10;
 
     /// <summary>
     /// Dimensions of a photo, in tiles. X is Width, Y is Height.
     /// </summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float SelectedPhotoDimensions = 5;
 
     /// <summary>

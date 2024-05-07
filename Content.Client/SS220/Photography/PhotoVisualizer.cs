@@ -2,12 +2,12 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Client.Hands.Systems;
-using Content.Client.Rotation;
 using Content.Shared.Damage;
 using Content.Shared.Decals;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
+using Content.Shared.Rotation;
 using Content.Shared.SS220.Photography;
 using Content.Shared.StatusEffect;
 using Robust.Client.GameObjects;

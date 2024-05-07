@@ -47,7 +47,10 @@ public sealed partial class PhotoVisualizer : EntitySystem
             return;
         }
 
-        _photoDataCache.Add(data.Id, data);
+        if (_photoDataCache.TryAdd(data.Id, data))
+            Log.Debug("Photo data with ID {0} was received and cached.", data.Id);
+        else
+            Log.Warning("Photo data with ID {0} was received but has already been cached!", data.Id);
 
         if (QUEUED_MODE)
         {
@@ -124,10 +127,13 @@ public sealed partial class PhotoVisualizer : EntitySystem
 
     public void RequestPhotoEye(PhotoEyeRequest request)
     {
+        Log.Debug("Eye requested! ID:"+request.PhotoId);
+        var requestNeeded = false;
         if (!_eyeRequests.TryGetValue(request.PhotoId, out var requestSet))
         {
             requestSet = new();
             _eyeRequests.Add(request.PhotoId, requestSet);
+            requestNeeded = true;
         }
 
         requestSet.Add(request);
@@ -158,9 +164,12 @@ public sealed partial class PhotoVisualizer : EntitySystem
             return;
         }
 
-        var ev = new PhotoDataRequest(request.PhotoId);
-        RaiseNetworkEvent(ev);
-        _sawmill.Debug($"Sending data request for ID {request.PhotoId}");
+        if (requestNeeded)
+        {
+            var ev = new PhotoDataRequest(request.PhotoId);
+            RaiseNetworkEvent(ev);
+            _sawmill.Debug($"Sending data request for ID {request.PhotoId}");
+        }
     }
 }
 

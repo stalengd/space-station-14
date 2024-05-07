@@ -64,7 +64,7 @@ public sealed class PhotoEntityData
     public int? GridIndex = null;
     public Angle Rotation;
     public AppearanceComponentState? Appearance;
-    public ComponentState? HumanoidAppearance;
+    public IComponentState? HumanoidAppearance;
     public PointLightComponentState? PointLight;
     public OccluderComponent.OccluderComponentState? Occluder;
     public DamageableComponentState? Damageable;

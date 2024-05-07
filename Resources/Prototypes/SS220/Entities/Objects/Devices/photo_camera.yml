@@ -11,8 +11,8 @@
     closeOnHandDeselect: false
   - type: UserInterface
     interfaces:
-    - key: enum.PhotoUiKey.Key
-      type: PhotoBoundUserInterface
+      enum.PhotoUiKey.Key:
+        type: PhotoBoundUserInterface
   - type: Sprite
     sprite: SS220/Objects/Devices/photography.rsi
     state: photo

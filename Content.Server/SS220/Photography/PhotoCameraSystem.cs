@@ -10,7 +10,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.SS220.Photography;
 using Content.Shared.Verbs;
-using Robust.Shared.Player;
+using Robust.Server.Audio;
 
 namespace Content.Server.SS220.Photography;
 
@@ -21,7 +21,7 @@ public sealed class PhotoCameraSystem : EntitySystem
     [Dependency] private readonly SharedChargesSystem _charges = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly AudioSystem _audio = default!;
 
     public override void Initialize()
     {
@@ -119,6 +119,7 @@ public sealed class PhotoCameraSystem : EntitySystem
 
         _charges.UseCharge(entity, charges);
         _audio.PlayPvs(entity.Comp.ShotSound, entity);
+        Dirty(entity);
         args.Handled = true;
     }
 

@@ -150,7 +150,6 @@ public sealed partial class AdminVerbSystem
             Act = () =>
             {
                 _antag.ForceMakeAntag<CultRuleComponent>(targetPlayer, DefaultCultRule);
-                //_cultRule.MakeCultistAdmin(args.Target);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-cultist"),

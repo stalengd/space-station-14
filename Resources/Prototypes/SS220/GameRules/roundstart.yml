@@ -3,4 +3,19 @@
   parent: BaseGameRule
   noSpawn: true
   components:
+  - type: GameRule
+    minPlayers: 60
+    delay:
+      min: 240
+      max: 420
   - type: CultRule
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ Cult ]
+      max: 4
+      playerRatio: 4
+      lateJoinAdditional: true
+      mindComponents:
+      - type: CultRole
+        prototype: Cult
+

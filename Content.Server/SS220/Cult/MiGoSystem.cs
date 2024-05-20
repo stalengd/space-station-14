@@ -54,7 +54,7 @@ public sealed class MiGoSystem : SharedMiGoSystem
         */
 
         //Start the rule if it has not already been started
-        var traitorRuleComponent = _cultRule.StartGameRule();
-        _cultRule.TryMakeCultist(args.Target, traitorRuleComponent);
+        //var traitorRuleComponent = _cultRule.StartGameRule();
+        //_cultRule.TryMakeCultist(args.Target, traitorRuleComponent);
     }
 }

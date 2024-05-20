@@ -1,6 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Server.NPC.Components;
 using Content.Shared.Dataset;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Random;
 using Content.Shared.Roles;
 using Robust.Shared.Audio;
@@ -21,7 +21,7 @@ public sealed partial class CultRuleComponent : Component
     public readonly List<EntityUid> CultistMinds = new();
 
     [DataField]
-    public ProtoId<AntagPrototype> CultPrototypeId = "Cultist";
+    public ProtoId<AntagPrototype> CultPrototypeId = "Cult";
 
     [DataField]
     public ProtoId<NpcFactionPrototype> NanoTrasenFaction = "NanoTrasen";
@@ -49,7 +49,7 @@ public sealed partial class CultRuleComponent : Component
     public SelectionState SelectionStatus = SelectionState.WaitingForSpawn;
 
     /// <summary>
-    /// When should traitors be selected and the announcement made
+    /// When should cultists be selected and the announcement made
     /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan? AnnounceAt;

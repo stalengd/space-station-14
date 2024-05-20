@@ -29,7 +29,8 @@ public sealed class AntagStatusIconSystem : SharedStatusIconSystem
         SubscribeLocalEvent<EventRoleComponent, GetStatusIconsEvent>(GetIcon); //SS220-admeme-ebents
         SubscribeLocalEvent<MindSlaveComponent, GetStatusIconsEvent>(GetIcon); //SS220-mindslave
         SubscribeLocalEvent<MindSlaveMasterComponent, GetStatusIconsEvent>(GetIcon); //SS220-mindslave
-		SubscribeLocalEvent<CultComponent, GetStatusIconsEvent>(GetIcon);//SS220-Cult    }
+		SubscribeLocalEvent<CultComponent, GetStatusIconsEvent>(GetIcon);//SS220-Cult
+    }
 
     /// <summary>
     /// Adds a Status Icon on an entity if the player is supposed to see it.

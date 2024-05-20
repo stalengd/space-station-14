@@ -10,7 +10,7 @@ using Content.Shared.Verbs;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Server.SS220.GameTicking.Rules;
+using Content.Server.SS220.GameTicking.Rules.Components;
 
 namespace Content.Server.Administration.Systems;
 
@@ -18,7 +18,6 @@ public sealed partial class AdminVerbSystem
 {
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly ZombieSystem _zombie = default!;
-    [Dependency] private readonly CultRuleSystem _cultRule = default!;
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string DefaultTraitorRule = "Traitor";
@@ -34,6 +33,11 @@ public sealed partial class AdminVerbSystem
 
     [ValidatePrototypeId<StartingGearPrototype>]
     private const string PirateGearId = "PirateGear";
+
+    //SS200 Cult start
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string DefaultCultRule = "Cult";
+    //SS220 Cult end
 
     // All antag verbs have names so invokeverb works.
     private void AddAntagVerbs(GetVerbsEvent<Verb> args)
@@ -142,10 +146,11 @@ public sealed partial class AdminVerbSystem
         {
             Text = Loc.GetString("admin-verb-text-make-cultist"),
             Category = VerbCategory.Antag,
-            Icon = new SpriteSpecifier.Texture(new("/Textures/SS220/Interface/Actions/cultist-turn.png")),
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/SS220/Interface/Actions/cult.rsi"), "turn"),
             Act = () =>
             {
-                _cultRule.MakeCultistAdmin(args.Target);
+                _antag.ForceMakeAntag<CultRuleComponent>(targetPlayer, DefaultCultRule);
+                //_cultRule.MakeCultistAdmin(args.Target);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-cultist"),

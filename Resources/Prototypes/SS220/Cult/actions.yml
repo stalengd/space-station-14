@@ -8,7 +8,9 @@
   - type: EntityTargetAction
     event: !type:CultCorruptItemEvent
     itemIconStyle: NoItem
-    icon: SS220/Interface/Cult/corrupt.png
+    icon:
+      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      state: corrupt
     useDelay: 15
 
 
@@ -22,7 +24,9 @@
     useDelay: 15
     event: !type:CultPukeShroomEvent
     itemIconStyle: NoItem
-    icon: SS220/Interface/Cult/migopuke.png
+    icon:
+      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      state: migopuke
 
 - type: entity
   id: ActionCultAscending
@@ -34,7 +38,9 @@
     useDelay: 15
     event: !type:CultAscendingEvent
     itemIconStyle: NoItem
-    icon: SS220/Interface/Cult/migopuke.png
+    icon:
+      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      state: migopuke
 
 #Mi'Go actions
 - type: entity
@@ -47,7 +53,23 @@
     useDelay: 15
     event: !type:MiGoEnslavementEvent
     itemIconStyle: NoItem
-    icon: SS220/Interface/Cult/enslavement.png
+    icon:
+      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      state: enslavement
+
+- type: entity
+  id: ActionMiGoHeal
+  name: Исцеление
+  description: Ускорьте процессы восстановления прислужника.
+  noSpawn: true
+  components:
+  - type: EntityTargetAction
+    useDelay: 15
+    event: !type:MiGoEnslavementEvent
+    itemIconStyle: NoItem
+    icon:
+      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      state: heal
 
 - type: entity
   id: ActionMiGoAstral
@@ -59,7 +81,9 @@
     useDelay: 15
     event: !type:MiGoAstralEvent
     itemIconStyle: NoItem
-    icon: SS220/Interface/Cult/migoastral.png
+    icon:
+      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      state: migoastral
 
 
 - type: entity
@@ -72,7 +96,9 @@
     useDelay: 15
     event: !type:MiGoErectEvent
     itemIconStyle: NoItem
-    icon: SS220/Interface/Cult/migoastral.png
+    icon:
+      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      state: migopuke
 
 - type: entity
   id: ActionMiGoSacrifice
@@ -84,7 +110,9 @@
     useDelay: 15
     event: !type:MiGoSacrificeEvent
     itemIconStyle: NoItem
-    icon: SS220/Interface/Cult/migoastral.png
+    icon:
+      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      state: migopuke
 
 
 

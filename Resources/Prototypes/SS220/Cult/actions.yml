@@ -9,7 +9,7 @@
     event: !type:CultCorruptItemEvent
     itemIconStyle: NoItem
     icon:
-      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      sprite: SS220/Interface/Actions/cult.rsi
       state: corrupt
     useDelay: 15
 
@@ -25,7 +25,7 @@
     event: !type:CultPukeShroomEvent
     itemIconStyle: NoItem
     icon:
-      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      sprite: SS220/Interface/Actions/cult.rsi
       state: migopuke
 
 - type: entity
@@ -38,9 +38,7 @@
     useDelay: 15
     event: !type:CultAscendingEvent
     itemIconStyle: NoItem
-    icon:
-      sprite: SS220/Interface/Interface/Actions/cult.rsi
-      state: migopuke
+    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: migopuke}
 
 #Mi'Go actions
 - type: entity
@@ -53,9 +51,7 @@
     useDelay: 15
     event: !type:MiGoEnslavementEvent
     itemIconStyle: NoItem
-    icon:
-      sprite: SS220/Interface/Interface/Actions/cult.rsi
-      state: enslavement
+    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: enslavement }
 
 - type: entity
   id: ActionMiGoHeal
@@ -67,9 +63,7 @@
     useDelay: 15
     event: !type:MiGoEnslavementEvent
     itemIconStyle: NoItem
-    icon:
-      sprite: SS220/Interface/Interface/Actions/cult.rsi
-      state: heal
+    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: heal }
 
 - type: entity
   id: ActionMiGoAstral
@@ -82,7 +76,7 @@
     event: !type:MiGoAstralEvent
     itemIconStyle: NoItem
     icon:
-      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      sprite: SS220/Interface/Actions/cult.rsi
       state: migoastral
 
 
@@ -97,7 +91,7 @@
     event: !type:MiGoErectEvent
     itemIconStyle: NoItem
     icon:
-      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      sprite: SS220/Interface/Actions/cult.rsi
       state: migopuke
 
 - type: entity
@@ -111,7 +105,7 @@
     event: !type:MiGoSacrificeEvent
     itemIconStyle: NoItem
     icon:
-      sprite: SS220/Interface/Interface/Actions/cult.rsi
+      sprite: SS220/Interface/Actions/cult.rsi
       state: migopuke
 
 

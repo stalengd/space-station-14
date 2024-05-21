@@ -1,0 +1,9 @@
+- type: npcFaction
+  id: Cult
+  hostile:
+  - SimpleHostile
+  - Syndicate
+  - Xeno
+  - Zombie
+  - Revolutionary
+  - NanoTrasen

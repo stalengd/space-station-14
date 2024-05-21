@@ -50,8 +50,8 @@ public abstract class SharedCultSystem : EntitySystem
     private void PukeAction(EntityUid uid, CultComponent comp, CultPukeShroomEvent args)
     {
         _entityManager.SpawnEntity(comp.PukedLiquid, Transform(uid).Coordinates);
-        _entityManager.SpawnEntity(comp.PukedEntity, Transform(uid).Coordinates);
-        _audio.PlayPredicted(comp.PukeSound, uid, uid);
+        var shroom = _entityManager.SpawnEntity(comp.PukedEntity, Transform(uid).Coordinates);
+        _audio.PlayPredicted(comp.PukeSound, uid, shroom);
     }
 
 }

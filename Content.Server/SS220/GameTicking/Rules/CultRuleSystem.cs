@@ -1,37 +1,18 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.SS220.GameTicking.Rules.Components;
-using System.Linq;
 using Content.Server.Chat.Managers;
-using Content.Server.Roles;
-using Content.Server.SS220.Roles;
 using Content.Server.Zombies;
-using Content.Shared.CCVar;
-using Content.Shared.Humanoid;
 using Content.Server.Mind;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Content.Server.Antag;
 using Content.Shared.SS220.Cult;
-using Content.Shared.CombatMode.Pacification;
 using Content.Server.Objectives;
-using Content.Server.PDA.Ringer;
-using Content.Server.Traitor.Uplink;
-using Content.Shared.Mind;
 using Content.Shared.NPC.Systems;
-using Content.Shared.Objectives.Components;
-using Content.Shared.PDA;
 using Content.Shared.Roles;
-using Content.Shared.Roles.Jobs;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
-using System.Text;
-using Content.Server.GameTicking.Components;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 

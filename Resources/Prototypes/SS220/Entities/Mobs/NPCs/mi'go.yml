@@ -17,6 +17,11 @@
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: alive
   - type: Physics
+  - type: NpcFactionMember
+    factions:
+    - Cult
+  - type: RandomMetadata #ToDo нагенерить спец имена
+    nameSegments: [ "Командир", SyndicateNamesElite ]
   - type: Fixtures
     fixtures:
       fix1:

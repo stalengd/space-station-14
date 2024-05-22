@@ -90,10 +90,6 @@ public abstract class SharedCultSystem : EntitySystem
         if (_mindSystem.TryGetMind(uid, out var mindId, out var mind))
             _mindSystem.TransferTo(mindId, migo, mind: mind);
 
-
-        //ToDo set Migo special name
-        //_metaData.SetEntityName(uid, GetTitle(target.Value, comp.Title), MetaData(uid));
-
         //Gib original body
         if (TryComp<BodyComponent>(uid, out var body))
         {

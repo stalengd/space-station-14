@@ -7,6 +7,8 @@ using Content.Shared.Mind;
 using Content.Shared.Body.Systems;
 using Content.Shared.Body.Components;
 using Content.Shared.Actions;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 
 namespace Content.Shared.SS220.Cult;
 
@@ -19,6 +21,7 @@ public abstract class SharedCultSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {
@@ -29,6 +32,7 @@ public abstract class SharedCultSystem : EntitySystem
         // actions
         SubscribeLocalEvent<CultComponent, CultPukeShroomEvent>(PukeAction);
         SubscribeLocalEvent<CultComponent, CultCorruptItemEvent>(CorruptItemAction);
+        SubscribeLocalEvent<CultComponent, CultCorruptItemInHandEvent>(CorruptItemInHandAction);
         SubscribeLocalEvent<CultComponent, CultAscendingEvent>(AscendingAction);
     }
 
@@ -36,6 +40,7 @@ public abstract class SharedCultSystem : EntitySystem
     {
         _actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);
         _actions.AddAction(uid, ref comp.CorruptItemActionEntity, comp.CorruptItemAction);
+        _actions.AddAction(uid, ref comp.CorruptItemInHandActionEntity, comp.CorruptItemInHandAction);
         _actions.AddAction(uid, ref comp.AscendingActionEntity, comp.AscendingAction);
     }
 
@@ -65,12 +70,46 @@ public abstract class SharedCultSystem : EntitySystem
 
         var corruptedEntity = Spawn("FoodSnackMREBrownieOpen", coords);
 
-        _entityManager.AddComponent<CorruptedComponent>(corruptedEntity);//ToDo save previuos form
+        _entityManager.AddComponent<CorruptedComponent>(corruptedEntity);//ToDo save previuos form here
 
         _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(uid)} used corrupt on {ToPrettyString(args.Target)} and made {ToPrettyString(corruptedEntity)}");
 
         //Delete previous entity
         _entityManager.DeleteEntity(args.Target);
+    }
+    private void CorruptItemInHandAction(EntityUid uid, CultComponent comp, CultCorruptItemInHandEvent args)//ToDo some list of corruption
+    {
+        if (!_entityManager.TryGetComponent<HandsComponent>(uid, out var hands))
+            return;
+
+        if (hands.ActiveHand == null)
+            return;
+
+        var handItem = hands.ActiveHand.HeldEntity;
+
+        if (handItem == null)
+            return;
+
+        /* ToDo Hastable
+          if(!(args.Targer in List))
+         {
+             _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-foun"), args.Args.Target.Value, args.Args.User);
+             return;
+         }
+         */
+
+        var coords = Transform(uid).Coordinates;
+
+        var corruptedEntity = Spawn("FoodSnackMREBrownieOpen", coords);
+
+        _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(uid)} used corrupt on {ToPrettyString(handItem)} and made {ToPrettyString(corruptedEntity)}");
+
+        //Delete previous entity
+        _entityManager.DeleteEntity(handItem);
+
+        _entityManager.AddComponent<CorruptedComponent>(corruptedEntity);//ToDo save previuos form here
+
+        _hands.PickupOrDrop(uid, corruptedEntity);
     }
     private void AscendingAction(EntityUid uid, CultComponent comp, CultAscendingEvent args)
     {

@@ -32,11 +32,17 @@ public sealed partial class CultComponent : Component, IAntagStatusIconComponent
     [DataField]
     public EntProtoId CorruptItemAction = "ActionCultCorruptItem";
 
+    [DataField]
+    public EntProtoId CorruptItemInHandAction = "ActionCultCorruptItemInHand";
+
     [DataField, AutoNetworkedField]
     public EntityUid? PukeShroomActionEntity;
 
     [DataField, AutoNetworkedField]
     public EntityUid? CorruptItemActionEntity;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? CorruptItemInHandActionEntity;
 
     [DataField, AutoNetworkedField]
     public EntityUid? AscendingActionEntity;

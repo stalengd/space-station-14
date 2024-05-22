@@ -11,6 +11,10 @@ public sealed partial class CultCorruptItemEvent : EntityTargetActionEvent
 {
 }
 
+public sealed partial class CultCorruptItemInHandEvent : InstantActionEvent
+{
+}
+
 public sealed partial class CultAscendingEvent : InstantActionEvent
 {
 }

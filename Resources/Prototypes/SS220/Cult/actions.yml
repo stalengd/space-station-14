@@ -13,6 +13,19 @@
       state: corrupt
     useDelay: 15
 
+- type: entity
+  id: ActionCultCorruptItemInHand
+  name: Преобразование
+  description: Исказить предмет даровав ему форму заложенную создателем.
+  noSpawn: true
+  components:
+  - type: InstantAction
+    event: !type:CultCorruptItemInHandEvent
+    itemIconStyle: NoItem
+    icon:
+      sprite: SS220/Interface/Actions/cult.rsi
+      state: corrupt
+    useDelay: 15
 
 - type: entity
   id: ActionCultPukeShroom

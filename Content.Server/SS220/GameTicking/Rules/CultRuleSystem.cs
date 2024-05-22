@@ -13,6 +13,25 @@ using Content.Shared.SS220.Cult;
 using Content.Server.Objectives;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Roles;
+using Content.Server.Antag;
+using Content.Server.Chat.Systems;
+using Content.Server.GameTicking.Rules.Components;
+using Content.Server.Popups;
+using Content.Server.RoundEnd;
+using Content.Server.Station.Components;
+using Content.Server.Station.Systems;
+using Content.Server.Zombies;
+using Content.Shared.Humanoid;
+using Content.Shared.Mind;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Zombies;
+using Robust.Shared.Player;
+using Robust.Shared.Timing;
+using System.Globalization;
+using Content.Server.GameTicking.Components;
+using Content.Server.GameTicking;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -66,10 +85,50 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         return true;
     }
 
-    private void OnObjectivesTextGetInfo(EntityUid uid, TraitorRuleComponent comp, ref ObjectivesTextGetInfoEvent args)
+    protected override void AppendRoundEndText(EntityUid uid, CultRuleComponent component, GameRuleComponent gameRule,
+    ref RoundEndTextAppendEvent args)
     {
-        args.Minds = _antag.GetAntagMindEntityUids(uid);
+        base.AppendRoundEndText(uid, component, gameRule, ref args);
 
-        args.AgentName = Loc.GetString("traitor-round-end-agent-name");
+        if (component.Summoned)
+        {
+            args.AddLine(Loc.GetString("cult-round-end-amount-win"));
+        }
+        else
+        {
+            var fraction = GetCultistsFraction();
+            if (fraction <= 0)
+                args.AddLine(Loc.GetString("cult-round-end-amount-none"));
+            else if (fraction <= 2)
+                args.AddLine(Loc.GetString("cult-round-end-amount-low"));
+            else if (fraction < 12)
+                args.AddLine(Loc.GetString("cult-round-end-amount-medium"));
+            else
+                args.AddLine(Loc.GetString("cult-round-end-amount-high"));
+        }
+
+        args.AddLine(Loc.GetString("cult-round-end-initial-count", ("initialCount", component.InitialCultistsNames.Count)));
+
+        var antags = _antag.GetAntagIdentifiers(uid);
+        args.AddLine(Loc.GetString("zombie-round-end-initial-count", ("initialCount", antags.Count)));
+        foreach (var (_, data, entName) in antags)
+        {
+            args.AddLine(Loc.GetString("cult-round-end-user-was-initial",
+                ("name", entName),
+                ("username", data.UserName)));
+        }
+    }
+    private float GetCultistsFraction()//надо учесть МиГо
+    {
+        int cultistsCount = 0;
+        var query = EntityQueryEnumerator<HumanoidAppearanceComponent, CultComponent, MobStateComponent>();
+        while (query.MoveNext(out _, out _, out _, out var mob))
+        {
+            if (mob.CurrentState == MobState.Dead)
+                continue;
+            cultistsCount++;
+        }
+
+        return cultistsCount;
     }
 }

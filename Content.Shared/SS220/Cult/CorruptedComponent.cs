@@ -4,7 +4,11 @@ using Robust.Shared.GameStates;
 namespace Content.Shared.SS220.Cult;
 
 [RegisterComponent, NetworkedComponent]
+
+/// <summary>
+/// Used to mark object us corrupted for exorcism
+/// </summary>
 public sealed partial class CorruptedComponent : Component
 {
-
+    public string PreviousForm;
 }

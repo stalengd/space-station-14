@@ -16,10 +16,10 @@ public abstract class SharedCultSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedBodySystem _bodySystem = default!;
+    [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
 
@@ -54,14 +54,16 @@ public abstract class SharedCultSystem : EntitySystem
     {
         if (_entityManager.HasComponent<CorruptedComponent>(args.Target))
         {
-            //_popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-foun"), args.Args.Target.Value, args.Args.User);
+            //_popup.PopupCursor(Loc.GetString("cult-corrupt-already-corrupted"), PopupType.SmallCaution); //somehow isn't working
+            _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), args.Target, uid);
             return;
         }
-
         /* ToDo Hastable
          if(!(args.Targer in List))
         {
-            _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-foun"), args.Args.Target.Value, args.Args.User);
+        }
+
+            _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
             return;
         }
          */
@@ -90,10 +92,17 @@ public abstract class SharedCultSystem : EntitySystem
         if (handItem == null)
             return;
 
+        if (_entityManager.HasComponent<CorruptedComponent>(handItem))
+        {
+            //_popup.PopupClient(Loc.GetString("cult-corrupt-already-corrupted"), uid, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), uid);
+            return;
+        }
+
         /* ToDo Hastable
           if(!(args.Targer in List))
          {
-             _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-foun"), args.Args.Target.Value, args.Args.User);
+             _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
              return;
          }
          */
@@ -126,13 +135,13 @@ public abstract class SharedCultSystem : EntitySystem
 
 
         // Move the mind if there is one and it's supposed to be transferred
-        if (_mindSystem.TryGetMind(uid, out var mindId, out var mind))
-            _mindSystem.TransferTo(mindId, migo, mind: mind);
+        if (_mind.TryGetMind(uid, out var mindId, out var mind))
+            _mind.TransferTo(mindId, migo, mind: mind);
 
         //Gib original body
         if (TryComp<BodyComponent>(uid, out var body))
         {
-            _bodySystem.GibBody(uid, body: body);
+            _body.GibBody(uid, body: body);
         }
     }
 

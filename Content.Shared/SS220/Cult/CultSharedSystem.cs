@@ -1,5 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Popups;
@@ -7,8 +8,10 @@ using Content.Shared.Mind;
 using Content.Shared.Body.Systems;
 using Content.Shared.Body.Components;
 using Content.Shared.Actions;
+using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Ninja.Systems;
 
 namespace Content.Shared.SS220.Cult;
 
@@ -22,6 +25,8 @@ public abstract class SharedCultSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
 
     public override void Initialize()
     {
@@ -34,6 +39,7 @@ public abstract class SharedCultSystem : EntitySystem
         SubscribeLocalEvent<CultComponent, CultCorruptItemEvent>(CorruptItemAction);
         SubscribeLocalEvent<CultComponent, CultCorruptItemInHandEvent>(CorruptItemInHandAction);
         SubscribeLocalEvent<CultComponent, CultAscendingEvent>(AscendingAction);
+        SubscribeLocalEvent<CultComponent, CultCorruptDoAfterEvent>(CorruptOnDoAfter);
     }
 
     protected virtual void OnCompInit(EntityUid uid, CultComponent comp, ComponentStartup args)
@@ -55,19 +61,32 @@ public abstract class SharedCultSystem : EntitySystem
         if (_entityManager.HasComponent<CorruptedComponent>(args.Target))
         {
             //_popup.PopupCursor(Loc.GetString("cult-corrupt-already-corrupted"), PopupType.SmallCaution); //somehow isn't working
-            _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), args.Target, uid);
+            if (_net.IsClient)
+                _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), args.Target, uid);
             return;
         }
         /* ToDo Hastable
          if(!(args.Targer in List))
         {
-        }
-
             _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
             return;
         }
          */
 
+        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(false), uid, args.Target)//ToDo estimate time for corruption
+        {
+            Broadcast = false,
+            BreakOnDamage = true,
+            BreakOnMove = true,
+            NeedHand = true,
+            BlockDuplicate = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent
+        };
+
+
+        _doAfter.TryStartDoAfter(doafterArgs);
+        /*
         var coords = Transform(args.Target).Coordinates;
 
         var corruptedEntity = Spawn("FoodSnackMREBrownieOpen", coords);
@@ -78,6 +97,7 @@ public abstract class SharedCultSystem : EntitySystem
 
         //Delete previous entity
         _entityManager.DeleteEntity(args.Target);
+        */
     }
     private void CorruptItemInHandAction(EntityUid uid, CultComponent comp, CultCorruptItemInHandEvent args)//ToDo some list of corruption
     {
@@ -95,30 +115,54 @@ public abstract class SharedCultSystem : EntitySystem
         if (_entityManager.HasComponent<CorruptedComponent>(handItem))
         {
             //_popup.PopupClient(Loc.GetString("cult-corrupt-already-corrupted"), uid, PopupType.SmallCaution);
-            _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), uid);
+            if (_net.IsClient)
+                _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), uid);
             return;
         }
 
         /* ToDo Hastable
-          if(!(args.Targer in List))
-         {
-             _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
-             return;
-         }
-         */
+        if(!(args.Targer in List))
+        {
+        _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
+        return;
+        }
+        */
 
-        var coords = Transform(uid).Coordinates;
+        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(true), uid, handItem)//ToDo estimate time for corruption
+        {
+            Broadcast = false,
+            BreakOnDamage = true,
+            BreakOnMove = false,
+            NeedHand = true,
+            BlockDuplicate = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent
+        };
+
+        _doAfter.TryStartDoAfter(doafterArgs);
+    }
+    private void CorruptOnDoAfter(EntityUid uid, CultComponent component, CultCorruptDoAfterEvent args)//DoAfter for corruption
+    {
+        if (args.Handled || args.Cancelled || args.Target == null)
+            return;
+
+        var coords = Transform((EntityUid) args.Target).Coordinates;
 
         var corruptedEntity = Spawn("FoodSnackMREBrownieOpen", coords);
 
-        _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(uid)} used corrupt on {ToPrettyString(handItem)} and made {ToPrettyString(corruptedEntity)}");
+        _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(uid)} used corrupt on {ToPrettyString(args.Target)} and made {ToPrettyString(corruptedEntity)}");
+
+        //ToDo if object is a storage, it should drop all its items
 
         //Delete previous entity
-        _entityManager.DeleteEntity(handItem);
+        _entityManager.DeleteEntity(args.Target);
 
         _entityManager.AddComponent<CorruptedComponent>(corruptedEntity);//ToDo save previuos form here
 
-        _hands.PickupOrDrop(uid, corruptedEntity);
+        if (args.InHand)
+            _hands.PickupOrDrop(uid, corruptedEntity);
+
+        args.Handled = true;
     }
     private void AscendingAction(EntityUid uid, CultComponent comp, CultAscendingEvent args)
     {

@@ -1,7 +1,7 @@
 #Cultists actions
 - type: entity
   id: ActionCultCorruptItem
-  name: Преобразование
+  name: Преобразовать предмет через прикосновение
   description: Исказить предмет даровав ему форму заложенную создателем.
   noSpawn: true
   components:
@@ -15,7 +15,7 @@
 
 - type: entity
   id: ActionCultCorruptItemInHand
-  name: Преобразование
+  name: Преобразовать предмет в руках
   description: Исказить предмет даровав ему форму заложенную создателем.
   noSpawn: true
   components:

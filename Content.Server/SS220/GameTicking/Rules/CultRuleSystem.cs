@@ -1,6 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Server.GameTicking.Rules;
-using Content.Server.GameTicking.Rules.Components;
 using Content.Server.SS220.GameTicking.Rules.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.Zombies;
@@ -10,28 +9,17 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Content.Server.Antag;
 using Content.Shared.SS220.Cult;
-using Content.Server.Objectives;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Roles;
-using Content.Server.Antag;
-using Content.Server.Chat.Systems;
-using Content.Server.GameTicking.Rules.Components;
-using Content.Server.Popups;
-using Content.Server.RoundEnd;
-using Content.Server.Station.Components;
-using Content.Server.Station.Systems;
-using Content.Server.Zombies;
 using Content.Shared.Humanoid;
-using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Zombies;
-using Robust.Shared.Player;
-using Robust.Shared.Timing;
-using System.Globalization;
 using Content.Server.GameTicking.Components;
 using Content.Server.GameTicking;
+using Content.Shared.Revolutionary.Components;
+using Content.Shared.Mindshield.Components;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -47,6 +35,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
 
     public override void Initialize()
     {
@@ -63,24 +52,51 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         MakeCultist(args.EntityUid, ent);
     }
 
-    public bool MakeCultist(EntityUid cultist, CultRuleComponent component, bool giveObjectives = true)
+    public bool MakeCultist(EntityUid uid, CultRuleComponent component, bool giveObjectives = true)
     {
         //Grab the mind if it wasnt provided
-        if (!_mindSystem.TryGetMind(cultist, out var mindId, out var mind))
+        if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
             return false;
 
-        _antagSelection.SendBriefing(cultist, Loc.GetString("traitor-role-greeting"), null, component.GreetSoundNotification);
+        _antagSelection.SendBriefing(uid, Loc.GetString("traitor-role-greeting"), null, component.GreetSoundNotification);
 
         component.CultistMinds.Add(mindId);
 
         // Change the faction
-        _npcFaction.RemoveFaction(cultist, component.NanoTrasenFaction, false);
-        _npcFaction.AddFaction(cultist, component.CultFaction);
+        _npcFaction.RemoveFaction(uid, component.NanoTrasenFaction, false);
+        _npcFaction.AddFaction(uid, component.CultFaction);
 
-        _entityManager.AddComponent<CultComponent>(cultist);
-        _entityManager.AddComponent<ZombieImmuneComponent>(cultist);//they are practically mushrooms
+        _entityManager.AddComponent<CultComponent>(uid);
+        _entityManager.AddComponent<ZombieImmuneComponent>(uid);//they are practically mushrooms
 
         //ToDo Give list of sacrificial
+
+        return true;
+    }
+
+    public bool TryMakeCultist(EntityUid uid, CultRuleComponent component)
+        //needed 4 enslavement
+        //maybe looc into RevolutionaryRuleSystem
+        //maybe it should be an event
+    {
+        if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
+            return false;
+
+        if (HasComp<RevolutionaryComponent>(uid) ||
+            HasComp<MindShieldComponent>(uid) ||
+            !HasComp<HumanoidAppearanceComponent>(uid) ||
+            !_mobState.IsAlive(uid) ||
+            HasComp<ZombieComponent>(uid))
+        {
+            return false;
+        }
+
+        //ToDo in sacrificial list, or possible sacrificial
+        /*
+        if(uid in)
+        */
+
+        MakeCultist(uid, component);
 
         return true;
     }

@@ -19,9 +19,6 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, MiGoHealEvent>(MiGoHeal);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
-        //SubscribeLocalEvent<MiGoComponent, MiGoEnslavementEvent>(PukeAction);
-        //SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(PukeAction);
-        //SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(PukeAction);
     }
 
     protected virtual void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
@@ -48,7 +45,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     {
 
     }
-    private void MiGoSacrificel(EntityUid uid, MiGoComponent comp, MiGoSacrificeEvent args)
+    private void MiGoSacrifice(EntityUid uid, MiGoComponent comp, MiGoSacrificeEvent args)
     {
 
     }

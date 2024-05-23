@@ -2,12 +2,15 @@
 using Content.Shared.Actions;
 
 namespace Content.Shared.SS220.Cult;
-
-public sealed partial class MiGoAstralEvent : InstantActionEvent
+public sealed partial class MiGoEnslavementEvent : EntityTargetActionEvent
 {
 }
 
-public sealed partial class MiGoEnslavementEvent : EntityTargetActionEvent
+public sealed partial class MiGoHealEvent : EntityTargetActionEvent
+{
+}
+
+public sealed partial class MiGoAstralEvent : InstantActionEvent
 {
 }
 

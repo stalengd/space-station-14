@@ -24,37 +24,9 @@ public sealed class MiGoSystem : SharedMiGoSystem
     public override void Initialize()
     {
         base.Initialize();
-
-        SubscribeLocalEvent<MiGoComponent, MiGoAstralEvent>(MiGoAstral);
-        SubscribeLocalEvent<MiGoComponent, MiGoEnslavementEvent>(MiGoEnslave);
-
     }
     protected override void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
     {
         base.OnCompInit(uid, comp, args);
-
-
-        _actions.AddAction(uid, ref comp.MiGoAstralActionEntity, comp.MiGoAstralAction);
-
-        _actions.AddAction(uid, ref comp.MiGoEnslavementActionEntity, comp.MiGoEnslavementAction);
-        /*
-        _actions.AddAction(uid, ref comp.MiGoErectActionEntity, comp.MiGoErectAction);
-        */
-    }
-
-    private void MiGoAstral(EntityUid uid, MiGoComponent comp, MiGoAstralEvent args)
-    {
-    }
-
-    private void MiGoEnslave(EntityUid uid, MiGoComponent comp, MiGoEnslavementEvent args)
-    {
-        /*
-        if (!Resolve(args.Target, ref comp))
-            return;
-        */
-
-        //Start the rule if it has not already been started
-        //var traitorRuleComponent = _cultRule.StartGameRule();
-        //_cultRule.TryMakeCultist(args.Target, traitorRuleComponent);
     }
 }

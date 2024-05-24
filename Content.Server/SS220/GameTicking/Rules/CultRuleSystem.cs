@@ -74,33 +74,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         return true;
     }
 
-    public bool TryMakeCultist(EntityUid uid, CultRuleComponent component)
-        //needed 4 enslavement
-        //maybe looc into RevolutionaryRuleSystem
-        //maybe it should be an event
-    {
-        if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
-            return false;
-
-        if (HasComp<RevolutionaryComponent>(uid) ||
-            HasComp<MindShieldComponent>(uid) ||
-            !HasComp<HumanoidAppearanceComponent>(uid) ||
-            !_mobState.IsAlive(uid) ||
-            HasComp<ZombieComponent>(uid))
-        {
-            return false;
-        }
-
-        //ToDo in sacrificial list, or possible sacrificial
-        /*
-        if(uid in)
-        */
-
-        MakeCultist(uid, component);
-
-        return true;
-    }
-
     protected override void AppendRoundEndText(EntityUid uid, CultRuleComponent component, GameRuleComponent gameRule,
     ref RoundEndTextAppendEvent args)
     {

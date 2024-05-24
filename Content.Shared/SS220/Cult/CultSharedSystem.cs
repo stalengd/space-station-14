@@ -11,7 +11,8 @@ using Content.Shared.Actions;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Ninja.Systems;
+using Content.Shared.Nutrition.EntitySystems;
+
 
 namespace Content.Shared.SS220.Cult;
 
@@ -27,6 +28,7 @@ public abstract class SharedCultSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly HungerSystem _hungerSystem = default!;
 
     public override void Initialize()
     {
@@ -52,12 +54,36 @@ public abstract class SharedCultSystem : EntitySystem
 
     private void PukeAction(EntityUid uid, CultComponent comp, CultPukeShroomEvent args)
     {
+        if (args.Handled)
+            return;
+
+        if (_net.IsClient) // Have to do this because spawning stuff in shared is CBT.
+            return;
+
         _entityManager.SpawnEntity(comp.PukedLiquid, Transform(uid).Coordinates);
         var shroom = _entityManager.SpawnEntity(comp.PukedEntity, Transform(uid).Coordinates);
         _audio.PlayPredicted(comp.PukeSound, uid, shroom);
+
+        _hungerSystem.ModifyHunger(uid, -comp.HungerCost);
+
+        /*
+        if (TryComp<HungerComponent>(uid, out var hungerComp) // A check, just incase the doafter is somehow performed when the entity is not in the right hunger state.
+        && _hungerSystem.IsHungerBelowState(uid, comp.MinHungerThreshold, hungerComp.CurrentHunger - comp.HungerCost, hungerComp))
+        {
+            _popupSystem.PopupClient(Loc.GetString(comp.PopupText), uid, uid);
+            return;
+        }
+        */
+
+        args.Handled = true;
+
+        //SharedSericultureSystem watch ref for staf here
     }
     private void CorruptItemAction(EntityUid uid, CultComponent comp, CultCorruptItemEvent args)//ToDo some list of corruption
     {
+        if (args.Handled)
+            return;
+
         if (_entityManager.HasComponent<CorruptedComponent>(args.Target))
         {
             //_popup.PopupCursor(Loc.GetString("cult-corrupt-already-corrupted"), PopupType.SmallCaution); //somehow isn't working
@@ -86,21 +112,14 @@ public abstract class SharedCultSystem : EntitySystem
 
 
         _doAfter.TryStartDoAfter(doafterArgs);
-        /*
-        var coords = Transform(args.Target).Coordinates;
 
-        var corruptedEntity = Spawn("FoodSnackMREBrownieOpen", coords);
-
-        _entityManager.AddComponent<CorruptedComponent>(corruptedEntity);//ToDo save previuos form here
-
-        _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(uid)} used corrupt on {ToPrettyString(args.Target)} and made {ToPrettyString(corruptedEntity)}");
-
-        //Delete previous entity
-        _entityManager.DeleteEntity(args.Target);
-        */
+        args.Handled = true;
     }
     private void CorruptItemInHandAction(EntityUid uid, CultComponent comp, CultCorruptItemInHandEvent args)//ToDo some list of corruption
     {
+        if (args.Handled)
+            return;
+
         if (!_entityManager.TryGetComponent<HandsComponent>(uid, out var hands))
             return;
 
@@ -140,10 +159,15 @@ public abstract class SharedCultSystem : EntitySystem
         };
 
         _doAfter.TryStartDoAfter(doafterArgs);
+
+        args.Handled = true;
     }
     private void CorruptOnDoAfter(EntityUid uid, CultComponent component, CultCorruptDoAfterEvent args)//DoAfter for corruption
     {
         if (args.Handled || args.Cancelled || args.Target == null)
+            return;
+
+        if (_net.IsClient)
             return;
 
         var coords = Transform((EntityUid) args.Target).Coordinates;
@@ -170,6 +194,9 @@ public abstract class SharedCultSystem : EntitySystem
         if (!_timing.IsFirstTimePredicted)
             return;
         */
+
+        if (_net.IsClient)
+            return;
 
         if (TerminatingOrDeleted(uid))
             return;

@@ -63,6 +63,13 @@ public sealed partial class CultComponent : Component, IAntagStatusIconComponent
     public string PukedLiquid = "PuddleVomit"; //maybe should be special liquid?
 
     /// <summary>
+    /// This will subtract (not add, don't get this mixed up) from the current hunger of the mob doing micoz
+    /// </summary>
+
+    [ViewVariables, DataField, AutoNetworkedField]
+    public float HungerCost = 5f;
+
+    /// <summary>
     /// The role prototype of the zombie antag role
     /// </summary>
     [DataField("cultRoleId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]

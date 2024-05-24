@@ -1,13 +1,22 @@
 {
     "version": 1,
     "license": "EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt",
-    "copyright": "Made by MIXnikita for SS220",
+    "copyright": "SecurityPilot Made by Surani, mindslave Made by ell_good, cult_icon made by MIXnikita (Discord) For SS220",
 
     "size": {
         "x": 8,
         "y": 8
     },
     "states": [
+        {
+          "name": "SecurityPilot"
+        },
+        {
+          "name": "master"
+        },
+        {
+          "name": "slave"
+        },
         {
             "name": "cult_icon"
         }

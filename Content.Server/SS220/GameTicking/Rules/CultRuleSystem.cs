@@ -15,11 +15,8 @@ using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Zombies;
 using Content.Server.GameTicking.Components;
 using Content.Server.GameTicking;
-using Content.Shared.Revolutionary.Components;
-using Content.Shared.Mindshield.Components;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -36,23 +33,48 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CultRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
-
-        //SubscribeLocalEvent<CultRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
-        //SubscribeLocalEvent<CultRuleComponent, ObjectivesTextPrependEvent>(OnObjectivesTextPrepend);
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslaveCompleteEvent>(MiGoEnslave);
     }
 
     private void AfterEntitySelected(Entity<CultRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
         MakeCultist(args.EntityUid, ent);
     }
+    private void MiGoEnslave(EntityUid uid, MiGoComponent comp, ref MiGoEnslaveCompleteEvent args)
+    {
+        //ToDo revise
+        GetCultGamerule(out var gameRuleEntity, out var gameRule);
 
-    public bool MakeCultist(EntityUid uid, CultRuleComponent component, bool giveObjectives = true)
+        if (gameRule == null)
+            return;
+
+        MakeCultist(args.Target, gameRule);
+    }
+
+    private void GetCultGamerule(out EntityUid? ruleEntity, out CultRuleComponent? component)
+    {
+        var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
+        ruleEntity = null;
+        while (gameRules.MoveNext())
+        {
+            if (!HasComp<CultRuleComponent>(gameRules.Current))
+                continue;
+
+            ruleEntity = gameRules.Current;
+            break;
+        }
+
+        TryComp(ruleEntity, out component);
+    }
+
+    public bool MakeCultist(EntityUid uid, CultRuleComponent component, bool initial = true)
     {
         //Grab the mind if it wasnt provided
         if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))

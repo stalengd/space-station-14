@@ -6,8 +6,13 @@ using Content.Shared.Revolutionary.Components;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Systems;
-using Robust.Shared.Network;
 using Content.Shared.Popups;
+using Content.Shared.DoAfter;
+using Robust.Shared.Network;
+using Robust.Shared.GameObjects;
+using Robust.Shared.Player;
+
+
 
 namespace Content.Shared.SS220.Cult;
 
@@ -18,6 +23,8 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _userInterface = default!;
 
     public override void Initialize()
     {
@@ -26,11 +33,12 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, ComponentStartup>(OnCompInit);
 
         // actions
-        SubscribeLocalEvent<MiGoComponent, MiGoEnslavementEvent>(Enslave);
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslavementEvent>(MiGoEnslave);
         SubscribeLocalEvent<MiGoComponent, MiGoAstralEvent>(MiGoAstral);
         SubscribeLocalEvent<MiGoComponent, MiGoHealEvent>(MiGoHeal);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslaveOnDoAfter);
     }
 
     protected virtual void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
@@ -41,31 +49,34 @@ public abstract class SharedMiGoSystem : EntitySystem
 
     }
 
-    private void Enslave(EntityUid uid, MiGoComponent comp, MiGoEnslavementEvent args)
+    private void MiGoEnslave(EntityUid uid, MiGoComponent comp, MiGoEnslavementEvent args)
     {
+        if (args.Handled)
+            return;
+
         //maybe look into RevolutionaryRuleSystem
-        if (!_mind.TryGetMind(uid, out var mindId, out var mind))
+        if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
         {
             if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-enslave-no-mind"), args.Target, uid);
+                _popup.PopupEntity(Loc.GetString("cult-no-mind"), args.Target, uid);
             return;
         }
 
-        if (!HasComp<HumanoidAppearanceComponent>(uid))
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
             if (_net.IsClient)
                 _popup.PopupEntity(Loc.GetString("cult-enslave-must-be-human"), args.Target, uid);
             return;
         }
 
-        if (!_mobState.IsAlive(uid))
+        if (!_mobState.IsAlive(args.Target))
         {
             if (_net.IsClient)
                 _popup.PopupEntity(Loc.GetString("cult-enslave-must-be-alive"), args.Target, uid);
             return;
         }
 
-        if (HasComp<RevolutionaryComponent>(uid) || HasComp<MindShieldComponent>(uid) || HasComp<ZombieComponent>(uid))
+        if (HasComp<RevolutionaryComponent>(args.Target) || HasComp<MindShieldComponent>(args.Target) || HasComp<ZombieComponent>(args.Target))
         {
             if (_net.IsClient)
                 _popup.PopupEntity(Loc.GetString("cult-enslave-another-fraction"), args.Target, uid);
@@ -80,8 +91,57 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         }
          */
+        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new MiGoEnslavetDoAfterEvent(), uid, args.Target)//ToDo estimate time for Enslave
+        {
+            Broadcast = false,
+            BreakOnDamage = true,
+            BreakOnMove = false,
+            NeedHand = false,
+            BlockDuplicate = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent
+        };
 
+        _doAfter.TryStartDoAfter(doafterArgs);
+
+        args.Handled = true;
     }
+    private void MiGoEnslaveOnDoAfter(EntityUid uid, MiGoComponent comp, MiGoEnslavetDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled || args.Target == null)
+            return;
+
+        var ev = new MiGoEnslaveCompleteEvent((EntityUid) args.Target, uid);
+        RaiseLocalEvent(ref ev);
+
+        /*
+        GetCultGamerule(out var gameRuleEntity, out var gameRule);
+        
+        if (gameRule == null)
+            return;
+
+        var ev = new MiGoEnslaveCompleteEvent((EntityUid) args.Target, uid);
+        RaiseLocalEvent(ref ev);
+        */
+        args.Handled = true;
+    }
+    /*
+    private void GetCultGamerule(out EntityUid? ruleEntity, out CultRuleComponent? component)
+    {
+        var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
+        ruleEntity = null;
+        while (gameRules.MoveNext())
+        {
+            if (!HasComp<CultRuleComponent>(gameRules.Current))
+                continue;
+
+            ruleEntity = gameRules.Current;
+            break;
+        }
+
+        TryComp(ruleEntity, out component);
+    }
+    */
 
     private void MiGoAstral(EntityUid uid, MiGoComponent comp, MiGoAstralEvent args)
     {
@@ -89,11 +149,34 @@ public abstract class SharedMiGoSystem : EntitySystem
     }
     private void MiGoHeal(EntityUid uid, MiGoComponent comp, MiGoHealEvent args)
     {
+        if (args.Handled)
+            return;
 
+        if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
+        {
+            if (_net.IsClient)
+                _popup.PopupEntity(Loc.GetString("cult-no-mind"), args.Target, uid);
+            return;
+        }
+
+        if (!HasComp<CultComponent>(args.Target) || !HasComp<MiGoComponent>(args.Target))
+        {
+            if (_net.IsClient)
+                _popup.PopupEntity(Loc.GetString("cult-heal-only-cultists"), args.Target, uid);
+            return;
+        }
+
+        //ToDo find way to heal
+
+        args.Handled = true;
     }
     private void MiGoErect(EntityUid uid, MiGoComponent comp, MiGoErectEvent args)
     {
+        if (args.Handled || !TryComp<ActorComponent>(uid, out var actor))
+            return;
+        args.Handled = true;
 
+        //_userInterface.TryToggleUi(uid, SiliconLawsUiKey.Key, actor.PlayerSession);
     }
     private void MiGoSacrifice(EntityUid uid, MiGoComponent comp, MiGoSacrificeEvent args)
     {

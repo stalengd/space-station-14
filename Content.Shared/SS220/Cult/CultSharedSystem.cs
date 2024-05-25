@@ -83,6 +83,15 @@ public abstract class SharedCultSystem : EntitySystem
     {
         if (args.Handled)
             return;
+        _prototypeManager.EnumeratePrototypes
+
+        /* ToDo Hastable
+         if(!(args.Targer in List))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
+            return;
+        }
+         */
 
         if (_entityManager.HasComponent<CorruptedComponent>(args.Target))
         {
@@ -91,13 +100,7 @@ public abstract class SharedCultSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), args.Target, uid);
             return;
         }
-        /* ToDo Hastable
-         if(!(args.Targer in List))
-        {
-            _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
-            return;
-        }
-         */
+
 
         var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(false), uid, args.Target)//ToDo estimate time for corruption
         {

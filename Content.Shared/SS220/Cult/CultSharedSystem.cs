@@ -83,7 +83,7 @@ public abstract class SharedCultSystem : EntitySystem
     {
         if (args.Handled)
             return;
-        _prototypeManager.EnumeratePrototypes
+        //_prototypeManager.EnumeratePrototypes;
 
         /* ToDo Hastable
          if(!(args.Targer in List))

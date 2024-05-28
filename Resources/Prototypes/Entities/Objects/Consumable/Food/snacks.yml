@@ -430,6 +430,7 @@
   - type: Sprite
     state: mre-brownie-open
   - type: Food
+  - type: FoodBehaviour
   - type: SolutionContainerManager
     solutions:
       food:

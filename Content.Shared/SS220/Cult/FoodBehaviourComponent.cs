@@ -6,7 +6,7 @@ namespace Content.Shared.SS220.Cult;
 [RegisterComponent, NetworkedComponent]
 
 /// <summary>
-/// Does food has some special interactions?
+/// Does food has some special interactions when someone eats it?
 /// </summary>
 public sealed partial class FoodBehaviourComponent : Component
 {

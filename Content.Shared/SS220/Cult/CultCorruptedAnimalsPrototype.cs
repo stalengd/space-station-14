@@ -4,18 +4,18 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.SS220.Cult
 {
     /// <summary>
-    ///     Recepies for corruption
+    ///  Resecpie for corruption of animals
     /// </summary>
-    [Prototype("corrupted")]
+    [Prototype("corruptedAnimals")]
 
     [Serializable, NetSerializable]
-    public sealed partial class CultCorruptedPrototype : IPrototype
+    public sealed partial class CultCorruptedAnimalsPrototype : IPrototype
     {
         [ViewVariables]
         [IdDataField]
         public string ID { get; private set; } = default!;
 
-        [DataField("corruptedEntity")]
+        [DataField("corruptedAnimal")]
         public string? Start { get; private set; }
 
         [DataField("result")]

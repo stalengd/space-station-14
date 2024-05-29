@@ -1,4 +1,4 @@
-ult-corrupt-no-proto = Предмет не имеет истинной форсы
+сult-corrupt-no-proto = Предмет не имеет истинной форсы
 cult-no-mind = Оболочка не имеет разума
 cult-enslave-must-be-human = Только гуманоиды могут превознестись
 cult-enslave-must-be-alive = Оболочка кандидата нарушена

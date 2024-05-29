@@ -1,8 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Shared.Nutrition;
 using Content.Shared.Humanoid;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -10,13 +8,8 @@ using Content.Shared.Popups;
 using Content.Shared.Mind;
 using Content.Shared.Body.Systems;
 using Content.Shared.Body.Components;
-using Content.Shared.Actions;
-using Content.Shared.DoAfter;
-using Content.Shared.Hands.Components;
-using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Nutrition.EntitySystems;
 using System.Diagnostics.CodeAnalysis;
-
+using Robust.Shared.Network;
 
 namespace Content.Shared.SS220.Cult;
 
@@ -24,6 +17,8 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
 {
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly INetManager _net = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -48,15 +43,37 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
             return;
         }
     }
-    private void AnimalCorruption(EntityUid uid)
+    private void AnimalCorruption(EntityUid uid)//Corrupt animal
     {
+        //ToDo AddGhost role
+        if (_net.IsClient)
+            return;
 
+        if (TerminatingOrDeleted(uid))
+            return;
+
+        if (!CheckForCorruption(uid, out var corruptionProto))
+        {
+            //maybe do smth
+            return;
+        }
+
+        // Get original body position and spawn MiGo here
+        var corruptedAnimal = _entityManager.SpawnAtPosition(corruptionProto.Result, Transform(uid).Coordinates);
+
+        // Move the mind if there is one and it's supposed to be transferred
+        if (_mind.TryGetMind(uid, out var mindId, out var mind))
+            _mind.TransferTo(mindId, corruptedAnimal, mind: mind);
+
+        //Delete previous entity
+        _entityManager.DeleteEntity(uid);
     }
-    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultCorruptedPrototype? corruption)//if item in list of corrupted
+    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultCorruptedAnimalsPrototype? corruption)//if item in list of corrupted
     {
-        var idOfEnity = _entityManager.GetComponent<MetaDataComponent>(uid).EntityPrototype!.ID;
+        var idOfEnity = MetaData(uid).EntityPrototype!.ID;
+        //var idOfEnity = _entityManager.GetComponent<MetaDataComponent>(uid).EntityPrototype!.ID;
 
-        foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultCorruptedPrototype>())//idk if it isn't shitcode
+        foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultCorruptedAnimalsPrototype>())//idk if it isn't shitcode
         {
             if (idOfEnity == entProto.ID)
             {

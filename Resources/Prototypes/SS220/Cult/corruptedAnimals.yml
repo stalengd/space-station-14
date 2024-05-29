@@ -1,10 +1,15 @@
 #list of corrupted recepies
 - type: corruptedAnimals
-  id: WeaponRifleAk
-  corruptedEntity: WeaponRifleAk
+  id: MobCow
+  corruptedAnimal: MobCow
   result: FoodSnackMREBrownie
 
 - type: corruptedAnimals
-  id: WeaponLaserCarbine
-  corruptedEntity: WeaponLaserCarbine
-  result: FoodPacketMRETrash
+  id: MobMonkey
+  corruptedAnimal: MobMonkey
+  result: CultCowCorrupted
+
+- type: corruptedAnimals
+  id: MobMouse
+  corruptedAnimal: MobMouse
+  result: CultCowCorrupted

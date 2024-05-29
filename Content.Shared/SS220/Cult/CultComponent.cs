@@ -57,10 +57,19 @@ public sealed partial class CultComponent : Component, IAntagStatusIconComponent
     });
 
     [ViewVariables, DataField, AutoNetworkedField]
-    public string PukedEntity = "FoodMi'GomyceteCult"; //what we will puke out
+    public string PukedEntity = "FoodMi'GomyceteCult"; //what will be puked out
 
     [ViewVariables, DataField, AutoNetworkedField]
     public string PukedLiquid = "PuddleVomit"; //maybe should be special liquid?
+
+    /// <summary>
+    /// Entity the cultist will ascend into
+    /// </summary>
+    public string AscendedEntity = "MiGoCult";
+
+    public int ConsumedShrooms = 0; //buffer
+
+    public const int NeededForAscended = 3;//How many shrooms need to be consumed before ascension
 
     /// <summary>
     /// This will subtract (not add, don't get this mixed up) from the current hunger of the mob doing micoz

@@ -40,22 +40,26 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         base.Initialize();
 
         SubscribeLocalEvent<CultRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
-        SubscribeLocalEvent<MiGoComponent, MiGoEnslaveCompleteEvent>(MiGoEnslave);
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslave);
     }
 
     private void AfterEntitySelected(Entity<CultRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
         MakeCultist(args.EntityUid, ent);
     }
-    private void MiGoEnslave(EntityUid uid, MiGoComponent comp, ref MiGoEnslaveCompleteEvent args)
+    private void MiGoEnslave(Entity<MiGoComponent> uid, ref MiGoEnslavetDoAfterEvent args)// Make somebody a cultist
     {
-        //ToDo revise
+        if (args.Handled || args.Cancelled || args.Target == null)
+            return;
+
         GetCultGamerule(out var gameRuleEntity, out var gameRule);
 
         if (gameRule == null)
             return;
 
-        MakeCultist(args.Target, gameRule);
+        MakeCultist((EntityUid) args.Target, gameRule);
+
+        args.Handled = true;
     }
 
     private void GetCultGamerule(out EntityUid? ruleEntity, out CultRuleComponent? component)

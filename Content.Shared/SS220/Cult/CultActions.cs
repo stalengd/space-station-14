@@ -26,8 +26,11 @@ public sealed partial class CultCorruptDoAfterEvent : SimpleDoAfterEvent
 {
     public readonly bool InHand;
 
-    public CultCorruptDoAfterEvent(bool inHand)
+    public readonly CultCorruptedPrototype? Proto;
+
+    public CultCorruptDoAfterEvent(CultCorruptedPrototype? proto, bool inHand)
     {
         InHand = inHand;
+        Proto = proto;
     }
 }

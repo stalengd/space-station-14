@@ -9,7 +9,6 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.DoAfter;
 using Robust.Shared.Network;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 
 
@@ -38,7 +37,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, MiGoHealEvent>(MiGoHeal);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
-        SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslaveOnDoAfter);
+        //SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslaveOnDoAfter);
     }
 
     protected virtual void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
@@ -57,29 +56,25 @@ public abstract class SharedMiGoSystem : EntitySystem
         //maybe look into RevolutionaryRuleSystem
         if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
         {
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-no-mind"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-no-mind"), args.Target, uid);
             return;
         }
 
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-enslave-must-be-human"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-enslave-must-be-human"), args.Target, uid);
             return;
         }
 
         if (!_mobState.IsAlive(args.Target))
         {
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-enslave-must-be-alive"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-enslave-must-be-alive"), args.Target, uid);
             return;
         }
 
         if (HasComp<RevolutionaryComponent>(args.Target) || HasComp<MindShieldComponent>(args.Target) || HasComp<ZombieComponent>(args.Target))
         {
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-enslave-another-fraction"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-enslave-another-fraction"), args.Target, uid);
             return;
         }
 
@@ -111,37 +106,10 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (args.Handled || args.Cancelled || args.Target == null)
             return;
 
-        var ev = new MiGoEnslaveCompleteEvent((EntityUid) args.Target, uid);
-        RaiseLocalEvent(ref ev);
+        //ToDo Remove clients effects
 
-        /*
-        GetCultGamerule(out var gameRuleEntity, out var gameRule);
-        
-        if (gameRule == null)
-            return;
-
-        var ev = new MiGoEnslaveCompleteEvent((EntityUid) args.Target, uid);
-        RaiseLocalEvent(ref ev);
-        */
         args.Handled = true;
     }
-    /*
-    private void GetCultGamerule(out EntityUid? ruleEntity, out CultRuleComponent? component)
-    {
-        var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
-        ruleEntity = null;
-        while (gameRules.MoveNext())
-        {
-            if (!HasComp<CultRuleComponent>(gameRules.Current))
-                continue;
-
-            ruleEntity = gameRules.Current;
-            break;
-        }
-
-        TryComp(ruleEntity, out component);
-    }
-    */
 
     private void MiGoAstral(EntityUid uid, MiGoComponent comp, MiGoAstralEvent args)
     {

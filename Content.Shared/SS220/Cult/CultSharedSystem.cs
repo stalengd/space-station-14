@@ -1,6 +1,7 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Popups;
@@ -12,6 +13,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Nutrition.EntitySystems;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace Content.Shared.SS220.Cult;
@@ -29,6 +31,7 @@ public abstract class SharedCultSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly HungerSystem _hungerSystem = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
     public override void Initialize()
     {
@@ -83,26 +86,23 @@ public abstract class SharedCultSystem : EntitySystem
     {
         if (args.Handled)
             return;
-        //_prototypeManager.EnumeratePrototypes;
 
-        /* ToDo Hastable
-         if(!(args.Targer in List))
+        if (!CheckForCorruption(args.Target, out var corruption))
         {
-            _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
+            //_popup.PopupClient(Loc.GetString("cult-corrupt-no-protod"), uid, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cult-corrupt-no-proto"), uid);
             return;
         }
-         */
 
         if (_entityManager.HasComponent<CorruptedComponent>(args.Target))
         {
             //_popup.PopupCursor(Loc.GetString("cult-corrupt-already-corrupted"), PopupType.SmallCaution); //somehow isn't working
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), args.Target, uid);
             return;
         }
 
 
-        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(false), uid, args.Target)//ToDo estimate time for corruption
+        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(corruption, false), uid, args.Target)//ToDo estimate time for corruption
         {
             Broadcast = false,
             BreakOnDamage = true,
@@ -134,23 +134,14 @@ public abstract class SharedCultSystem : EntitySystem
         if (handItem == null)
             return;
 
-        if (_entityManager.HasComponent<CorruptedComponent>(handItem))
+        if (!CheckForCorruption((EntityUid) handItem, out var corruption))
         {
-            //_popup.PopupClient(Loc.GetString("cult-corrupt-already-corrupted"), uid, PopupType.SmallCaution);
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), uid);
+            //_popup.PopupClient(Loc.GetString("cult-corrupt-no-protod"), uid, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cult-corrupt-no-proto"), uid);
             return;
         }
 
-        /* ToDo Hastable
-        if(!(args.Targer in List))
-        {
-        _popupSystem.PopupEntity(Loc.GetString("cult-corrupt-not-found"), args.Args.Target.Value, args.Args.User);
-        return;
-        }
-        */
-
-        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(true), uid, handItem)//ToDo estimate time for corruption
+        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(corruption, true), uid, handItem)//ToDo estimate time for corruption
         {
             Broadcast = false,
             BreakOnDamage = true,
@@ -165,6 +156,21 @@ public abstract class SharedCultSystem : EntitySystem
 
         args.Handled = true;
     }
+    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultCorruptedPrototype? corruption)//if item in list of corrupted
+    {
+        var idOfEnity = _entityManager.GetComponent<MetaDataComponent>(uid).EntityPrototype!.ID;
+
+        foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultCorruptedPrototype>())//idk if it isn't shitcode
+        {
+            if (idOfEnity == entProto.ID)
+            {
+                corruption = entProto;
+                return true;
+            }
+        }
+        corruption = null;
+        return false;
+    }
     private void CorruptOnDoAfter(EntityUid uid, CultComponent component, CultCorruptDoAfterEvent args)//DoAfter for corruption
     {
         if (args.Handled || args.Cancelled || args.Target == null)
@@ -173,18 +179,27 @@ public abstract class SharedCultSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        if (args.Proto == null)
+            return;
+
         var coords = Transform((EntityUid) args.Target).Coordinates;
 
-        var corruptedEntity = Spawn("FoodSnackMREBrownieOpen", coords);
+        var corruptedEntity = Spawn(args.Proto.Result, coords);
 
         _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(uid)} used corrupt on {ToPrettyString(args.Target)} and made {ToPrettyString(corruptedEntity)}");
 
         //ToDo if object is a storage, it should drop all its items
 
+        //Every corrupted entity should have this  entity at start
+        _entityManager.AddComponent<CorruptedComponent>(corruptedEntity);//ToDo save previuos form here, so delete it when you do all the corrupted list
+        if (!_entityManager.TryGetComponent<CorruptedComponent>(corruptedEntity, out var corrupted))
+            return;
+
+        corrupted.PreviousForm = "";
+
         //Delete previous entity
         _entityManager.DeleteEntity(args.Target);
 
-        _entityManager.AddComponent<CorruptedComponent>(corruptedEntity);//ToDo save previuos form here
 
         if (args.InHand)
             _hands.PickupOrDrop(uid, corruptedEntity);
@@ -205,8 +220,7 @@ public abstract class SharedCultSystem : EntitySystem
             return;
 
         // Get original body position and spawn MiGo here
-        var migo = _entityManager.SpawnAtPosition("MiGoCult", Transform(uid).Coordinates);
-
+        var migo = _entityManager.SpawnAtPosition(comp.AscendedEntity, Transform(uid).Coordinates);
 
         // Move the mind if there is one and it's supposed to be transferred
         if (_mind.TryGetMind(uid, out var mindId, out var mind))

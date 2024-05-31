@@ -39,7 +39,7 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
         }
         if (!_entityManager.TryGetComponent<CultComponent>(args.Target, out var comp))
         {
-            //bigure out function to increase amount of consumed shrooms
+            //figure out function to increase amount of consumed shrooms
             return;
         }
     }
@@ -54,7 +54,7 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
 
         if (!CheckForCorruption(uid, out var corruptionProto))
         {
-            //maybe do smth
+            //maybe do smth if its isn't in list
             return;
         }
 
@@ -68,7 +68,7 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
         //Delete previous entity
         _entityManager.DeleteEntity(uid);
     }
-    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultCorruptedAnimalsPrototype? corruption)//if item in list of corrupted
+    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultCorruptedAnimalsPrototype? corruption)//if enity_id in list of corruptable
     {
         var idOfEnity = MetaData(uid).EntityPrototype!.ID;
         //var idOfEnity = _entityManager.GetComponent<MetaDataComponent>(uid).EntityPrototype!.ID;

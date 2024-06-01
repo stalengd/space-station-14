@@ -1,5 +1,5 @@
 - type: npcFaction
-  id: Cult
+  id: CultYogg
   hostile:
   - SimpleHostile
   - Syndicate

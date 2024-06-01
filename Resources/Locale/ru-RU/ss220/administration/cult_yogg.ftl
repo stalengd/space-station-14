@@ -1,1 +1,1 @@
-admin-verb-text-make-cult-yogg = Сделать цель культистом.
+admin-verb-make-cult-yogg = Сделать цель культистом.

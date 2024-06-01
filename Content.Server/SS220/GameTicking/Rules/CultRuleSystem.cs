@@ -8,7 +8,7 @@ using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Content.Server.Antag;
-using Content.Shared.SS220.Cult;
+using Content.Shared.SS220.CultYogg;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Roles;
 using Content.Shared.Humanoid;
@@ -20,7 +20,7 @@ using Content.Server.GameTicking;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
-public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
+public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 {
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
@@ -39,11 +39,11 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CultRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
+        SubscribeLocalEvent<CultYoggRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
         SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslave);
     }
 
-    private void AfterEntitySelected(Entity<CultRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
+    private void AfterEntitySelected(Entity<CultYoggRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
         MakeCultist(args.EntityUid, ent);
     }
@@ -62,13 +62,13 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         args.Handled = true;
     }
 
-    private void GetCultGamerule(out EntityUid? ruleEntity, out CultRuleComponent? component)
+    private void GetCultGamerule(out EntityUid? ruleEntity, out CultYoggRuleComponent? component)
     {
         var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
         ruleEntity = null;
         while (gameRules.MoveNext())
         {
-            if (!HasComp<CultRuleComponent>(gameRules.Current))
+            if (!HasComp<CultYoggRuleComponent>(gameRules.Current))
                 continue;
 
             ruleEntity = gameRules.Current;
@@ -78,7 +78,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         TryComp(ruleEntity, out component);
     }
 
-    public bool MakeCultist(EntityUid uid, CultRuleComponent component, bool initial = true)
+    public bool MakeCultist(EntityUid uid, CultYoggRuleComponent component, bool initial = true)
     {
         //Grab the mind if it wasnt provided
         if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
@@ -90,9 +90,9 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         // Change the faction
         _npcFaction.RemoveFaction(uid, component.NanoTrasenFaction, false);
-        _npcFaction.AddFaction(uid, component.CultFaction);
+        _npcFaction.AddFaction(uid, component.CultYoggFaction);
 
-        _entityManager.AddComponent<CultComponent>(uid);
+        _entityManager.AddComponent<CultYoggComponent>(uid);
         _entityManager.AddComponent<ZombieImmuneComponent>(uid);//they are practically mushrooms
 
         //ToDo Give list of sacrificial
@@ -100,7 +100,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         return true;
     }
 
-    protected override void AppendRoundEndText(EntityUid uid, CultRuleComponent component, GameRuleComponent gameRule,
+    protected override void AppendRoundEndText(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule,
     ref RoundEndTextAppendEvent args)
     {
         base.AppendRoundEndText(uid, component, gameRule, ref args);
@@ -136,7 +136,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     private float GetCultistsFraction()//надо учесть МиГо
     {
         int cultistsCount = 0;
-        var query = EntityQueryEnumerator<HumanoidAppearanceComponent, CultComponent, MobStateComponent>();
+        var query = EntityQueryEnumerator<HumanoidAppearanceComponent, CultYoggComponent, MobStateComponent>();
         while (query.MoveNext(out _, out _, out _, out var mob))
         {
             if (mob.CurrentState == MobState.Dead)

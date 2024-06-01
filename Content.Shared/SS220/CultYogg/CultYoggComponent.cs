@@ -16,24 +16,24 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 
-namespace Content.Shared.SS220.Cult;
+namespace Content.Shared.SS220.CultYogg;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedCultSystem), Friend = AccessPermissions.ReadWriteExecute, Other = AccessPermissions.Read)]
-public sealed partial class CultComponent : Component, IAntagStatusIconComponent
+[Access(typeof(SharedCultYoggSystem), Friend = AccessPermissions.ReadWriteExecute, Other = AccessPermissions.Read)]
+public sealed partial class CultYoggComponent : Component, IAntagStatusIconComponent
 {
     /// ABILITIES ///
     [DataField]
-    public EntProtoId PukeShroomAction = "ActionCultPukeShroom";
+    public EntProtoId PukeShroomAction = "ActionCultYoggPukeShroom";
 
     [DataField]
-    public EntProtoId AscendingAction = "ActionCultAscending";
+    public EntProtoId AscendingAction = "ActionCultYoggAscending";
 
     [DataField]
-    public EntProtoId CorruptItemAction = "ActionCultCorruptItem";
+    public EntProtoId CorruptItemAction = "ActionCultYoggCorruptItem";
 
     [DataField]
-    public EntProtoId CorruptItemInHandAction = "ActionCultCorruptItemInHand";
+    public EntProtoId CorruptItemInHandAction = "ActionCultYoggCorruptItemInHand";
 
     [DataField, AutoNetworkedField]
     public EntityUid? PukeShroomActionEntity;
@@ -51,7 +51,7 @@ public sealed partial class CultComponent : Component, IAntagStatusIconComponent
     /// Sound played while puking MiGoShroom
     /// </summary>
     [ViewVariables, DataField, AutoNetworkedField]
-    public SoundSpecifier PukeSound = new SoundPathSpecifier("/Audio/SS220/Cult/puke.ogg", new()
+    public SoundSpecifier PukeSound = new SoundPathSpecifier("/Audio/SS220/CultYogg/puke.ogg", new()
     {
         MaxDistance = 3
     });
@@ -85,7 +85,7 @@ public sealed partial class CultComponent : Component, IAntagStatusIconComponent
     public string CultRoleId = "Cultist";
 
     [DataField("cultStatusIcon")]
-    public ProtoId<StatusIconPrototype> StatusIcon { get; set; } = "CultFaction";
+    public ProtoId<StatusIconPrototype> StatusIcon { get; set; } = "CultYoggFaction";
 
     [DataField]
     public bool IconVisibleToGhost { get; set; } = true;

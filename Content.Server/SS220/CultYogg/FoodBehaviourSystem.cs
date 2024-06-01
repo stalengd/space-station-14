@@ -1,5 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Shared.SS220.Cult;
+using Content.Shared.SS220.CultYogg;
 using Robust.Shared.Prototypes;
 using Content.Server.Actions;
 using Content.Server.Polymorph.Systems;
@@ -12,9 +12,9 @@ using Content.Shared.Body.Components;
 using Content.Server.Administration.Logs;
 using Content.Shared.Database;
 
-namespace Content.Server.SS220.Cult;
+namespace Content.Server.SS220.CultYogg;
 
-public sealed class CultSystem : SharedCultSystem
+public sealed class FoodBehaviourSystem : SharedFoodBehaviourSystem
 {
     public override void Initialize()
     {

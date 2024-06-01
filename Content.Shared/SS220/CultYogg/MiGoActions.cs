@@ -3,7 +3,7 @@ using Content.Shared.Actions;
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.SS220.Cult;
+namespace Content.Shared.SS220.CultYogg;
 public sealed partial class MiGoEnslavementEvent : EntityTargetActionEvent
 {
 }

@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.SS220.Cult
+namespace Content.Shared.SS220.CultYogg
 {
     /// <summary>
     ///     Recepies for corruption
@@ -9,7 +9,7 @@ namespace Content.Shared.SS220.Cult
     [Prototype("corrupted")]
 
     [Serializable, NetSerializable]
-    public sealed partial class CultCorruptedPrototype : IPrototype
+    public sealed partial class CultYoggCorruptedPrototype : IPrototype
     {
         [ViewVariables]
         [IdDataField]

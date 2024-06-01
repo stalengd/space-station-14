@@ -9,8 +9,8 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Server.SS220.GameTicking.Rules.Components;
 
-[RegisterComponent, Access(typeof(CultRuleSystem))]
-public sealed partial class CultRuleComponent : Component
+[RegisterComponent, Access(typeof(CultYoggRuleSystem))]
+public sealed partial class CultYoggRuleComponent : Component
 {
     [DataField]
     public Dictionary<string, string> InitialCultistsNames = new();//Who was cultist on the gamestart.
@@ -21,16 +21,16 @@ public sealed partial class CultRuleComponent : Component
     public readonly List<EntityUid> CultistMinds = new();
 
     [DataField]
-    public ProtoId<AntagPrototype> CultPrototypeId = "Cult";
+    public ProtoId<AntagPrototype> CultYoggPrototypeId = "CultYogg";
 
     [DataField]
     public ProtoId<NpcFactionPrototype> NanoTrasenFaction = "NanoTrasen";
 
     [DataField]
-    public ProtoId<NpcFactionPrototype> CultFaction = "Cult";
+    public ProtoId<NpcFactionPrototype> CultYoggFaction = "CultYogg";
 
     [DataField]
-    public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultObjectiveGroups";
+    public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultYoggObjectiveGroups";
 
     [DataField]
     public bool Summoned = false;

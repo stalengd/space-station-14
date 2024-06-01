@@ -11,7 +11,7 @@ using Content.Shared.Body.Components;
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.Network;
 
-namespace Content.Shared.SS220.Cult;
+namespace Content.Shared.SS220.CultYogg;
 
 public abstract class SharedFoodBehaviourSystem : EntitySystem
 {

@@ -7,7 +7,7 @@ using Content.Shared.StatusIcon.Components;
 using Content.Shared.Zombies;
 using Robust.Client.Player;
 using Robust.Shared.Prototypes;
-using Content.Shared.SS220.Cult;
+using Content.Shared.SS220.CultYogg;
 
 namespace Content.Client.Antag;
 
@@ -29,7 +29,7 @@ public sealed class AntagStatusIconSystem : SharedStatusIconSystem
         SubscribeLocalEvent<EventRoleComponent, GetStatusIconsEvent>(GetIcon); //SS220-admeme-ebents
         SubscribeLocalEvent<MindSlaveComponent, GetStatusIconsEvent>(GetIcon); //SS220-mindslave
         SubscribeLocalEvent<MindSlaveMasterComponent, GetStatusIconsEvent>(GetIcon); //SS220-mindslave
-		SubscribeLocalEvent<CultComponent, GetStatusIconsEvent>(GetIcon);//SS220-Cult
+		SubscribeLocalEvent<CultYoggComponent, GetStatusIconsEvent>(GetIcon);//SS220-CultYogg
     }
 
     /// <summary>

@@ -1,14 +1,14 @@
-#Cult Hardsuit
+#CultYogg Hardsuit
 - type: entity
   parent: ClothingOuterHardsuitBase
-  id: ClothingOuterHardsuitCult
+  id: ClothingOuterHardsuitCultYogg
   name: Hardsuit corrupted by a Cult
   description: Corrupted pile of incomprehensible substane, somehowe prowiding great defence.
   components:
   - type: Sprite
-    sprite: SS220/Clothing/OuterClothing/Hardsuits/cultrig.rsi
+    sprite: SS220/Clothing/OuterClothing/Hardsuits/cult_yogg_rig.rsi
   - type: Clothing
-    sprite: SS220/Clothing/OuterClothing/Hardsuits/cultrig.rsi
+    sprite: SS220/Clothing/OuterClothing/Hardsuits/cult_yogg_rig.rsi
   - type: TemperatureProtection
     coefficient: 0.001
   - type: PressureProtection
@@ -30,19 +30,19 @@
   - type: ExplosionResistance
     damageCoefficient: 0.3
   - type: ToggleableClothing
-    clothingPrototype: ClothingHeadHelmetHardsuitCult
+    clothingPrototype: ClothingHeadHelmetHardsuitCultYogg
 
 - type: entity
   parent: ClothingHeadHardsuitWithLightBase
-  id: ClothingHeadHelmetHardsuitCult
+  id: ClothingHeadHelmetHardsuitCultYogg
   name: Hardsuit helmet corrupted by a Cult
   description: Corrupted pile of incomprehensible substane, somehowe prowiding great defence.
   noSpawn: true
   components:
   - type: Sprite
-    sprite: SS220/Clothing/Head/Hardsuits/cultrig.rsi
+    sprite: SS220/Clothing/Head/Hardsuits/cult_yogg_rig.rsi
   - type: Clothing
-    sprite: SS220/Clothing/Head/Hardsuits/cultrig.rsi
+    sprite: SS220/Clothing/Head/Hardsuits/cult_yogg_rig.rsi
   - type: PointLight
     radius: 5
     energy: 3.5

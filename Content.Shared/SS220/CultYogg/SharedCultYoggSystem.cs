@@ -16,9 +16,9 @@ using Content.Shared.Nutrition.EntitySystems;
 using System.Diagnostics.CodeAnalysis;
 
 
-namespace Content.Shared.SS220.Cult;
+namespace Content.Shared.SS220.CultYogg;
 
-public abstract class SharedCultSystem : EntitySystem
+public abstract class SharedCultYoggSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
@@ -37,17 +37,17 @@ public abstract class SharedCultSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CultComponent, ComponentStartup>(OnCompInit);
+        SubscribeLocalEvent<CultYoggComponent, ComponentStartup>(OnCompInit);
 
         // actions
-        SubscribeLocalEvent<CultComponent, CultPukeShroomEvent>(PukeAction);
-        SubscribeLocalEvent<CultComponent, CultCorruptItemEvent>(CorruptItemAction);
-        SubscribeLocalEvent<CultComponent, CultCorruptItemInHandEvent>(CorruptItemInHandAction);
-        SubscribeLocalEvent<CultComponent, CultAscendingEvent>(AscendingAction);
-        SubscribeLocalEvent<CultComponent, CultCorruptDoAfterEvent>(CorruptOnDoAfter);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggPukeShroomEvent>(PukeAction);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemEvent>(CorruptItemAction);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemInHandEvent>(CorruptItemInHandAction);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptDoAfterEvent>(CorruptOnDoAfter);
     }
 
-    protected virtual void OnCompInit(EntityUid uid, CultComponent comp, ComponentStartup args)
+    protected virtual void OnCompInit(EntityUid uid, CultYoggComponent comp, ComponentStartup args)
     {
         _actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);
         _actions.AddAction(uid, ref comp.CorruptItemActionEntity, comp.CorruptItemAction);
@@ -55,7 +55,7 @@ public abstract class SharedCultSystem : EntitySystem
         _actions.AddAction(uid, ref comp.AscendingActionEntity, comp.AscendingAction);
     }
 
-    private void PukeAction(EntityUid uid, CultComponent comp, CultPukeShroomEvent args)
+    private void PukeAction(EntityUid uid, CultYoggComponent comp, CultYoggPukeShroomEvent args)
     {
         if (args.Handled)
             return;
@@ -82,7 +82,7 @@ public abstract class SharedCultSystem : EntitySystem
 
         //SharedSericultureSystem watch ref for staf here
     }
-    private void CorruptItemAction(EntityUid uid, CultComponent comp, CultCorruptItemEvent args)//ToDo some list of corruption
+    private void CorruptItemAction(EntityUid uid, CultYoggComponent comp, CultYoggCorruptItemEvent args)//ToDo some list of corruption
     {
         if (args.Handled)
             return;
@@ -94,7 +94,7 @@ public abstract class SharedCultSystem : EntitySystem
             return;
         }
 
-        if (_entityManager.HasComponent<CorruptedComponent>(args.Target))
+        if (_entityManager.HasComponent<CultYoggCorruptedComponent>(args.Target))
         {
             //_popup.PopupCursor(Loc.GetString("cult-corrupt-already-corrupted"), PopupType.SmallCaution); //somehow isn't working
             _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), args.Target, uid);
@@ -102,7 +102,7 @@ public abstract class SharedCultSystem : EntitySystem
         }
 
 
-        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(corruption, false), uid, args.Target)//ToDo estimate time for corruption
+        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultYoggCorruptDoAfterEvent(corruption, false), uid, args.Target)//ToDo estimate time for corruption
         {
             Broadcast = false,
             BreakOnDamage = true,
@@ -118,7 +118,7 @@ public abstract class SharedCultSystem : EntitySystem
 
         args.Handled = true;
     }
-    private void CorruptItemInHandAction(EntityUid uid, CultComponent comp, CultCorruptItemInHandEvent args)//ToDo some list of corruption
+    private void CorruptItemInHandAction(EntityUid uid, CultYoggComponent comp, CultYoggCorruptItemInHandEvent args)//ToDo some list of corruption
     {
         if (args.Handled)
             return;
@@ -141,7 +141,7 @@ public abstract class SharedCultSystem : EntitySystem
             return;
         }
 
-        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultCorruptDoAfterEvent(corruption, true), uid, handItem)//ToDo estimate time for corruption
+        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new CultYoggCorruptDoAfterEvent(corruption, true), uid, handItem)//ToDo estimate time for corruption
         {
             Broadcast = false,
             BreakOnDamage = true,
@@ -156,12 +156,12 @@ public abstract class SharedCultSystem : EntitySystem
 
         args.Handled = true;
     }
-    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultCorruptedPrototype? corruption)//if item in list of corrupted
+    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultYoggCorruptedPrototype? corruption)//if item in list of corrupted
     {
         var idOfEnity = MetaData(uid).EntityPrototype!.ID;
         //var idOfEnity = _entityManager.GetComponent<MetaDataComponent>(uid).EntityPrototype!.ID;
 
-        foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultCorruptedPrototype>())//idk if it isn't shitcode
+        foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultYoggCorruptedPrototype>())//idk if it isn't shitcode
         {
             if (idOfEnity == entProto.ID)
             {
@@ -172,7 +172,7 @@ public abstract class SharedCultSystem : EntitySystem
         corruption = null;
         return false;
     }
-    private void CorruptOnDoAfter(EntityUid uid, CultComponent component, CultCorruptDoAfterEvent args)//DoAfter for corruption
+    private void CorruptOnDoAfter(EntityUid uid, CultYoggComponent component, CultYoggCorruptDoAfterEvent args)//DoAfter for corruption
     {
         if (args.Handled || args.Cancelled || args.Target == null)
             return;
@@ -192,8 +192,8 @@ public abstract class SharedCultSystem : EntitySystem
         //ToDo if object is a storage, it should drop all its items
 
         //Every corrupted entity should have this  entity at start
-        _entityManager.AddComponent<CorruptedComponent>(corruptedEntity);//ToDo save previuos form here, so delete it when you do all the corrupted list
-        if (!_entityManager.TryGetComponent<CorruptedComponent>(corruptedEntity, out var corrupted))
+        _entityManager.AddComponent<CultYoggCorruptedComponent>(corruptedEntity);//ToDo save previuos form here, so delete it when you do all the corrupted list
+        if (!_entityManager.TryGetComponent<CultYoggCorruptedComponent>(corruptedEntity, out var corrupted))
             return;
 
         corrupted.PreviousForm = "";
@@ -207,7 +207,7 @@ public abstract class SharedCultSystem : EntitySystem
 
         args.Handled = true;
     }
-    private void AscendingAction(EntityUid uid, CultComponent comp, CultAscendingEvent args)
+    private void AscendingAction(EntityUid uid, CultYoggComponent comp, CultYoggAscendingEvent args)
     {
         /* idk what is this
         if (!_timing.IsFirstTimePredicted)

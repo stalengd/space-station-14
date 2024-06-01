@@ -19,7 +19,7 @@
   - type: Physics
   - type: NpcFactionMember
     factions:
-    - Cult
+    - CultYogg
   - type: RandomMetadata #ToDo нагенерить спец имена
     nameSegments: [ "Командир", SyndicateNamesElite ]
   - type: Fixtures

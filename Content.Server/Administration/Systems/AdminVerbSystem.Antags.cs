@@ -34,10 +34,10 @@ public sealed partial class AdminVerbSystem
     [ValidatePrototypeId<StartingGearPrototype>]
     private const string PirateGearId = "PirateGear";
 
-    //SS200 Cult start
+    //SS200 CultYogg start
     [ValidatePrototypeId<EntityPrototype>]
-    private const string DefaultCultRule = "Cult";
-    //SS220 Cult end
+    private const string DefaultCultYoggRule = "CultYogg";
+    //SS220 CultYogg end
 
     // All antag verbs have names so invokeverb works.
     private void AddAntagVerbs(GetVerbsEvent<Verb> args)
@@ -141,20 +141,20 @@ public sealed partial class AdminVerbSystem
         };
         args.Verbs.Add(thief);
 
-        //SS220 Cult start
-        Verb cultist = new()
+        //SS220 CultYogg start
+        Verb cult_yogg = new()
         {
-            Text = Loc.GetString("admin-verb-text-make-cultist"),
+            Text = Loc.GetString("admin-verb-text-make-cult-yogg"),
             Category = VerbCategory.Antag,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/SS220/Interface/Actions/cult.rsi"), "turn"),
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/SS220/Interface/Actions/cult_yogg.rsi"), "turn"),
             Act = () =>
             {
-                _antag.ForceMakeAntag<CultRuleComponent>(targetPlayer, DefaultCultRule);
+                _antag.ForceMakeAntag<CultYoggRuleComponent>(targetPlayer, DefaultCultYoggRule);
             },
             Impact = LogImpact.High,
-            Message = Loc.GetString("admin-verb-make-cultist"),
+            Message = Loc.GetString("admin-verb-make-cult=yogg"),
         };
         args.Verbs.Add(cultist);
-        //SS220 Cult end
+        //SS220 CultYogg end
     }
 }

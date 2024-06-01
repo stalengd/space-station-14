@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.SS220.Cult;
+namespace Content.Shared.SS220.CultYogg;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedCultSystem), Friend = AccessPermissions.ReadWriteExecute, Other = AccessPermissions.Read)]

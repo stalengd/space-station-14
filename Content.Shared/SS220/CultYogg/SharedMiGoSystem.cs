@@ -13,7 +13,7 @@ using Robust.Shared.Player;
 
 
 
-namespace Content.Shared.SS220.Cult;
+namespace Content.Shared.SS220.CultYogg;
 
 public abstract class SharedMiGoSystem : EntitySystem
 {

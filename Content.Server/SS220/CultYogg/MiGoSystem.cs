@@ -4,7 +4,7 @@ using System.Linq;
 using Content.Server.Storage.EntitySystems;
 using Content.Server.Store.Systems;
 using Content.Shared.FixedPoint;
-using Content.Shared.SS220.Cult;
+using Content.Shared.SS220.CultYogg;
 using Content.Shared.Store;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -13,7 +13,7 @@ using Content.Server.Polymorph.Systems;
 using Content.Shared.Popups;
 using Content.Server.SS220.GameTicking.Rules;
 
-namespace Content.Server.SS220.Cult;
+namespace Content.Server.SS220.CultYogg;
 
 public sealed class MiGoSystem : SharedMiGoSystem
 {

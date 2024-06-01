@@ -7,6 +7,6 @@ namespace Content.Server.SS220.Roles;
 /// </summary>
 
 [RegisterComponent, ExclusiveAntagonist]
-public sealed partial class CultRoleComponent : AntagonistRoleComponent
+public sealed partial class CultYoggRoleComponent : AntagonistRoleComponent
 {
 }

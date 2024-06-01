@@ -8,7 +8,7 @@
   - type: EntityTargetAction
     event: !type:CultCorruptItemEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: touch}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: touch}
     useDelay: 15
 
 - type: entity
@@ -21,7 +21,7 @@
     useDelay: 15
     event: !type:CultCorruptItemInHandEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: corrupt}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: corrupt}
 
 - type: entity
   id: ActionCultPukeShroom
@@ -33,8 +33,8 @@
     useDelay: 10
     event: !type:CultPukeShroomEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: migopuke}
-    iconOn: { sprite: SS220/Interface/Actions/cult.rsi, state: corrupt}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: migopuke}
+    iconOn: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: corrupt}
     checkCanInteract: false
 
 - type: entity
@@ -47,7 +47,7 @@
     useDelay: 15
     event: !type:CultAscendingEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: qwert2}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: qwert2}
 
 #Mi'Go actions
 - type: entity
@@ -60,7 +60,7 @@
     useDelay: 15
     event: !type:MiGoEnslavementEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: enslavement }
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: enslavement }
 
 - type: entity
   id: ActionMiGoHeal
@@ -72,7 +72,7 @@
     useDelay: 15
     event: !type:MiGoHealEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: heal}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: heal}
 
 - type: entity
   id: ActionMiGoAstral
@@ -84,7 +84,7 @@
     useDelay: 15
     event: !type:MiGoAstralEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: migoastral}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: migoastral}
 
 
 - type: entity
@@ -97,7 +97,7 @@
     useDelay: 15
     event: !type:MiGoErectEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: build1}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: build1}
 
 - type: entity
   id: ActionMiGoSacrifice
@@ -109,7 +109,7 @@
     useDelay: 15
     event: !type:MiGoSacrificeEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult.rsi, state: "summon1"}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: "summon1"}
 
 
 

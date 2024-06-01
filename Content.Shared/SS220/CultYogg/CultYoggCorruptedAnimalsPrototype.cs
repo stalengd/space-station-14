@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.SS220.Cult
+namespace Content.Shared.SS220.CultYogg
 {
     /// <summary>
     ///  Resecpie for corruption of animals
@@ -9,7 +9,7 @@ namespace Content.Shared.SS220.Cult
     [Prototype("corruptedAnimals")]
 
     [Serializable, NetSerializable]
-    public sealed partial class CultCorruptedAnimalsPrototype : IPrototype
+    public sealed partial class CultYoggCorruptedAnimalsPrototype : IPrototype
     {
         [ViewVariables]
         [IdDataField]

@@ -1,5 +1,5 @@
 - type: entity
-  id: Cult
+  id: CultYogg
   parent: BaseGameRule
   noSpawn: true
   components:
@@ -8,14 +8,14 @@
     delay:
       min: 240
       max: 420
-  - type: CultRule
+  - type: CultYoggRule
   - type: AntagSelection
     definitions:
-    - prefRoles: [ Cult ]
+    - prefRoles: [ CultYogg ]
       max: 4
       playerRatio: 4
       lateJoinAdditional: true
       mindComponents:
-      - type: CultRole
-        prototype: Cult
+      - type: CultYoggRole
+        prototype: CultYogg
 

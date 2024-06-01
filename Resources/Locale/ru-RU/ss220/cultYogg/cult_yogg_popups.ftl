@@ -1,7 +1,7 @@
-сult-corrupt-no-proto = Предмет не имеет истинной форсы
-cult-no-mind = Оболочка не имеет разума
-cult-enslave-must-be-human = Только гуманоиды могут превознестись
-cult-enslave-must-be-alive = Оболочка кандидата нарушена
-cult-enslave-another-fraction = Разум кандидата затуманен
-cult-enslave-is-sacraficial = Существо ценно, как жертва
-cult-heal-only-cultists = Оболочка не принадлежит культу
+сult-yogg-corrupt-no-proto = Предмет не имеет истинной форсы
+cult-yogg-no-mind = Оболочка не имеет разума
+cult-yogg-enslave-must-be-human = Только гуманоиды могут превознестись
+cult-yogg-enslave-must-be-alive = Оболочка кандидата нарушена
+cult-yogg-enslave-another-fraction = Разум кандидата затуманен
+cult-yogg-enslave-is-sacraficial = Существо ценно, как жертва
+cult-yogg-heal-only-cultists = Оболочка не принадлежит культу

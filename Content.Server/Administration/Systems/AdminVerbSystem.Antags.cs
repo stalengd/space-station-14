@@ -152,9 +152,9 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<CultYoggRuleComponent>(targetPlayer, DefaultCultYoggRule);
             },
             Impact = LogImpact.High,
-            Message = Loc.GetString("admin-verb-make-cult=yogg"),
+            Message = Loc.GetString("admin-verb-make-cult-yogg"),
         };
-        args.Verbs.Add(cultist);
+        args.Verbs.Add(cult_yogg);
         //SS220 CultYogg end
     }
 }

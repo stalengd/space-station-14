@@ -107,28 +107,28 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (component.Summoned)
         {
-            args.AddLine(Loc.GetString("cult-round-end-amount-win"));
+            args.AddLine(Loc.GetString("cult-yogg-round-end-amount-win"));
         }
         else
         {
             var fraction = GetCultistsFraction();
             if (fraction <= 0)
-                args.AddLine(Loc.GetString("cult-round-end-amount-none"));
+                args.AddLine(Loc.GetString("cult-yogg-round-end-amount-none"));
             else if (fraction <= 2)
-                args.AddLine(Loc.GetString("cult-round-end-amount-low"));
+                args.AddLine(Loc.GetString("cult-yogg-round-end-amount-low"));
             else if (fraction < 12)
-                args.AddLine(Loc.GetString("cult-round-end-amount-medium"));
+                args.AddLine(Loc.GetString("cult-yogg-round-end-amount-medium"));
             else
-                args.AddLine(Loc.GetString("cult-round-end-amount-high"));
+                args.AddLine(Loc.GetString("cult-yogg-round-end-amount-high"));
         }
 
-        args.AddLine(Loc.GetString("cult-round-end-initial-count", ("initialCount", component.InitialCultistsNames.Count)));
+        args.AddLine(Loc.GetString("cult-yogg-round-end-initial-count", ("initialCount", component.InitialCultistsNames.Count)));
 
         var antags = _antag.GetAntagIdentifiers(uid);
         args.AddLine(Loc.GetString("zombie-round-end-initial-count", ("initialCount", antags.Count)));
         foreach (var (_, data, entName) in antags)
         {
-            args.AddLine(Loc.GetString("cult-round-end-user-was-initial",
+            args.AddLine(Loc.GetString("cult-yogg-round-end-user-was-initial",
                 ("name", entName),
                 ("username", data.UserName)));
         }

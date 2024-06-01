@@ -22,7 +22,7 @@ public sealed class RoleSystem : SharedRoleSystem
         SubscribeAntagEvents<ThiefRoleComponent>();
 
         SubscribeAntagEvents<MindSlaveRoleComponent>();//SS220-mindslave
-        SubscribeAntagEvents<CultRoleComponent>();//SS220 Cult
+        SubscribeAntagEvents<CultYoggRoleComponent>();//SS220 CultYogg
     }
 
     public string? MindGetBriefing(EntityUid? mindId)

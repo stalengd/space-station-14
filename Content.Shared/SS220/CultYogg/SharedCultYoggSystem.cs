@@ -89,15 +89,15 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
         if (!CheckForCorruption(args.Target, out var corruption))
         {
-            //_popup.PopupClient(Loc.GetString("cult-corrupt-no-protod"), uid, PopupType.SmallCaution);
-            _popup.PopupEntity(Loc.GetString("cult-corrupt-no-proto"), uid);
+            //_popup.PopupClient(Loc.GetString("cult-yogg-corrupt-no-protod"), uid, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-corrupt-no-proto"), uid);
             return;
         }
 
         if (_entityManager.HasComponent<CultYoggCorruptedComponent>(args.Target))
         {
-            //_popup.PopupCursor(Loc.GetString("cult-corrupt-already-corrupted"), PopupType.SmallCaution); //somehow isn't working
-            _popup.PopupEntity(Loc.GetString("cult-corrupt-already-corrupted"), args.Target, uid);
+            //_popup.PopupCursor(Loc.GetString("cult-yogg-corrupt-already-corrupted"), PopupType.SmallCaution); //somehow isn't working
+            _popup.PopupEntity(Loc.GetString("cult-yogg-corrupt-already-corrupted"), args.Target, uid);
             return;
         }
 
@@ -136,8 +136,8 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
         if (!CheckForCorruption((EntityUid) handItem, out var corruption))
         {
-            //_popup.PopupClient(Loc.GetString("cult-corrupt-no-protod"), uid, PopupType.SmallCaution);
-            _popup.PopupEntity(Loc.GetString("cult-corrupt-no-proto"), uid);
+            //_popup.PopupClient(Loc.GetString("cult-yogg-corrupt-no-protod"), uid, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-corrupt-no-proto"), uid);
             return;
         }
 

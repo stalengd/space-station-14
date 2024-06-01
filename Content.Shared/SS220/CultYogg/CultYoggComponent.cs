@@ -65,7 +65,7 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     /// <summary>
     /// Entity the cultist will ascend into
     /// </summary>
-    public string AscendedEntity = "MiGoCult";
+    public string AscendedEntity = "MiGoCultYogg";
 
     public int ConsumedShrooms = 0; //buffer
 
@@ -81,10 +81,10 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     /// <summary>
     /// The role prototype of the zombie antag role
     /// </summary>
-    [DataField("cultRoleId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]
-    public string CultRoleId = "Cultist";
+    [DataField("cultYoggRoleId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]
+    public string CultYoggRoleId = "CultYogg";
 
-    [DataField("cultStatusIcon")]
+    [DataField("cultYoggStatusIcon")]
     public ProtoId<StatusIconPrototype> StatusIcon { get; set; } = "CultYoggFaction";
 
     [DataField]

@@ -37,7 +37,7 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
             AnimalCorruption((EntityUid) args.Target);//beast must be transformed
             return;
         }
-        if (!_entityManager.TryGetComponent<CultComponent>(args.Target, out var comp))
+        if (!_entityManager.TryGetComponent<CultYoggComponent>(args.Target, out var comp))
         {
             //figure out function to increase amount of consumed shrooms
             return;
@@ -68,12 +68,12 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
         //Delete previous entity
         _entityManager.DeleteEntity(uid);
     }
-    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultCorruptedAnimalsPrototype? corruption)//if enity_id in list of corruptable
+    private bool CheckForCorruption(EntityUid uid, [NotNullWhen(true)] out CultYoggCorruptedAnimalsPrototype? corruption)//if enity_id in list of corruptable
     {
         var idOfEnity = MetaData(uid).EntityPrototype!.ID;
         //var idOfEnity = _entityManager.GetComponent<MetaDataComponent>(uid).EntityPrototype!.ID;
 
-        foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultCorruptedAnimalsPrototype>())//idk if it isn't shitcode
+        foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultYoggCorruptedAnimalsPrototype>())//idk if it isn't shitcode
         {
             if (idOfEnity == entProto.ID)
             {

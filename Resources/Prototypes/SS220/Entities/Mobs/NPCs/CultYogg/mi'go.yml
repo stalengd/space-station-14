@@ -4,7 +4,7 @@
   name: МиГо
   parent: [ SimpleSpaceMobBase, FlyingMobBase]
   description: Дитя темного бога
-  id: MiGoCult
+  id: MiGoCultYogg
   components:
   - type: MiGo
   - type: MovementSpeedModifier
@@ -12,7 +12,7 @@
     baseSprintSpeed : 6
   - type: Sprite
     drawdepth: Mobs
-    sprite: SS220/Mobs/Cult/Mi'Go.rsi
+    sprite: SS220/Mobs/CultYogg/Mi'Go.rsi
     layers:
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: alive

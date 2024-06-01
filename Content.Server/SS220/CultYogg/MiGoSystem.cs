@@ -20,7 +20,7 @@ public sealed class MiGoSystem : SharedMiGoSystem
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly PolymorphSystem _polymorphSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly CultRuleSystem _cultRule = default!;
+
     public override void Initialize()
     {
         base.Initialize();

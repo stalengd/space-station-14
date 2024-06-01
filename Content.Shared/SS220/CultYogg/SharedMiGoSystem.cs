@@ -25,6 +25,8 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _userInterface = default!;
 
+    //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
+
     public override void Initialize()
     {
         base.Initialize();
@@ -56,25 +58,25 @@ public abstract class SharedMiGoSystem : EntitySystem
         //maybe look into RevolutionaryRuleSystem
         if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
         {
-            _popup.PopupEntity(Loc.GetString("cult-no-mind"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid);
             return;
         }
 
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
-            _popup.PopupEntity(Loc.GetString("cult-enslave-must-be-human"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-must-be-human"), args.Target, uid);
             return;
         }
 
         if (!_mobState.IsAlive(args.Target))
         {
-            _popup.PopupEntity(Loc.GetString("cult-enslave-must-be-alive"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-must-be-alive"), args.Target, uid);
             return;
         }
 
         if (HasComp<RevolutionaryComponent>(args.Target) || HasComp<MindShieldComponent>(args.Target) || HasComp<ZombieComponent>(args.Target))
         {
-            _popup.PopupEntity(Loc.GetString("cult-enslave-another-fraction"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-another-fraction"), args.Target, uid);
             return;
         }
 
@@ -82,7 +84,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         if(HasComp<SacrificialComponent>(uid))
         {
             if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-enslave-is-sacraficial"), args.Target, uid);
+                _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-is-sacraficial"), args.Target, uid);
             return;
         }
          */
@@ -123,14 +125,14 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
         {
             if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-no-mind"), args.Target, uid);
+                _popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid);
             return;
         }
 
-        if (!HasComp<CultComponent>(args.Target) || !HasComp<MiGoComponent>(args.Target))
+        if (!HasComp<CultYoggComponent>(args.Target) || !HasComp<MiGoComponent>(args.Target))
         {
             if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-heal-only-cultists"), args.Target, uid);
+                _popup.PopupEntity(Loc.GetString("cult-yogg-heal-only-cultists"), args.Target, uid);
             return;
         }
 

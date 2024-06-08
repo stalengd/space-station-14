@@ -2,23 +2,24 @@
 using Content.Shared.Nutrition;
 using Content.Shared.Humanoid;
 using Robust.Shared.Prototypes;
-using Content.Shared.Administration.Logs;
-using Content.Shared.Database;
-using Content.Shared.Popups;
 using Content.Shared.Mind;
-using Content.Shared.Body.Systems;
-using Content.Shared.Body.Components;
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.Network;
+using Content.Shared.StatusEffect;
+using Content.Shared.Drunk;//Delete this after
 
 namespace Content.Shared.SS220.CultYogg;
 
 public abstract class SharedFoodBehaviourSystem : EntitySystem
 {
+    [ValidatePrototypeId<StatusEffectPrototype>]
+    public const string DrunkKey = "Drunk";
+
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -41,6 +42,26 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
         {
             //figure out function to increase amount of consumed shrooms
             return;
+        }
+
+        ShroomEffect((EntityUid) args.Target);
+    }
+
+    private void ShroomEffect(EntityUid uid, StatusEffectsComponent? status = null)//Add special effects if consumed
+    {
+        if (!Resolve(uid, ref status, false))
+            return;
+
+       // if (TryComp<LightweightDrunkComponent>(uid, out var trait))
+      //      boozePower *= trait.BoozeStrengthMultiplier;
+
+        if (!_statusEffectsSystem.HasStatusEffect(uid, DrunkKey, status))
+        {
+            _statusEffectsSystem.TryAddStatusEffect<DrunkComponent>(uid, DrunkKey, TimeSpan.FromSeconds(30), true, status);
+        }
+        else
+        {
+            _statusEffectsSystem.TryAddTime(uid, DrunkKey, TimeSpan.FromSeconds(30), status);
         }
     }
     private void AnimalCorruption(EntityUid uid)//Corrupt animal

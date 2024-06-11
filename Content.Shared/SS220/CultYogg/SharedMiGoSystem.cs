@@ -10,8 +10,12 @@ using Content.Shared.Popups;
 using Content.Shared.DoAfter;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-
-
+using Content.Shared.Physics;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
+using Content.Shared.Tag;
+using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Systems;
 
 namespace Content.Shared.SS220.CultYogg;
 
@@ -24,6 +28,9 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _userInterface = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _speedModifier = default!;
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
 
@@ -115,7 +122,56 @@ public abstract class SharedMiGoSystem : EntitySystem
 
     private void MiGoAstral(EntityUid uid, MiGoComponent comp, MiGoAstralEvent args)
     {
+        if (comp.PhysicalForm)
+        {
+            ChangeForm(uid, comp, false);
+        }
+        else
+        {
+            ChangeForm(uid, comp, true);
+        }
+
         //ToDo https://github.com/TheArturZh/space-station-14/blob/b0ee614751216474ddbeabab970b3ab505f63845/Content.Shared/SS220/DarkReaper/DarkReaperSharedSystem.cs#L4
+    }
+    public virtual void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial)
+    {
+        comp.PhysicalForm = isMaterial;
+
+        if (TryComp<FixturesComponent>(uid, out var fixturesComp))
+        {
+            if (fixturesComp.Fixtures.TryGetValue("fix1", out var fixture))
+            {
+                var mask = (int) (isMaterial ? CollisionGroup.MobMask : CollisionGroup.GhostImpassable);
+                var layer = (int) (isMaterial ? CollisionGroup.MobLayer : CollisionGroup.None);
+                _physics.SetCollisionMask(uid, "fix1", fixture, mask);
+                _physics.SetCollisionLayer(uid, "fix1", fixture, layer);
+            }
+        }
+
+        if (isMaterial)
+        {
+            _physics.SetBodyType(uid, BodyType.KinematicController);
+            _tag.AddTag(uid, "DoorBumpOpener");
+        }
+        else
+        {
+            _physics.SetBodyType(uid, BodyType.Static);
+            _tag.RemoveTag(uid, "DoorBumpOpener");
+            comp.MaterializedStart = null;
+        }
+
+        UpdateMovementSpeed(uid, comp);
+
+        Dirty(uid, comp);
+    }
+
+    private void UpdateMovementSpeed(EntityUid uid, MiGoComponent comp)
+    {
+        if (!TryComp<MovementSpeedModifierComponent>(uid, out var modifComp))
+            return;
+
+        var speed = comp.PhysicalForm ? comp.MaterialMovementSpeed : comp.UnMaterialMovementSpeed;
+        _speedModifier.ChangeBaseSpeed(uid, speed, speed, modifComp.Acceleration, modifComp);
     }
     private void MiGoHeal(EntityUid uid, MiGoComponent comp, MiGoHealEvent args)
     {

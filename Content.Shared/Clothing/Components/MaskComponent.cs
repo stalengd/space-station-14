@@ -22,4 +22,10 @@ public sealed partial class MaskComponent : Component
 
     [DataField, AutoNetworkedField]
     public string EquippedPrefix = "toggled";
+
+    [DataField("enabled"), AutoNetworkedField]
+    public bool IsEnabled = true; // ss220 bandana fix
+
+    [DataField, AutoNetworkedField]
+    public bool DisableOnFolded; // ss220 bandana fix
 }

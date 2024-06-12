@@ -9,6 +9,9 @@ public sealed partial class CultYoggPukeShroomEvent : InstantActionEvent
 {
 }
 
+public sealed partial class CultYoggDigestEvent : InstantActionEvent
+{
+}
 public sealed partial class CultYoggCorruptItemEvent : EntityTargetActionEvent
 {
 }

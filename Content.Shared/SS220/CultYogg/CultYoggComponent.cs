@@ -4,17 +4,8 @@ using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Content.Shared.StatusIcon;
 using Content.Shared.Antag;
-using Content.Shared.Chat.Prototypes;
-using Content.Shared.Damage;
-using Content.Shared.Humanoid;
 using Content.Shared.Roles;
-using Content.Shared.StatusIcon;
-using Robust.Shared.Audio;
-using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-
 
 namespace Content.Shared.SS220.CultYogg;
 
@@ -27,6 +18,9 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     public EntProtoId PukeShroomAction = "ActionCultYoggPukeShroom";
 
     [DataField]
+    public EntProtoId DigestAction = "ActionCultYoggDigest";
+
+    [DataField]
     public EntProtoId AscendingAction = "ActionCultYoggAscending";
 
     [DataField]
@@ -37,6 +31,9 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
 
     [DataField, AutoNetworkedField]
     public EntityUid? PukeShroomActionEntity;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? DigestActionEntity;
 
     [DataField, AutoNetworkedField]
     public EntityUid? CorruptItemActionEntity;

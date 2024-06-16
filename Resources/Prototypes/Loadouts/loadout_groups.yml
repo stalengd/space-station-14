@@ -143,6 +143,10 @@
   - GreyJumpskirt
   - RainbowJumpsuit
   - AncientJumpsuit
+  - PassengerJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - PassengerJumpsuitTurtleneckAlt
+  - PassengerJumpskirtTurtleneck
+  - PassengerJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: PassengerFace
@@ -417,6 +421,8 @@
   loadouts:
   - ClownSuit
   - JesterSuit
+  - ClownJumpsuit #SS220-Clown-reSprite-Begin
+  - ClownJumpskirt #SS220-Clown-reSprite-End
 
 - type: loadoutGroup
   id: ClownBackpack
@@ -558,6 +564,10 @@
   loadouts:
   - CargoTechnicianJumpsuit
   - CargoTechnicianJumpskirt
+  - CargoTechnicianJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - CargoTechnicianJumpsuitTurtleneckAlt
+  - CargoTechnicianJumpskirtTurtleneck
+  - CargoTechnicianJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: CargoTechnicianBackpack
@@ -580,7 +590,17 @@
   loadouts:
   - BlackShoes
   - CargoWinterBoots
-
+#SS220-MoreTurtleneck-Begin
+- type: loadoutGroup
+  id: SalvageSpecialistJumpsuit
+  name: loadout-group-salvage-specialist-jumpsuit
+  loadouts:
+  - UniformJumpsuitSalvageSpecialist
+  - SalvageSpecialistJumpsuitTurtleneck
+  - SalvageSpecialistJumpsuitTurtleneckAlt
+  - SalvageSpecialistJumpskirtTurtleneck
+  - SalvageSpecialistJumpskirtTurtleneckAlt
+#SS220-MoreTurtleneck-End
 - type: loadoutGroup
   id: SalvageSpecialistBackpack
   name: loadout-group-salvage-specialist-backpack
@@ -668,6 +688,10 @@
   loadouts:
   - YellowJumpsuit
   - YellowJumpskirt
+  - TechnicalAssistantJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - TechnicalAssistantJumpsuitTurtleneckAlt
+  - TechnicalAssistantJumpskirtTurtleneck
+  - TechnicalAssistantJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: StationEngineerHead
@@ -687,6 +711,10 @@
   - StationEngineerHazardsuit
   - SeniorEngineerJumpsuit
   - SeniorEngineerJumpskirt
+  - StationEngineerJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - StationEngineerJumpsuitTurtleneckAlt
+  - StationEngineerJumpskirtTurtleneck
+  - StationEngineerJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: StationEngineerBackpack
@@ -725,6 +753,8 @@
   - AtmosphericTechnicianJumpsuit
   - AtmosphericTechnicianJumpskirt
   - AtmosphericTechnicianJumpsuitCasual
+  - AtmosphericTechnicianJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - AtmosphericTechnicianJumpskirtTurtleneck #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: AtmosphericTechnicianOuterClothing
@@ -820,6 +850,10 @@
   - RoboticistJumpskirt
   - SeniorResearcherJumpsuit
   - SeniorResearcherJumpskirt
+  - ScientistJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - ScientistJumpsuitTurtleneckAlt
+  - ScientistJumpskirtTurtleneck
+  - ScientistJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: ScientistBackpack
@@ -871,6 +905,10 @@
   loadouts:
   - WhiteJumpsuit
   - WhiteJumpskirt
+  - ResearchAssistantJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - ResearchAssistantJumpsuitTurtleneckAlt
+  - ResearchAssistantJumpskirtTurtleneck
+  - ResearchAssistantJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 # Security
 - type: loadoutGroup
@@ -922,6 +960,7 @@
   loadouts:
   - WardenJumpsuit
   - WardenJumpskirt
+  - WardenJumpsuitTurtleneck #SS220-MoreTurtleneck
 
 - type: loadoutGroup
   id: WardenOuterClothing
@@ -949,6 +988,8 @@
   - SecurityJumpskirtGrey
   - SeniorOfficerJumpsuit
   - SeniorOfficerJumpskirt
+  - SecurityJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - SecurityJumpskirtTurtleneck #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: SecurityBackpack
@@ -1034,6 +1075,10 @@
   loadouts:
   - RedJumpsuit
   - RedJumpskirt
+  - SecurityCadetJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - SecurityCadetJumpsuitTurtleneckAlt
+  - SecurityCadetJumpskirtTurtleneck
+  - SecurityCadetJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 # Medical
 - type: loadoutGroup
@@ -1108,6 +1153,10 @@
   - MedicalBlueScrubs
   - MedicalGreenScrubs
   - MedicalPurpleScrubs
+  - MedicalDoctorJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - MedicalDoctorJumpsuitTurtleneckAlt
+  - MedicalDoctorJumpskirtTurtleneck
+  - MedicalDoctorJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: MedicalDoctorOuterClothing
@@ -1161,6 +1210,10 @@
   loadouts:
   - WhiteJumpsuit
   - WhiteJumpskirt
+  - MedicalInternJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - MedicalInternJumpsuitTurtleneckAlt
+  - MedicalInternJumpskirtTurtleneck
+  - MedicalInternJumpskirtTurtleneckAlt #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: ChemistJumpsuit
@@ -1168,6 +1221,8 @@
   loadouts:
   - ChemistJumpsuit
   - ChemistJumpskirt
+  - ChemistJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - ChemistJumpskirtTurtleneck #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: ChemistOuterClothing
@@ -1199,6 +1254,8 @@
   loadouts:
   - ParamedicJumpsuit
   - ParamedicJumpskirt
+  - ParamedicJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
+  - ParamedicJumpskirtTurtleneck #SS220-MoreTurtleneck-End
 
 - type: loadoutGroup
   id: ParamedicOuterClothing

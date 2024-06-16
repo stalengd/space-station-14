@@ -14,7 +14,15 @@
       "name": "harvest"
     },
     {
-      "name": "produce"
+      "name": "produce",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
     },
     {
       "name": "seed"
@@ -24,6 +32,9 @@
     },
     {
       "name": "stage-2"
+    },
+    {
+      "name": "stage-3s"
     }
   ]
 }

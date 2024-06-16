@@ -19,7 +19,8 @@
         - ReagentId: Nutriment
           Quantity: 5
   - type: Sprite
-    sprite: SS220/Objects/Cult/Mi'Gomycete.rsi
+    sprite: SS220/Objects/CultYogg/MiGomycete.rsi
+    state: produce
   - type: Produce
     seedId: Mi'Gospores
   - type: Extractable
@@ -35,14 +36,15 @@
     - type: Seed
       seedId: Mi'Gospores
     - type: Sprite
-      sprite: SS220/Objects/Cult/Mi'Gomycete.rsi
+      sprite: SS220/Objects/CultYogg/MiGomycete.rsi
+      state: seed
 
 - type: seed
   id: Mi'Gospores
   name: seeds-Mi'Go-name
   noun: seeds-noun-spores
   displayName: seeds-flyamanita-display-name
-  plantRsi: SS220/Objects/Cult/Mi'Gomycete.rsi
+  plantRsi: SS220/Objects/CultYogg/MiGomycete.rsi
   packetPrototype: Mi'GoSeedsCult
   productPrototypes:
     - FoodMi'GomyceteCult

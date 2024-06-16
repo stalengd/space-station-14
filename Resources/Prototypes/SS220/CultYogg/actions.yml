@@ -38,8 +38,8 @@
 
 - type: entity
   id: ActionCultYoggDigest
-  name: Извергнуть
-  description: Извергнуть выращенный в желудке гриб.
+  name: Переварить
+  description: Отдать часть своих сил, чтобы переварить новый гриб
   noSpawn: true
   components:
   - type: InstantAction

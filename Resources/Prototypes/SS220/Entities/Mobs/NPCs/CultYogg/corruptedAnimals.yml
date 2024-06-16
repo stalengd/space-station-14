@@ -70,7 +70,7 @@
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: cow
-      sprite: SS220/Mobs/Cult/cow_corrupted.rsi
+      sprite: SS220/Mobs/CultYogg/cow_corrupted.rsi
   - type: Fixtures
     fixtures:
       fix1:

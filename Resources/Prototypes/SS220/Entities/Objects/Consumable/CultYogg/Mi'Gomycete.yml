@@ -1,9 +1,9 @@
 # EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 - type: entity
-  name: Ми'Гомицелий (Old)
+  name: МиГомицелий
   parent: FoodProduceBase
-  id: FoodMi'GomyceteCult
+  id: FoodMiGomyceteCult
   description: Мистическая субстанция взывающая к полгощению и рвотные позывы.
   components:
   - type: FlavorProfile
@@ -19,7 +19,7 @@
         - ReagentId: Nutriment
           Quantity: 5
   - type: Sprite
-    sprite: SS220/Objects/CultYogg/MiGomycete.rsi
+    sprite: SS220/Objects/CultYogg/migomycete.rsi
     state: produce
   - type: Produce
     seedId: Mi'Gospores
@@ -36,7 +36,7 @@
     - type: Seed
       seedId: Mi'Gospores
     - type: Sprite
-      sprite: SS220/Objects/CultYogg/MiGomycete.rsi
+      sprite: SS220/Objects/CultYogg/migomycete.rsi
       state: seed
 
 - type: seed
@@ -44,7 +44,7 @@
   name: seeds-Mi'Go-name
   noun: seeds-noun-spores
   displayName: seeds-flyamanita-display-name
-  plantRsi: SS220/Objects/CultYogg/MiGomycete.rsi
+  plantRsi: SS220/Objects/CultYogg/migomycete.rsi
   packetPrototype: Mi'GoSeedsCult
   productPrototypes:
     - FoodMi'GomyceteCult

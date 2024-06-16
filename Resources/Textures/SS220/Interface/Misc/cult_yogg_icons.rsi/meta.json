@@ -9,13 +9,20 @@
     },
     "states": [
         {
-          "name": "SecurityPilot"
-        },
-        {
-          "name": "master"
-        },
-        {
-          "name": "slave"
+            "name": "cult_yogg",
+            "directions": 1,
+            "delays": [
+                [
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.3
+                ]
+            ]
         }
     ]
 }

@@ -54,7 +54,7 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     });
 
     [ViewVariables, DataField, AutoNetworkedField]
-    public string PukedEntity = "FoodMi'GomyceteCult"; //what will be puked out
+    public string PukedEntity = "FoodMiGomyceteCult"; //what will be puked out
 
     [ViewVariables, DataField, AutoNetworkedField]
     public string PukedLiquid = "PuddleVomit"; //maybe should be special liquid?

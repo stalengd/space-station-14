@@ -87,7 +87,8 @@ public abstract class SharedCultYoggSystem : EntitySystem
         if (TryComp<HungerComponent>(uid, out var hungerComp)
         && _hungerSystem.IsHungerBelowState(uid, comp.MinHungerThreshold, hungerComp.CurrentHunger - comp.HungerCost, hungerComp))
         {
-            _popup.PopupClient(Loc.GetString("cult-yogg-digest-no-nutritions"), uid, uid);//idk if it isn't working, but OnSericultureStart ok
+            _popup.PopupEntity(Loc.GetString("cult-yogg-digest-no-nutritions"), uid);
+            //_popup.PopupClient(Loc.GetString("cult-yogg-digest-no-nutritions"), uid, uid);//idk if it isn't working, but OnSericultureStart is an ok
             return;
         }
 

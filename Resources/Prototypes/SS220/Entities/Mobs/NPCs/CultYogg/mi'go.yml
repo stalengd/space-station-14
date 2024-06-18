@@ -21,7 +21,7 @@
     factions:
     - CultYogg
   - type: RandomMetadata #ToDo нагенерить спец имена
-    nameSegments: [ "Командир", SyndicateNamesElite ]
+    nameSegments: [ cult_yogg_migo ]
   - type: Fixtures
     fixtures:
       fix1:

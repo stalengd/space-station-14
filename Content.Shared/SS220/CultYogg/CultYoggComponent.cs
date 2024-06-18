@@ -5,6 +5,7 @@ using Robust.Shared.Prototypes;
 using Content.Shared.StatusIcon;
 using Content.Shared.Antag;
 using Content.Shared.Roles;
+using Content.Shared.Nutrition.Components;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.SS220.CultYogg;
@@ -58,6 +59,14 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
 
     [ViewVariables, DataField, AutoNetworkedField]
     public string PukedLiquid = "PuddleVomit"; //maybe should be special liquid?
+
+    /// <summary>
+    /// The lowest hunger threshold that this mob can be in before it's allowed to digest another shroom.
+    /// </summary>
+    [DataField("minHungerThreshold")]
+    [ViewVariables(VVAccess.ReadWrite)]
+    [AutoNetworkedField]
+    public HungerThreshold MinHungerThreshold = HungerThreshold.Okay;
 
     /// <summary>
     /// Entity the cultist will ascend into

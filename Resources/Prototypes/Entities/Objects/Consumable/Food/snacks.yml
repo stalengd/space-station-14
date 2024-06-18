@@ -430,7 +430,6 @@
   - type: Sprite
     state: mre-brownie-open
   - type: Food
-  - type: FoodBehaviour #Do not forget to delete this test shit
   - type: SolutionContainerManager
     solutions:
       food:

@@ -12,12 +12,12 @@
   - type: SolutionContainerManager
     solutions:
       food:
-        maxVol: 30
+        maxVol: 10
         reagents:
-        - ReagentId: Amatoxin
-          Quantity: 25
         - ReagentId: Nutriment
           Quantity: 5
+        - ReagentId: Theobromine
+          Quantity: 3
   - type: Sprite
     sprite: SS220/Objects/CultYogg/migomycete.rsi
     state: produce
@@ -26,6 +26,7 @@
   - type: Extractable
     grindableSolutionName: food
   - type: BadFood
+  - type: FoodBehaviour #Do not forget to delete this after reagent done
 
 - type: entity
   parent: SeedBase

@@ -94,6 +94,12 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
         _hungerSystem.ModifyHunger(uid, -comp.HungerCost);
 
+        //maybe add thist
+        /*
+        if (TryComp<ThirstComponent>(uid, out var thirst))
+            _thirst.ModifyThirst(uid, thirst, thirstAdded);
+        */
+
         _actions.RemoveAction(uid, comp.DigestActionEntity);//if we digested, we should puke after
 
         if (_actions.AddAction(uid, ref comp.PukeShroomActionEntity, out var act, comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added

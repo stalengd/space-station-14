@@ -1,0 +1,4 @@
+- type: flavor
+  id: menacing
+  flavorType: Complex
+  description: вы чувствуете неописуемую силу и такой же страх

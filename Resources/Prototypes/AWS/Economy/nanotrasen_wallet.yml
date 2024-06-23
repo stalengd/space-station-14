@@ -1,0 +1,20 @@
+- type: entity
+  id: Thaler
+  suffix: 1 TR
+  components:
+  - type: Stack
+    count: 1
+
+- type: currency
+  id: Thaler
+  displayName: store-currency-display-telecrystal
+  cash:
+    1: Thaler
+  canWithdraw: true
+
+- type: economyAccountIdPrototype
+  id: Nanotrasen
+  Descriptior: "-"
+  Prefix: "5051"
+  Strik: 4
+  NumbersPerStrik: 4

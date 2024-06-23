@@ -109,16 +109,16 @@ public abstract class SharedNyarlathotepHorizonSystem : EntitySystem
 
         EntityManager.Dirty(uid, fixtures);
     }
-    private void OnNyarlathotepHorizonStartup(EntityUid uid, NyarlathotepHorizonComponent comp, ComponentStartup args)
+    private void OnNyarlathotepHorizonStartup(Entity<NyarlathotepHorizonComponent> comp, ref ComponentStartup args)
     {
-        UpdateNyarlathotepHorizonFixture(uid, NyarlathotepHorizon: comp);
+        UpdateNyarlathotepHorizonFixture(comp.Owner, NyarlathotepHorizon: comp.Comp);
     }
-    private void OnPreventCollide(EntityUid uid, NyarlathotepHorizonComponent comp, ref PreventCollideEvent args)
+    private void OnPreventCollide(Entity<NyarlathotepHorizonComponent> comp, ref PreventCollideEvent args)
     {
         if (!args.Cancelled)
-            PreventCollide(uid, comp, ref args);
+            PreventCollide(comp, ref args);
     }
-    protected virtual bool PreventCollide(EntityUid uid, NyarlathotepHorizonComponent comp, ref PreventCollideEvent args)
+    protected virtual bool PreventCollide(Entity<NyarlathotepHorizonComponent> comp, ref PreventCollideEvent args)
     {
         var otherUid = args.OtherEntity;
         if (HasComp<MapGridComponent>(otherUid) ||

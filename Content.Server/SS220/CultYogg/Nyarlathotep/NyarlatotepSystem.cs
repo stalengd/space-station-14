@@ -10,7 +10,7 @@ using Content.Shared.SS220.CultYogg;
 
 namespace Content.Server.SS220.CultYogg.Nyarlathotep;
 
-public sealed class NyarlathotepSystem : SharedLightningSystem
+public sealed class NyarlathotepSystem : EntitySystem
 {
     [Dependency] private readonly BeamSystem _beam = default!;
     [Dependency] private readonly IRobustRandom _random = default!;

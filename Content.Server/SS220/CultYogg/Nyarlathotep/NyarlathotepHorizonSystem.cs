@@ -52,9 +52,9 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         vvHandle.AddPath(nameof(NyarlathotepHorizonComponent.TargetConsumePeriod), (_, comp) => comp.TargetConsumePeriod, SetConsumePeriod);
     }
 
-    private void OnHorizonMapInit(EntityUid uid, NyarlathotepHorizonComponent component, MapInitEvent args)
+    private void OnHorizonMapInit(Entity<NyarlathotepHorizonComponent> component, ref MapInitEvent args)
     {
-        component.NextConsumeWaveTime = _timing.CurTime;
+        component.Comp.NextConsumeWaveTime = _timing.CurTime;
     }
 
     public override void Shutdown()
@@ -76,76 +76,76 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         }
     }
 
-    public void Update(EntityUid uid, NyarlathotepHorizonComponent? NyarlathotepHorizon = null, TransformComponent? xform = null)
+    public void Update(EntityUid uid, NyarlathotepHorizonComponent? nyarlathotepHorizon = null, TransformComponent? xform = null)
     {
-        if (!Resolve(uid, ref NyarlathotepHorizon))
+        if (!Resolve(uid, ref nyarlathotepHorizon))
             return;
 
-        NyarlathotepHorizon.NextConsumeWaveTime += NyarlathotepHorizon.TargetConsumePeriod;
+        nyarlathotepHorizon.NextConsumeWaveTime += nyarlathotepHorizon.TargetConsumePeriod;
 
         if (!Resolve(uid, ref xform))
             return;
 
         // Handle singularities some admin smited into a locker.
         if (_containerSystem.TryGetContainingContainer(uid, out var container, transform: xform)
-        && !AttemptConsumeEntity(uid, container.Owner, NyarlathotepHorizon))
+        && !AttemptConsumeEntity(uid, container.Owner, nyarlathotepHorizon))
         {
             // Locker is indestructible. Consume everything else in the locker instead of magically teleporting out.
-            ConsumeEntitiesInContainer(uid, container, NyarlathotepHorizon, container);
+            ConsumeEntitiesInContainer(uid, container, nyarlathotepHorizon, container);
             return;
         }
 
-        if (NyarlathotepHorizon.Radius > 0.0f)
-            ConsumeEverythingInRange(uid, NyarlathotepHorizon.Radius, xform, NyarlathotepHorizon);
+        if (nyarlathotepHorizon.Radius > 0.0f)
+            ConsumeEverythingInRange(uid, nyarlathotepHorizon.Radius, xform, nyarlathotepHorizon);
     }
 
     #region Consume
 
     #region Consume Entities
 
-    public void ConsumeEntity(EntityUid hungry, EntityUid morsel, NyarlathotepHorizonComponent NyarlathotepHorizon, BaseContainer? outerContainer = null)
+    public void ConsumeEntity(EntityUid nyarlathotep, EntityUid entityToConsume, NyarlathotepHorizonComponent nyarlathotepHorizon, BaseContainer? outerContainer = null)
     {
-        if (!EntityManager.IsQueuedForDeletion(morsel) // I saw it log twice a few times for some reason?
-        && (HasComp<MindContainerComponent>(morsel)
-            || _tagSystem.HasTag(morsel, "HighRiskItem")))
+        if (!EntityManager.IsQueuedForDeletion(entityToConsume) // I saw it log twice a few times for some reason?
+        && (HasComp<MindContainerComponent>(entityToConsume)
+            || _tagSystem.HasTag(entityToConsume, "HighRiskItem")))
         {
-            _adminLogger.Add(LogType.EntityDelete, LogImpact.Extreme, $"{ToPrettyString(morsel)} entered the event horizon of {ToPrettyString(hungry)} and was deleted");
+            _adminLogger.Add(LogType.EntityDelete, LogImpact.Extreme, $"{ToPrettyString(entityToConsume)} entered the event horizon of {ToPrettyString(nyarlathotep)} and was deleted");
         }
 
-        EntityManager.QueueDeleteEntity(morsel);
-        var evSelf = new NyarlathotepConsumedByEventHorizonEvent(morsel, hungry, NyarlathotepHorizon, outerContainer);
-        var evEaten = new NyarlathotepHorizonConsumedEntityEvent(morsel, hungry, NyarlathotepHorizon, outerContainer);
-        RaiseLocalEvent(hungry, ref evSelf);
-        RaiseLocalEvent(morsel, ref evEaten);
+        EntityManager.QueueDeleteEntity(entityToConsume);
+        var evSelf = new NyarlathotepConsumedByEventHorizonEvent(entityToConsume, nyarlathotep, nyarlathotepHorizon, outerContainer);
+        var evEaten = new NyarlathotepHorizonConsumedEntityEvent(entityToConsume, nyarlathotep, nyarlathotepHorizon, outerContainer);
+        RaiseLocalEvent(nyarlathotep, ref evSelf);
+        RaiseLocalEvent(entityToConsume, ref evEaten);
     }
 
-    public bool AttemptConsumeEntity(EntityUid hungry, EntityUid morsel, NyarlathotepHorizonComponent NyarlathotepHorizon, BaseContainer? outerContainer = null)
+    public bool AttemptConsumeEntity(EntityUid nyarlathotep, EntityUid entityToConsume, NyarlathotepHorizonComponent nyarlathotepHorizon, BaseContainer? outerContainer = null)
     {
-        if (!CanConsumeEntity(hungry, morsel, NyarlathotepHorizon))
+        if (!CanConsumeEntity(nyarlathotep, entityToConsume, nyarlathotepHorizon))
             return false;
 
-        ConsumeEntity(hungry, morsel, NyarlathotepHorizon, outerContainer);
+        ConsumeEntity(nyarlathotep, entityToConsume, nyarlathotepHorizon, outerContainer);
         return true;
     }
 
-    public bool CanConsumeEntity(EntityUid hungry, EntityUid uid, NyarlathotepHorizonComponent NyarlathotepHorizon)
+    public bool CanConsumeEntity(EntityUid nyarlathotep, EntityUid entityToConsume, NyarlathotepHorizonComponent nyarlathotepHorizon)
     {
-        var ev = new NyarlathotepHorizonAttemptConsumeEntityEvent(uid, hungry, NyarlathotepHorizon);
-        RaiseLocalEvent(uid, ref ev);
+        var ev = new NyarlathotepHorizonAttemptConsumeEntityEvent(entityToConsume, nyarlathotep, nyarlathotepHorizon);
+        RaiseLocalEvent(entityToConsume, ref ev);
         return !ev.Cancelled;
     }
 
-    public void ConsumeEntitiesInRange(EntityUid uid, float range, TransformComponent? xform = null, NyarlathotepHorizonComponent? NyarlathotepHorizon = null)
+    public void ConsumeEntitiesInRange(EntityUid nyarlathotep, float range, TransformComponent? xform = null, NyarlathotepHorizonComponent? nyarlathotepHorizon = null)
     {
-        if (!Resolve(uid, ref xform, ref NyarlathotepHorizon))
+        if (!Resolve(nyarlathotep, ref xform, ref nyarlathotepHorizon))
             return;
 
         var range2 = range * range;
         var xformQuery = EntityManager.GetEntityQuery<TransformComponent>();
         var epicenter = _xformSystem.GetWorldPosition(xform, xformQuery);
-        foreach (var entity in _lookup.GetEntitiesInRange(_xformSystem.GetMapCoordinates(uid, xform), range, flags: LookupFlags.Uncontained))
+        foreach (var entity in _lookup.GetEntitiesInRange(_xformSystem.GetMapCoordinates(nyarlathotep, xform), range, flags: LookupFlags.Uncontained))
         {
-            if (entity == uid)
+            if (entity == nyarlathotep)
                 continue;
             if (!xformQuery.TryGetComponent(entity, out var entityXform))
                 continue;
@@ -154,17 +154,17 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
             if (displacement.LengthSquared() > range2)
                 continue;
 
-            AttemptConsumeEntity(uid, entity, NyarlathotepHorizon);
+            AttemptConsumeEntity(nyarlathotep, entity, nyarlathotepHorizon);
         }
     }
 
-    public void ConsumeEntitiesInContainer(EntityUid hungry, BaseContainer container, NyarlathotepHorizonComponent NyarlathotepHorizon, BaseContainer? outerContainer = null)
+    public void ConsumeEntitiesInContainer(EntityUid nyarlathotep, BaseContainer container, NyarlathotepHorizonComponent nyarlathotepHorizon, BaseContainer? outerContainer = null)
     {
         List<EntityUid> immune = new();
 
         foreach (var entity in container.ContainedEntities)
         {
-            if (entity == hungry || !AttemptConsumeEntity(hungry, entity, NyarlathotepHorizon, outerContainer))
+            if (entity == nyarlathotep || !AttemptConsumeEntity(nyarlathotep, entity, nyarlathotepHorizon, outerContainer))
                 immune.Add(entity);
         }
 
@@ -186,61 +186,60 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
     }
 
     #endregion Consume Entities
-    public void ConsumeEverythingInRange(EntityUid uid, float range, TransformComponent? xform = null, NyarlathotepHorizonComponent? NyarlathotepHorizon = null)
+    public void ConsumeEverythingInRange(EntityUid nyarlathotep, float range, TransformComponent? xform = null, NyarlathotepHorizonComponent? nyarlathotepHorizon = null)
     {
-        if (!Resolve(uid, ref xform, ref NyarlathotepHorizon))
+        if (!Resolve(nyarlathotep, ref xform, ref nyarlathotepHorizon))
             return;
 
-        if (NyarlathotepHorizon.ConsumeEntities)
-            ConsumeEntitiesInRange(uid, range, xform, NyarlathotepHorizon);
+        if (nyarlathotepHorizon.ConsumeEntities)
+            ConsumeEntitiesInRange(nyarlathotep, range, xform, nyarlathotepHorizon);
     }
 
     #endregion Consume
 
     #region Getters/Setters
 
-    public void SetConsumePeriod(EntityUid uid, TimeSpan value, NyarlathotepHorizonComponent? NyarlathotepHorizon = null)
+    public void SetConsumePeriod(EntityUid nyarlathotep, TimeSpan value, NyarlathotepHorizonComponent? nyarlathotepHorizon = null)
     {
-        if (!Resolve(uid, ref NyarlathotepHorizon))
+        if (!Resolve(nyarlathotep, ref nyarlathotepHorizon))
             return;
 
-        if (MathHelper.CloseTo(NyarlathotepHorizon.TargetConsumePeriod.TotalSeconds, value.TotalSeconds))
+        if (MathHelper.CloseTo(nyarlathotepHorizon.TargetConsumePeriod.TotalSeconds, value.TotalSeconds))
             return;
 
-        var diff = (value - NyarlathotepHorizon.TargetConsumePeriod);
-        NyarlathotepHorizon.TargetConsumePeriod = value;
-        NyarlathotepHorizon.NextConsumeWaveTime += diff;
+        var diff = (value - nyarlathotepHorizon.TargetConsumePeriod);
+        nyarlathotepHorizon.TargetConsumePeriod = value;
+        nyarlathotepHorizon.NextConsumeWaveTime += diff;
 
         var curTime = _timing.CurTime;
-        if (NyarlathotepHorizon.NextConsumeWaveTime < curTime)
-            Update(uid, NyarlathotepHorizon);
+        if (nyarlathotepHorizon.NextConsumeWaveTime < curTime)
+            Update(nyarlathotep, nyarlathotepHorizon);
     }
 
     #endregion Getters/Setters
 
     #region Event Handlers
 
-    protected override bool PreventCollide(EntityUid uid, NyarlathotepHorizonComponent comp, ref PreventCollideEvent args)
+    protected override bool PreventCollide(Entity<NyarlathotepHorizonComponent> comp, ref PreventCollideEvent args)
     {
-        if (base.PreventCollide(uid, comp, ref args) || args.Cancelled)
+        if (base.PreventCollide(comp, ref args) || args.Cancelled)
             return true;
 
-        // If we can eat it we don't want to bounce off of it. If we can't eat it we want to bounce off of it (containment fields).
-        args.Cancelled = args.OurFixture.Hard && CanConsumeEntity(uid, args.OtherEntity, comp);
+        args.Cancelled = args.OurFixture.Hard && CanConsumeEntity(comp.Owner, args.OtherEntity, comp.Comp);
         return false;
     }
 
-    public void PreventConsumeMobs<TComp>(EntityUid uid, TComp comp, ref NyarlathotepHorizonAttemptConsumeEntityEvent args)
+    public void PreventConsumeMobs(Entity<MobStateComponent> comp, ref NyarlathotepHorizonAttemptConsumeEntityEvent args)
     {
-        PreventConsume(uid, comp, ref args);
+        PreventConsume(comp.Owner, comp.Comp, ref args);
         if (_mob.IsAlive(args.entity) && !HasComp<MiGoComponent>(args.entity))
         {
             DamageSpecifier damage = new();
             damage.DamageDict.Add("Cold", 100);//Надо решить какой тип урона
-            _damageable.TryChangeDamage(uid, damage, true);
-            if (HasComp<NyarlathotepTargetComponent>(uid))
+            _damageable.TryChangeDamage(comp.Owner, damage, true);
+            if (HasComp<NyarlathotepTargetComponent>(comp.Owner))
             {
-                EntityManager.RemoveComponent(uid, EntityManager.GetComponent<NyarlathotepTargetComponent>(uid));
+                EntityManager.RemoveComponent(comp.Owner, EntityManager.GetComponent<NyarlathotepTargetComponent>(comp.Owner));
             }
         }
     }
@@ -250,18 +249,17 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
             args.Cancelled = true;
     }
 
-    private void OnStartCollide(EntityUid uid, NyarlathotepHorizonComponent comp, ref StartCollideEvent args)
+    private void OnStartCollide(Entity<NyarlathotepHorizonComponent> comp, ref StartCollideEvent args)
     {
-        if (args.OurFixtureId != comp.ConsumerFixtureId)
+        if (args.OurFixtureId != comp.Comp.ConsumerFixtureId)
             return;
-        if (args.OurFixtureId != comp.ConsumerFixtureId)
+        if (args.OurFixtureId != comp.Comp.ConsumerFixtureId)
             return;
 
-        AttemptConsumeEntity(uid, args.OtherEntity, comp);
+        AttemptConsumeEntity(comp.Owner, args.OtherEntity, comp.Comp);
     }
     private void OnNyarlathotepHorizonContained(EntityUid uid, NyarlathotepHorizonComponent comp, EntGotInsertedIntoContainerMessage args)
     {
-        // Delegates processing an event until all queued events have been processed.
         QueueLocalEvent(new NyarlathotepHorizonContainedEvent(uid, comp, args));
     }
 
@@ -281,13 +279,13 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         ConsumeEntitiesInContainer(uid, args.Args.Container, comp, args.Args.Container);
     }
 
-    private void OnContainerConsumed(EntityUid uid, ContainerManagerComponent comp, ref NyarlathotepHorizonConsumedEntityEvent args)
+    private void OnContainerConsumed(Entity<ContainerManagerComponent> comp, ref NyarlathotepHorizonConsumedEntityEvent args)
     {
         var drop_container = args.Container;
         if (drop_container is null)
-            _containerSystem.TryGetContainingContainer(uid, out drop_container);
+            _containerSystem.TryGetContainingContainer(comp.Owner, out drop_container);
 
-        foreach (var container in comp.GetAllContainers())
+        foreach (var container in comp.Comp.GetAllContainers())
         {
             ConsumeEntitiesInContainer(args.NyarlathotepHorizonUid, container, args.NyarlathotepHorizon, drop_container);
         }

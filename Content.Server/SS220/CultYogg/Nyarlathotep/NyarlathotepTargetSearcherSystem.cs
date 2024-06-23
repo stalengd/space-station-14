@@ -17,9 +17,9 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
         SubscribeLocalEvent<NyarlathotepSearchTargetsComponent, MapInitEvent>(OnSearchMapInit);
     }
 
-    private void OnSearchMapInit(EntityUid uid, NyarlathotepSearchTargetsComponent component, ref MapInitEvent args)
+    private void OnSearchMapInit(Entity<NyarlathotepSearchTargetsComponent> component, ref MapInitEvent args)
     {
-        component.NextSearchTime = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SearchMaxInterval);
+        component.Comp.NextSearchTime = _gameTiming.CurTime + TimeSpan.FromSeconds(component.Comp.SearchMaxInterval);
     }
 
     public override void Update(float frameTime)

@@ -4,6 +4,7 @@ using Robust.Shared.Utility;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Access.Components;
 
 namespace Content.Shared.AW.Economy
 {
@@ -39,20 +40,23 @@ namespace Content.Shared.AW.Economy
             {
                 // string account_id = component.AccountIdByProto;
 
-                if (!_prototypeManager.TryIndex(component.AccountIdByProto, out EconomyAccountIdPrototype proto))
+                if (!_prototypeManager.TryIndex(component.AccountIdByProto, out EconomyAccountIdPrototype? proto))
                     return;
                 
-                component.AccountName = proto.Prefix;
+                component.AccountId = proto.Prefix;
 
                 for (int strik = 0; strik < proto.Strik; strik++)
                 {
                     string formedStrik = "";
                     for (int num = 0; num < proto.NumbersPerStrik; num++)
                     {
-                        _robustRandom.
+                        formedStrik += _robustRandom.Next(0, 10);
                     }
-                    component.AccountName += proto.Descriptior + formedStrik;
+                    component.AccountId += proto.Descriptior + formedStrik;
                 }
+
+                if (TryComp<IdCardComponent>(entity, out var idCardComponent))
+                    component.AccountName = idCardComponent.FullName ?? component.AccountName;
 
 
                 storageComp.Accounts.Add(component);

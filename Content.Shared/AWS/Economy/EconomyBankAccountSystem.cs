@@ -10,9 +10,9 @@ namespace Content.Shared.AW.Economy
 {
     public sealed partial class EconomyBankAccountSystem : EntitySystem
     {
-        [Dependency] protected readonly ItemSlotsSystem _itemSlotsSystem = default!;
-        [Dependency] protected readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] protected readonly IRobustRandom _robustRandom = default!;
+        [Dependency] private readonly ItemSlotsSystem _itemSlotsSystem = default!;
+        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+        [Dependency] private readonly IRobustRandom _robustRandom = default!;
         const uint MinPaydayPrecent = 25;
         const uint MaxPaydayPrecent = 75;
         public override void Initialize()

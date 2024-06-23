@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.Utility;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Content.Shared.Containers.ItemSlots;
 
 namespace Content.Shared.AW.Economy
@@ -8,6 +10,8 @@ namespace Content.Shared.AW.Economy
     public sealed partial class EconomyBankAccountSystem : EntitySystem
     {
         [Dependency] protected readonly ItemSlotsSystem _itemSlotsSystem = default!;
+        [Dependency] protected readonly IPrototypeManager _prototypeManager = default!;
+        [Dependency] protected readonly IRobustRandom _robustRandom = default!;
         const uint MinPaydayPrecent = 25;
         const uint MaxPaydayPrecent = 75;
         public override void Initialize()
@@ -33,6 +37,24 @@ namespace Content.Shared.AW.Economy
             var storageComp = GetStationAccountStorage();
             if (storageComp is not null)
             {
+                // string account_id = component.AccountIdByProto;
+
+                if (!_prototypeManager.TryIndex(component.AccountIdByProto, out EconomyAccountIdPrototype proto))
+                    return;
+                
+                component.AccountName = proto.Prefix;
+
+                for (int strik = 0; strik < proto.Strik; strik++)
+                {
+                    string formedStrik = "";
+                    for (int num = 0; num < proto.NumbersPerStrik; num++)
+                    {
+                        _robustRandom.
+                    }
+                    component.AccountName += proto.Descriptior + formedStrik;
+                }
+
+
                 storageComp.Accounts.Add(component);
                 return;
             }

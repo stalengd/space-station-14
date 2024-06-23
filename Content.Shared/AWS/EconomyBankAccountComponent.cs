@@ -15,10 +15,12 @@ namespace Content.Shared.AW.Economy
         public ulong Balance = 0;
         [ViewVariables(VVAccess.ReadWrite), DataField(required: false)]
         public ulong Penalty = 0;
+        
         [ViewVariables(VVAccess.ReadWrite), DataField()]
         public string AccountId = "NO VALUE";
         [ViewVariables(VVAccess.ReadWrite), DataField(required: false)]
         public string AccountName = "";
+
         [ViewVariables(VVAccess.ReadWrite), DataField(required: false)]
         public bool Blocked = false;
     }

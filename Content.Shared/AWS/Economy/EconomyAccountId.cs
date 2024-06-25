@@ -18,8 +18,8 @@ namespace Content.Shared.AW.Economy
         public uint NumbersPerStrik = 4;
 
         [DataField(required: false)]
-        public uint[2] MinMaxSallary = {0,0};
+        public uint[] MinMaxSallary = {0,0};
         [DataField(required: false)]
-        public uint[2] MinMaxStartMoney = {0,0};
+        public uint[] MinMaxStartMoney = {0,0};
     }
 }

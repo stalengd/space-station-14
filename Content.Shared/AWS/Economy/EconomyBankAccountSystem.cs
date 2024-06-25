@@ -13,8 +13,10 @@ namespace Content.Shared.AW.Economy
         [Dependency] private readonly ItemSlotsSystem _itemSlotsSystem = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly IRobustRandom _robustRandom = default!;
+
         const uint MinPaydayPrecent = 25;
         const uint MaxPaydayPrecent = 75;
+
         public override void Initialize()
         {
             base.Initialize();
@@ -40,24 +42,23 @@ namespace Content.Shared.AW.Economy
             {
                 // string account_id = component.AccountIdByProto;
 
-                if (!_prototypeManager.TryIndex(component.AccountIdByProto, out EconomyAccountIdPrototype? proto))
-                    return;
-                
-                component.AccountId = proto.Prefix;
-
-                for (int strik = 0; strik < proto.Strik; strik++)
+                if (_prototypeManager.TryIndex(component.AccountIdByProto, out EconomyAccountIdPrototype? proto))
                 {
-                    string formedStrik = "";
-                    for (int num = 0; num < proto.NumbersPerStrik; num++)
+                    component.AccountId = proto.Prefix;
+
+                    for (int strik = 0; strik < proto.Strik; strik++)
                     {
-                        formedStrik += _robustRandom.Next(0, 10);
+                        string formedStrik = "";
+                        for (int num = 0; num < proto.NumbersPerStrik; num++)
+                        {
+                            formedStrik += _robustRandom.Next(0, 10);
+                        }
+                        component.AccountId += proto.Descriptior + formedStrik;
                     }
-                    component.AccountId += proto.Descriptior + formedStrik;
                 }
 
                 if (TryComp<IdCardComponent>(entity, out var idCardComponent))
                     component.AccountName = idCardComponent.FullName ?? component.AccountName;
-
 
                 storageComp.Accounts.Add(component);
                 return;

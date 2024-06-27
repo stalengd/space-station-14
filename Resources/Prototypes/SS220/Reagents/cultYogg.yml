@@ -11,10 +11,5 @@
   metabolisms:
     Poison:
       effects:
-      - !type:HealthChange
-        damage:
-          types:
-            Poison: 4
-      - !type:ChemVomit
+      - !type:MiGomiceliumEffect
         probability: 0.25
-

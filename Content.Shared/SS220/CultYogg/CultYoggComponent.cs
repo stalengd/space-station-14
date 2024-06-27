@@ -73,6 +73,8 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     /// </summary>
     public string AscendedEntity = "MiGoCultYogg";
 
+    public int AmountShroomsToAscend = 3; //to check what amount should be for ascencion
+
     public int ConsumedShrooms = 0; //buffer
 
     public const int NeededForAscended = 3;//How many shrooms need to be consumed before ascension
@@ -95,4 +97,8 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
 
     [DataField]
     public bool IconVisibleToGhost { get; set; } = true;
+}
+public abstract class CultYoggShroomEatenEvent : EntityEventArgs //event for consumed shrooms for cultists
+{
+
 }

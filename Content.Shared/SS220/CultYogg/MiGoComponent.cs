@@ -57,3 +57,10 @@ public enum MiGoVisual
 {
     Base
 }
+
+//UI for creation foundation of a building
+[NetSerializable, Serializable]
+public enum SiliconLawsUiKey : byte
+{
+    Key
+}

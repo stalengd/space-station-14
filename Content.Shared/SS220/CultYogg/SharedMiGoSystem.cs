@@ -47,17 +47,18 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
         //SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslaveOnDoAfter);
+
+        SubscribeLocalEvent<MiGoComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
     }
 
-    protected virtual void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
+    protected virtual void OnCompInit(Entity<MiGoComponent> uid, ref ComponentStartup args)
     {
-
-        _actions.AddAction(uid, ref comp.MiGoEnslavementActionEntity, comp.MiGoEnslavementAction);
-        _actions.AddAction(uid, ref comp.MiGoAstralActionEntity, comp.MiGoAstralAction);
-
+        _actions.AddAction(uid, ref uid.Comp.MiGoEnslavementActionEntity, uid.Comp.MiGoEnslavementAction);
+        _actions.AddAction(uid, ref uid.Comp.MiGoAstralActionEntity, uid.Comp.MiGoAstralAction);
+        _actions.AddAction(uid, ref uid.Comp.MiGoErectActionEntity, uid.Comp.MiGoErectAction);
     }
 
-    private void MiGoEnslave(EntityUid uid, MiGoComponent comp, MiGoEnslavementEvent args)
+    private void MiGoEnslave(Entity<MiGoComponent> uid, ref MiGoEnslavementEvent args)
     {
         if (args.Handled)
             return;
@@ -110,7 +111,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         args.Handled = true;
     }
-    private void MiGoEnslaveOnDoAfter(EntityUid uid, MiGoComponent comp, MiGoEnslavetDoAfterEvent args)
+    private void MiGoEnslaveOnDoAfter(Entity<MiGoComponent> uid, ref MiGoEnslavetDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled || args.Target == null)
             return;
@@ -120,15 +121,15 @@ public abstract class SharedMiGoSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void MiGoAstral(EntityUid uid, MiGoComponent comp, MiGoAstralEvent args)
+    private void MiGoAstral(Entity<MiGoComponent> uid, ref MiGoAstralEvent args)
     {
-        if (comp.PhysicalForm)
+        if (uid.Comp.PhysicalForm)
         {
-            ChangeForm(uid, comp, false);
+            ChangeForm(uid, uid.Comp, false);
         }
         else
         {
-            ChangeForm(uid, comp, true);
+            ChangeForm(uid, uid.Comp, true);
         }
 
         //ToDo https://github.com/TheArturZh/space-station-14/blob/b0ee614751216474ddbeabab970b3ab505f63845/Content.Shared/SS220/DarkReaper/DarkReaperSharedSystem.cs#L4
@@ -173,7 +174,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         var speed = comp.PhysicalForm ? comp.MaterialMovementSpeed : comp.UnMaterialMovementSpeed;
         _speedModifier.ChangeBaseSpeed(uid, speed, speed, modifComp.Acceleration, modifComp);
     }
-    private void MiGoHeal(EntityUid uid, MiGoComponent comp, MiGoHealEvent args)
+    private void MiGoHeal(Entity<MiGoComponent> uid, ref MiGoHealEvent args)
     {
         if (args.Handled)
             return;
@@ -198,13 +199,25 @@ public abstract class SharedMiGoSystem : EntitySystem
     }
     private void MiGoErect(EntityUid uid, MiGoComponent comp, MiGoErectEvent args)
     {
+        //(Entity<MiGoComponent> uid, ref MiGoErectEvent args)
+        //will wait when sw will update ui parts to copy pase, cause rn it has an errors
         if (args.Handled || !TryComp<ActorComponent>(uid, out var actor))
             return;
         args.Handled = true;
 
-        //_userInterface.TryToggleUi(uid, SiliconLawsUiKey.Key, actor.PlayerSession);
+        _userInterface.TryToggleUi(uid, SiliconLawsUiKey.Key, actor.PlayerSession);
     }
-    private void MiGoSacrifice(EntityUid uid, MiGoComponent comp, MiGoSacrificeEvent args)
+    private void OnBoundUIOpened(EntityUid uid, MiGoComponent component, BoundUIOpenedEvent args)
+    {//(Entity<MiGoComponent> uid, ref BoundUIOpenedEvent args)
+        /*
+        _entityManager.TryGetComponent<IntrinsicRadioTransmitterComponent>(uid, out var intrinsicRadio);
+        var radioChannels = intrinsicRadio?.Channels;
+
+        var state = new SiliconLawBuiState(GetLaws(uid).Laws, radioChannels);
+        _userInterface.SetUiState(args.Entity, SiliconLawsUiKey.Key, state);
+        */
+    }
+    private void MiGoSacrifice(Entity<MiGoComponent> uid, ref MiGoSacrificeEvent args)
     {
 
     }

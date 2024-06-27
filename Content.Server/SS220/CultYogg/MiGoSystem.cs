@@ -25,8 +25,4 @@ public sealed class MiGoSystem : SharedMiGoSystem
     {
         base.Initialize();
     }
-    protected override void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
-    {
-        base.OnCompInit(uid, comp, args);
-    }
 }

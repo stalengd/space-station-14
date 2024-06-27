@@ -50,3 +50,7 @@
     tags:
     - CannotSuicide
     - DoorBumpOpener
+  - type: UserInterface
+    interfaces:
+      enum.SiliconLawsUiKey.Key:
+        type: SiliconLawBoundUserInterface

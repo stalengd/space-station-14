@@ -49,23 +49,24 @@ public abstract class SharedCultYoggSystem : EntitySystem
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemInHandEvent>(CorruptItemInHandAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptDoAfterEvent>(CorruptOnDoAfter);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggShroomEatenEvent>(AddConsumed);
     }
 
-    protected virtual void OnCompInit(EntityUid uid, CultYoggComponent comp, ComponentStartup args)
+    protected virtual void OnCompInit(Entity<CultYoggComponent> uid, ref ComponentStartup args)
     {
         //_actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);
-        _actions.AddAction(uid, ref comp.CorruptItemActionEntity, comp.CorruptItemAction);
-        _actions.AddAction(uid, ref comp.CorruptItemInHandActionEntity, comp.CorruptItemInHandAction);
-        _actions.AddAction(uid, ref comp.AscendingActionEntity, comp.AscendingAction);
-        if (_actions.AddAction(uid, ref comp.PukeShroomActionEntity, out var act, comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
+        _actions.AddAction(uid, ref uid.Comp.CorruptItemActionEntity, uid.Comp.CorruptItemAction);
+        _actions.AddAction(uid, ref uid.Comp.CorruptItemInHandActionEntity, uid.Comp.CorruptItemInHandAction);
+        _actions.AddAction(uid, ref uid.Comp.AscendingActionEntity, uid.Comp.AscendingAction);//delete this when released it should be added through shrooms
+        if (_actions.AddAction(uid, ref uid.Comp.PukeShroomActionEntity, out var act, uid.Comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
         {
             var start = _gameTiming.CurTime;
             var end = start + act.UseDelay.Value;
-            _actions.SetCooldown(comp.PukeShroomActionEntity.Value, start, end);
+            _actions.SetCooldown(uid.Comp.PukeShroomActionEntity.Value, start, end);
         }
     }
 
-    private void PukeAction(EntityUid uid, CultYoggComponent comp, CultYoggPukeShroomEvent args)
+    private void PukeAction(Entity<CultYoggComponent> uid, ref CultYoggPukeShroomEvent args)
     {
         if (args.Handled)
             return;
@@ -73,26 +74,26 @@ public abstract class SharedCultYoggSystem : EntitySystem
         if (_net.IsClient) // Have to do this because spawning stuff in shared is CBT.
             return;
 
-        _entityManager.SpawnEntity(comp.PukedLiquid, Transform(uid).Coordinates);
-        var shroom = _entityManager.SpawnEntity(comp.PukedEntity, Transform(uid).Coordinates);
-        _audio.PlayPredicted(comp.PukeSound, uid, shroom);
+        _entityManager.SpawnEntity(uid.Comp.PukedLiquid, Transform(uid).Coordinates);
+        var shroom = _entityManager.SpawnEntity(uid.Comp.PukedEntity, Transform(uid).Coordinates);
+        _audio.PlayPredicted(uid.Comp.PukeSound, uid, shroom);
 
         args.Handled = true;
 
-        _actions.RemoveAction(uid, comp.PukeShroomActionEntity);
-        _actions.AddAction(uid, ref comp.DigestActionEntity, comp.DigestAction);
+        _actions.RemoveAction(uid, uid.Comp.PukeShroomActionEntity);
+        _actions.AddAction(uid, ref uid.Comp.DigestActionEntity, uid.Comp.DigestAction);
     }
-    private void DigestAction(EntityUid uid, CultYoggComponent comp, CultYoggDigestEvent args)
+    private void DigestAction(Entity<CultYoggComponent> uid, ref CultYoggDigestEvent args)
     {
         if (TryComp<HungerComponent>(uid, out var hungerComp)
-        && _hungerSystem.IsHungerBelowState(uid, comp.MinHungerThreshold, hungerComp.CurrentHunger - comp.HungerCost, hungerComp))
+        && _hungerSystem.IsHungerBelowState(uid, uid.Comp.MinHungerThreshold, hungerComp.CurrentHunger - uid.Comp.HungerCost, hungerComp))
         {
             _popup.PopupEntity(Loc.GetString("cult-yogg-digest-no-nutritions"), uid);
             //_popup.PopupClient(Loc.GetString("cult-yogg-digest-no-nutritions"), uid, uid);//idk if it isn't working, but OnSericultureStart is an ok
             return;
         }
 
-        _hungerSystem.ModifyHunger(uid, -comp.HungerCost);
+        _hungerSystem.ModifyHunger(uid, -uid.Comp.HungerCost);
 
         //maybe add thist
         /*
@@ -100,16 +101,16 @@ public abstract class SharedCultYoggSystem : EntitySystem
             _thirst.ModifyThirst(uid, thirst, thirstAdded);
         */
 
-        _actions.RemoveAction(uid, comp.DigestActionEntity);//if we digested, we should puke after
+        _actions.RemoveAction(uid, uid.Comp.DigestActionEntity);//if we digested, we should puke after
 
-        if (_actions.AddAction(uid, ref comp.PukeShroomActionEntity, out var act, comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
+        if (_actions.AddAction(uid, ref uid.Comp.PukeShroomActionEntity, out var act, uid.Comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
         {
             var start = _gameTiming.CurTime;
             var end = start + act.UseDelay.Value;
-            _actions.SetCooldown(comp.PukeShroomActionEntity.Value, start, end);
+            _actions.SetCooldown(uid.Comp.PukeShroomActionEntity.Value, start, end);
         }
     }
-    private void CorruptItemAction(EntityUid uid, CultYoggComponent comp, CultYoggCorruptItemEvent args)//ToDo some list of corruption
+    private void CorruptItemAction(Entity<CultYoggComponent> uid, ref CultYoggCorruptItemEvent args)//ToDo some list of corruption
     {
         if (args.Handled)
             return;
@@ -145,7 +146,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
         args.Handled = true;
     }
-    private void CorruptItemInHandAction(EntityUid uid, CultYoggComponent comp, CultYoggCorruptItemInHandEvent args)//ToDo some list of corruption
+    private void CorruptItemInHandAction(Entity<CultYoggComponent> uid, ref CultYoggCorruptItemInHandEvent args)//ToDo some list of corruption
     {
         if (args.Handled)
             return;
@@ -199,7 +200,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         corruption = null;
         return false;
     }
-    private void CorruptOnDoAfter(EntityUid uid, CultYoggComponent component, CultYoggCorruptDoAfterEvent args)//DoAfter for corruption
+    private void CorruptOnDoAfter(Entity<CultYoggComponent> uid, ref CultYoggCorruptDoAfterEvent args)//DoAfter for corruption
     {
         if (args.Handled || args.Cancelled || args.Target == null)
             return;
@@ -234,7 +235,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
         args.Handled = true;
     }
-    private void AscendingAction(EntityUid uid, CultYoggComponent comp, CultYoggAscendingEvent args)
+    private void AscendingAction(Entity<CultYoggComponent> uid, ref CultYoggAscendingEvent args)
     {
         /* idk what is this
         if (!_timing.IsFirstTimePredicted)
@@ -248,7 +249,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
             return;
 
         // Get original body position and spawn MiGo here
-        var migo = _entityManager.SpawnAtPosition(comp.AscendedEntity, Transform(uid).Coordinates);
+        var migo = _entityManager.SpawnAtPosition(uid.Comp.AscendedEntity, Transform(uid).Coordinates);
 
         // Move the mind if there is one and it's supposed to be transferred
         if (_mind.TryGetMind(uid, out var mindId, out var mind))
@@ -261,4 +262,12 @@ public abstract class SharedCultYoggSystem : EntitySystem
         }
     }
 
+    private void AddConsumed(Entity<CultYoggComponent> ent, ref CultYoggShroomEatenEvent args)
+    {
+        ent.Comp.ConsumedShrooms++; //Add shroom to buffer
+        if (ent.Comp.ConsumedShrooms >= ent.Comp.AmountShroomsToAscend)
+        {
+            //_actions.AddAction(uid, ref comp.AscendingActionEntity, comp.AscendingAction)//uncomment when all MiGotests will be done
+        }
+    }
 }

@@ -12,4 +12,3 @@
     Poison:
       effects:
       - !type:MiGomiceliumEffect
-        probability: 0.25

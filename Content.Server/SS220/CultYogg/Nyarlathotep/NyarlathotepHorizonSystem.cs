@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Map.Components;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Events;
 using Content.Shared.Ghost;
 using Content.Server.Administration.Logs;
@@ -20,6 +20,10 @@ using Content.Shared.SS220.CultYogg;
 
 namespace Content.Server.SS220.CultYogg.Nyarlathotep;
 
+/// <summary>
+/// The entity system primarily responsible for managing <see cref="NyarlathotepHorizonComponent"/>s.
+/// Handles their consumption of entities.
+/// </summary>
 public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
 {
     #region Dependencies
@@ -44,8 +48,6 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         SubscribeLocalEvent<MobStateComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsumeMobs);
         SubscribeLocalEvent<NyarlathotepHorizonComponent, MapInitEvent>(OnHorizonMapInit);
         SubscribeLocalEvent<NyarlathotepHorizonComponent, StartCollideEvent>(OnStartCollide);
-        SubscribeLocalEvent<NyarlathotepHorizonComponent, EntGotInsertedIntoContainerMessage>(OnNyarlathotepHorizonContained);
-        SubscribeLocalEvent<NyarlathotepHorizonContainedEvent>(OnNyarlathotepHorizonContained);
         SubscribeLocalEvent<ContainerManagerComponent, NyarlathotepHorizonConsumedEntityEvent>(OnContainerConsumed);
 
         var vvHandle = Vvm.GetTypeHandler<NyarlathotepHorizonComponent>();
@@ -65,6 +67,10 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         base.Shutdown();
     }
 
+    /// <summary>
+    /// Updates the cooldowns of Nyarlathotep horizon.
+    /// If an horizon are off cooldown this makes it consume everything within range and resets their cooldown.
+    /// </summary>
     public override void Update(float frameTime)
     {
         var query = EntityQueryEnumerator<NyarlathotepHorizonComponent, TransformComponent>();
@@ -76,6 +82,9 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         }
     }
 
+    /// <summary>
+    /// Makes an horizon consume everything nearby and resets the cooldown it for the next automated wave.
+    /// </summary>
     public void Update(EntityUid uid, NyarlathotepHorizonComponent? nyarlathotepHorizon = null, TransformComponent? xform = null)
     {
         if (!Resolve(uid, ref nyarlathotepHorizon))
@@ -103,6 +112,9 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
 
     #region Consume Entities
 
+    /// <summary>
+    /// Makes an horizon consume a given entity.
+    /// </summary>
     public void ConsumeEntity(EntityUid nyarlathotep, EntityUid entityToConsume, NyarlathotepHorizonComponent nyarlathotepHorizon, BaseContainer? outerContainer = null)
     {
         if (!EntityManager.IsQueuedForDeletion(entityToConsume) // I saw it log twice a few times for some reason?
@@ -119,6 +131,9 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         RaiseLocalEvent(entityToConsume, ref evEaten);
     }
 
+    /// <summary>
+    /// Makes an event horizon attempt to consume a given entity.
+    /// </summary>
     public bool AttemptConsumeEntity(EntityUid nyarlathotep, EntityUid entityToConsume, NyarlathotepHorizonComponent nyarlathotepHorizon, BaseContainer? outerContainer = null)
     {
         if (!CanConsumeEntity(nyarlathotep, entityToConsume, nyarlathotepHorizon))
@@ -128,6 +143,9 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         return true;
     }
 
+    /// <summary>
+    /// Checks whether an horizon can consume a given entity.
+    /// </summary>
     public bool CanConsumeEntity(EntityUid nyarlathotep, EntityUid entityToConsume, NyarlathotepHorizonComponent nyarlathotepHorizon)
     {
         var ev = new NyarlathotepHorizonAttemptConsumeEntityEvent(entityToConsume, nyarlathotep, nyarlathotepHorizon);
@@ -135,6 +153,10 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         return !ev.Cancelled;
     }
 
+    /// <summary>
+    /// Attempts to consume all entities within a given distance of an entity;
+    /// Excludes the center entity.
+    /// </summary>
     public void ConsumeEntitiesInRange(EntityUid nyarlathotep, float range, TransformComponent? xform = null, NyarlathotepHorizonComponent? nyarlathotepHorizon = null)
     {
         if (!Resolve(nyarlathotep, ref xform, ref nyarlathotepHorizon))
@@ -158,6 +180,11 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         }
     }
 
+    /// <summary>
+    /// Attempts to consume all entities within a container.
+    /// Excludes the horizon itself.
+    /// All immune entities within the container will be dumped to a given container or the map/grid if that is impossible.
+    /// </summary>
     public void ConsumeEntitiesInContainer(EntityUid nyarlathotep, BaseContainer container, NyarlathotepHorizonComponent nyarlathotepHorizon, BaseContainer? outerContainer = null)
     {
         List<EntityUid> immune = new();
@@ -199,6 +226,11 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
 
     #region Getters/Setters
 
+    /// <summary>
+    /// Sets how often an horizon will scan for overlapping entities to consume.
+    /// The value is specifically how long the subsystem should wait between scans.
+    /// If the new scanning period would have already prompted a scan given the previous scan time one is prompted immediately.
+    /// </summary>
     public void SetConsumePeriod(EntityUid nyarlathotep, TimeSpan value, NyarlathotepHorizonComponent? nyarlathotepHorizon = null)
     {
         if (!Resolve(nyarlathotep, ref nyarlathotepHorizon))
@@ -220,6 +252,9 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
 
     #region Event Handlers
 
+    /// <summary>
+    /// Prevents a Nyarlathotep from colliding with anything it is incapable of consuming.
+    /// </summary>
     protected override bool PreventCollide(Entity<NyarlathotepHorizonComponent> comp, ref PreventCollideEvent args)
     {
         if (base.PreventCollide(comp, ref args) || args.Cancelled)
@@ -229,6 +264,10 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         return false;
     }
 
+    /// <summary>
+    /// An event handler that prevents Nyarlathotep from consuming living entities, instead we just deal damage to them.
+    /// This is also the logic for preventing MiGo damage.
+    /// </summary>
     public void PreventConsumeMobs(Entity<MobStateComponent> comp, ref NyarlathotepHorizonAttemptConsumeEntityEvent args)
     {
         PreventConsume(comp.Owner, comp.Comp, ref args);
@@ -243,12 +282,19 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
             }
         }
     }
+
+    /// <summary>
+    /// A generic event handler that prevents Nyarlathotep from consuming entities with a component of a given type if registered.
+    /// </summary>
     public static void PreventConsume<TComp>(EntityUid uid, TComp comp, ref NyarlathotepHorizonAttemptConsumeEntityEvent args)
     {
         if (!args.Cancelled)
             args.Cancelled = true;
     }
 
+    /// <summary>
+    /// Handles horizons consuming any entities they bump into.
+    /// </summary>
     private void OnStartCollide(Entity<NyarlathotepHorizonComponent> comp, ref StartCollideEvent args)
     {
         if (args.OurFixtureId != comp.Comp.ConsumerFixtureId)
@@ -258,27 +304,11 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
 
         AttemptConsumeEntity(comp.Owner, args.OtherEntity, comp.Comp);
     }
-    private void OnNyarlathotepHorizonContained(EntityUid uid, NyarlathotepHorizonComponent comp, EntGotInsertedIntoContainerMessage args)
-    {
-        QueueLocalEvent(new NyarlathotepHorizonContainedEvent(uid, comp, args));
-    }
 
-    private void OnNyarlathotepHorizonContained(NyarlathotepHorizonContainedEvent args)
-    {
-        var uid = args.Entity;
-        if (!EntityManager.EntityExists(uid))
-            return;
-        var comp = args.NyarlathotepHorizon;
-
-        var containerEntity = args.Args.Container.Owner;
-        if (!EntityManager.EntityExists(containerEntity))
-            return;
-        if (AttemptConsumeEntity(uid, containerEntity, comp))
-            return; // If we consume the entity we also consume everything in the containers it has.
-
-        ConsumeEntitiesInContainer(uid, args.Args.Container, comp, args.Args.Container);
-    }
-
+    /// <summary>
+    /// Recursively consumes all entities within a container that is consumed by Nyarlathotep.
+    /// If an entity within a consumed container cannot be consumed itself it is removed from the container.
+    /// </summary>
     private void OnContainerConsumed(Entity<ContainerManagerComponent> comp, ref NyarlathotepHorizonConsumedEntityEvent args)
     {
         var drop_container = args.Container;

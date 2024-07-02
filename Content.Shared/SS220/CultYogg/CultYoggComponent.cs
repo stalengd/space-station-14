@@ -98,7 +98,3 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     [DataField]
     public bool IconVisibleToGhost { get; set; } = true;
 }
-public abstract class CultYoggShroomEatenEvent : EntityEventArgs //event for consumed shrooms for cultists
-{
-
-}

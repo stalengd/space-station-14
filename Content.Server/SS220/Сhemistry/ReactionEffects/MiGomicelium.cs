@@ -15,8 +15,11 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
     [UsedImplicitly]
     public sealed partial class MiGomiceliumEffect : ReagentEffect //stub as vomit, will change when figure out
     {
-
-        [Dependency] private readonly IEntityManager _entityManager = default!;
+        /// <summary>
+        /// Minimum quantity of reagent required to trigger this effect.
+        /// </summary>
+        [DataField]
+        public float AmountThreshold = 0.5f;
 
         /// How many units of thirst to add each time we vomit
         [DataField]
@@ -25,36 +28,30 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
         [DataField]
         public float HungerAmount = -8f;
 
-        protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
-            => Loc.GetString("reagent-effect-guidebook-chem-vomit", ("chance", Probability));
         public override void Effect(ReagentEffectArgs args)
         {
-            //strange errors.
-            /*
-            if (!_entityManager.TryGetComponent<CultYoggComponent>(args.SolutionEntity, out var comp))
-            {
-                //will do it later
-                //var ev = new CultYoggShroomEatenEvent();
-                //_entityManager.RaiseLocalEvent(args.SolutionEntity, ref ev);
-                return;
-            }
-            */
-            //idk why it isn't working
-            /*
-            if (!HasComp<HumanoidAppearanceComponent>(args.SolutionEntity))
-            {
-                //create system ti corrupt an animal
-                //AnimalCorruption((EntityUid) args.Target);//beast must be transformed
-                return;
-            }
-            */
 
-            if (args.Scale != 1f)
+            if (args.Reagent == null || args.Quantity < AmountThreshold)
                 return;
 
-            var vomitSys = args.EntityManager.EntitySysManager.GetEntitySystem<VomitSystem>();
+            var entityManager = args.EntityManager;
+
+            if (entityManager.TryGetComponent<CultYoggComponent>(args.SolutionEntity, out var comp))
+            {
+                args.EntityManager.System<SharedCultYoggSystem>().ModifyEtaenShrooms(args.SolutionEntity, comp);
+                return;
+            }
+
+            if (entityManager.HasComponent<HumanoidAppearanceComponent>(args.SolutionEntity))
+            {
+                return;
+            }
+
+            var vomitSys = entityManager.EntitySysManager.GetEntitySystem<VomitSystem>();
 
             vomitSys.Vomit(args.SolutionEntity, ThirstAmount, HungerAmount);
         }
+
+        protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("reagent-effect-guidebook-plant-phalanximine", ("chance", Probability));
     }
 }

@@ -49,7 +49,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemInHandEvent>(CorruptItemInHandAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptDoAfterEvent>(CorruptOnDoAfter);
-        SubscribeLocalEvent<CultYoggComponent, CultYoggShroomEatenEvent>(AddConsumed);
     }
 
     protected virtual void OnCompInit(Entity<CultYoggComponent> uid, ref ComponentStartup args)
@@ -261,11 +260,10 @@ public abstract class SharedCultYoggSystem : EntitySystem
             _body.GibBody(uid, body: body);
         }
     }
-
-    private void AddConsumed(Entity<CultYoggComponent> ent, ref CultYoggShroomEatenEvent args)
+    public void ModifyEtaenShrooms(EntityUid uid, CultYoggComponent component)//idk if it is canser or no, will be like that for a time
     {
-        ent.Comp.ConsumedShrooms++; //Add shroom to buffer
-        if (ent.Comp.ConsumedShrooms >= ent.Comp.AmountShroomsToAscend)
+        component.ConsumedShrooms++; //Add shroom to buffer
+        if (component.ConsumedShrooms >= component.AmountShroomsToAscend)
         {
             //_actions.AddAction(uid, ref comp.AscendingActionEntity, comp.AscendingAction)//uncomment when all MiGotests will be done
         }

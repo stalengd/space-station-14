@@ -53,4 +53,4 @@
   - type: UserInterface
     interfaces:
       enum.SiliconLawsUiKey.Key:
-        type: SiliconLawBoundUserInterface
+        type: FlatpackCreatorBoundUserInterface

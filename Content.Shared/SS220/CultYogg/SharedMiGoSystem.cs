@@ -205,7 +205,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         args.Handled = true;
 
-        _userInterface.TryToggleUi(uid, SiliconLawsUiKey.Key, actor.PlayerSession);
+        _userInterface.TryToggleUi(uid, MiGoErectUiKey.Key, actor.PlayerSession);
     }
     private void OnBoundUIOpened(EntityUid uid, MiGoComponent component, BoundUIOpenedEvent args)
     {//(Entity<MiGoComponent> uid, ref BoundUIOpenedEvent args)

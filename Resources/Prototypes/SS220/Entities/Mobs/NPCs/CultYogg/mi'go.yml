@@ -52,5 +52,6 @@
     - DoorBumpOpener
   - type: UserInterface
     interfaces:
-      enum.SiliconLawsUiKey.Key:
-        type: FlatpackCreatorBoundUserInterface
+      enum.MiGoErectUiKey.Key:
+       #type: FlatpackCreatorBoundUserInterface #just for check
+        type: MiGoErectBoundUserInterface

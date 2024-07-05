@@ -36,6 +36,7 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
 
             var entityManager = args.EntityManager;
 
+            
             if (entityManager.TryGetComponent<CultYoggComponent>(args.SolutionEntity, out var comp))
             {
                 args.EntityManager.System<SharedCultYoggSystem>().ModifyEtaenShrooms(args.SolutionEntity, comp);

@@ -1,5 +1,6 @@
 using Content.Shared.Construction.Components;
 using JetBrains.Annotations;
+using Content.Shared.SS220.CultYogg;
 
 namespace Content.Client.SS220.CultYogg.UI
 {
@@ -7,23 +8,13 @@ namespace Content.Client.SS220.CultYogg.UI
     public sealed class MiGoErectBoundUserInterface : BoundUserInterface
     {
         [ViewVariables]
-        private MiGoErectLawMenu? _menu;
+        private MiGoErectMenu? _menu;
         private EntityUid _owner;
         //private List<SiliconLaw>? _laws;
 
         public MiGoErectBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
         {
             _owner = owner;
-        }
-
-        protected override void Open()
-        {
-            base.Open();
-
-            _menu = new();
-
-            _menu.OnClose += Close;
-            _menu.OpenCentered();
         }
 
         protected override void Open()
@@ -48,7 +39,7 @@ namespace Content.Client.SS220.CultYogg.UI
         {
             base.UpdateState(state);
 
-            if (state is not MiGoErectLawBuiState msg)
+            if (state is not MiGoErectBuiState msg)
                 return;
 
             _menu?.Update(_owner, msg);

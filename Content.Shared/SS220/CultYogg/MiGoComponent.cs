@@ -60,7 +60,15 @@ public enum MiGoVisual
 
 //UI for creation foundation of a building
 [NetSerializable, Serializable]
-public enum SiliconLawsUiKey : byte
+public enum MiGoErectUiKey : byte
 {
     Key
+}
+
+[Serializable, NetSerializable]
+public sealed class MiGoErectBuiState : BoundUserInterfaceState
+{
+    public MiGoErectBuiState()
+    {
+    }
 }

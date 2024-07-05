@@ -153,7 +153,7 @@ public abstract class SharedNyarlathotepHorizonSystem : EntitySystem
     /// <summary>
     /// Syncs the state of the fixture associated with the Nyarlathotep horizon upon startup.
     /// </summary>
-    /// <param name="comp">An entity that has just received a Nyarlathotep horizon component with a Nyarlathotep horizon homeponent that runs.</param>
+    /// <param name="comp">An entity that has just received a Nyarlathotep horizon component with a Nyarlathotep horizon component.</param>
     /// <param name="args">The Nyarlathotep arguments.</param>
     private void OnNyarlathotepHorizonStartup(Entity<NyarlathotepHorizonComponent> comp, ref ComponentStartup args)
     {
@@ -165,7 +165,7 @@ public abstract class SharedNyarlathotepHorizonSystem : EntitySystem
     /// Most notably map grids and ghosts.
     /// Also makes Nyarlathotep's horizons not swallow cult members.
     /// </summary>
-    /// <param name="comp">An entity that has just received a Nyarlathotep horizon component with a Nyarlathotep horizon homeponent that runs.</param>
+    /// <param name="comp">An entity that has just received a Nyarlathotep horizon component with a Nyarlathotep horizon component.</param>
     /// <param name="args">The Nyarlathotep arguments.</param>
     private void OnPreventCollide(Entity<NyarlathotepHorizonComponent> comp, ref PreventCollideEvent args)
     {
@@ -177,7 +177,7 @@ public abstract class SharedNyarlathotepHorizonSystem : EntitySystem
     /// The actual, functional part of SharedNyarlathotepHorizonSystem.OnPreventCollide.
     /// The return value allows for overrides to early return if the base successfully handles collision prevention.
     /// </summary>
-    /// <param name="comp">An entity that has just received a Nyarlathotep horizon component with a Nyarlathotep horizon homeponent that runs.</param>
+    /// <param name="comp">An entity that has just received a Nyarlathotep horizon component with a Nyarlathotep horizon component.</param>
     /// <param name="args">The Nyarlathotep arguments.</param>
     /// <returns>A bool indicating whether the collision prevention has been handled.</returns>
     protected virtual bool PreventCollide(Entity<NyarlathotepHorizonComponent> comp, ref PreventCollideEvent args)

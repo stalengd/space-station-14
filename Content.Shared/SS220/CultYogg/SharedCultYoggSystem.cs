@@ -47,6 +47,18 @@ public abstract class SharedCultYoggSystem : EntitySystem
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptDoAfterEvent>(CorruptOnDoAfter);
     }
 
+    public EntityUid? RevertCorruption(Entity<CultYoggCorruptedComponent> corruptedEntity)
+    {
+        if (corruptedEntity.Comp.PreviousForm is null)
+            return null;
+
+        var coords = Transform(corruptedEntity).Coordinates;
+        var normalEntity = Spawn(corruptedEntity.Comp.PreviousForm, coords);
+
+        _entityManager.DeleteEntity(corruptedEntity);
+        return normalEntity;
+    }
+
     protected virtual void OnCompInit(EntityUid uid, CultYoggComponent comp, ComponentStartup args)
     {
         _actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);
@@ -196,7 +208,8 @@ public abstract class SharedCultYoggSystem : EntitySystem
         if (!_entityManager.TryGetComponent<CultYoggCorruptedComponent>(corruptedEntity, out var corrupted))
             return;
 
-        corrupted.PreviousForm = "";
+        corrupted.PreviousForm = MetaData(args.Target.Value).EntityPrototype?.ID;
+        corrupted.CorruptionReverseEffect = args.Proto.CorruptionReverseEffect;
 
         //Delete previous entity
         _entityManager.DeleteEntity(args.Target);

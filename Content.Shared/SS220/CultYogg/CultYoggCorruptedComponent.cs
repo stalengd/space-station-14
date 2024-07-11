@@ -10,5 +10,12 @@ namespace Content.Shared.SS220.CultYogg;
 /// </summary>
 public sealed partial class CultYoggCorruptedComponent : Component
 {
-    public string PreviousForm;
+    /// <summary>
+    /// Prototype ID of the original entity, <see langword="null"/> if none.
+    /// </summary>
+    public string? PreviousForm;
+    /// <summary>
+    /// Prototype ID of the corruption reverse effect entity, <see langword="null"/> if none.
+    /// </summary>
+    public string? CorruptionReverseEffect;
 }

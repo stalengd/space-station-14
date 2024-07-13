@@ -16,6 +16,7 @@ using Content.Shared.Nutrition.EntitySystems;
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.Timing;
 using Content.Shared.Nutrition.Components;
+using Content.Shared.Antag;
 
 
 namespace Content.Shared.SS220.CultYogg;
@@ -53,7 +54,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
     protected virtual void OnCompInit(Entity<CultYoggComponent> uid, ref ComponentStartup args)
     {
-        //_actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);
+        //_actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);//delete after testing
         _actions.AddAction(uid, ref uid.Comp.CorruptItemActionEntity, uid.Comp.CorruptItemAction);
         _actions.AddAction(uid, ref uid.Comp.CorruptItemInHandActionEntity, uid.Comp.CorruptItemInHandAction);
         _actions.AddAction(uid, ref uid.Comp.AscendingActionEntity, uid.Comp.AscendingAction);//delete this when released it should be added through shrooms
@@ -260,7 +261,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
             _body.GibBody(uid, body: body);
         }
     }
-    public void ModifyEtaenShrooms(EntityUid uid, CultYoggComponent component)//idk if it is canser or no, will be like that for a time
+    public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent component)//idk if it is canser or no, will be like that for a time
     {
         component.ConsumedShrooms++; //Add shroom to buffer
         if (component.ConsumedShrooms >= component.AmountShroomsToAscend)

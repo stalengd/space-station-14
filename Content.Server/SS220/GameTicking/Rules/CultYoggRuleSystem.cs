@@ -15,8 +15,9 @@ using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Server.GameTicking.Components;
 using Content.Server.GameTicking;
+using Content.Shared.GameTicking.Components;
+
 
 namespace Content.Server.SS220.GameTicking.Rules;
 

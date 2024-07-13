@@ -39,7 +39,7 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
             
             if (entityManager.TryGetComponent<CultYoggComponent>(args.SolutionEntity, out var comp))
             {
-                args.EntityManager.System<SharedCultYoggSystem>().ModifyEtaenShrooms(args.SolutionEntity, comp);
+                args.EntityManager.System<SharedCultYoggSystem>().ModifyEatenShrooms(args.SolutionEntity, comp);
                 return;
             }
 

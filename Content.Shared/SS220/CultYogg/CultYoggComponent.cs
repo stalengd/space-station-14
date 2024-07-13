@@ -12,8 +12,8 @@ namespace Content.Shared.SS220.CultYogg;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedCultYoggSystem), Friend = AccessPermissions.ReadWriteExecute, Other = AccessPermissions.Read)]
-public sealed partial class CultYoggComponent : Component, IAntagStatusIconComponent
-{
+public sealed partial class CultYoggComponent : Component
+{ 
     /// ABILITIES ///
     [DataField]
     public EntProtoId PukeShroomAction = "ActionCultYoggPukeShroom";
@@ -44,6 +44,15 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
 
     [DataField, AutoNetworkedField]
     public EntityUid? AscendingActionEntity;
+
+    /// <summary>
+    /// Icon
+    /// </summary>
+    [DataField]
+    public bool IconVisibleToGhost { get; set; } = true;
+
+    [DataField]
+    public ProtoId<StatusIconPrototype> StatusIcon = "CultYoggFaction";
 
     /// <summary>
     /// Sound played while puking MiGoShroom
@@ -87,14 +96,8 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     public float HungerCost = 5f;
 
     /// <summary>
-    /// The role prototype of the zombie antag role
+    /// The role prototype of the culsist antag role
     /// </summary>
     [DataField("cultYoggRoleId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]
     public string CultYoggRoleId = "CultYogg";
-
-    [DataField("cultYoggStatusIcon")]
-    public ProtoId<StatusIconPrototype> StatusIcon { get; set; } = "CultYoggFaction";
-
-    [DataField]
-    public bool IconVisibleToGhost { get; set; } = true;
 }

@@ -5,6 +5,9 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Shared.SS220.Bible;
 
 [RegisterComponent]
+/// <summary>
+/// Adds ability to perform exorcism with this component on item. 
+/// </summary>
 public sealed partial class ExorcismPerformerComponent : Component
 {
     [DataField("requiresBibleUser")]

@@ -1,0 +1,39 @@
+#Objectives of th cult
+- type: entity
+  abstract: true
+  parent: BaseObjective
+  id: BaseCultYoggObjective
+  components:
+  - type: Objective
+    issuer: cult_yogg
+  - type: RoleRequirement
+    roles:
+      components:
+      - CultYoggRole
+
+# requires that the player sacrifice someone
+# disables social objectives and is disabled by social objectives
+- type: entity
+  abstract: true
+  parent: BaseTargetObjective
+  id: BaseCultYoggSacraficeObjective
+  components:
+  - type: Objective
+    unique: false
+    icon:
+      sprite: Objects/Weapons/Guns/Pistols/viper.rsi #need to chose an icon for this
+      state: icon
+  - type: KillPersonCondition
+
+# requires that the god will be summoned
+- type: entity
+  abstract: true
+  parent: BaseCultYoggObjective
+  id: BaseCultYoggSummonObjective
+  components:
+  - type: HelpProgressCondition
+  - type: Objective
+    unique: false
+    icon:
+      sprite: Objects/Weapons/Guns/Pistols/viper.rsi #need to chose an icon for this
+      state: icon

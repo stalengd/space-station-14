@@ -12,7 +12,7 @@ public sealed class CultYoggSacrificialSystem : SharedCultYoggSacrificialSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CultYoggSacrificialComponent, GetStatusIconsEvent>(GetSacraficialIcon);
+        SubscribeLocalEvent<CultYoggSacrificialComponent, GetStatusIconsEvent>(GetSacraficialIcon);//ToDo rewrite it as visor type; cause sacraficial can see his own status
     }
     private void GetSacraficialIcon(Entity<CultYoggSacrificialComponent> ent, ref GetStatusIconsEvent args)
     {

@@ -28,12 +28,14 @@ public sealed partial class CultYoggAscendingEvent : InstantActionEvent
 public sealed partial class CultYoggCorruptDoAfterEvent : SimpleDoAfterEvent
 {
     public readonly bool InHand;
-
     public readonly CultYoggCorruptedPrototype? Proto;
+    [NonSerialized]
+    public readonly Action<EntityUid?>? Callback;
 
-    public CultYoggCorruptDoAfterEvent(CultYoggCorruptedPrototype? proto, bool inHand)
+    public CultYoggCorruptDoAfterEvent(CultYoggCorruptedPrototype? proto, bool inHand, Action<EntityUid?>? callback)
     {
         InHand = inHand;
         Proto = proto;
+        Callback = callback;
     }
 }

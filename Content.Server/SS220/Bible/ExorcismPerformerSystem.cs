@@ -24,7 +24,7 @@ public sealed class ExorcismPerformerSystem : SharedExorcismPerformerSystem
     [Dependency] private readonly EntityLookupSystem _entityLookupSystem = default!;
     [Dependency] private readonly ITimerManager _timerManager = default!;
     [Dependency] private readonly ActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedCultYoggSystem _cultYoggSystem = default!;
+    [Dependency] private readonly SharedCultYoggCorruptedSystem _cultYoggCorruptedSystem = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly AppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
@@ -85,7 +85,7 @@ public sealed class ExorcismPerformerSystem : SharedExorcismPerformerSystem
     {
         var previousEntityString = ToPrettyString(entity);
         var effectPrototype = entity.Comp.CorruptionReverseEffect;
-        var uncorruptedEntity = _cultYoggSystem.RevertCorruption(entity);
+        var uncorruptedEntity = _cultYoggCorruptedSystem.RevertCorruption(entity);
         _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(args.Performer)} used exorcism on {previousEntityString} and made {ToPrettyString(uncorruptedEntity)}");
 
         if (uncorruptedEntity == null) return;

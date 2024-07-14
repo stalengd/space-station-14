@@ -1,6 +1,7 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 using Content.Shared.Popups;
 using Content.Shared.Mind;
 using Content.Shared.Body.Systems;
@@ -8,10 +9,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Actions;
 using Content.Shared.Hands.Components;
 using Content.Shared.Nutrition.EntitySystems;
-using System.Diagnostics.CodeAnalysis;
-using Robust.Shared.Timing;
 using Content.Shared.Nutrition.Components;
-using Content.Shared.Antag;
 
 namespace Content.Shared.SS220.CultYogg;
 

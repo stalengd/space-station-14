@@ -3,8 +3,10 @@
   id: WeaponRifleAk
   corruptedEntity: WeaponRifleAk
   result: FoodSnackMREBrownie
+  corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: WeaponLaserCarbine
   corruptedEntity: WeaponLaserCarbine
   result: FoodPacketMRETrash
+  corruptionReverseEffect: ExorcismUncorruptEffect

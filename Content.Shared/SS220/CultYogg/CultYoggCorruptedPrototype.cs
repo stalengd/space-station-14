@@ -4,7 +4,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.SS220.CultYogg
 {
     /// <summary>
-    ///     Recepies for corruption
+    ///     Recipes for corruption
     /// </summary>
     [Prototype("corrupted")]
 
@@ -20,5 +20,8 @@ namespace Content.Shared.SS220.CultYogg
 
         [DataField("result")]
         public string? Result { get; private set; }
+
+        [DataField("corruptionReverseEffect")]
+        public string? CorruptionReverseEffect { get; private set; }
     }
 }

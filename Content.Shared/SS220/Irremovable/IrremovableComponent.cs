@@ -5,8 +5,14 @@ namespace Content.Shared.SS220.Irremovable;
 [RegisterComponent]
 public sealed partial class IrremovableComponent : Component
 {
+    /// <summary>
+    /// If true, the item will be locked in hand, if false, entity will be locked in the slot
+    /// </summary>
     [DataField]
     public bool InHandItem = false;
+    /// <summary>
+    /// If true, drop blocked entities upon the death of the owner
+    /// </summary>
     [DataField]
     public bool ShouldDropOnDeath = true;
 }

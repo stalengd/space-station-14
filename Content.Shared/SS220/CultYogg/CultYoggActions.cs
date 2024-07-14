@@ -39,3 +39,4 @@ public sealed partial class CultYoggCorruptDoAfterEvent : SimpleDoAfterEvent
         Callback = callback;
     }
 }
+

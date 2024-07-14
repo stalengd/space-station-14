@@ -6,7 +6,7 @@ cult-yogg-role-greeting = "Время настало! Вы были избран
 
 cult-yogg-round-end-initial-count = Стартовых культистов было { $initialCount }, ими были:
 cult-yogg-round-end-user-was-initial = - [color=plum]{ $name }[/color] ([color=gray]{ $username }[/color]) был одним из стартовых прислужников.
-cult-yogg-round-end-initial-count = Обращенных культистов было { $initialCount }, ими были:
+cult-yogg-round-end-enslaved-count = Обращенных культистов было { $initialCount }, ими были:
 cult-yogg-round-end-user-was-enslaved = - [color=plum]{ $name }[/color] ([color=gray]{ $username }[/color]) был одним из порабощенных прислужников.
 
 cult-yogg-round-end-amount-none = [color=green]Все сторонники культа были уничтожены![/color]

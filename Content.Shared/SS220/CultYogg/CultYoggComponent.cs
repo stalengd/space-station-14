@@ -5,14 +5,15 @@ using Robust.Shared.Prototypes;
 using Content.Shared.StatusIcon;
 using Content.Shared.Antag;
 using Content.Shared.Roles;
+using Content.Shared.Nutrition.Components;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.SS220.CultYogg;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedCultYoggSystem), Friend = AccessPermissions.ReadWriteExecute, Other = AccessPermissions.Read)]
-public sealed partial class CultYoggComponent : Component, IAntagStatusIconComponent
-{
+public sealed partial class CultYoggComponent : Component
+{ 
     /// ABILITIES ///
     [DataField]
     public EntProtoId PukeShroomAction = "ActionCultYoggPukeShroom";
@@ -45,6 +46,15 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     public EntityUid? AscendingActionEntity;
 
     /// <summary>
+    /// Icon
+    /// </summary>
+    [DataField]
+    public bool IconVisibleToGhost { get; set; } = true;
+
+    [DataField]
+    public ProtoId<StatusIconPrototype> StatusIcon = "CultYoggFaction";
+
+    /// <summary>
     /// Sound played while puking MiGoShroom
     /// </summary>
     [ViewVariables, DataField, AutoNetworkedField]
@@ -54,15 +64,25 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     });
 
     [ViewVariables, DataField, AutoNetworkedField]
-    public string PukedEntity = "FoodMi'GomyceteCult"; //what will be puked out
+    public string PukedEntity = "FoodMiGomyceteCult"; //what will be puked out
 
     [ViewVariables, DataField, AutoNetworkedField]
     public string PukedLiquid = "PuddleVomit"; //maybe should be special liquid?
 
     /// <summary>
+    /// The lowest hunger threshold that this mob can be in before it's allowed to digest another shroom.
+    /// </summary>
+    [DataField("minHungerThreshold")]
+    [ViewVariables(VVAccess.ReadWrite)]
+    [AutoNetworkedField]
+    public HungerThreshold MinHungerThreshold = HungerThreshold.Okay;
+
+    /// <summary>
     /// Entity the cultist will ascend into
     /// </summary>
     public string AscendedEntity = "MiGoCultYogg";
+
+    public int AmountShroomsToAscend = 3; //to check what amount should be for ascencion
 
     public int ConsumedShrooms = 0; //buffer
 
@@ -76,14 +96,8 @@ public sealed partial class CultYoggComponent : Component, IAntagStatusIconCompo
     public float HungerCost = 5f;
 
     /// <summary>
-    /// The role prototype of the zombie antag role
+    /// The role prototype of the culsist antag role
     /// </summary>
     [DataField("cultYoggRoleId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]
     public string CultYoggRoleId = "CultYogg";
-
-    [DataField("cultYoggStatusIcon")]
-    public ProtoId<StatusIconPrototype> StatusIcon { get; set; } = "CultYoggFaction";
-
-    [DataField]
-    public bool IconVisibleToGhost { get; set; } = true;
 }

@@ -21,7 +21,7 @@
     factions:
     - CultYogg
   - type: RandomMetadata #ToDo нагенерить спец имена
-    nameSegments: [ "Командир", SyndicateNamesElite ]
+    nameSegments: [ cult_yogg_migo ]
   - type: Fixtures
     fixtures:
       fix1:
@@ -50,3 +50,8 @@
     tags:
     - CannotSuicide
     - DoorBumpOpener
+  - type: UserInterface
+    interfaces:
+      enum.MiGoErectUiKey.Key:
+       #type: FlatpackCreatorBoundUserInterface #just for check
+        type: MiGoErectBoundUserInterface

@@ -57,3 +57,18 @@ public enum MiGoVisual
 {
     Base
 }
+
+//UI for creation foundation of a building
+[NetSerializable, Serializable]
+public enum MiGoErectUiKey : byte
+{
+    Key
+}
+
+[Serializable, NetSerializable]
+public sealed class MiGoErectBuiState : BoundUserInterfaceState
+{
+    public MiGoErectBuiState()
+    {
+    }
+}

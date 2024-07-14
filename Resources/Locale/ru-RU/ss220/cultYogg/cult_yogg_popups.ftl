@@ -5,3 +5,4 @@ cult-yogg-enslave-must-be-alive = Оболочка кандидата наруш
 cult-yogg-enslave-another-fraction = Разум кандидата затуманен
 cult-yogg-enslave-is-sacraficial = Существо ценно, как жертва
 cult-yogg-heal-only-cultists = Оболочка не принадлежит культу
+cult-yogg-digest-no-nutritions = Недостаточно питательных веществ

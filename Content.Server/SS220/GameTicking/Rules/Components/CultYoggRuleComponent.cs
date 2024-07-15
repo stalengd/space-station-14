@@ -12,6 +12,9 @@ namespace Content.Server.SS220.GameTicking.Rules.Components;
 [RegisterComponent, Access(typeof(CultYoggRuleSystem))]
 public sealed partial class CultYoggRuleComponent : Component
 {
+    /// <summary>
+    /// Storages for an endgame screen title
+    /// </summary>
     [DataField]
     public Dictionary<string, string> InitialCultistsNames = new();//Who was cultist on the gamestart.
 
@@ -19,6 +22,11 @@ public sealed partial class CultYoggRuleComponent : Component
     public Dictionary<string, string> CultistsNames = new();
 
     public readonly List<EntityUid> CultistMinds = new();
+
+    /// <summary>
+    /// Storage for a sacraficials
+    /// </summary>
+    public readonly List<EntityUid> SacreficialsMinds = new();
 
     [DataField]
     public ProtoId<AntagPrototype> CultYoggPrototypeId = "CultYogg";
@@ -32,8 +40,16 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultYoggObjectiveGroups";
 
+
+    /// <summary>
+    /// Check for an endgame screen title
+    /// </summary>
+
     [DataField]
     public bool Summoned = false;
+
+    [DataField]
+    public int amountOfSacrifices = 0;
 
     public int TotalTraitors => CultistMinds.Count;
     public enum SelectionState

@@ -37,3 +37,17 @@
     icon:
       sprite: Objects/Weapons/Guns/Pistols/viper.rsi #need to chose an icon for this
       state: icon
+
+# requires that the god will be summoned
+- type: entity
+  parent: [BaseCultYoggObjective, BaseLivingObjective]
+  id: CultEscapeShuttleObjective
+  name: Escape to centcom alive and unrestrained.
+  description: One of our undercover agents will debrief you when you arrive. Don't show up in cuffs.
+  components:
+  - type: Objective
+    difficulty: 1.3
+    icon:
+      sprite: Structures/Furniture/chairs.rsi
+      state: shuttle
+  - type: EscapeShuttleCondition

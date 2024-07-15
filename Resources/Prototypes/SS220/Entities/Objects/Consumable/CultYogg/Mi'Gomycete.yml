@@ -23,8 +23,6 @@
     seedId: MiGospores
   - type: Extractable
     grindableSolutionName: food
-  - type: BadFood
-  #- type: FoodBehaviour #Do not forget to delete this after reagent done
 
 - type: entity
   parent: SeedBase

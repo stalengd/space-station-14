@@ -16,6 +16,7 @@ using Robust.Shared.Physics.Systems;
 using Content.Shared.Tag;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.SS220.CultYogg;
 
@@ -221,4 +222,10 @@ public abstract class SharedMiGoSystem : EntitySystem
     {
 
     }
+}
+
+
+[Serializable, NetSerializable]
+public sealed partial class MiGoEnslavetDoAfterEvent : SimpleDoAfterEvent
+{
 }

@@ -1,20 +1,17 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Content.Shared.SS220.CultYogg;
+using Robust.Shared.Prototypes;
 using Content.Shared.Nutrition;
 using Content.Shared.Humanoid;
-using Robust.Shared.Prototypes;
 using Content.Shared.Mind;
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.Network;
 using Content.Shared.StatusEffect;
 using Content.Shared.Drunk;//Delete this after
+namespace Content.Server.SS220.CultYogg;
 
-namespace Content.Shared.SS220.CultYogg;
-
-public abstract class SharedFoodBehaviourSystem : EntitySystem
+public sealed class CultYoggAnimalCorruptionSystem : EntitySystem
 {
-    [ValidatePrototypeId<StatusEffectPrototype>]
-    public const string DrunkKey = "Drunk";
-
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
@@ -23,61 +20,16 @@ public abstract class SharedFoodBehaviourSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        SubscribeLocalEvent<FoodBehaviourComponent, ConsumeDoAfterEvent>(OnDoAfter);
     }
-    private void OnDoAfter(Entity<FoodBehaviourComponent> entity, ref ConsumeDoAfterEvent args)
+    public void AnimalCorruption(EntityUid uid)//Corrupt animal
     {
-        if (args.Handled || args.Cancelled || args.Target == null)
-            return;
-
-        args.Handled = true;
-
-        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
-        {
-            AnimalCorruption((EntityUid) args.Target);//beast must be transformed
-            return;
-        }
-        if (!_entityManager.TryGetComponent<CultYoggComponent>(args.Target, out var comp))
-        {
-            //figure out function to increase amount of consumed shrooms
-            return;
-        }
-
-        ShroomEffect((EntityUid) args.Target);
-    }
-
-    private void ShroomEffect(EntityUid uid, StatusEffectsComponent? status = null)//Add special effects if consumed
-    {
-        if (!Resolve(uid, ref status, false))
-            return;
-
-       // if (TryComp<LightweightDrunkComponent>(uid, out var trait))
-      //      boozePower *= trait.BoozeStrengthMultiplier;
-
-        if (!_statusEffectsSystem.HasStatusEffect(uid, DrunkKey, status))
-        {
-            _statusEffectsSystem.TryAddStatusEffect<DrunkComponent>(uid, DrunkKey, TimeSpan.FromSeconds(30), true, status);
-        }
-        else
-        {
-            _statusEffectsSystem.TryAddTime(uid, DrunkKey, TimeSpan.FromSeconds(30), status);
-        }
-    }
-    private void AnimalCorruption(EntityUid uid)//Corrupt animal
-    {
-        //ToDo AddGhost role
-        if (_net.IsClient)
-            return;
+        //ToDo Add new animal as the gost role
 
         if (TerminatingOrDeleted(uid))
             return;
 
         if (!CheckForCorruption(uid, out var corruptionProto))
-        {
-            //maybe do smth if its isn't in list
             return;
-        }
 
         // Get original body position and spawn MiGo here
         var corruptedAnimal = _entityManager.SpawnAtPosition(corruptionProto.Result, Transform(uid).Coordinates);

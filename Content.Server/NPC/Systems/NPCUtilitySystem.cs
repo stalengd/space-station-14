@@ -184,6 +184,8 @@ public sealed class NPCUtilitySystem : EntitySystem
                 if (avoidBadFood && HasComp<BadFoodComponent>(targetUid))
                     return 0f;
 
+                //SS220 ToDo add here MiGoShroom preference
+
                 return 1f;
             }
             case DrinkValueCon:

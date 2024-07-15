@@ -18,4 +18,8 @@
       mindComponents:
       - type: CultYoggRole
         prototype: CultYogg
+  - type: AntagObjectives
+    objectives:
+    - CarpRiftsObjective
+    - DragonSurviveObjective
 

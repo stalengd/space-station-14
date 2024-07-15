@@ -10,6 +10,7 @@ using Content.Shared.Actions;
 using Content.Shared.Hands.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Components;
+using Content.Shared.DoAfter;
 
 namespace Content.Shared.SS220.CultYogg;
 
@@ -99,7 +100,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         }
     }
 
-    private void CorruptItemAction(Entity<CultYoggComponent> uid, ref CultYoggCorruptItemEvent args)//ToDo some list of corruption
+    private void CorruptItemAction(Entity<CultYoggComponent> uid, ref CultYoggCorruptItemEvent args)
     {
         if (args.Handled)
             return;
@@ -118,7 +119,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void CorruptItemInHandAction(Entity<CultYoggComponent> uid, ref CultYoggCorruptItemInHandEvent args)//ToDo some list of corruption
+    private void CorruptItemInHandAction(Entity<CultYoggComponent> uid, ref CultYoggCorruptItemInHandEvent args)
     {
         if (args.Handled)
             return;

@@ -6,6 +6,7 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using System.Diagnostics.CodeAnalysis;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.SS220.CultYogg;
 
@@ -205,5 +206,24 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
             _hands.PickupOrDrop(user, corruptedEntity);
 
         return corruptedEntity;
+    }
+}
+
+/// <summary>
+/// Event raised after completeon of DoAfter
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class CultYoggCorruptDoAfterEvent : SimpleDoAfterEvent
+{
+    public readonly bool InHand;
+    public readonly CultYoggCorruptedPrototype? Proto;
+    [NonSerialized]
+    public readonly Action<EntityUid?>? Callback;
+
+    public CultYoggCorruptDoAfterEvent(CultYoggCorruptedPrototype? proto, bool inHand, Action<EntityUid?>? callback)
+    {
+        InHand = inHand;
+        Proto = proto;
+        Callback = callback;
     }
 }

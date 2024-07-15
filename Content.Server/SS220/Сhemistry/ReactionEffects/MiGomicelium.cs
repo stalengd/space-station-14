@@ -5,6 +5,7 @@ using Content.Server.Medical;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Content.Shared.SS220.CultYogg;
+using Content.Server.SS220.CultYogg;
 using Content.Shared.Humanoid;
 
 namespace Content.Server.SS220.Chemistry.ReactionEffects
@@ -36,23 +37,26 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
 
             var entityManager = args.EntityManager;
 
-            
             if (entityManager.TryGetComponent<CultYoggComponent>(args.SolutionEntity, out var comp))
             {
-                args.EntityManager.System<SharedCultYoggSystem>().ModifyEatenShrooms(args.SolutionEntity, comp);
+                entityManager.System<SharedCultYoggSystem>().ModifyEatenShrooms(args.SolutionEntity, comp);
                 return;
+            }
+            //ADD here galutination + drunk
+            var vomitSys = entityManager.EntitySysManager.GetEntitySystem<VomitSystem>();//delete this after
+            vomitSys.Vomit(args.SolutionEntity, ThirstAmount, HungerAmount);
+
+            if (!entityManager.HasComponent<HumanoidAppearanceComponent>(args.SolutionEntity)) //if its an animal -- corrupt it
+            {
+                entityManager.System<CultYoggAnimalCorruptionSystem>().AnimalCorruption(args.SolutionEntity);
             }
 
             if (entityManager.HasComponent<HumanoidAppearanceComponent>(args.SolutionEntity))
             {
-                return;
+                //ToDo add here status effect that will allow MiGo to enslave somebody
             }
-
-            var vomitSys = entityManager.EntitySysManager.GetEntitySystem<VomitSystem>();
-
-            vomitSys.Vomit(args.SolutionEntity, ThirstAmount, HungerAmount);
         }
-
+        //DoNot forget to add note in guidebook
         protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("reagent-effect-guidebook-plant-phalanximine", ("chance", Probability));
     }
 }

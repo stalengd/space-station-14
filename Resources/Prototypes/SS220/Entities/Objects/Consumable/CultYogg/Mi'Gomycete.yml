@@ -23,6 +23,8 @@
     seedId: MiGospores
   - type: Extractable
     grindableSolutionName: food
+  - type: DesiredFood
+    desireLevel: 1
 
 - type: entity
   parent: SeedBase

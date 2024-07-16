@@ -1,6 +1,4 @@
-using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
-using Content.Shared.Traits.Assorted;
 
 namespace Content.Shared.SS220.CultYogg;
 

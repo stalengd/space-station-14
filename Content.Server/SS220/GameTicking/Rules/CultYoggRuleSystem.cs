@@ -36,7 +36,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         base.Initialize();
 
         SubscribeLocalEvent<CultYoggRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
-        SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslave);
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslaveDoAfterEvent>(MiGoEnslave);
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     /// </summary>
     /// <param name="args.User">MiGo</param>
     /// <param name="args.Target">Target of enslavement</param>
-    private void MiGoEnslave(Entity<MiGoComponent> uid, ref MiGoEnslavetDoAfterEvent args)
+    private void MiGoEnslave(Entity<MiGoComponent> uid, ref MiGoEnslaveDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled || args.Target == null)
             return;

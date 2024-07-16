@@ -17,6 +17,7 @@ using Content.Shared.Tag;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.Serialization;
+using Content.Shared.StatusEffect;
 
 namespace Content.Shared.SS220.CultYogg;
 
@@ -32,6 +33,8 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _speedModifier = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
 
@@ -89,6 +92,12 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         }
 
+        if (!_statusEffectsSystem.HasStatusEffect(args.Target, "Rave"))//ToDo add in comp no hardcode
+        {
+            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-should-eat-shroom"), args.Target, uid);
+            return;
+        }
+
         /*
         if(HasComp<SacrificialComponent>(uid))
         {
@@ -97,7 +106,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         }
          */
-        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new MiGoEnslavetDoAfterEvent(), uid, args.Target)//ToDo estimate time for Enslave
+        var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new MiGoEnslaveDoAfterEvent(), uid, args.Target)//ToDo estimate time for Enslave
         {
             Broadcast = false,
             BreakOnDamage = true,
@@ -112,7 +121,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         args.Handled = true;
     }
-    private void MiGoEnslaveOnDoAfter(Entity<MiGoComponent> uid, ref MiGoEnslavetDoAfterEvent args)
+    private void MiGoEnslaveOnDoAfter(Entity<MiGoComponent> uid, ref MiGoEnslaveDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled || args.Target == null)
             return;
@@ -226,6 +235,6 @@ public abstract class SharedMiGoSystem : EntitySystem
 
 
 [Serializable, NetSerializable]
-public sealed partial class MiGoEnslavetDoAfterEvent : SimpleDoAfterEvent
+public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent
 {
 }

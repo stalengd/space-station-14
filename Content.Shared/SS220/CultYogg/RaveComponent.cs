@@ -9,7 +9,7 @@ public sealed partial class RaveComponent : Component
     /// <summary>
     /// The random time between incidents, (min, max).
     /// </summary>
-    public Vector2 TimeBetweenIncidents = new Vector2(5, 10);
+    public Vector2 TimeBetweenIncidents = new Vector2(0, 5);
 
     public float NextIncidentTime;
 }

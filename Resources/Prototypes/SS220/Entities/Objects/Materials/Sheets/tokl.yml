@@ -1,0 +1,35 @@
+- type: entity
+  parent: SheetMetalBase
+  id: SheetTokl
+  name: tokl
+  suffix: Full
+  components:
+  - type: Sprite
+    sprite: SS220/Objects/Materials/Sheets/tokl.rsi
+  - type: Item
+    sprite: SS220/Objects/Materials/Sheets/tokl.rsi
+    size: Normal
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 100
+  - type: Stack
+    stackType: Steel
+    baseLayer: base
+    layerStates:
+    - tokl
+    - tokl_2
+    - tokl_3
+  - type: Sprite
+    state: tokl_3
+    layers:
+    - state: tokl_3
+      map: ["base"]
+  - type: Item
+    heldPrefix: tokl
+  - type: Appearance
+  - type: FloorTile
+    outputs:
+    - Plating
+  - type: Extractable
+    grindableSolutionName: tokl

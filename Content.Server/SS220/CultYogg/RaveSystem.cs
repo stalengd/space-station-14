@@ -39,7 +39,7 @@ public sealed class RaveSystem : SharedRaveSystem
             raving.NextIncidentTime +=
                 _random.NextFloat(raving.TimeBetweenIncidents.X, raving.TimeBetweenIncidents.Y);
 
-            _chat.TrySendInGameICMessage(uid, "Ymzhk", InGameICChatType.Speak, ChatTransmitRange.Normal);
+            _chat.TrySendInGameICMessage(uid, "Пиздец", InGameICChatType.Speak, ChatTransmitRange.Normal);
         }
     }
     private string PickEmote(string name)

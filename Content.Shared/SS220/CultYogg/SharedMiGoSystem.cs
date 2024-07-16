@@ -92,7 +92,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         }
 
-        if (!_statusEffectsSystem.HasStatusEffect(args.Target, uid.Comp.requiedEffect))
+        if (!_statusEffectsSystem.HasStatusEffect(args.Target, uid.Comp.RequiedEffect))
         {
             _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-should-eat-shroom"), args.Target, uid);
             return;

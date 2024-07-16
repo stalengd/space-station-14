@@ -1,5 +1,4 @@
 - type: entity
-  parent: SheetMetalBase
   id: SheetTokl
   name: tokl
   suffix: Full
@@ -13,23 +12,3 @@
   - type: PhysicalComposition
     materialComposition:
       Steel: 100
-  - type: Stack
-    stackType: Steel
-    baseLayer: base
-    layerStates:
-    - tokl
-    - tokl_2
-    - tokl_3
-  - type: Sprite
-    state: tokl_3
-    layers:
-    - state: tokl_3
-      map: ["base"]
-  - type: Item
-    heldPrefix: tokl
-  - type: Appearance
-  - type: FloorTile
-    outputs:
-    - Plating
-  - type: Extractable
-    grindableSolutionName: tokl

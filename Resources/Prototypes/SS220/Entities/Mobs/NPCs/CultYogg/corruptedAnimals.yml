@@ -59,10 +59,17 @@
       accent: genericAggressive
     - type: Speech
       speechVerb: LargeMob
-
+    - type: GhostRole
+      makeSentient: true
+      allowMovement: true
+      allowSpeech: false
+      name: ghost-role-information-corrupted-mob-cultyogg-name
+      description: ghost-role-information-corrupted-mob-cultyogg-description
+      rules: ghost-role-information-corrupted-mob-cultyogg-rules
+    - type: GhostTakeoverAvailable
 
 - type: entity
-  parent: BaseMobCorrupted
+  parent: [BaseMobCorrupted , MobCow]
   id: CultCowCorrupted
   components:
   - type: Sprite

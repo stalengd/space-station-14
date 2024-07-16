@@ -29,11 +29,17 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
         [DataField]
         public float HungerAmount = -8f;
 
+        [DataField]
+        public float Time = 2.0f;
+
         public override void Effect(ReagentEffectArgs args)
         {
 
             if (args.Reagent == null || args.Quantity < AmountThreshold)
                 return;
+
+            var time = Time;
+            time *= args.Scale;
 
             var entityManager = args.EntityManager;
 
@@ -43,8 +49,8 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
                 return;
             }
             //ADD here galutination + drunk
-            var vomitSys = entityManager.EntitySysManager.GetEntitySystem<VomitSystem>();//delete this after
-            vomitSys.Vomit(args.SolutionEntity, ThirstAmount, HungerAmount);
+            //var vomitSys = entityManager.EntitySysManager.GetEntitySystem<VomitSystem>();//delete this after
+            //vomitSys.Vomit(args.SolutionEntity, ThirstAmount, HungerAmount);
 
             if (!entityManager.HasComponent<HumanoidAppearanceComponent>(args.SolutionEntity)) //if its an animal -- corrupt it
             {
@@ -53,7 +59,7 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
 
             if (entityManager.HasComponent<HumanoidAppearanceComponent>(args.SolutionEntity))
             {
-                //ToDo add here status effect that will allow MiGo to enslave somebody
+                entityManager.System<SharedRaveSystem>().TryApplyRavenness(args.SolutionEntity, time);
             }
         }
         //DoNot forget to add note in guidebook

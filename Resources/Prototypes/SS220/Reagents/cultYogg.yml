@@ -12,3 +12,4 @@
     Poison:
       effects:
       - !type:MiGomiceliumEffect
+        time: 500

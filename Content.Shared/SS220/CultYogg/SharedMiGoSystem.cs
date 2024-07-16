@@ -92,7 +92,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         }
 
-        if (!_statusEffectsSystem.HasStatusEffect(args.Target, "Rave"))//ToDo add in comp no hardcode
+        if (!_statusEffectsSystem.HasStatusEffect(args.Target, uid.Comp.requiedEffect))
         {
             _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-should-eat-shroom"), args.Target, uid);
             return;

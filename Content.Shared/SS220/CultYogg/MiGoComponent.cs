@@ -37,9 +37,12 @@ public sealed partial class MiGoComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? MiGoSacrificeActionEntity;
 
+    //Enlsavement requirements
+    public string requiedEffect = "Rave";
+
     //Astral variables
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
-    public bool PhysicalForm = true;//Is MiGo in phisycal form?
+    [ViewVariables, AutoNetworkedField]
+    private bool PhysicalForm = true;//Is MiGo in phisycal form?
 
     [ViewVariables]
     public TimeSpan? MaterializedStart;

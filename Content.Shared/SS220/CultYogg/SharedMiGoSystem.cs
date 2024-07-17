@@ -191,7 +191,11 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (args.Handled)
             return;
 
-        _entityManager.System<SharedMiGoHealSystem>().TryApplyMiGoHeal(args.Target, uid.Comp.HealingEffectTime);
+        //unregistred errors idk how to fix
+        //_entityManager.System<SharedMiGoHealSystem>().TryApplyMiGoHeal(args.Target, uid.Comp.HealingEffectTime);
+
+        var ev = new MiGoSetHealStatusEvent(args.Target, uid.Comp.HealingEffectTime);
+        RaiseLocalEvent(uid, ref ev);
 
         args.Handled = true;
     }

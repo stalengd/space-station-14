@@ -11,9 +11,8 @@ public sealed partial class MiGoHealComponent : Component
 
     public float NextIncidentTime;
 
-    /// <summary>
-    /// Damage to apply every metabolism cycle. Damage Ignores resistances.
-    /// </summary>
+
+    //copypaste=rename
     [DataField(required: true)]
     [JsonPropertyName("damage")]
     public DamageSpecifier Damage = default!;

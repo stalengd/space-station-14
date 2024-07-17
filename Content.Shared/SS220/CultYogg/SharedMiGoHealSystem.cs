@@ -12,6 +12,11 @@ public abstract class SharedMiGoHealSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<MiGoComponent, MiGoSetHealStatusEvent>(SetupMiGoHeal);//IDK if its good to recieve it from another component
+    }
+    private void SetupMiGoHeal(Entity<MiGoComponent> uid, ref MiGoSetHealStatusEvent args)
+    {
+        TryApplyMiGoHeal(uid, args.HealTime);
     }
     public void TryApplyMiGoHeal(EntityUid uid, float time, StatusEffectsComponent? status = null)
     {
@@ -20,7 +25,7 @@ public abstract class SharedMiGoHealSystem : EntitySystem
 
         if (!_statusEffectsSystem.HasStatusEffect(uid, EffectkKey, status))
         {
-            _statusEffectsSystem.TryAddStatusEffect<RaveComponent>(uid, EffectkKey, TimeSpan.FromSeconds(time), true, status);
+            _statusEffectsSystem.TryAddStatusEffect<MiGoHealComponent>(uid, EffectkKey, TimeSpan.FromSeconds(time), true, status);
         }
         else
         {
@@ -36,5 +41,24 @@ public abstract class SharedMiGoHealSystem : EntitySystem
     {
         _statusEffectsSystem.TryRemoveTime(uid, EffectkKey, TimeSpan.FromSeconds(timeRemoved));
     }
+}
 
+/// <summary>
+/// Event that is raised whenever someone is implanted with any given implant.
+/// Raised on the the implant entity.
+/// </summary>
+/// <remarks>
+/// implant implant implant implant
+/// </remarks>
+[ByRefEvent]
+public readonly struct MiGoSetHealStatusEvent
+{
+    public readonly EntityUid Target;
+    public readonly float HealTime;
+
+    public MiGoSetHealStatusEvent(EntityUid target, float healTime)
+    {
+        Target = target;
+        HealTime = healTime;
+    }
 }

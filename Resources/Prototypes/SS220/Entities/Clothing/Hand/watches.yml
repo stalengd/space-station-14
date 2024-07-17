@@ -1,0 +1,54 @@
+- type: entity
+  parent: Clothing
+  id: ClothingWristWatch
+  name: Наручные часы
+  description: Показывают время.
+  components:
+  - type: Sprite
+    sprite: SS220/Clothing/Hands/WristWatch/nt-watch.rsi
+    state: icon
+  - type: Clothing
+    sprite: SS220/Clothing/Hands/WristWatch/nt-watch.rsi
+    slots: [gloves]
+  - type: Item
+    size: Small
+    storedRotation: -90
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+  - type: WristWatch
+    style: NTDigital
+  - type: UserInterface
+    interfaces:
+      enum.WristWatchUiKey.Key:
+        type: WristWatchBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WristWatchUiKey.Key
+    singleUser: true
+
+- type: wristWatchStyle
+  id: NTDigital
+  panelTexture: /Textures/SS220/Interface/WristWatch/WristWatchPanel.png
+  panelSize: 256, 214
+  hoursLabel:
+    font: 
+      path: /Fonts/SS220/WristWatch/SS220 Watch Digits 22.ttf
+      size: 33 # Should be 32, but 33 gives wanted result
+    color: "#75E6FF"
+    position: 38, 92
+    size: 64, 44
+  minutesLabel:
+    color: "#75E6FF"
+    position: 116, 92
+    size: 64, 44
+  firstSeparator:
+    color: "#75E6FF"
+    position: 100, 92
+    size: 20, 44
+  secondsLabel:
+    font: 
+      path: /Fonts/SS220/WristWatch/SS220 Watch Digits 16.ttf
+      size: 24 # Should be 20, but 24 gives wanted result
+    color: "#75E6FF"
+    position: 180, 104
+    size: 40, 32

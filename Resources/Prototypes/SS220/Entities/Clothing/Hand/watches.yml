@@ -1,8 +1,8 @@
 - type: entity
   parent: Clothing
   id: ClothingWristWatch
-  name: Наручные часы
-  description: Показывают время.
+  name: наручные часы
+  description: Показывают точное время. Произведено Нанотрейзен.
   components:
   - type: Sprite
     sprite: SS220/Clothing/Hands/WristWatch/nt-watch.rsi
@@ -50,5 +50,45 @@
       path: /Fonts/SS220/WristWatch/SS220 Watch Digits 16.ttf
       size: 24 # Should be 20, but 24 gives wanted result
     color: "#75E6FF"
+    position: 180, 104
+    size: 40, 32
+
+- type: entity
+  parent: ClothingWristWatch
+  id: ClothingWristWatchGold
+  name: наручные часы командования
+  description: Показывают точное время. Произведено Нанотрейзен специально для командного состава.
+  components:
+  - type: Sprite
+    sprite: SS220/Clothing/Hands/WristWatch/nt-watch-gold.rsi
+  - type: Clothing
+    sprite: SS220/Clothing/Hands/WristWatch/nt-watch-gold.rsi
+  - type: WristWatch
+    style: NTDigitalGold
+
+- type: wristWatchStyle
+  id: NTDigitalGold
+  panelTexture: /Textures/SS220/Interface/WristWatch/WristWatchPanelGold.png
+  panelSize: 256, 214
+  hoursLabel:
+    font: 
+      path: /Fonts/SS220/WristWatch/SS220 Watch Digits 22.ttf
+      size: 33 # Should be 32, but 33 gives wanted result
+    color: "#DBD6BB"
+    position: 38, 92
+    size: 64, 44
+  minutesLabel:
+    color: "#DBD6BB"
+    position: 116, 92
+    size: 64, 44
+  firstSeparator:
+    color: "#DBD6BB"
+    position: 100, 92
+    size: 20, 44
+  secondsLabel:
+    font: 
+      path: /Fonts/SS220/WristWatch/SS220 Watch Digits 16.ttf
+      size: 24 # Should be 20, but 24 gives wanted result
+    color: "#DBD6BB"
     position: 180, 104
     size: 40, 32

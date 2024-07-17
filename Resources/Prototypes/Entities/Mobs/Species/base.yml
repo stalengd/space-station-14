@@ -142,6 +142,7 @@
     - StaminaModifier
     - Flashed
     - Rave #SS220 cult
+    - MiGoHeal  #SS220 cult
   - type: Reflect
     enabled: false
     reflectProb: 0

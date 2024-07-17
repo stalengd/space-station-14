@@ -44,9 +44,9 @@ public abstract class SharedCultYoggSystem : EntitySystem
     protected virtual void OnCompInit(Entity<CultYoggComponent> uid, ref ComponentStartup args)
     {
         //_actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);//delete after testing
+        //_actions.AddAction(uid, ref uid.Comp.AscendingActionEntity, uid.Comp.AscendingAction);//delete after testing
         _actions.AddAction(uid, ref uid.Comp.CorruptItemActionEntity, uid.Comp.CorruptItemAction);
         _actions.AddAction(uid, ref uid.Comp.CorruptItemInHandActionEntity, uid.Comp.CorruptItemInHandAction);
-        _actions.AddAction(uid, ref uid.Comp.AscendingActionEntity, uid.Comp.AscendingAction);//delete this when released it should be added through shrooms
         if (_actions.AddAction(uid, ref uid.Comp.PukeShroomActionEntity, out var act, uid.Comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
         {
             var start = _gameTiming.CurTime;
@@ -173,12 +173,22 @@ public abstract class SharedCultYoggSystem : EntitySystem
         }
     }
 
-    public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent component)//idk if it is canser or no, will be like that for a time
+    public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent comp)//idk if it is canser or no, will be like that for a time
     {
-        component.ConsumedShrooms++; //Add shroom to buffer
-        if (component.ConsumedShrooms >= component.AmountShroomsToAscend)
+        comp.ConsumedShrooms++; //Add shroom to buffer
+        if (comp.ConsumedShrooms < comp.AmountShroomsToAscend) // if its not enough to ascend go next
+            return;
+
+        //Maybe in later version we will detiriorate the body and add some kind of effects
+
+        //ToDo Needed some kind of check, how many MiGo exists, alive and less than 3
+
+        //IDK how to check if he already has this action, so i did this markup
+        if (_actions.AddAction(uid, ref comp.AscendingActionEntity, out var act, comp.AscendingAction) && act.UseDelay != null)
         {
-            //_actions.AddAction(uid, ref comp.AscendingActionEntity, comp.AscendingAction)//uncomment when all MiGotests will be done
+            var start = _gameTiming.CurTime;
+            var end = start + act.UseDelay.Value;
+            _actions.SetCooldown(comp.AscendingActionEntity.Value, start, end);
         }
     }
 }

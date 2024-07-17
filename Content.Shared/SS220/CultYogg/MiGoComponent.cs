@@ -29,6 +29,9 @@ public sealed partial class MiGoComponent : Component
     public EntityUid? MiGoEnslavementActionEntity;
 
     [DataField, AutoNetworkedField]
+    public EntityUid? MiGoHealActionEntity;
+
+    [DataField, AutoNetworkedField]
     public EntityUid? MiGoAstralActionEntity;
 
     [DataField, AutoNetworkedField]
@@ -39,6 +42,9 @@ public sealed partial class MiGoComponent : Component
 
     //Enlsavement requirements
     public string RequiedEffect = "Rave";
+
+    //How long heal effect will occure
+    public float HealingEffectTime = 100;
 
     //Astral variables
     [ViewVariables, AutoNetworkedField]

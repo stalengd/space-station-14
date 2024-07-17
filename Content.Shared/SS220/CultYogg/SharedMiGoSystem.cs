@@ -34,6 +34,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _speedModifier = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
 
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
@@ -57,6 +58,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 
     protected virtual void OnCompInit(Entity<MiGoComponent> uid, ref ComponentStartup args)
     {
+        _actions.AddAction(uid, ref uid.Comp.MiGoHealActionEntity, uid.Comp.MiGoHealAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoEnslavementActionEntity, uid.Comp.MiGoEnslavementAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoAstralActionEntity, uid.Comp.MiGoAstralAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoErectActionEntity, uid.Comp.MiGoErectAction);
@@ -189,28 +191,14 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
-        {
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid);
-            return;
-        }
-
-        if (!HasComp<CultYoggComponent>(args.Target) || !HasComp<MiGoComponent>(args.Target))
-        {
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-heal-only-cultists"), args.Target, uid);
-            return;
-        }
-
-        //ToDo find way to heal
+        _entityManager.System<SharedMiGoHealSystem>().TryApplyMiGoHeal(args.Target, uid.Comp.HealingEffectTime);
 
         args.Handled = true;
     }
     private void MiGoErect(EntityUid uid, MiGoComponent comp, MiGoErectEvent args)
     {
         //(Entity<MiGoComponent> uid, ref MiGoErectEvent args)
-        //will wait when sw will update ui parts to copy pase, cause rn it has an errors
+        //will wait when sw will update ui parts to copy paste, cause rn it has an errors
         if (args.Handled || !TryComp<ActorComponent>(uid, out var actor))
             return;
         args.Handled = true;
@@ -218,7 +206,8 @@ public abstract class SharedMiGoSystem : EntitySystem
         _userInterface.TryToggleUi(uid, MiGoErectUiKey.Key, actor.PlayerSession);
     }
     private void OnBoundUIOpened(EntityUid uid, MiGoComponent component, BoundUIOpenedEvent args)
-    {//(Entity<MiGoComponent> uid, ref BoundUIOpenedEvent args)
+    {
+        //(Entity<MiGoComponent> uid, ref BoundUIOpenedEvent args)
         /*
         _entityManager.TryGetComponent<IntrinsicRadioTransmitterComponent>(uid, out var intrinsicRadio);
         var radioChannels = intrinsicRadio?.Channels;
@@ -232,7 +221,6 @@ public abstract class SharedMiGoSystem : EntitySystem
 
     }
 }
-
 
 [Serializable, NetSerializable]
 public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent

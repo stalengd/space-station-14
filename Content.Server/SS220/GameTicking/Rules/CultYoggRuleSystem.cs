@@ -36,7 +36,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         base.Initialize();
 
         SubscribeLocalEvent<CultYoggRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
-        SubscribeLocalEvent<MiGoComponent, MiGoEnslaveDoAfterEvent>(MiGoEnslave);
+        SubscribeLocalEvent<CultYoggRuleComponent, MiGoEnslaveDoAfterEvent>(MiGoEnslave);//cant receive this shit
     }
 
     /// <summary>
@@ -44,15 +44,38 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     /// </summary>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-        AssignHead(uid, component);//rn its only head, later maybe it will be necessarily 1 captain, 1 head, 1 common worker
+        //AssignCaptain(uid, component);
+        AssignHead(uid, component);
+        //AssignRegular(uid, component);
+    }
+    private void AssignSacriaficials(EntityUid uid, CultYoggRuleComponent component)
+    {
+        var allHumans = GetAliveHumans();
+
     }
 
+    public List<EntityUid> GetAliveHumans()//maybe add here sacraficials and cultists filter
+    {
+        var mindQuery = EntityQuery<MindComponent>();
+
+        var allHumans = new List<EntityUid>();
+        // HumanoidAppearanceComponent is used to prevent mice, pAIs, etc from being chosen
+        var query = EntityQueryEnumerator<MindContainerComponent, MobStateComponent, HumanoidAppearanceComponent>();
+        while (query.MoveNext(out var uid, out var mc, out var mobState, out _))
+        {
+            // the player needs to have a mind and not be the excluded one
+            if (mc.Mind == null)
+                continue;
+
+            // the player has to be alive
+            if (_mobState.IsAlive(uid, mobState))
+                allHumans.Add(mc.Mind.Value);
+        }
+
+        return allHumans;
+    }
     private void AssignHead(EntityUid uid, CultYoggRuleComponent component)
     {
-        //ToDoCheck if head were assigned
-
-
-        // no other humans to kill
         var mindQuery = EntityQuery<MindComponent>();
 
         var allHumans = new List<EntityUid>();
@@ -65,7 +88,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         while (query.MoveNext(out var uids, out var mc, out var mobState, out _))
         {
             // the player needs to have a mind and not be the excluded one
-            if (mc.Mind == null || !HasComp<CultYoggComponent>(uid))
+            if (mc.Mind == null || !HasComp<CultYoggComponent>(uid) || !HasComp<CultYoggSacrificialComponent>(uid))
                 continue;
 
             // the player has to be alive
@@ -92,7 +115,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     private void SetTarget(EntityUid uid, CultYoggRuleComponent component)
     {
-        component.SacreficialsMinds.Add(uid);
+        //component.SacreficialsMinds.Add(uid); // maybe it should be mind
         //ToDo add target component on it
     }
 
@@ -106,7 +129,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     /// </summary>
     /// <param name="args.User">MiGo</param>
     /// <param name="args.Target">Target of enslavement</param>
-    private void MiGoEnslave(Entity<MiGoComponent> uid, ref MiGoEnslaveDoAfterEvent args)
+    private void MiGoEnslave(Entity<CultYoggRuleComponent> uid, ref MiGoEnslaveDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled || args.Target == null)
             return;
@@ -121,6 +144,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         args.Handled = true;
     }
 
+    //it isn't working
     private void GetCultGamerule(out EntityUid? ruleEntity, out CultYoggRuleComponent? component)
     {
         var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
@@ -141,6 +165,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     {
         //Grab the mind if it wasnt provided
         if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
+            return false;
+
+        if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists
             return false;
 
         _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);

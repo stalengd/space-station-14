@@ -20,6 +20,5 @@
         prototype: CultYogg
   - type: AntagObjectives
     objectives:
-    - CarpRiftsObjective
-    - DragonSurviveObjective
-
+    - BaseTargetObjective
+    - CultEscapeShuttleObjective

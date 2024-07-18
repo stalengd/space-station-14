@@ -7,7 +7,6 @@ namespace Content.Client.SS220.WristWatch;
 [RegisterComponent]
 public sealed partial class WristWatchComponent : SharedWristWatchComponent
 {
-    //[DataField("style", customTypeSerializer: typeof(PrototypeIdSerializer<WristWatchStylePrototype>))]
-    [DataField]
+    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<WristWatchStylePrototype>))]
     public string Style;
 }

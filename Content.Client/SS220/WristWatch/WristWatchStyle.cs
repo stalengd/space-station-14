@@ -7,7 +7,7 @@ namespace Content.Client.SS220.WristWatch;
 [Prototype("wristWatchStyle")]
 public sealed partial class WristWatchStylePrototype : IPrototype
 {
-    //[ViewVariables]
+    [ViewVariables]
     [IdDataField]
     public string ID { get; private set; } = default!;
     [DataField]

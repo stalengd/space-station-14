@@ -67,6 +67,7 @@
       description: ghost-role-information-corrupted-mob-cultyogg-description
       rules: ghost-role-information-corrupted-mob-cultyogg-rules
     - type: GhostTakeoverAvailable
+    - type: ShowCultYoggIcons
 
 - type: entity
   parent: [BaseMobCorrupted , MobCow]

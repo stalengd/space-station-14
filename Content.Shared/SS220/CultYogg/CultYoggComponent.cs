@@ -46,15 +46,6 @@ public sealed partial class CultYoggComponent : Component
     public EntityUid? AscendingActionEntity;
 
     /// <summary>
-    /// Icon
-    /// </summary>
-    [DataField]
-    public bool IconVisibleToGhost { get; set; } = true;
-
-    [DataField]
-    public ProtoId<StatusIconPrototype> StatusIcon = "CultYoggFaction";
-
-    /// <summary>
     /// Sound played while puking MiGoShroom
     /// </summary>
     [ViewVariables, DataField, AutoNetworkedField]

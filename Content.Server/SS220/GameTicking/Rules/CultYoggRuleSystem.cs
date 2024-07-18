@@ -179,6 +179,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _npcFaction.AddFaction(uid, component.CultYoggFaction);
 
         _entityManager.AddComponent<CultYoggComponent>(uid);
+        _entityManager.AddComponent <ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
         _entityManager.AddComponent<ZombieImmuneComponent>(uid);//they are practically mushrooms
 
         return true;

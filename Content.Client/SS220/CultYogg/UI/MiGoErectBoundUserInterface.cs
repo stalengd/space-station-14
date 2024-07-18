@@ -1,6 +1,6 @@
 using Content.Shared.Construction.Components;
 using JetBrains.Annotations;
-using Content.Shared.SS220.CultYogg;
+using Content.Shared.SS220.CultYogg.Components;
 
 namespace Content.Client.SS220.CultYogg.UI
 {

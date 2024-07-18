@@ -7,13 +7,14 @@ using Content.Shared.Antag;
 using Content.Shared.Roles;
 using Content.Shared.Nutrition.Components;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using Content.Shared.SS220.CultYogg.EntitySystems;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedCultYoggSystem), Friend = AccessPermissions.ReadWriteExecute, Other = AccessPermissions.Read)]
 public sealed partial class CultYoggComponent : Component
-{ 
+{
     /// ABILITIES ///
     [DataField]
     public EntProtoId PukeShroomAction = "ActionCultYoggPukeShroom";

@@ -1,6 +1,7 @@
 using Content.Shared.StatusEffect;
+using Content.Shared.SS220.CultYogg.Components;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
 public abstract class SharedMiGoHealSystem : EntitySystem
 {

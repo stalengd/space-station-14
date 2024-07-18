@@ -11,8 +11,9 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.SS220.CultYogg.Components;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
 public abstract class SharedCultYoggSystem : EntitySystem
 {

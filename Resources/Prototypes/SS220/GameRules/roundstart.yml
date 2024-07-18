@@ -4,7 +4,7 @@
   noSpawn: true
   components:
   - type: GameRule
-    minPlayers: 60
+    minPlayers: 1 #ToDo calculate around 60
     delay:
       min: 240
       max: 420

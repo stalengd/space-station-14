@@ -38,15 +38,15 @@
 
 - type: entity
   id: ActionCultYoggDigest
-  name: Переварить
-  description: Отдать часть своих сил, чтобы переварить новый гриб
+  name: Микоз
+  description: Отдать часть калорий, чтобы переварить новый гриб
   noSpawn: true
   components:
   - type: InstantAction
     useDelay: 10
     event: !type:CultYoggDigestEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: qwert2}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: IconMycosis}
     checkCanInteract: false
 
 - type: entity

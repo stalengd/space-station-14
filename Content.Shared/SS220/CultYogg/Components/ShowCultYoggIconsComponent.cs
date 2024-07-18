@@ -2,7 +2,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Content.Shared.StatusIcon;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.Components;
 
 /// <summary>
 ///     This component allows you to see any icons related to CultYogg.

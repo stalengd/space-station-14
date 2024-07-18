@@ -3,7 +3,7 @@ using Content.Shared.Popups;
 using Content.Shared.Silicons.Laws.Components;
 using Content.Shared.Wires;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
 public abstract class SharedMiGoErectSystem : EntitySystem
 {

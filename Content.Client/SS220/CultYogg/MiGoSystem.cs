@@ -3,7 +3,8 @@ using Content.Shared.Ghost;
 using Content.Shared.Revenant.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
-using Content.Shared.SS220.CultYogg;
+using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.EntitySystems;
 
 namespace Content.Client.SS220.CultYogg;
 

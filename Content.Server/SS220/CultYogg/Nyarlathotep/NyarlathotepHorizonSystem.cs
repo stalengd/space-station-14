@@ -15,7 +15,7 @@ using Content.Server.SS220.CultYogg.Nyarlathotep.Events;
 using Content.Shared.Damage;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.SS220.CultYogg;
+using Content.Shared.SS220.CultYogg.Components;
 
 
 namespace Content.Server.SS220.CultYogg.Nyarlathotep;

@@ -7,8 +7,9 @@ using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.Serialization;
+using Content.Shared.SS220.CultYogg.Components;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
 /// <summary>
 /// Handles all corruption logic.

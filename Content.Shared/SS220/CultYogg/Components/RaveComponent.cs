@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using System.Numerics;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.Components;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class RaveComponent : Component

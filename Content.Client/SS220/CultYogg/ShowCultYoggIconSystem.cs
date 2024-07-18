@@ -1,19 +1,15 @@
-using Content.Shared.Access.Components;
-using Content.Shared.Access.Systems;
-using Content.Shared.Overlays;
-using Content.Shared.PDA;
-using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
-using Content.Shared.SS220.CultYogg;
-using Content.Client.Overlays;
+using Content.Shared.SS220.CultYogg.Components;
+using Robust.Client.Player;
 
 namespace Content.Client.SS220.CultYogg;
 
-public sealed class ShowCultYoggIconsSystem : EquipmentHudSystem<ShowCultYoggIconsComponent>
+public sealed class ShowCultYoggIconsSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     [ValidatePrototypeId<StatusIconPrototype>]
     private const string JobIconForNoId = "JobIconNoId";
@@ -22,15 +18,12 @@ public sealed class ShowCultYoggIconsSystem : EquipmentHudSystem<ShowCultYoggIco
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ShowCultYoggIconsComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
-        SubscribeLocalEvent<CultYoggSacrificialComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent2);
+        SubscribeLocalEvent<ShowCultYoggIconsComponent, GetStatusIconsEvent>(OnGetCultistsIconsEvent);
+        SubscribeLocalEvent<CultYoggSacrificialComponent, GetStatusIconsEvent>(OnGetSacraficialIconsEvent);
     }
 
-    private void OnGetStatusIconsEvent(EntityUid uid, ShowCultYoggIconsComponent _, ref GetStatusIconsEvent ev)
+    private void OnGetCultistsIconsEvent(EntityUid uid, ShowCultYoggIconsComponent _, ref GetStatusIconsEvent ev)
     {
-        if (!IsActive)
-            return;
-
         var iconId = JobIconForNoId;
 
         if (TryComp<ShowCultYoggIconsComponent>(uid, out var cultComp))
@@ -43,9 +36,10 @@ public sealed class ShowCultYoggIconsSystem : EquipmentHudSystem<ShowCultYoggIco
         else
             Log.Error($"Invalid job icon prototype: {iconPrototype}");
     }
-    private void OnGetStatusIconsEvent2(EntityUid uid, CultYoggSacrificialComponent _, ref GetStatusIconsEvent ev)
+    private void OnGetSacraficialIconsEvent(EntityUid uid, CultYoggSacrificialComponent _, ref GetStatusIconsEvent ev)
     {
-        if (!IsActive)
+        var viewer = _playerManager.LocalSession?.AttachedEntity;
+        if (viewer == uid)
             return;
 
         var iconId = JobIconForNoId;

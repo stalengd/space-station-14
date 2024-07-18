@@ -19,10 +19,10 @@ using Content.Shared.Movement.Systems;
 using Robust.Shared.Serialization;
 using Content.Shared.StatusEffect;
 using Robust.Shared.Timing;
-using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
+using Content.Shared.SS220.CultYogg.Components;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
 public abstract class SharedMiGoSystem : EntitySystem
 {
@@ -56,7 +56,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, MiGoHealEvent>(MiGoHeal);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
-        //SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslaveOnDoAfter);
+
 
         SubscribeLocalEvent<MiGoComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
 
@@ -130,15 +130,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         args.Handled = true;
     }
-    private void MiGoEnslaveOnDoAfter(Entity<MiGoComponent> uid, ref MiGoEnslaveDoAfterEvent args)
-    {
-        if (args.Handled || args.Cancelled || args.Target == null)
-            return;
 
-        //ToDo Remove clients effects
-
-        args.Handled = true;
-    }
 
     private void MiGoAstral(Entity<MiGoComponent> uid, ref MiGoAstralEvent args)
     {
@@ -373,8 +365,5 @@ public sealed partial class AfterDeMaterialize : DoAfterEvent
     public override DoAfterEvent Clone() => this;
 }
 
-/// <summary>
-/// Raised on a melee weapon to calculate potential damage bonuses or decreases.
-/// </summary>
 [ByRefEvent]
 public record struct MiGoAstralAppearanceEvent();

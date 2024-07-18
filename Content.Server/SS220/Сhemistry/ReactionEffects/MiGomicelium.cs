@@ -4,7 +4,8 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Server.Medical;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
-using Content.Shared.SS220.CultYogg;
+using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Server.SS220.CultYogg;
 using Content.Shared.Humanoid;
 

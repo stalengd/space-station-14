@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Content.Shared.StatusIcon;
 
-namespace Content.Shared.SS220.CultYogg;
+namespace Content.Shared.SS220.CultYogg.Components;
 
 /// <summary>
 /// Used to markup cult's sacrifice targets

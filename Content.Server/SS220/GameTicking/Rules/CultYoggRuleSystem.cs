@@ -4,7 +4,7 @@ using Content.Server.SS220.GameTicking.Rules.Components;
 using Content.Server.Zombies;
 using Content.Server.Mind;
 using Content.Server.Antag;
-using Content.Shared.SS220.CultYogg;
+using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
@@ -16,6 +16,8 @@ using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Roles.Jobs;
 using Robust.Shared.Random;
+using System.Linq;
+using Content.Shared.Administration;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -36,7 +38,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         base.Initialize();
 
         SubscribeLocalEvent<CultYoggRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
-        SubscribeLocalEvent<CultYoggRuleComponent, MiGoEnslaveDoAfterEvent>(MiGoEnslave);//cant receive this shit
+        SubscribeLocalEvent<MiGoComponent, CultYoggEnslavedEvent>(MiGoEnslave);//cant receive this shit
     }
 
     /// <summary>
@@ -129,9 +131,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     /// </summary>
     /// <param name="args.User">MiGo</param>
     /// <param name="args.Target">Target of enslavement</param>
-    private void MiGoEnslave(Entity<CultYoggRuleComponent> uid, ref MiGoEnslaveDoAfterEvent args)
+    private void MiGoEnslave(Entity<MiGoComponent> uid, ref CultYoggEnslavedEvent args)
     {
-        if (args.Handled || args.Cancelled || args.Target == null)
+        if (args.Target == null)
             return;
 
         GetCultGamerule(out var gameRuleEntity, out var gameRule);
@@ -141,12 +143,17 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         MakeCultist((EntityUid) args.Target, gameRule);
 
-        args.Handled = true;
+        //args.Handled = true;
     }
 
     //it isn't working
     private void GetCultGamerule(out EntityUid? ruleEntity, out CultYoggRuleComponent? component)
     {
+        List<GameRuleInfo> _gameRulesList = new();
+        _gameRulesList = _gameTicker.GetAddedGameRules().Select(gr => new GameRuleInfo(GetNetEntity(gr), MetaData(gr).EntityPrototype?.ID ?? string.Empty)).ToList();
+
+        var gameRu = _gameTicker.GetAddedGameRules();
+
         var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
         ruleEntity = null;
         while (gameRules.MoveNext())
@@ -235,3 +242,6 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         return cultistsCount;
     }
 }
+
+[ByRefEvent, Serializable]
+public record struct CultYoggEnslavedEvent(EntityUid? Target);

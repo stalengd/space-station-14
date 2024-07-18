@@ -173,7 +173,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             var doafterArgs = new DoAfterArgs(
                 EntityManager,
                 uid,
-                TimeSpan.FromSeconds(4.14 /* Hand-picked value to match the sound */),
+                TimeSpan.FromSeconds(1.25 /* Hand-picked value to match the sound */),
                 new AfterDeMaterialize(),
                 uid
             )
@@ -205,12 +205,8 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (!args.Cancelled)
         {
             ChangeForm(uid, uid.Comp, true);
-            uid.Comp.MaterializedStart = _timing.CurTime;
 
-            var cooldownStart = _timing.CurTime;
-            var cooldownEnd = cooldownStart + uid.Comp.CooldownAfterMaterialize;
-
-            _actions.SetCooldown(uid.Comp.MiGoAstralActionEntity, cooldownStart, cooldownEnd);
+            _actions.StartUseDelay(uid.Comp.MiGoAstralActionEntity);
         }
     }
 
@@ -221,7 +217,12 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (!args.Cancelled)
         {
             ChangeForm(uid, uid.Comp, false);
-            _actions.StartUseDelay(uid.Comp.MiGoAstralActionEntity);
+            uid.Comp.DeMaterializedStart = _timing.CurTime;
+
+            var cooldownStart = _timing.CurTime;
+            var cooldownEnd = cooldownStart + uid.Comp.CooldownAfterMaterialize;
+
+            _actions.SetCooldown(uid.Comp.MiGoAstralActionEntity, cooldownStart, cooldownEnd);
         }
     }
 
@@ -248,22 +249,29 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (isMaterial)
         {
             _tag.AddTag(uid, "DoorBumpOpener");
+            comp.DeMaterializedStart = null;
+            /*
             if (HasComp<NpcFactionMemberComponent>(uid))
             {
                 _npcFaction.ClearFactions(uid);
                 _npcFaction.AddFaction(uid, "SimpleHostile");
             }
+            */
         }
         else
         {
             _tag.RemoveTag(uid, "DoorBumpOpener");
-            comp.MaterializedStart = null;
+            /*
             if (HasComp<NpcFactionMemberComponent>(uid))
             {
                 _npcFaction.ClearFactions(uid);
                 _npcFaction.AddFaction(uid, "DarkReaperPassive");
             }
+            */
         }
+
+        var ev = new MiGoAstralAppearanceEvent();
+        RaiseLocalEvent(uid, ref ev);
 
         UpdateMovementSpeed(uid, comp);
 
@@ -292,17 +300,14 @@ public abstract class SharedMiGoSystem : EntitySystem
 
             if (_net.IsServer && _actions.TryGetActionData(comp.MiGoAstralActionEntity, out var materializeData, false))
             {
-                var visibleEyes = materializeData.Cooldown.HasValue &&
-                materializeData.Cooldown.Value.End > _timing.CurTime &&
-                !comp.PhysicalForm;
+                //var visibleEyes = materializeData.Cooldown.HasValue && materializeData.Cooldown.Value.End > _timing.CurTime && !comp.PhysicalForm;
                 //_appearance.SetData(uid, DarkReaperVisual.GhostCooldown, visibleEyes);
             }
 
-            if (comp.MaterializedStart != null)
+            if (comp.DeMaterializedStart != null)
             {
-                
                 var maxDuration = comp.MaterializeDurations[2];
-                var diff = comp.MaterializedStart.Value + maxDuration - _timing.CurTime;
+                var diff = comp.DeMaterializedStart.Value + maxDuration - _timing.CurTime;
                 if (diff <= TimeSpan.Zero)
                 {
                     ChangeForm(uid, comp, false);
@@ -367,3 +372,9 @@ public sealed partial class AfterDeMaterialize : DoAfterEvent
 {
     public override DoAfterEvent Clone() => this;
 }
+
+/// <summary>
+/// Raised on a melee weapon to calculate potential damage bonuses or decreases.
+/// </summary>
+[ByRefEvent]
+public record struct MiGoAstralAppearanceEvent();

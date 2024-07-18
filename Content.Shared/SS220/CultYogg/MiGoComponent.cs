@@ -65,7 +65,7 @@ public sealed partial class MiGoComponent : Component
 
 
     [ViewVariables]
-    public TimeSpan? MaterializedStart;
+    public TimeSpan? DeMaterializedStart;
 
     [ViewVariables, DataField, AutoNetworkedField]
     public float MaterialMovementSpeed = 6f; //ToDo check this thing

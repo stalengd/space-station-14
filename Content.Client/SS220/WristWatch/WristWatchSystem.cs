@@ -5,10 +5,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.SS220.WristWatch;
 
-public sealed class WristWatchSystem : EntitySystem
+public sealed class WristWatchSystem : SharedWristWatchSystem<WristWatchComponent>
 {
     public override void Initialize()
     {
+        base.Initialize();
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
     }
 

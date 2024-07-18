@@ -18,6 +18,9 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.Serialization;
 using Content.Shared.StatusEffect;
+using Robust.Shared.Timing;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Systems;
 
 namespace Content.Shared.SS220.CultYogg;
 
@@ -35,6 +38,8 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _speedModifier = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
 
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
@@ -54,6 +59,9 @@ public abstract class SharedMiGoSystem : EntitySystem
         //SubscribeLocalEvent<MiGoComponent, MiGoEnslavetDoAfterEvent>(MiGoEnslaveOnDoAfter);
 
         SubscribeLocalEvent<MiGoComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
+
+        SubscribeLocalEvent<MiGoComponent, AfterMaterialize>(OnAfterMaterialize);
+        SubscribeLocalEvent<MiGoComponent, AfterDeMaterialize>(OnAfterDeMaterialize);
     }
 
     protected virtual void OnCompInit(Entity<MiGoComponent> uid, ref ComponentStartup args)
@@ -69,10 +77,10 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (args.Handled)
             return;
 
-        //maybe look into RevolutionaryRuleSystem
         if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
         {
-            _popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid);
+            if (_net.IsClient)
+                _popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid);
             return;
         }
 
@@ -100,14 +108,13 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         }
 
-        /*
-        if(HasComp<SacrificialComponent>(uid))
+        if (HasComp<CultYoggSacrificialComponent>(uid))
         {
             if (_net.IsClient)
                 _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-is-sacraficial"), args.Target, uid);
             return;
         }
-         */
+
         var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new MiGoEnslaveDoAfterEvent(), uid, args.Target)//ToDo estimate time for Enslave
         {
             Broadcast = false,
@@ -135,17 +142,89 @@ public abstract class SharedMiGoSystem : EntitySystem
 
     private void MiGoAstral(Entity<MiGoComponent> uid, ref MiGoAstralEvent args)
     {
-        if (uid.Comp.PhysicalForm)
+        if (!uid.Comp.PhysicalForm)
         {
-            ChangeForm(uid, uid.Comp, false);
+            var doafterArgs = new DoAfterArgs(
+                EntityManager,
+                uid,
+                TimeSpan.FromSeconds(1.25 /* Hand-picked value to match the sound */),
+                new AfterMaterialize(),
+                uid
+            )
+            {
+                Broadcast = false,
+                BreakOnDamage = false,
+                //BreakOnTargetMove = false,
+                //BreakOnUserMove = false,
+                NeedHand = false,
+                BlockDuplicate = true,
+                CancelDuplicate = false
+            };
+
+            var started = _doAfter.TryStartDoAfter(doafterArgs);
+            if (started)
+            {
+                _physics.SetBodyType(uid, BodyType.Static);
+                //_audio.PlayPredicted(comp.PortalOpenSound, uid, uid); //ToDo Our own sound
+            }
         }
         else
         {
-            ChangeForm(uid, uid.Comp, true);
+            var doafterArgs = new DoAfterArgs(
+                EntityManager,
+                uid,
+                TimeSpan.FromSeconds(4.14 /* Hand-picked value to match the sound */),
+                new AfterDeMaterialize(),
+                uid
+            )
+            {
+                Broadcast = false,
+                BreakOnDamage = false,
+                //BreakOnTargetMove = false,
+                //BreakOnUserMove = false,
+                NeedHand = false,
+                BlockDuplicate = true,
+                CancelDuplicate = false
+            };
+
+            var started = _doAfter.TryStartDoAfter(doafterArgs);
+            if (started)
+            {
+                //_audio.PlayPredicted(comp.PortalCloseSound, uid, uid); //ToDo Our own sound
+            }
         }
 
         //ToDo https://github.com/TheArturZh/space-station-14/blob/b0ee614751216474ddbeabab970b3ab505f63845/Content.Shared/SS220/DarkReaper/DarkReaperSharedSystem.cs#L4
     }
+    private void OnAfterMaterialize(Entity<MiGoComponent> uid, ref AfterMaterialize args)
+    {
+        args.Handled = true;
+
+        _physics.SetBodyType(uid, BodyType.KinematicController);
+
+        if (!args.Cancelled)
+        {
+            ChangeForm(uid, uid.Comp, true);
+            uid.Comp.MaterializedStart = _timing.CurTime;
+
+            var cooldownStart = _timing.CurTime;
+            var cooldownEnd = cooldownStart + uid.Comp.CooldownAfterMaterialize;
+
+            _actions.SetCooldown(uid.Comp.MiGoAstralActionEntity, cooldownStart, cooldownEnd);
+        }
+    }
+
+    private void OnAfterDeMaterialize(Entity<MiGoComponent> uid, ref AfterDeMaterialize args)
+    {
+        args.Handled = true;
+
+        if (!args.Cancelled)
+        {
+            ChangeForm(uid, uid.Comp, false);
+            _actions.StartUseDelay(uid.Comp.MiGoAstralActionEntity);
+        }
+    }
+
     public virtual void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial)
     {
         comp.PhysicalForm = isMaterial;
@@ -160,17 +239,30 @@ public abstract class SharedMiGoSystem : EntitySystem
                 _physics.SetCollisionLayer(uid, "fix1", fixture, layer);
             }
         }
+        /*
+        if (TryComp<EyeComponent>(uid, out var eye))
+            _eye.SetDrawFov(uid, isMaterial, eye);
+        _appearance.SetData(uid, DarkReaperVisual.PhysicalForm, isMaterial);
+        */
 
         if (isMaterial)
         {
-            _physics.SetBodyType(uid, BodyType.KinematicController);
             _tag.AddTag(uid, "DoorBumpOpener");
+            if (HasComp<NpcFactionMemberComponent>(uid))
+            {
+                _npcFaction.ClearFactions(uid);
+                _npcFaction.AddFaction(uid, "SimpleHostile");
+            }
         }
         else
         {
-            _physics.SetBodyType(uid, BodyType.Static);
             _tag.RemoveTag(uid, "DoorBumpOpener");
             comp.MaterializedStart = null;
+            if (HasComp<NpcFactionMemberComponent>(uid))
+            {
+                _npcFaction.ClearFactions(uid);
+                _npcFaction.AddFaction(uid, "DarkReaperPassive");
+            }
         }
 
         UpdateMovementSpeed(uid, comp);
@@ -185,6 +277,39 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         var speed = comp.PhysicalForm ? comp.MaterialMovementSpeed : comp.UnMaterialMovementSpeed;
         _speedModifier.ChangeBaseSpeed(uid, speed, speed, modifComp.Acceleration, modifComp);
+    }
+    // Update loop
+    public override void Update(float delta)
+    {
+        base.Update(delta);
+
+        var query = EntityQueryEnumerator<MiGoComponent>();
+
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (IsPaused(uid))
+                continue;
+
+            if (_net.IsServer && _actions.TryGetActionData(comp.MiGoAstralActionEntity, out var materializeData, false))
+            {
+                var visibleEyes = materializeData.Cooldown.HasValue &&
+                materializeData.Cooldown.Value.End > _timing.CurTime &&
+                !comp.PhysicalForm;
+                //_appearance.SetData(uid, DarkReaperVisual.GhostCooldown, visibleEyes);
+            }
+
+            if (comp.MaterializedStart != null)
+            {
+                
+                var maxDuration = comp.MaterializeDurations[2];
+                var diff = comp.MaterializedStart.Value + maxDuration - _timing.CurTime;
+                if (diff <= TimeSpan.Zero)
+                {
+                    ChangeForm(uid, comp, false);
+                    _actions.StartUseDelay(comp.MiGoAstralActionEntity);
+                }
+            }
+        }
     }
     private void MiGoHeal(Entity<MiGoComponent> uid, ref MiGoHealEvent args)
     {
@@ -229,4 +354,16 @@ public abstract class SharedMiGoSystem : EntitySystem
 [Serializable, NetSerializable]
 public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent
 {
+}
+
+[Serializable, NetSerializable]
+public sealed partial class AfterMaterialize : DoAfterEvent
+{
+    public override DoAfterEvent Clone() => this;
+}
+
+[Serializable, NetSerializable]
+public sealed partial class AfterDeMaterialize : DoAfterEvent
+{
+    public override DoAfterEvent Clone() => this;
 }

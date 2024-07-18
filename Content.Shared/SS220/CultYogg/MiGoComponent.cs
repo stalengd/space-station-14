@@ -50,14 +50,28 @@ public sealed partial class MiGoComponent : Component
     [ViewVariables, AutoNetworkedField]
     public bool PhysicalForm = true;//Is MiGo in phisycal form?
 
+    public TimeSpan CooldownAfterMaterialize = TimeSpan.FromSeconds(3);
+
+    /// <summary>
+    /// How long reaper can stay materialized, depending on stage
+    /// </summary>
+    [ViewVariables, DataField, AutoNetworkedField]
+    public List<TimeSpan> MaterializeDurations = new()
+    {
+        TimeSpan.FromSeconds(15),
+        TimeSpan.FromSeconds(20),
+        TimeSpan.FromSeconds(40)
+    };
+
+
     [ViewVariables]
     public TimeSpan? MaterializedStart;
 
     [ViewVariables, DataField, AutoNetworkedField]
-    public float MaterialMovementSpeed = 4f; //ToDo check this thing
+    public float MaterialMovementSpeed = 6f; //ToDo check this thing
 
     [ViewVariables, DataField, AutoNetworkedField]
-    public float UnMaterialMovementSpeed = 1f;//ToDo check this thing
+    public float UnMaterialMovementSpeed = 18f;//ToDo check this thing
 }
 
 //Visual

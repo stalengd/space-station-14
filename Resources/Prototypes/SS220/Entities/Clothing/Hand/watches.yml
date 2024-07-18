@@ -25,6 +25,8 @@
   - type: ActivatableUI
     key: enum.WristWatchUiKey.Key
     singleUser: true
+  - type: StaticPrice
+    price: 25
 
 - type: wristWatchStyle
   id: NTDigital
@@ -65,6 +67,8 @@
     sprite: SS220/Clothing/Hands/WristWatch/nt-watch-gold.rsi
   - type: WristWatch
     style: NTDigitalGold
+  - type: StaticPrice
+    price: 2000
 
 - type: wristWatchStyle
   id: NTDigitalGold

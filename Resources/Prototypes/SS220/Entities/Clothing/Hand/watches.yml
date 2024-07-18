@@ -69,6 +69,8 @@
     style: NTDigitalGold
   - type: StaticPrice
     price: 2000
+  - type: StealTarget
+    stealGroup: WristWatchGold
 
 - type: wristWatchStyle
   id: NTDigitalGold

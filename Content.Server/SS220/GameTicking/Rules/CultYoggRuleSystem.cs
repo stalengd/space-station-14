@@ -39,6 +39,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         SubscribeLocalEvent<CultYoggRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
         SubscribeLocalEvent<MiGoComponent, CultYoggEnslavedEvent>(MiGoEnslave);//cant receive this shit
+        //SubscribeLocalEvent<MiGoComponent, MobStateChangedEvent>(OnMobStateChanged);
+        //SubscribeLocalEvent<CultYoggComponent, CleansedEvent>();
+        //SubscribeLocalEvent<GodSummonedEvent>();
     }
 
     /// <summary>
@@ -146,13 +149,38 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         //args.Handled = true;
     }
 
-    //it isn't working
+//Wierd copypase function
     private void GetCultGamerule(out EntityUid? ruleEntity, out CultYoggRuleComponent? component)
     {
         List<GameRuleInfo> _gameRulesList = new();
         _gameRulesList = _gameTicker.GetAddedGameRules().Select(gr => new GameRuleInfo(GetNetEntity(gr), MetaData(gr).EntityPrototype?.ID ?? string.Empty)).ToList();
 
-        var gameRu = _gameTicker.GetAddedGameRules();
+        ruleEntity = null;
+        component = null;
+
+        foreach(var rule in _gameRulesList)
+        {
+            if (rule.Name != "CultYogg")
+                continue;
+
+            ruleEntity = GetEntity(rule.Entity);
+            TryComp(ruleEntity, out component);
+        }
+
+        // var gameRu = _gameTicker.GetAddedGameRules();
+        /*
+        var query = QueryActiveRules();
+        while (query.MoveNext(out var uid, out _, out var cultrule, out _))
+        {
+            TryComp(uid, out component);
+            ruleEntity = uid;
+        }
+        */
+        /*
+        while (query.MoveNext(out var uid, out _, out var nukeops, out _))
+        {
+            OnRoundEnd((uid, nukeops));
+        }
 
         var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
         ruleEntity = null;
@@ -163,9 +191,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
             ruleEntity = gameRules.Current;
             break;
-        }
+        }*/
 
-        TryComp(ruleEntity, out component);
+       // TryComp(ruleEntity, out component);
     }
 
     public bool MakeCultist(EntityUid uid, CultYoggRuleComponent component, bool initial = true)

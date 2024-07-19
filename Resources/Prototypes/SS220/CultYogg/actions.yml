@@ -1,3 +1,5 @@
+# © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+
 #Cultists actions
 - type: entity
   id: ActionCultYoggCorruptItem
@@ -122,7 +124,3 @@
     event: !type:MiGoSacrificeEvent
     itemIconStyle: NoItem
     icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: "summon1"}
-
-
-
-

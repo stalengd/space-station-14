@@ -2,8 +2,6 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
-using Content.Shared.StatusIcon;
-using Content.Shared.Antag;
 using Content.Shared.Roles;
 using Content.Shared.Nutrition.Components;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;

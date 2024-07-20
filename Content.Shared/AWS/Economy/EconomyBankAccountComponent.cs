@@ -3,7 +3,7 @@ using Content.Shared.Store;
 
 namespace Content.Shared.AW.Economy
 {
-    [RegisterComponent]
+    [RegisterComponent, AutoGenerateComponentState]
     public sealed partial class EconomyBankAccountComponent : Component
     {
         [ViewVariables(VVAccess.ReadWrite), DataField(required: true)]
@@ -11,17 +11,22 @@ namespace Content.Shared.AW.Economy
         [ViewVariables(VVAccess.ReadWrite), DataField(required: true)]
         public ProtoId<EconomyAccountIdPrototype> AccountIdByProto;
 
-        [ViewVariables(VVAccess.ReadWrite), DataField(required: true)]
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        [AutoNetworkedField]
         public ulong Balance = 0;
-        [ViewVariables(VVAccess.ReadWrite), DataField(required: false)]
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        [AutoNetworkedField]
         public ulong Penalty = 0;
 
-        [ViewVariables(VVAccess.ReadWrite), DataField()]
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        [AutoNetworkedField]
         public string AccountId = "NO VALUE";
-        [ViewVariables(VVAccess.ReadWrite), DataField(required: false)]
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        [AutoNetworkedField]
         public string AccountName = "UNEXPECTED USER";
 
-        [ViewVariables(VVAccess.ReadWrite), DataField(required: false)]
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        [AutoNetworkedField]
         public bool Blocked = false;
     }
 }

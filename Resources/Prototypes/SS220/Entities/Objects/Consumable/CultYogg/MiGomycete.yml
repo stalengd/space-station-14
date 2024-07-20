@@ -28,7 +28,7 @@
 
 - type: entity
   parent: SeedBase
-  name: packet of fly Mi'Go spores
+  name: packet of fly MiGo spores
   description: "The iconic, extremely deadly mushroom to be used for purely ornamental purposes."
   id: Mi'GoSeedsCult
   components:

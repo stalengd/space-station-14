@@ -71,7 +71,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         _actions.AddAction(uid, ref uid.Comp.MiGoAstralActionEntity, uid.Comp.MiGoAstralAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoErectActionEntity, uid.Comp.MiGoErectAction);
     }
-
+    #region Enslave
     private void MiGoEnslave(Entity<MiGoComponent> uid, ref MiGoEnslavementEvent args)
     {
         if (args.Handled)
@@ -130,8 +130,9 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         args.Handled = true;
     }
+    #endregion
 
-
+    #region Astral
     private void MiGoAstral(Entity<MiGoComponent> uid, ref MiGoAstralEvent args)
     {
         if (!uid.Comp.PhysicalForm)
@@ -308,6 +309,9 @@ public abstract class SharedMiGoSystem : EntitySystem
             }
         }
     }
+    #endregion
+
+    #region Heal
     private void MiGoHeal(Entity<MiGoComponent> uid, ref MiGoHealEvent args)
     {
         if (args.Handled)
@@ -321,6 +325,9 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         args.Handled = true;
     }
+    #endregion
+
+    #region Erect
     private void MiGoErect(EntityUid uid, MiGoComponent comp, MiGoErectEvent args)
     {
         //(Entity<MiGoComponent> uid, ref MiGoErectEvent args)
@@ -342,10 +349,14 @@ public abstract class SharedMiGoSystem : EntitySystem
         _userInterface.SetUiState(args.Entity, SiliconLawsUiKey.Key, state);
         */
     }
+    #endregion
+
+    #region MiGoSacrifice
     private void MiGoSacrifice(Entity<MiGoComponent> uid, ref MiGoSacrificeEvent args)
     {
 
     }
+    #endregion
 }
 
 [Serializable, NetSerializable]

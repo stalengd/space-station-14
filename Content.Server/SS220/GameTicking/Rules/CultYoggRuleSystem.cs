@@ -49,16 +49,12 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     /// </summary>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-        //AssignCaptain(uid, component);
+        AssignCaptain(uid, component); // absolutely stypid code, but for now is ok
         AssignHead(uid, component);
-        //AssignRegular(uid, component);
-    }
-    private void AssignSacriaficials(EntityUid uid, CultYoggRuleComponent component)
-    {
-        var allHumans = GetAliveHumans();
-
+        AssignRegular(uid, component);
     }
 
+    #region Sacreficials
     public List<EntityUid> GetAliveHumans()//maybe add here sacraficials and cultists filter
     {
         var mindQuery = EntityQuery<MindComponent>();
@@ -79,27 +75,35 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         return allHumans;
     }
-    private void AssignHead(EntityUid uid, CultYoggRuleComponent component)
+    private void AssignCaptain(EntityUid uid, CultYoggRuleComponent component)
     {
-        var mindQuery = EntityQuery<MindComponent>();
-
-        var allHumans = new List<EntityUid>();
+        var allHumans = GetAliveHumans();
 
         if (allHumans.Count == 0)
             return;
 
-        // HumanoidAppearanceComponent is used to prevent mice, pAIs, etc from being chosen
-        var query = EntityQueryEnumerator<MindContainerComponent, MobStateComponent, HumanoidAppearanceComponent>();
-        while (query.MoveNext(out var uids, out var mc, out var mobState, out _))
+        var allHeads = new List<EntityUid>();
+        foreach (var mind in allHumans)
         {
-            // the player needs to have a mind and not be the excluded one
-            if (mc.Mind == null || !HasComp<CultYoggComponent>(uid) || !HasComp<CultYoggSacrificialComponent>(uid))
-                continue;
-
-            // the player has to be alive
-            if (_mobState.IsAlive(uid, mobState))
-                allHumans.Add(mc.Mind.Value);
+            // RequireAdminNotify used as a cheap way to check for command department
+            if (_job.MindTryGetJob(mind, out _, out var prototype) && prototype.Name == "Captain")
+                allHeads.Add(mind);
         }
+
+        if (allHeads.Count == 0)
+        {
+            AssignHead(uid, component);
+            return;
+        }
+
+        SetTarget(_random.Pick(allHeads), component);
+    }
+    private void AssignHead(EntityUid uid, CultYoggRuleComponent component)
+    {
+        var allHumans = GetAliveHumans();
+
+        if (allHumans.Count == 0)
+            return;
 
         var allHeads = new List<EntityUid>();
         foreach (var mind in allHumans)
@@ -111,11 +115,32 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (allHeads.Count == 0)
         {
-            //should call pick random guy function
+            AssignRegular(uid, component);//should call pick random guy function
             return;
         }
 
         SetTarget(_random.Pick(allHeads), component);
+    }
+
+    private void AssignRegular(EntityUid uid, CultYoggRuleComponent component)
+    {
+        var allHumans = GetAliveHumans();
+
+        if (allHumans.Count == 0)
+            return;
+
+        var allRegulars = new List<EntityUid>();
+        foreach (var mind in allHumans)
+        {
+            // RequireAdminNotify used as a cheap way to check for command department
+            if (_job.MindTryGetJob(mind, out _, out var prototype) && !prototype.RequireAdminNotify)
+                allRegulars.Add(mind);
+        }
+
+        if (allRegulars.Count == 0)
+            return;
+
+        SetTarget(_random.Pick(allRegulars), component);
     }
 
     private void SetTarget(EntityUid uid, CultYoggRuleComponent component)
@@ -123,12 +148,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         //component.SacreficialsMinds.Add(uid); // maybe it should be mind
         //ToDo add target component on it
     }
+    #endregion
 
-    private void AfterEntitySelected(Entity<CultYoggRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
-    {
-        MakeCultist(args.EntityUid, ent);
-    }
-
+    #region Enslaving
     /// <summary>
     /// If MiGo enslaves somebody -- will call this
     /// </summary>
@@ -148,52 +170,12 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         //args.Handled = true;
     }
+    #endregion
 
-//Wierd copypase function
-    private void GetCultGamerule(out EntityUid? ruleEntity, out CultYoggRuleComponent? component)
+    #region Cultists making
+    private void AfterEntitySelected(Entity<CultYoggRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
-        List<GameRuleInfo> _gameRulesList = new();
-        _gameRulesList = _gameTicker.GetAddedGameRules().Select(gr => new GameRuleInfo(GetNetEntity(gr), MetaData(gr).EntityPrototype?.ID ?? string.Empty)).ToList();
-
-        ruleEntity = null;
-        component = null;
-
-        foreach(var rule in _gameRulesList)
-        {
-            if (rule.Name != "CultYogg")
-                continue;
-
-            ruleEntity = GetEntity(rule.Entity);
-            TryComp(ruleEntity, out component);
-        }
-
-        // var gameRu = _gameTicker.GetAddedGameRules();
-        /*
-        var query = QueryActiveRules();
-        while (query.MoveNext(out var uid, out _, out var cultrule, out _))
-        {
-            TryComp(uid, out component);
-            ruleEntity = uid;
-        }
-        */
-        /*
-        while (query.MoveNext(out var uid, out _, out var nukeops, out _))
-        {
-            OnRoundEnd((uid, nukeops));
-        }
-
-        var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
-        ruleEntity = null;
-        while (gameRules.MoveNext())
-        {
-            if (!HasComp<CultYoggRuleComponent>(gameRules.Current))
-                continue;
-
-            ruleEntity = gameRules.Current;
-            break;
-        }*/
-
-       // TryComp(ruleEntity, out component);
+        MakeCultist(args.EntityUid, ent);
     }
 
     public bool MakeCultist(EntityUid uid, CultYoggRuleComponent component, bool initial = true)
@@ -219,9 +201,11 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         return true;
     }
+    #endregion
 
+    #region EndText
     /// <summary>
-    /// EndTect copypasted from zombies. Hasn't finished.
+    /// EndText copypasted from zombies. Hasn't finished.
     /// </summary>
     protected override void AppendRoundEndText(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule,
     ref RoundEndTextAppendEvent args)
@@ -268,6 +252,37 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         }
 
         return cultistsCount;
+    }
+    #endregion
+
+    //Wierd copypase function-francenstein
+    private void GetCultGamerule(out EntityUid? ruleEntity, out CultYoggRuleComponent? component)
+    {
+        List<GameRuleInfo> _gameRulesList = new();
+        _gameRulesList = _gameTicker.GetAddedGameRules().Select(gr => new GameRuleInfo(GetNetEntity(gr), MetaData(gr).EntityPrototype?.ID ?? string.Empty)).ToList();
+
+        ruleEntity = null;
+        component = null;
+
+        foreach (var rule in _gameRulesList)
+        {
+            if (rule.Name != "CultYogg")
+                continue;
+
+            ruleEntity = GetEntity(rule.Entity);
+            TryComp(ruleEntity, out component);
+        }
+
+        var gameRules = _gameTicker.GetActiveGameRules().GetEnumerator();
+        ruleEntity = null;
+        while (gameRules.MoveNext())
+        {
+            if (!HasComp<CultYoggRuleComponent>(gameRules.Current))
+                continue;
+
+            ruleEntity = gameRules.Current;
+            break;
+        }
     }
 }
 

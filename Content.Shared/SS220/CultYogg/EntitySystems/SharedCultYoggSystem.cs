@@ -56,6 +56,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         }
     }
 
+    #region Puke
     private void PukeAction(Entity<CultYoggComponent> uid, ref CultYoggPukeShroomEvent args)
     {
         if (args.Handled)
@@ -100,7 +101,9 @@ public abstract class SharedCultYoggSystem : EntitySystem
             _actions.SetCooldown(uid.Comp.PukeShroomActionEntity.Value, start, end);
         }
     }
+    #endregion
 
+    #region Corruption
     private void CorruptItemAction(Entity<CultYoggComponent> uid, ref CultYoggCorruptItemEvent args)
     {
         if (args.Handled)
@@ -124,8 +127,10 @@ public abstract class SharedCultYoggSystem : EntitySystem
     {
         if (args.Handled)
             return;
+
         if (!_entityManager.TryGetComponent<HandsComponent>(uid, out var hands))
             return;
+
         if (hands.ActiveHand == null)
             return;
 
@@ -146,7 +151,9 @@ public abstract class SharedCultYoggSystem : EntitySystem
         }
         args.Handled = true;
     }
+    #endregion
 
+    #region Ascending
     private void AscendingAction(Entity<CultYoggComponent> uid, ref CultYoggAscendingEvent args)
     {
         /* idk what is this
@@ -192,4 +199,5 @@ public abstract class SharedCultYoggSystem : EntitySystem
             _actions.SetCooldown(comp.AscendingActionEntity.Value, start, end);
         }
     }
+    #endregion
 }

@@ -1,0 +1,120 @@
+- type: entity
+  name: hornTest
+  parent: BaseItem
+  id: HornTest
+  components:
+    - type: Gun
+      soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
+      soundEmpty: null
+      fireRate: 20
+      rojectileSpeed: 50
+      selectedMode: SemiAuto
+      availableModes:
+      - SemiAuto
+      - FullAuto
+    - type: BasicEntityAmmoProvider
+      proto: WatcherBolt
+      capacity: 1
+    - type: Sprite
+      sprite: SS220/Objects/Weapons/Guns/cult_yogg_spikegun.rsi
+      layers:
+        - state: icon_noammo
+    - type: Appearance
+    - type: RechargeBasicEntityAmmo
+      rechargeCooldown: 0.5
+    - type: UseDelay
+      delay: 5
+    - type: Wieldable
+    - type: IncreaseDamageOnWield
+      damage:
+       types:
+          Brute: 30
+          Stamina: 80
+
+- type: entity
+  id: BaseWawe
+  name: BaseWawe
+  description: If you hear this you're probably dead!
+  abstract: true
+  components:
+  - type: Reflective
+  - type: FlyBySound
+  - type: Clickable
+  - type: Sprite
+    noRot: false
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+    - state: bullet
+      shader: unshaded
+  - type: Physics
+    bodyType: Dynamic
+    linearDamping: 0
+    angularDamping: 0
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+      fly-by: &flybyfixture
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: False
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 14
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: entity
+  name: watcher bolt
+  id: TestWawe
+  parent: BaseBullet
+  noSpawn: true
+  components:
+  - type: FlyBySound
+    sound:
+      collection: EnergyMiss
+      params:
+        volume: 5
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
+    layers:
+    - state: omnilaser
+      shader: unshaded
+  - type: Ammo
+    muzzleFlash: null
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.2,-0.2,0.2,0.2"
+        hard: false
+        mask:
+        - Opaque
+      fly-by: *flybyfixture
+  - type: StaminaDamageOnCollide
+    damage: 40
+  - type: Projectile
+    #   soundHit:  Waiting on serv3
+    impactEffect: BulletImpactEffectDisabler
+    damage:
+      types:
+        Cold: 10
+  - type: TimedDespawn
+    lifetime: 3

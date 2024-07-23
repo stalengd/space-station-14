@@ -8,7 +8,18 @@
   },
   "states": [
     {
-      "name": "icon"
+      "name": "icon_noammo"
+    },
+    {
+      "name": "icon_fullammo"
+    },
+    {
+      "name": "noammo-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "noammo-inhand-right",
+      "directions": 4
     },
     {
       "name": "inhand-left",
@@ -17,6 +28,9 @@
     {
       "name": "inhand-right",
       "directions": 4
+    },
+    {
+      "name": "spike_projectile"
     }
   ]
 }

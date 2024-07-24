@@ -49,6 +49,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     /// </summary>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
+        //GenerateJobs
         AssignCaptain(uid, component); // absolutely stypid code, but for now is ok
         AssignHead(uid, component);
         AssignRegular(uid, component);

@@ -507,6 +507,7 @@
   loadouts:
   - QuartermasterHead
   - QuartermasterBeret
+  - QuartermasterHeadWarehouseman #SS220-QM-Trip
 
 - type: loadoutGroup
   id: QuartermasterJumpsuit
@@ -518,6 +519,7 @@
   - QuartermasterTurtleneckSkirt
   - QuartermasterFormalSuit
   - QuartermasterJumpsuitCargonovich #SS220-Cargonovich
+  - QuartermasterJumpsuitWarehouseman #SS220-QM-Trip
 
 - type: loadoutGroup
   id: QuartermasterNeck
@@ -533,6 +535,7 @@
   minLimit: 0
   loadouts:
   - QuartermasterWintercoat
+  - QuartermasterOuterCoatQMWarehouseman #SS220-QM-Trip
 
 - type: loadoutGroup
   id: QuartermasterShoes
@@ -682,7 +685,7 @@
   - StationEngineerHardhatYellow
   - StationEngineerHardhatOrange
   - StationEngineerHardhatRed
-  - SeniorEngineerBeret
+  # - SeniorEngineerBeret  #SS220 Seniors roles
 
 - type: loadoutGroup
   id: StationEngineerJumpsuit
@@ -691,8 +694,8 @@
   - StationEngineerJumpsuit
   - StationEngineerJumpskirt
   - StationEngineerHazardsuit
-  - SeniorEngineerJumpsuit
-  - SeniorEngineerJumpskirt
+  # - SeniorEngineerJumpsuit  #SS220 Seniors roles
+  # - SeniorEngineerJumpskirt  #SS220 Seniors roles
   - StationEngineerJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
   - StationEngineerJumpsuitTurtleneckAlt
   - StationEngineerJumpskirtTurtleneck
@@ -726,7 +729,7 @@
   name: loadout-group-station-engineer-id
   loadouts:
   - StationEngineerPDA
-  - SeniorEngineerPDA
+  # - SeniorEngineerPDA  #SS220 Seniors roles
 
 - type: loadoutGroup
   id: AtmosphericTechnicianJumpsuit
@@ -805,7 +808,7 @@
   loadouts:
   - RoboticistCap
   - SkullBandana
-  - ScientificBeret
+  # - ScientificBeret  #SS220 Seniors roles
 
 - type: loadoutGroup
   id: ScientistNeck
@@ -822,8 +825,8 @@
   - ScientistJumpskirt
   - RoboticistJumpsuit
   - RoboticistJumpskirt
-  - SeniorResearcherJumpsuit
-  - SeniorResearcherJumpskirt
+  # - SeniorResearcherJumpsuit  #SS220 Seniors roles
+  # - SeniorResearcherJumpskirt  #SS220 Seniors roles
   - ScientistJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
   - ScientistJumpsuitTurtleneckAlt
   - ScientistJumpskirtTurtleneck
@@ -847,7 +850,7 @@
   - ScienceWintercoat
   - RoboticistLabCoat
   - RoboticistWintercoat
-  - SeniorResearcherLabCoat
+  # - SeniorResearcherLabCoat  #SS220 Seniors roles
 
 - type: loadoutGroup
   id: ScientistShoes
@@ -871,7 +874,7 @@
   name: loadout-group-scientist-id
   loadouts:
   - ScientistPDA
-  - SeniorResearcherPDA
+  # - SeniorResearcherPDA  #SS220 Seniors roles
 
 - type: loadoutGroup
   id: ResearchAssistantJumpsuit
@@ -970,8 +973,8 @@
   - SecurityJumpskirt
   - SecurityJumpsuitGrey
   - SecurityJumpskirtGrey
-  - SeniorOfficerJumpsuit
-  - SeniorOfficerJumpskirt
+  # - SeniorOfficerJumpsuit  #SS220 Seniors roles
+  # - SeniorOfficerJumpskirt  #SS220 Seniors roles
   - SecurityJumpsuitTurtleneck #SS220-MoreTurtleneck-Begin
   - SecurityJumpskirtTurtleneck #SS220-MoreTurtleneck-End
 
@@ -1011,7 +1014,7 @@
   name: loadout-group-security-id
   loadouts:
   - SecurityPDA
-  - SeniorOfficerPDA
+  # - SeniorOfficerPDA  #SS220 Seniors roles
 
 - type: loadoutGroup
   id: DetectiveHead
@@ -1106,7 +1109,7 @@
   minLimit: 0
   loadouts:
   - MedicalBeret
-  - SeniorPhysicianBeret
+  # - SeniorPhysicianBeret  #SS220 Seniors roles
   - MedicalHeadMirror
   - BlueSurgeryCap
   - GreenSurgeryCap
@@ -1119,8 +1122,8 @@
   loadouts:
   - MedicalDoctorJumpsuit
   - MedicalDoctorJumpskirt
-  - SeniorPhysicianJumpsuit
-  - SeniorPhysicianJumpskirt
+  # - SeniorPhysicianJumpsuit  #SS220 Seniors roles
+  # - SeniorPhysicianJumpskirt  #SS220 Seniors roles
   - MedicalBlueScrubs
   - MedicalGreenScrubs
   - MedicalPurpleScrubs
@@ -1136,7 +1139,7 @@
   loadouts:
   - RegularLabCoat
   - MedicalDoctorWintercoat
-  - SeniorPhysicianLabCoat
+  # - SeniorPhysicianLabCoat  #SS220 Seniors roles
 
 - type: loadoutGroup
   id: MedicalBackpack
@@ -1158,7 +1161,7 @@
   name: loadout-group-medical-doctor-id
   loadouts:
   - MedicalDoctorPDA
-  - SeniorPhysicianPDA
+  # - SeniorPhysicianPDA  #SS220 Seniors roles
 
 - type: loadoutGroup
   id: MedicalGloves

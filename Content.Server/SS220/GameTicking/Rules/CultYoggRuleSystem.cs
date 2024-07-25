@@ -18,6 +18,8 @@ using Content.Shared.Roles.Jobs;
 using Robust.Shared.Random;
 using System.Linq;
 using Content.Shared.Administration;
+using Robust.Shared.Prototypes;
+using Content.Shared.Dataset;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -33,6 +35,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedJobSystem _job = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -49,10 +52,15 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     /// </summary>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-        //GenerateJobs
+        GenerateJobsList();
         AssignCaptain(uid, component); // absolutely stypid code, but for now is ok
         AssignHead(uid, component);
         AssignRegular(uid, component);
+    }
+
+    public void GenerateJobsList()
+    {
+        //var dataset = _proto.Index<DatasetPrototype>("Command");
     }
 
     #region Sacreficials

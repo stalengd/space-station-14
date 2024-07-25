@@ -13,6 +13,9 @@ public sealed class RaveSystem : SharedRaveSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+
+    [ValidatePrototypeId<DatasetPrototype>]
+    private const string PhrasesPlaceholders = "CultRlehPhrases";
     public override void Initialize()
     {
         base.Initialize();
@@ -40,10 +43,10 @@ public sealed class RaveSystem : SharedRaveSystem
             raving.NextIncidentTime +=
                 _random.NextFloat(raving.TimeBetweenIncidents.X, raving.TimeBetweenIncidents.Y);
 
-            _chat.TrySendInGameICMessage(uid, "Пиздец", InGameICChatType.Speak, ChatTransmitRange.Normal);
+            _chat.TrySendInGameICMessage(uid, PickPhrase(PhrasesPlaceholders), InGameICChatType.Speak, ChatTransmitRange.Normal);
         }
     }
-    private string PickEmote(string name)
+    private string PickPhrase(string name)
     {
         var dataset = _proto.Index<DatasetPrototype>(name);
         return _random.Pick(dataset.Values);

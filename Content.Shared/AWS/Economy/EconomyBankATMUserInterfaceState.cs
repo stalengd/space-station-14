@@ -25,6 +25,13 @@ public sealed class EconomyBankATMWithdrawMessage(ulong amount) : BoundUserInter
 }
 
 [Serializable, NetSerializable]
+public sealed class EconomyBankATMTransferMessage(ulong amount, string recipientAccountId) : BoundUserInterfaceMessage
+{
+    public readonly ulong Amount = amount;
+    public readonly string RecipientAccountId = recipientAccountId;
+}
+
+[Serializable, NetSerializable]
 public enum EconomyBankATMUiKey
 {
     Key

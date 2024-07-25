@@ -31,6 +31,7 @@ namespace Content.Shared.AW.Economy
             SubscribeLocalEvent<EconomyBankATMComponent, EntInsertedIntoContainerMessage>(OnATMItemSlotChanged);
             SubscribeLocalEvent<EconomyBankATMComponent, EntRemovedFromContainerMessage>(OnATMItemSlotChanged);
             SubscribeLocalEvent<EconomyBankATMComponent, EconomyBankATMWithdrawMessage>(OnATMWithdrawMessage);
+            SubscribeLocalEvent<EconomyBankATMComponent, EconomyBankATMTransferMessage>(OnATMTransferMessage);
         }
         private void OnStorageComponentInit(EntityUid entity, EconomyBankAccountStorageComponent component, ComponentInit eventArgs)
         {
@@ -107,6 +108,15 @@ namespace Content.Shared.AW.Economy
                 UpdateATMUserInterface((uid, atm), error);
         }
 
+        private void OnATMTransferMessage(EntityUid uid, EconomyBankATMComponent atm, EconomyBankATMTransferMessage args)
+        {
+            var bankAccount = GetATMInsertedAccount(atm);
+            if (bankAccount is null)
+                return;
+            if (!TryTransfer(bankAccount, (uid, atm), args.RecipientAccountId, args.Amount, out var error))
+                UpdateATMUserInterface((uid, atm), error);
+        }
+
         public EconomyBankAccountStorageComponent? GetStationAccountStorage()
         {
             AllEntityQuery<EconomyBankAccountStorageComponent>().MoveNext(out var _, out var comp);
@@ -131,6 +141,12 @@ namespace Content.Shared.AW.Economy
         {
             // UI should be updated 
             //UpdateATMUserInterface(???);
+        }
+
+        public bool TryTransfer(EconomyBankAccountComponent fromAccount, Entity<EconomyBankATMComponent> atm, string recipientAccountId, ulong amount, [NotNullWhen(false)] out string? errorMessage)
+        {
+            errorMessage = null;
+            return true;
         }
 
         private void UpdateATMUserInterface(Entity<EconomyBankATMComponent> entity, string? error = null)

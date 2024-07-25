@@ -20,6 +20,13 @@ public sealed class EconomyBankATMBoundUserInteface : BoundUserInterface
         SendMessage(new EconomyBankATMWithdrawMessage(amount));
     }
 
+    public void OnTransferPressed(ulong amount, string recipientId)
+    {
+        if (_bankAccount is null)
+            return;
+        SendMessage(new EconomyBankATMTransferMessage(amount, recipientId));
+    }
+
     protected override void Open()
     {
         base.Open();

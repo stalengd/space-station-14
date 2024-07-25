@@ -19,7 +19,7 @@ using Robust.Shared.Random;
 using System.Linq;
 using Content.Shared.Administration;
 using Robust.Shared.Prototypes;
-using Content.Shared.Dataset;
+using Content.Shared.Roles;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -36,6 +36,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly SharedJobSystem _job = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+
+    public List<List<String>> SacraficialTiers = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -48,22 +51,110 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
 
     /// <summary>
-    /// Used to generate sacraficials
+    /// Used to generate sacraficials at the start of the gamerule
     /// </summary>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         GenerateJobsList();
-        AssignCaptain(uid, component); // absolutely stypid code, but for now is ok
-        AssignHead(uid, component);
-        AssignRegular(uid, component);
-    }
 
-    public void GenerateJobsList()
-    {
-        //var dataset = _proto.Index<DatasetPrototype>("Command");
+        SetSacraficials(component);
     }
 
     #region Sacreficials
+
+    //Filling list of jobs fot better range
+    public void GenerateJobsList()
+    {
+
+        List<string> FirstTier = new List<string> { "Captain" };//just captain as main target
+
+        List<string> SecondTier = new ();//heads
+
+        if(!_proto.TryIndex<DepartmentPrototype>("Command", out var commandList))
+            return;
+
+        foreach (ProtoId<JobPrototype> role in commandList.Roles)
+        {
+            if (FirstTier.Contains(role.Id))
+                continue;
+
+            SecondTier.Add(role.Id);
+        }
+
+        List<string> ThirdTier = new();//everybody else except heads
+
+        foreach(var departament in _proto.EnumeratePrototypes<DepartmentPrototype>())
+        {
+            if (departament.ID == "GhostRoles")
+                continue;
+
+            if (departament.ID == "Command")
+                continue;
+
+            foreach (ProtoId<JobPrototype> role in departament.Roles)
+            {
+                if (FirstTier.Contains(role.Id))
+                    continue;
+
+                if (SecondTier.Contains(role.Id))
+                    continue;
+
+                ThirdTier.Add(role.Id);
+            }
+        }
+
+        SacraficialTiers.Add(FirstTier);
+        SacraficialTiers.Add(SecondTier);
+        SacraficialTiers.Add(ThirdTier);
+    }
+
+    public void SetSacraficials(CultYoggRuleComponent component)
+    {
+        var allHumans = GetAliveHumans();
+
+        if (allHumans is null)
+            return;
+
+        for (int i = 0; i < SacraficialTiers.Count; i++)
+        {
+            PickTieredPerson(allHumans, i);
+            //SetSacraficeTarget(uid, i);
+        }
+    }
+
+    public EntityUid? PickTieredPerson(List<EntityUid> allHumans, int tier)
+    {
+        if (tier >= SacraficialTiers.Count)
+            return null;
+
+        var allSuitable = new List<EntityUid>();
+
+        foreach (var mind in allHumans)
+        {
+            // RequireAdminNotify used as a cheap way to check for command department
+            if (!_job.MindTryGetJob(mind, out _, out var prototype))
+                continue;
+
+            if (SacraficialTiers[tier].Contains(prototype.Name))
+                allSuitable.Add(mind);
+        }
+
+        if (allSuitable.Count == 0)
+        {
+            return PickTieredPerson(allHumans, ++tier);//check this later
+        }
+
+        return _random.Pick(allSuitable);
+    }
+
+    public void SetSacraficeTarget(EntityUid uid, int tier)
+    {
+        //ToDo
+        //uid.EnsureComponent<CultYoggSaraficialComponent> + add tier
+        //GetGamerulecomponent
+        //CultYoggRuleComponent.ListOfSacraficials.Add(uid);
+    }
+
     public List<EntityUid> GetAliveHumans()//maybe add here sacraficials and cultists filter
     {
         var mindQuery = EntityQuery<MindComponent>();
@@ -83,79 +174,6 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         }
 
         return allHumans;
-    }
-    private void AssignCaptain(EntityUid uid, CultYoggRuleComponent component)
-    {
-        var allHumans = GetAliveHumans();
-
-        if (allHumans.Count == 0)
-            return;
-
-        var allHeads = new List<EntityUid>();
-        foreach (var mind in allHumans)
-        {
-            // RequireAdminNotify used as a cheap way to check for command department
-            if (_job.MindTryGetJob(mind, out _, out var prototype) && prototype.Name == "Captain")
-                allHeads.Add(mind);
-        }
-
-        if (allHeads.Count == 0)
-        {
-            AssignHead(uid, component);
-            return;
-        }
-
-        SetTarget(_random.Pick(allHeads), component);
-    }
-    private void AssignHead(EntityUid uid, CultYoggRuleComponent component)
-    {
-        var allHumans = GetAliveHumans();
-
-        if (allHumans.Count == 0)
-            return;
-
-        var allHeads = new List<EntityUid>();
-        foreach (var mind in allHumans)
-        {
-            // RequireAdminNotify used as a cheap way to check for command department
-            if (_job.MindTryGetJob(mind, out _, out var prototype) && prototype.RequireAdminNotify)
-                allHeads.Add(mind);
-        }
-
-        if (allHeads.Count == 0)
-        {
-            AssignRegular(uid, component);//should call pick random guy function
-            return;
-        }
-
-        SetTarget(_random.Pick(allHeads), component);
-    }
-
-    private void AssignRegular(EntityUid uid, CultYoggRuleComponent component)
-    {
-        var allHumans = GetAliveHumans();
-
-        if (allHumans.Count == 0)
-            return;
-
-        var allRegulars = new List<EntityUid>();
-        foreach (var mind in allHumans)
-        {
-            // RequireAdminNotify used as a cheap way to check for command department
-            if (_job.MindTryGetJob(mind, out _, out var prototype) && !prototype.RequireAdminNotify)
-                allRegulars.Add(mind);
-        }
-
-        if (allRegulars.Count == 0)
-            return;
-
-        SetTarget(_random.Pick(allRegulars), component);
-    }
-
-    private void SetTarget(EntityUid uid, CultYoggRuleComponent component)
-    {
-        //component.SacreficialsMinds.Add(uid); // maybe it should be mind
-        //ToDo add target component on it
     }
     #endregion
 

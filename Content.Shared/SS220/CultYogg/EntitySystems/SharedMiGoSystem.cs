@@ -359,46 +359,43 @@ public abstract class SharedMiGoSystem : EntitySystem
     private void MiGoSacrifice(Entity<MiGoComponent> uid, ref MiGoSacrificeEvent args)
     {
         var altarQuery = EntityQueryEnumerator<CultYoggAltarComponent, TransformComponent>();
-        EntityUid? altarEnt;
 
-        while (altarQuery.MoveNext(out var altarComp, out _))
+        while (altarQuery.MoveNext(out var altarUid, out var altarComp, out _))
         {
-            if (!_transform.InRange(Transform(uid).Coordinates, Transform(altarComp.Owner).Coordinates, altarComp.RitualStartRange))
+            if (_transform.InRange(Transform(uid).Coordinates, Transform(altarUid).Coordinates, altarComp.RitualStartRange))
             {
-                _popup.PopupEntity(Loc.GetString("cultyogg-altar-not-in-range"), uid, uid);
-                return;
+                TryDoSacrifice(altarUid, uid, altarComp);
             }
-            TryDoScrifice(altarComp.Owner, uid);
         }
     }
-    public bool TryDoScrifice(EntityUid altarUid, EntityUid user)
+    public bool TryDoSacrifice(EntityUid altarUid, EntityUid user, CultYoggAltarComponent altarComp)
     {
         if (!TryComp<StrapComponent>(altarUid, out var strapComp))
             return false;
 
+        if (altarComp == null)
+            return false;
+
+        if (strapComp.BuckledEntities == null)
+            return false;
+
         var targetUid = strapComp.BuckledEntities.FirstOrDefault();
+        var migoQuery = EntityQueryEnumerator<MiGoComponent>();
 
-        if (!HasComp<CultYoggSacrificialComponent>(targetUid))
-            return false;
-
-        if (!TryComp<CultYoggAltarComponent>(altarUid, out var altarComp))
-            return false;
-
-        var altarCoords = Transform(altarUid).Coordinates;
-        var query = new EntityQueryEnumerator<MiGoComponent, TransformComponent>();
-
-        while (query.MoveNext(out var migoComp, out _))
+        while (migoQuery.MoveNext(out var migoUid, out var miGoComponent))
         {
-            if (_transform.InRange(altarCoords, Transform(migoComp.Owner).Coordinates, altarComp.RitualStartRange))
-            {
+            if (miGoComponent == null)
+                continue;
+
+            if (_transform.InRange(Transform(migoUid).Coordinates, Transform(altarUid).Coordinates,  altarComp.RitualStartRange))
                 altarComp.CurrentlyAmoutMiGo++;
-            }
+
         }
 
-        if (altarComp.CurrentlyAmoutMiGo >= altarComp.RequiredAmountMiGo)
+        if (altarComp.CurrentlyAmoutMiGo < altarComp.RequiredAmountMiGo)
             return false;
 
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, 5f, new AltarDoAfterEvent(), altarUid, target: targetUid));
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, 5f, new MiGoSacrificeDoAfterEvent(), altarUid, target: targetUid));
 
         return true;
     }
@@ -407,7 +404,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 }
 
 [Serializable, NetSerializable]
-public sealed partial class AltarDoAfterEvent : SimpleDoAfterEvent { }
+public sealed partial class MiGoSacrificeDoAfterEvent : SimpleDoAfterEvent { }
 
 [Serializable, NetSerializable]
 public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent

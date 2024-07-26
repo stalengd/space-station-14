@@ -8,7 +8,7 @@ public sealed partial class CultYoggAltarComponent : Component
     [DataField]
     public int RequiredAmountMiGo = 3;
     [DataField(readOnly: true)]
-    public int? CurrentlyAmoutMiGo;
+    public int CurrentlyAmoutMiGo = 0;
     [DataField]
     public float RitualStartRange = 250f;
 }

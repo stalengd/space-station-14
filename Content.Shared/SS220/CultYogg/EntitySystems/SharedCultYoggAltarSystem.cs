@@ -5,6 +5,7 @@
 using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
+using Content.Shared.SS220.Buckle;
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Serialization;
 
@@ -17,12 +18,19 @@ public abstract class SharedCultYoggAltarSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<HumanoidAppearanceComponent, BuckleAttemptEvent>(OnBuckleAttempt);
+        SubscribeLocalEvent<CultYoggAltarComponent, BuckleAttemptEvent>(OnBuckleAttempt);
     }
 
-    private void OnBuckleAttempt(Entity<HumanoidAppearanceComponent> ent, ref BuckleAttemptEvent args)
+    private void OnBuckleAttempt(Entity<CultYoggAltarComponent> ent, ref BuckleAttemptEvent args)
     {
-        if (!HasComp<CultYoggSacrificialComponent>(ent))
+        if (!HasComp<HumanoidAppearanceComponent>(args.UserEntity))
             args.Cancelled = true;
+
+        if (!HasComp<CultYoggSacrificialComponent>(args.UserEntity))
+            args.Cancelled = true;
+
+        if (args.BuckledEntity == args.UserEntity)
+            args.Cancelled = true;
+
     }
 }

@@ -15,10 +15,10 @@ public sealed partial class CultYoggAltarSystem : SharedCultYoggAltarSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CultYoggAltarComponent, AltarDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<CultYoggAltarComponent, MiGoSacrificeDoAfterEvent>(OnDoAfter);
     }
 
-    private void OnDoAfter(Entity<CultYoggAltarComponent> ent, ref AltarDoAfterEvent args)
+    private void OnDoAfter(Entity<CultYoggAltarComponent> ent, ref MiGoSacrificeDoAfterEvent args)
     {
         if (args.Cancelled)
             return;
@@ -28,7 +28,7 @@ public sealed partial class CultYoggAltarSystem : SharedCultYoggAltarSystem
 
         _body.GibBody(args.Target.Value, true);
 
-        RemComp<BuckleComponent>(ent);
+        RemComp<StrapComponent>(ent);
         RemComp<DestructibleComponent>(ent);
 
     }

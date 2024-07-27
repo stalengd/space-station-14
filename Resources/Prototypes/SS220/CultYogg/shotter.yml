@@ -19,25 +19,17 @@
       sprite: SS220/Objects/Weapons/Guns/cult_yogg_spikegun.rsi
       layers:
         - state: icon_noammo
-          map: ["base"]
+          map: ["sprite"]
     - type: Item
-      inhandVisuals:
-        left:
-        - state: noammo-inhand-left
-          map: ["test"]
-        right:
-        - state: inhand-right
-        - state: noammo-inhand-right
+      size: Normal
     - type: Appearance
     - type: RechargeBasicEntityAmmo
       rechargeCooldown: 10
+    - type: Spikegun
     - type: GenericVisualizer
       visuals:
         enum.AmmoVisuals.HasAmmo:
-          test:
-            False: {state: "noammo-inhand-left"}
-            True: {state: "inhand-left"}
-          base:
+          sprite:
             False: {state: "icon_noammo"}
             True: {state: "icon_fullammo"}
 
@@ -58,7 +50,7 @@
       shader: unshaded
   - type: Physics
     bodyType: Dynamic
-    linearDamping: 0.3 
+    linearDamping: 0.3
     angularDamping: 0
   - type: Fixtures
     fixtures:
@@ -101,4 +93,3 @@
     lifetime: 0.4
   - type: GatheringProjectile
 
-  

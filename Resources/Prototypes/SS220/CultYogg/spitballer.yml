@@ -1,0 +1,64 @@
+- type: entity
+  name: spitballer
+  parent: BaseItem
+  id: Spitballer
+  components:
+    - type: Gun
+      fireRate: 11
+      soundEmpty: null
+    - type: FireExtinguisher
+      hasSafety: false
+    - type: BasicEntityAmmoProvider
+      proto: CartridgeAcid
+      capacity: 1
+    - type: Sprite
+      sprite: SS220/Objects/Weapons/Guns/cult_yogg_spitballer.rsi
+      layers:
+        - state: icon
+          map: ["sprite"]
+    - type: Item
+      size: Normal
+    - type: Appearance
+    - type: RechargeBasicEntityAmmo
+      rechargeCooldown: 5
+    - type: GenericVisualizer
+      visuals:
+        enum.AmmoVisuals.HasAmmo:
+          sprite:
+            False: {state: "icon"}
+            True: {state: "icon"}
+
+- type: entity
+  id: CartridgeAcid
+  name: acid spit
+  parent: BaseCartridge
+  noSpawn: true
+  components:
+    - type: CartridgeAmmo
+      proto: Acid
+      count: 10
+      spread: 45
+
+- type: entity
+  id: Acid
+  name: acid spit
+  parent: BaseBullet
+  noSpawn: true
+  components:
+    - type: TimedDespawn
+      lifetime: 2
+    - type: Physics
+      bodyType: Dynamic
+      linearDamping: 6
+      angularDamping: 10
+    - type: Projectile
+      impactEffect: BulletImpactEffect
+      damage:
+        types:
+          Caustic: 5
+    - type: Sprite
+      sprite: Objects/Weapons/Guns/Projectiles/xeno_toxic.rsi
+      layers:
+        - state: xeno_toxic
+    - type: Ammo
+      muzzleFlash: null

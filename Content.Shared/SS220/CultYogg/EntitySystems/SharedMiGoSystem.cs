@@ -362,21 +362,24 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         while (altarQuery.MoveNext(out var altarUid, out var altarComp, out _))
         {
-            if (_transform.InRange(Transform(uid).Coordinates, Transform(altarUid).Coordinates, altarComp.RitualStartRange))
-            {
-                TryDoSacrifice(altarUid, uid, altarComp);
-            }
+            if (!_transform.InRange(Transform(uid).Coordinates, Transform(altarUid).Coordinates, altarComp.RitualStartRange))
+                continue;
+
+            if (!TryComp<StrapComponent>(altarUid, out var strapComp))
+                continue;
+
+            if (strapComp.BuckledEntities == null)
+                continue;
+
+            TryDoSacrifice(altarUid, uid, altarComp);
         }
     }
     public bool TryDoSacrifice(EntityUid altarUid, EntityUid user, CultYoggAltarComponent altarComp)
     {
-        if (!TryComp<StrapComponent>(altarUid, out var strapComp))
-            return false;
-
         if (altarComp == null)
             return false;
 
-        if (strapComp.BuckledEntities == null)
+        if (!TryComp<StrapComponent>(altarUid, out var strapComp))
             return false;
 
         var targetUid = strapComp.BuckledEntities.FirstOrDefault();
@@ -395,9 +398,9 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (altarComp.CurrentlyAmoutMiGo < altarComp.RequiredAmountMiGo)
             return false;
 
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, 5f, new MiGoSacrificeDoAfterEvent(), altarUid, target: targetUid));
+        var started = _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, 5f, new MiGoSacrificeDoAfterEvent(), altarUid, target: targetUid));
 
-        return true;
+        return started;
     }
 
     #endregion

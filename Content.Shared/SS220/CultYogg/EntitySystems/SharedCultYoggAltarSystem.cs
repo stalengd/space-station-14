@@ -13,8 +13,7 @@ namespace Content.Shared.SS220.CultYogg;
 
 public abstract class SharedCultYoggAltarSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -24,13 +23,34 @@ public abstract class SharedCultYoggAltarSystem : EntitySystem
     private void OnBuckleAttempt(Entity<CultYoggAltarComponent> ent, ref BuckleAttemptEvent args)
     {
         if (!HasComp<HumanoidAppearanceComponent>(args.UserEntity))
+        {
             args.Cancelled = true;
+            return;
+        }
 
         if (!HasComp<CultYoggSacrificialComponent>(args.UserEntity))
+        {
             args.Cancelled = true;
+            return;
+        }
 
-        if (args.BuckledEntity == args.UserEntity)
+        if (TryComp<BuckleComponent>(args.UserEntity, out var buckleComp) && buckleComp.Buckled)
+        {
             args.Cancelled = true;
+            return;
+        }
 
+    }
+
+    protected void UpdateAppearance(EntityUid uid, CultYoggAltarComponent? altarComp = null,
+    AppearanceComponent? appearanceComp = null)
+    {
+        if (!Resolve(uid, ref altarComp))
+            return;
+
+        if (!Resolve(uid, ref appearanceComp))
+            return;
+
+        _appearance.SetData(uid, CultYoggAltarComponent.CultYoggAltarVisuals.Sacrificed, altarComp.Used, appearanceComp);
     }
 }

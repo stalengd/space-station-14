@@ -26,7 +26,7 @@ public sealed partial class CultYoggRuleComponent : Component
     /// <summary>
     /// Storage for a sacraficials
     /// </summary>
-    public readonly List<EntityUid> Sacreficials = new();
+    public readonly List<EntityUid> SacraficialsList = new();
 
     public readonly int[] TierOfSacraficials = [1, 2, 3];//trying to save tier in target, so they might be replaced with the same lvl target
 

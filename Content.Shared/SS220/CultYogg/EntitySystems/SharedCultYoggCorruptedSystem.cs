@@ -9,6 +9,8 @@ using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Serialization;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Containers;
+using Robust.Shared.Random;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -24,10 +26,14 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedStackSystem _stackSystem = default!;
+    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     private readonly TimeSpan _corruptionDuration = TimeSpan.FromSeconds(3);
     private readonly Dictionary<ProtoId<EntityPrototype>, CultYoggCorruptedPrototype> _recipesBySourcePrototypeId = [];
     private readonly Dictionary<ProtoId<StackPrototype>, CultYoggCorruptedPrototype> _recipesBySourceStackType = [];
+    private readonly List<EntityUid> _dropEntitiesBuffer = [];
 
 
     public override void Initialize()
@@ -71,6 +77,8 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
         recipe = GetRecipeById(corruptedEntity.Comp.Recipe);
         if (recipe is null)
             return null;
+
+        TryDropAllContainedEntities(corruptedEntity);
 
         var coords = Transform(corruptedEntity).Coordinates;
         var normalEntity = Spawn(corruptedEntity.Comp.OriginalPrototypeId, coords);
@@ -229,7 +237,7 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
 
         _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(user)} used corrupt on {ToPrettyString(entity)} and made {ToPrettyString(corruptedEntity)}");
 
-        //ToDo if object is a storage, it should drop all its items
+        TryDropAllContainedEntities(entity);
 
         EnsureComp<CultYoggCorruptedComponent>(corruptedEntity, out var corrupted);
 
@@ -264,6 +272,33 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Drops entities from all attached containers
+    /// </summary>
+    private bool TryDropAllContainedEntities(EntityUid entity)
+    {
+        if (!TryComp<ContainerManagerComponent>(entity, out var containerManager))
+            return false;
+
+        _dropEntitiesBuffer.Clear();
+        var coords = Transform(entity).Coordinates;
+        foreach (var container in _containerSystem.GetAllContainers(entity, containerManager))
+        {
+            foreach (var item in container.ContainedEntities)
+            {
+                _dropEntitiesBuffer.Add(item);
+            }
+        }
+        foreach (var item in _dropEntitiesBuffer)
+        {
+            _transformSystem.AttachToGridOrMap(item);
+            _transformSystem.SetCoordinates(item, coords);
+            _transformSystem.SetWorldRotation(item, _random.NextAngle());
+        }
+        _dropEntitiesBuffer.Clear();
+        return true;
     }
 }
 

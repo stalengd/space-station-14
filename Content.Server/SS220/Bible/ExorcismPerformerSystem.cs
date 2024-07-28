@@ -85,8 +85,8 @@ public sealed class ExorcismPerformerSystem : SharedExorcismPerformerSystem
     private void OnExorcismPerformedOnCorrupted(Entity<CultYoggCorruptedComponent> entity, ref ExorcismPerformedEvent args)
     {
         var previousEntityString = ToPrettyString(entity);
-        var effectPrototype = entity.Comp.CorruptionReverseEffect;
-        var uncorruptedEntity = _cultYoggCorruptedSystem.RevertCorruption(entity);
+        var uncorruptedEntity = _cultYoggCorruptedSystem.RevertCorruption(entity, out var recipe);
+        var effectPrototype = recipe?.CorruptionReverseEffect;
         _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(args.Performer)} used exorcism on {previousEntityString} and made {ToPrettyString(uncorruptedEntity)}");
 
         if (uncorruptedEntity == null) return;

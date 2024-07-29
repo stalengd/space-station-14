@@ -233,12 +233,12 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (args.Target == null)
             return;
 
-        GetCultGamerule(out var gameRuleEntity, out var gameRule);
+        GetCultGameRuleComp(out var cultRuleComp);
 
-        if (gameRule == null)
+        if (cultRuleComp == null)
             return;
 
-        MakeCultist((EntityUid) args.Target, gameRule, false);
+        MakeCultist((EntityUid) args.Target, cultRuleComp, false);
 
         //args.Handled = true;
     }

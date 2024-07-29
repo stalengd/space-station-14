@@ -606,6 +606,7 @@
   - SalvageBoots
   - CargoWinterBoots
 
+
 # Engineering
 - type: loadoutGroup
   id: ChiefEngineerHead

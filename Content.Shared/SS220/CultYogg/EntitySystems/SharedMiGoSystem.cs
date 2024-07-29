@@ -368,7 +368,10 @@ public abstract class SharedMiGoSystem : EntitySystem
             if (!TryComp<StrapComponent>(altarUid, out var strapComp))
                 continue;
 
-            if (strapComp.BuckledEntities == null)
+            if (!strapComp.BuckledEntities.Any())
+                continue;
+
+            if (!HasComp<CultYoggSacrificialComponent>(strapComp.BuckledEntities.First()))
                 continue;
 
             TryDoSacrifice(altarUid, uid, altarComp);
@@ -384,6 +387,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         var targetUid = strapComp.BuckledEntities.FirstOrDefault();
         var migoQuery = EntityQueryEnumerator<MiGoComponent>();
+        var currentMiGoAmount = 0;
 
         while (migoQuery.MoveNext(out var migoUid, out var miGoComponent))
         {
@@ -391,14 +395,40 @@ public abstract class SharedMiGoSystem : EntitySystem
                 continue;
 
             if (_transform.InRange(Transform(migoUid).Coordinates, Transform(altarUid).Coordinates,  altarComp.RitualStartRange))
-                altarComp.CurrentlyAmoutMiGo++;
-
+                currentMiGoAmount++;
         }
 
-        if (altarComp.CurrentlyAmoutMiGo < altarComp.RequiredAmountMiGo)
-            return false;
+        if (currentMiGoAmount < altarComp.RequiredAmountMiGo)
+        {
+            if (_net.IsServer)
+                _popup.PopupEntity(Loc.GetString("cult-yogg-altar-not-enough-migo"), user, user);
 
-        var started = _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, 5f, new MiGoSacrificeDoAfterEvent(), altarUid, target: targetUid));
+            return false;
+        }
+
+        var sacrificeDoAfter = new DoAfterArgs(
+        EntityManager,
+        user,
+        altarComp.RutualTime,
+        new MiGoSacrificeDoAfterEvent(),
+        altarUid,
+        target: targetUid
+        )
+        {
+            BreakOnDamage = true,
+            BreakOnMove = true
+        };
+
+        var started = _doAfter.TryStartDoAfter(sacrificeDoAfter);
+
+        if (started)
+        {
+            if (_net.IsServer)
+                _popup.PopupEntity(Loc.GetString("cult-yogg-sacrifice-started", ("user", user), ("target", targetUid)),
+                 altarUid, PopupType.MediumCaution);
+
+            //_audio.PlayPredicted(altarComp.RitualSound, user, user); // TODO: ritual sound(mythic)
+        }
 
         return started;
     }

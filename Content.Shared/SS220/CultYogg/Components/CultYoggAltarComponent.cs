@@ -10,11 +10,12 @@ public sealed partial class CultYoggAltarComponent : Component
     [DataField]
     public int RequiredAmountMiGo = 3;
 
-    [DataField(readOnly: true)]
-    public int CurrentlyAmoutMiGo = 0;
+    [DataField]
+    public float RitualStartRange = 6f;
 
     [DataField]
-    public float RitualStartRange = 250f;
+    public TimeSpan RutualTime = TimeSpan.FromSeconds(25);
+
     [DataField]
     public bool Used = false;
 

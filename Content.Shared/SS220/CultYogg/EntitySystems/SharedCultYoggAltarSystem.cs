@@ -1,45 +1,51 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
-
-
 using Content.Shared.Buckle.Components;
-using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
-using Content.Shared.SS220.Buckle;
+using Content.Shared.Popups;
+using Content.Shared.Pulling.Events;
 using Content.Shared.SS220.CultYogg.Components;
-using Robust.Shared.Serialization;
+using Robust.Shared.Network;
 
 namespace Content.Shared.SS220.CultYogg;
 
 public abstract class SharedCultYoggAltarSystem : EntitySystem
 {
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly INetManager _net = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<CultYoggAltarComponent, BuckleAttemptEvent>(OnBuckleAttempt);
+        SubscribeLocalEvent<CultYoggSacrificialComponent, BeingPulledAttemptEvent>(OnBeingPulled);
+    }
+
+    private void OnBeingPulled(Entity<CultYoggSacrificialComponent> ent, ref BeingPulledAttemptEvent args)
+    {
+        if (TryComp<BuckleComponent>(ent, out var buckleComp) && HasComp<CultYoggAltarComponent>(buckleComp.BuckledTo))
+            args.Cancel();
     }
 
     private void OnBuckleAttempt(Entity<CultYoggAltarComponent> ent, ref BuckleAttemptEvent args)
     {
-        if (!HasComp<HumanoidAppearanceComponent>(args.UserEntity))
+        if (!HasComp<HumanoidAppearanceComponent>(args.BuckledEntity))
         {
             args.Cancelled = true;
             return;
         }
 
-        if (!HasComp<CultYoggSacrificialComponent>(args.UserEntity))
+        if (!HasComp<CultYoggSacrificialComponent>(args.BuckledEntity))
         {
             args.Cancelled = true;
-            return;
+
+            if (_net.IsServer)
+                _popup.PopupEntity(Loc.GetString("cult-yogg-buckle-attempt", ("user", args.BuckledEntity)),
+                 args.BuckledEntity, args.UserEntity, PopupType.SmallCaution);
         }
 
         if (TryComp<BuckleComponent>(args.UserEntity, out var buckleComp) && buckleComp.Buckled)
-        {
             args.Cancelled = true;
-            return;
-        }
-
     }
 
     protected void UpdateAppearance(EntityUid uid, CultYoggAltarComponent? altarComp = null,

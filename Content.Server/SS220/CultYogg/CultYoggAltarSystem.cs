@@ -14,7 +14,6 @@ public sealed partial class CultYoggAltarSystem : SharedCultYoggAltarSystem
     public override void Initialize()
     {
         base.Initialize();
-
         SubscribeLocalEvent<CultYoggAltarComponent, MiGoSacrificeDoAfterEvent>(OnDoAfter);
     }
 
@@ -26,10 +25,16 @@ public sealed partial class CultYoggAltarSystem : SharedCultYoggAltarSystem
         if (args.Target == null)
             return;
 
+        if (!TryComp<AppearanceComponent>(ent, out var appearanceComp))
+            return;
+
         _body.GibBody(args.Target.Value, true);
+        ent.Comp.Used = true;
 
         RemComp<StrapComponent>(ent);
+        RemComp<CultYoggAltarComponent>(ent);
         RemComp<DestructibleComponent>(ent);
 
+        UpdateAppearance(ent, ent.Comp, appearanceComp);
     }
 }

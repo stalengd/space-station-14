@@ -172,9 +172,9 @@
 - type: roleLoadout
   id: JobSalvageSpecialist
   groups:
-  - SalvageSpecialistHead
+  - SalvageSpecialistHead #SS220-Salvage-Loadouts-Update
   - SalvageSpecialistJumpsuit #SS220-MoreTurtleneck
-  - SalvageSpecialistBackpack
+  - SalvageSpecialistBackpack #SS220-Salvage-Loadouts-Update
   - SalvageSpecialistOuterClothing
   - SalvageSpecialistShoes
   - Glasses

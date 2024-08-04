@@ -19,4 +19,9 @@ public sealed partial class CultYoggSacrificialComponent : Component
 
     [DataField]
     public ProtoId<StatusIconPrototype> StatusIcon = "CultYoggSacraficialTarget";
+
+    public int Tier = 0;//initilize as max possible tier
+
+    [DataField]
+    public bool WasSacraficed = false;
 }

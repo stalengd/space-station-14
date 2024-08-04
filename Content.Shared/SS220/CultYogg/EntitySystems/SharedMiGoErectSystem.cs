@@ -37,7 +37,8 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<MiGoComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
-        SubscribeLocalEvent<MiGoComponent, MiGoErectBuildingSelectedMessage>(OnBuildingSelectedMessage);
+        SubscribeLocalEvent<MiGoComponent, MiGoErectBuildMessage>(OnBuildMessage);
+        SubscribeLocalEvent<MiGoComponent, MiGoErectEraseMessage>(OnEraseMessage);
 
         SubscribeLocalEvent<CultYoggBuildingFrameComponent, ComponentInit>(OnBuildingFrameInit);
         SubscribeLocalEvent<CultYoggBuildingFrameComponent, InteractUsingEvent>(OnBuildingFrameInteractUsing);
@@ -59,12 +60,13 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         });
     }
 
-    private void OnBuildingSelectedMessage(Entity<MiGoComponent> entity, ref MiGoErectBuildingSelectedMessage args)
+    private void OnBuildMessage(Entity<MiGoComponent> entity, ref MiGoErectBuildMessage args)
     {
+        if (entity.Owner != args.Actor)
+            return;
         if (!_prototypeManager.TryIndex(args.BuildingId, out var buildingPrototype))
             return;
-        var transform = Transform(entity);
-        var location = transform.Coordinates;
+        var location = GetCoordinates(args.Location);
         var tileRef = location.GetTileRef();
         if (tileRef == null || _turfSystem.IsTileBlocked(tileRef.Value, Physics.CollisionGroup.MachineMask))
         {
@@ -72,7 +74,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
             return;
         }
         var frameEntity = SpawnAtPosition(buildingPrototype.FrameEntityId, location);
-        Transform(frameEntity).LocalRotation = transform.LocalRotation.GetCardinalDir().ToAngle();
+        Transform(frameEntity).LocalRotation = args.Direction.ToAngle();
         var resultEntityProto = _prototypeManager.Index(buildingPrototype.ResultEntityId);
         _metaDataSystem.SetEntityName(frameEntity, Loc.GetString("cult-yogg-building-frame-name-template", ("name", resultEntityProto.Name)));
         var frame = EnsureComp<CultYoggBuildingFrameComponent>(frameEntity);
@@ -82,6 +84,16 @@ public sealed class SharedMiGoErectSystem : EntitySystem
             frame.AddedMaterialsAmount.Add(0);
         }
         Dirty(entity);
+    }
+
+    private void OnEraseMessage(Entity<MiGoComponent> entity, ref MiGoErectEraseMessage args)
+    {
+        if (entity.Owner != args.Actor)
+            return;
+        var buildingFrame = EntityManager.GetEntity(args.BuildingFrame);
+        if (!TryComp<CultYoggBuildingFrameComponent>(buildingFrame, out var frame))
+            return;
+        DestroyFrame((buildingFrame, frame));
     }
 
     private void OnBuildingFrameInit(Entity<CultYoggBuildingFrameComponent> entity, ref ComponentInit args)
@@ -112,14 +124,11 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         var item = args.Using.Value;
         InteractionVerb insertVerb = new()
         {
+            Text = Loc.GetString("place-item-verb-text", ("subject", verbSubject)),
+            Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/drop.svg.192dpi.png")),
             IconEntity = GetNetEntity(args.Using),
             Act = () => TryInsert(entity, item)
         };
-
-        insertVerb.Text = Loc.GetString("place-item-verb-text", ("subject", verbSubject));
-        insertVerb.Icon =
-            new SpriteSpecifier.Texture(
-                new ResPath("/Textures/Interface/VerbIcons/drop.svg.192dpi.png"));
 
         args.Verbs.Add(insertVerb);
     }
@@ -166,7 +175,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     private bool CanInsert(Entity<CultYoggBuildingFrameComponent> entity, EntityUid item, out int materialIndex)
     {
         materialIndex = 0;
-        if (!HasComp<MaterialComponent>(item) || !TryComp<StackComponent>(item, out var stack))
+        if (!TryComp<StackComponent>(item, out var stack))
             return false;
         if (!TryGetNeededMaterials(entity, out var neededMaterials))
             return false;

@@ -4,3 +4,4 @@ cult-yogg-building-frame-examined-material-needed = {$currentAmount}/{$totalAmou
 cult-yogg-building-frame-verb-destroy = Отменить постройку
 cult-yogg-building-tile-blocked-popup = Здесь нельзя разместить постройку
 cult-yogg-migo-erect-menu-title = Возведение
+cult-yogg-migo-erect-menu-erase-button = Отмена возведения

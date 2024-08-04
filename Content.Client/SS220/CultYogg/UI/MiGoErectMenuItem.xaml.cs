@@ -39,11 +39,11 @@ public sealed partial class MiGoErectMenuItem : ContainerButton
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         Panel.PanelOverride = _styleBox;
-        OnPressed += (args) =>
+        OnToggled += (args) =>
         {
             if (Building is null)
                 return;
-            _owner?.BuildingPressed(Building);
+            _owner?.OnItemToggled(this);
         };
     }
 

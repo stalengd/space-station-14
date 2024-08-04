@@ -13,17 +13,26 @@ public sealed partial class MiGoErectMenu : FancyWindow
     private readonly MiGoErectBoundUserInterface _owner;
     private List<CultYoggBuildingPrototype>? _buildings;
 
+    private float _maxItemsGridWidth = 0f;
+
     public MiGoErectMenu(MiGoErectBoundUserInterface owner)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         _owner = owner;
+        EraseButton.OnToggled += (args) => OnEraseToggled(args.Pressed);
     }
 
     protected override Vector2 ArrangeOverride(Vector2 finalSize)
     {
         finalSize = base.ArrangeOverride(finalSize);
-        ItemsContainer.MaxGridWidth = ItemsScrollContainer.Width - ItemsContainer.Margin.SumHorizontal;
+        var maxGridWidth = ItemsScrollContainer.Width - ItemsContainer.Margin.SumHorizontal;
+        if (maxGridWidth != _maxItemsGridWidth)
+        {
+            _maxItemsGridWidth = maxGridWidth;
+            ItemsContainer.MaxGridWidth = _maxItemsGridWidth;
+            ItemsScrollContainer.InvalidateArrange();
+        }
         return finalSize;
     }
 
@@ -40,8 +49,30 @@ public sealed partial class MiGoErectMenu : FancyWindow
         }
     }
 
-    public void BuildingPressed(CultYoggBuildingPrototype building)
+    public void SetSelectedItem(CultYoggBuildingPrototype? building)
     {
-        _owner.OnBuildingSelect(building);
+        foreach (var child in ItemsContainer.Children)
+        {
+            if (child is not MiGoErectMenuItem item)
+                continue;
+            item.Pressed = building == item.Building;
+        }
+    }
+
+    public void SetEraseEnabled(bool isErase)
+    {
+        EraseButton.Pressed = isErase;
+    }
+
+    public void OnItemToggled(MiGoErectMenuItem item)
+    {
+        if (item.Building is null)
+            return;
+        _owner.OnBuildingToggle(item.Building);
+    }
+
+    public void OnEraseToggled(bool isErase)
+    {
+        _owner.OnEraseToggle(isErase);
     }
 }

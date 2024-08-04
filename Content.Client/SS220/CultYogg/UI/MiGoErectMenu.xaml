@@ -5,20 +5,27 @@
                      Title="{Loc 'cult-yogg-migo-erect-menu-title'}"
                      MinSize="200 300"
                      SetSize="340 515">
-    <PanelContainer HorizontalExpand="True" VerticalExpand="True" Margin="10 10 10 10">
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
-        </PanelContainer.PanelOverride>
-    </PanelContainer>
-    <ScrollContainer
-        Name="ItemsScrollContainer"
-        Margin="10 10 10 10"
-        MinSize="130 130"
-        HScrollEnabled="False"
-        HorizontalExpand="True"
-        VerticalExpand="True">
-        <GridContainer Name="ItemsContainer" Margin="10 10 10 10" HorizontalAlignment="Center">
+    <BoxContainer Orientation="Vertical" Margin="10 10 10 10">
+        <BoxContainer Orientation="Horizontal">
+            <Control HorizontalExpand="True" />
+            <Button Name="EraseButton" ToggleMode="True" Text="{Loc 'cult-yogg-migo-erect-menu-erase-button'}" />
+        </BoxContainer>
+        <Control Margin="0 10 0 0" HorizontalExpand="True" VerticalExpand="True" >
+            <PanelContainer>
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+            <ScrollContainer
+                Name="ItemsScrollContainer"
+                MinSize="130 130"
+                HScrollEnabled="False"
+                HorizontalExpand="True"
+                VerticalExpand="True">
+                <GridContainer Name="ItemsContainer" Margin="10 10 10 10" HorizontalAlignment="Center">
 
-        </GridContainer>
-    </ScrollContainer>
+                </GridContainer>
+            </ScrollContainer>
+        </Control>
+    </BoxContainer>
 </controls:FancyWindow>

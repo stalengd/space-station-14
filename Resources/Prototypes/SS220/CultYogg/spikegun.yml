@@ -24,7 +24,7 @@
       size: Normal
     - type: Appearance
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 10
+      rechargeCooldown: 1.5
     - type: GenericVisualizer
       visuals:
         enum.AmmoVisuals.HasAmmo:
@@ -41,6 +41,7 @@
         - state: fullammo-inhand-right
           shader: unshaded
     - type: Irremovable
+      inHandItem: true
 
 - type: entity
   id: BaseSpike

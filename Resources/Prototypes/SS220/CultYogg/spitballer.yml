@@ -3,6 +3,7 @@
   parent: BaseItem
   id: SpitballerCultYogg
   components:
+    - type: Irremovable
     - type: Gun
       fireRate: 11
       soundEmpty: null

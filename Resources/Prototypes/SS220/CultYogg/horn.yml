@@ -3,6 +3,8 @@
   parent: BaseItem
   id: HornCultYogg
   components:
+    - type: Irremovable
+      inHandItem: true
     - type: Gun
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
       soundEmpty: null
@@ -34,7 +36,7 @@
       visuals:
         enum.AmmoVisuals.HasAmmo:
           sprite:
-            False: {state: "icon"}
+            False: {state: "icon-empty"}
             True: {state: "icon"}
     - type: GunByHasAmmoVisuals
       spriteLayer: null

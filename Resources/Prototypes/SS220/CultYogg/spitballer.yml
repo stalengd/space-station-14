@@ -4,6 +4,7 @@
   id: SpitballerCultYogg
   components:
     - type: Irremovable
+      inHandItem: true
     - type: Gun
       fireRate: 11
       soundEmpty: null

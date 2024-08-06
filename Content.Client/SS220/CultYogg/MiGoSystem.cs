@@ -3,7 +3,8 @@ using Content.Shared.Ghost;
 using Content.Shared.Revenant.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
-using Content.Shared.SS220.CultYogg;
+using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.EntitySystems;
 
 namespace Content.Client.SS220.CultYogg;
 
@@ -18,10 +19,14 @@ public sealed class MiHoSystem : SharedMiGoSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<MiGoComponent, AppearanceChangeEvent>(OnAppearanceChange, after: new[] { typeof(GenericVisualizerSystem) });
+        SubscribeLocalEvent<MiGoComponent, MiGoAstralAppearanceEvent>(MiGoAstralAppearance);
     }
+    private void MiGoAstralAppearance(Entity<MiGoComponent> uid, ref MiGoAstralAppearanceEvent args)
+    {
 
-    private void UpdateAppearance(EntityUid uid, MiGoComponent comp, SpriteComponent sprite, bool isPhysical)
+        UpdateAppearance(uid, uid.Comp, uid.Comp.PhysicalForm);
+    }
+    private void UpdateAppearance(EntityUid uid, MiGoComponent comp, bool isPhysical)
     {
         var controlled = _playerManager.LocalSession?.AttachedEntity;
         var isOwn = controlled == uid;
@@ -31,18 +36,13 @@ public sealed class MiHoSystem : SharedMiGoSystem
                            HasComp<RevenantComponent>(controlled));
         var canSeeGhosted = isOwn || canSeeOthers;
 
+        if (!TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+
         if (sprite.LayerMapTryGet(MiGoVisual.Base, out var layerIndex))
         {
             sprite.LayerSetVisible(layerIndex, (canSeeGhosted || isPhysical));
             sprite.LayerSetColor(layerIndex, (canSeeGhosted && !isPhysical) ? MiGoAstralColor : Color.White);
         }
-    }
-
-    private void OnAppearanceChange(EntityUid uid, MiGoComponent component, ref AppearanceChangeEvent args)
-    {
-        if (args.Sprite == null)
-            return;
-
-        UpdateAppearance(uid, component, args.Sprite, component.PhysicalForm);
     }
 }

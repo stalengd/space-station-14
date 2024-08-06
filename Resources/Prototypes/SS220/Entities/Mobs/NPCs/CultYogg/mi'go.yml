@@ -50,3 +50,9 @@
     tags:
     - CannotSuicide
     - DoorBumpOpener
+  - type: UserInterface
+    interfaces:
+      enum.MiGoErectUiKey.Key:
+       #type: FlatpackCreatorBoundUserInterface #just for check
+        type: MiGoErectBoundUserInterface
+  - type: ShowCultYoggIcons

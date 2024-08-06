@@ -1,13 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using System;
-using System.Linq;
-using Content.Server.Storage.EntitySystems;
-using Content.Server.Store.Systems;
-using Content.Shared.FixedPoint;
-using Content.Shared.SS220.CultYogg;
-using Content.Shared.Store;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
+using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Server.Actions;
 using Content.Server.Polymorph.Systems;
 using Content.Shared.Popups;
@@ -24,9 +17,18 @@ public sealed class MiGoSystem : SharedMiGoSystem
     public override void Initialize()
     {
         base.Initialize();
+
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslaveDoAfterEvent>(MiGoEnslaveOnDoAfter);
     }
-    protected override void OnCompInit(EntityUid uid, MiGoComponent comp, ComponentStartup args)
+    private void MiGoEnslaveOnDoAfter(Entity<MiGoComponent> uid, ref MiGoEnslaveDoAfterEvent args)
     {
-        base.OnCompInit(uid, comp, args);
+        if (args.Handled || args.Cancelled || args.Target == null)
+            return;
+
+        //ToDo Remove clients effects
+        var ev = new CultYoggEnslavedEvent(args.Target);
+        RaiseLocalEvent(uid, ref ev);
+
+        args.Handled = true;
     }
 }

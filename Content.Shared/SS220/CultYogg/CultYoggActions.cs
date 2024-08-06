@@ -24,16 +24,3 @@ public sealed partial class CultYoggAscendingEvent : InstantActionEvent
 {
 }
 
-[Serializable, NetSerializable]
-public sealed partial class CultYoggCorruptDoAfterEvent : SimpleDoAfterEvent
-{
-    public readonly bool InHand;
-
-    public readonly CultYoggCorruptedPrototype? Proto;
-
-    public CultYoggCorruptDoAfterEvent(CultYoggCorruptedPrototype? proto, bool inHand)
-    {
-        InHand = inHand;
-        Proto = proto;
-    }
-}

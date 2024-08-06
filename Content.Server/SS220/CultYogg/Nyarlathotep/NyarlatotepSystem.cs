@@ -1,10 +1,11 @@
+// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Server.Beam;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Random;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
-using Content.Shared.SS220.CultYogg;
+using Content.Shared.SS220.CultYogg.Components;
 
 namespace Content.Server.SS220.CultYogg.Nyarlathotep;
 
@@ -23,10 +24,14 @@ public sealed class NyarlathotepSystem : EntitySystem
     {
         foreach (var target in _entityLookupSystem.GetComponentsInRange<MobStateComponent>(_transform.GetMapCoordinates(user), range))
         {
-            if(!HasComp<MiGoComponent>(target.Owner) && !HasComp<NyarlathotepTargetComponent>(target.Owner) && _mobStateSystem.IsAlive(target.Owner))
-            {
+            if (HasComp<MiGoComponent>(target.Owner))
+                continue;
+
+            if (HasComp<NyarlathotepTargetComponent>(target.Owner))
+                continue;
+
+            if (_mobStateSystem.IsAlive(target.Owner))
                 EntityManager.AddComponent(target.Owner, new NyarlathotepTargetComponent());
-            }
         }
     }
 }

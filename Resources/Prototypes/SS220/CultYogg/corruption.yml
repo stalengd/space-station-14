@@ -1,10 +1,23 @@
+# © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+
 #list of corrupted recepies
 - type: corrupted
   id: WeaponRifleAk
-  corruptedEntity: WeaponRifleAk
+  from: 
+    prototypeId: WeaponRifleAk
   result: FoodSnackMREBrownie
+  corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: WeaponLaserCarbine
-  corruptedEntity: WeaponLaserCarbine
+  from: 
+    prototypeId: WeaponLaserCarbine
   result: FoodPacketMRETrash
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: SheetTokl
+  from:
+    stackType: Steel
+  result: SheetTokl
+  corruptionReverseEffect: ExorcismUncorruptEffect

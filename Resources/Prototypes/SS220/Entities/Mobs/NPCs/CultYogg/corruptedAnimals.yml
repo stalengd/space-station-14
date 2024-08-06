@@ -1,5 +1,7 @@
+# © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+
 - type: entity
-  name: space carp
+  name: base corrupted mob
   id: BaseMobCorrupted
   parent: [ MobRespirator, MobAtmosStandard, MobCombat ] #idk if they should breathe
   description: Unspeakable evil
@@ -59,10 +61,18 @@
       accent: genericAggressive
     - type: Speech
       speechVerb: LargeMob
-
+    - type: GhostRole
+      makeSentient: true
+      allowMovement: true
+      allowSpeech: false
+      name: ghost-role-information-corrupted-mob-cultyogg-name
+      description: ghost-role-information-corrupted-mob-cultyogg-description
+      rules: ghost-role-information-corrupted-mob-cultyogg-rules
+    - type: GhostTakeoverAvailable
+    - type: ShowCultYoggIcons
 
 - type: entity
-  parent: BaseMobCorrupted
+  parent: [BaseMobCorrupted , MobCow]
   id: CultCowCorrupted
   components:
   - type: Sprite

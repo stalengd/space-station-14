@@ -1,27 +1,27 @@
 - type: entity
-  name: hornTest
+  name: horn cult yogg
   parent: BaseItem
-  id: HornTest
+  id: HornCultYogg
   components:
     - type: Gun
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
       soundEmpty: null
       fireRate: 20
-      rojectileSpeed: 50
+      projectileSpeed: 5
       selectedMode: SemiAuto
       availableModes:
       - SemiAuto
       - FullAuto
     - type: BasicEntityAmmoProvider
-      proto: WatcherBolt
+      proto: HornGunBullet
       capacity: 1
     - type: Sprite
-      sprite: SS220/Objects/Weapons/Guns/cult_yogg_spikegun.rsi
+      sprite: SS220/Objects/Weapons/Guns/cult_yogg_horn.rsi
       layers:
-        - state: icon_noammo
+        - state: icon
     - type: Appearance
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.5
+      rechargeCooldown: 10
     - type: UseDelay
       delay: 5
     - type: Wieldable
@@ -30,91 +30,89 @@
        types:
           Brute: 30
           Stamina: 80
+    - type: GenericVisualizer
+      visuals:
+        enum.AmmoVisuals.HasAmmo:
+          sprite:
+            False: {state: "icon"}
+            True: {state: "icon"}
+    - type: GunByHasAmmoVisuals
+      spriteLayer: null
+      inhandVisuals:
+        left:
+        - state: fullammo-inhand-left
+          shader: unshaded
+        right:
+        - state: fullammo-inhand-right
+          shader: unshaded
 
 - type: entity
-  id: BaseWawe
-  name: BaseWawe
-  description: If you hear this you're probably dead!
-  abstract: true
-  components:
-  - type: Reflective
-  - type: FlyBySound
-  - type: Clickable
-  - type: Sprite
-    noRot: false
-    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
-    layers:
-    - state: bullet
-      shader: unshaded
-  - type: Physics
-    bodyType: Dynamic
-    linearDamping: 0
-    angularDamping: 0
-  - type: Fixtures
-    fixtures:
-      projectile:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.1,-0.1,0.1,0.1"
-        hard: false
-        mask:
-        - Impassable
-        - BulletImpassable
-      fly-by: &flybyfixture
-        shape: !type:PhysShapeCircle
-          radius: 1.5
-        layer:
-        - Impassable
-        - MidImpassable
-        - HighImpassable
-        - LowImpassable
-        hard: False
-  - type: Projectile
-    impactEffect: BulletImpactEffect
-    damage:
-      types:
-        Piercing: 14
-    soundHit:
-      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
-  - type: TimedDespawn
-    lifetime: 10
-
-- type: entity
-  name: watcher bolt
-  id: TestWawe
+  name: tesla gun lightning
+  id: HornGunBullet
   parent: BaseBullet
   noSpawn: true
   components:
-  - type: FlyBySound
-    sound:
-      collection: EnergyMiss
-      params:
-        volume: 5
-  - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
-    layers:
-    - state: omnilaser
-      shader: unshaded
-  - type: Ammo
-    muzzleFlash: null
-  - type: Physics
-  - type: Fixtures
-    fixtures:
-      projectile:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.2,-0.2,0.2,0.2"
-        hard: false
-        mask:
-        - Opaque
-      fly-by: *flybyfixture
-  - type: StaminaDamageOnCollide
-    damage: 40
-  - type: Projectile
-    #   soundHit:  Waiting on serv3
-    impactEffect: BulletImpactEffectDisabler
-    damage:
-      types:
-        Cold: 10
   - type: TimedDespawn
-    lifetime: 3
+    lifetime: 1
+  - type: Sprite
+    sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi
+    layers:
+    - state: tesla_projectile
+      shader: unshaded
+  - type: EmbeddableProjectile
+  - type: Projectile
+    deleteOnCollide: false
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: SpawnOnDespawn
+    prototype: StunnRune
+
+- type: entity
+  parent: CollideRune
+  id: StunnRune
+  name: "explosion rune"
+  components:
+    - type: Explosive
+      explosionType: Default
+      maxIntensity: 3.4
+      intensitySlope: 3
+      totalIntensity: 20
+      canCreateVacuum: false
+    - type: TriggerOnSpawn
+    - type: FlashOnTrigger
+      range: 7
+    - type: Sprite
+      sprite: Structures/Magic/Cult/trap.rsi
+      layers:
+        - state: trap
+          color: '#FF770055'
+    - type: TwoStageTrigger
+      triggerDelay: 0.5
+      components:
+        - type: AmbientSound
+          enabled: true
+          volume: -5
+          range: 14
+          sound:
+            path: /Audio/Effects/Grenades/Supermatter/whitehole_loop.ogg
+        - type: GravityWell
+          maxRange: 7
+          baseRadialAcceleration: -10
+          baseTangentialAcceleration: -5
+          gravPulsePeriod: 0.1
+        - type: SingularityDistortion
+          intensity: -10
+          falloffPower: 1.5
+        - type: PointLight
+          enabled: true
+          color: "#ffffff"
+          energy: 8
+          radius: 6
+          softness: 1
+          offset: "0, 0"
+        - type: ExplodeOnTrigger
+        - type: SoundOnTrigger
+          sound:
+            path: /Audio/Effects/Grenades/Supermatter/supermatter_end.ogg
+            params:
+              volume: 15

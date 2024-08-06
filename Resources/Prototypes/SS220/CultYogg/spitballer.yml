@@ -1,7 +1,7 @@
 - type: entity
-  name: spitballer
+  name: spitballer cult yogg
   parent: BaseItem
-  id: Spitballer
+  id: SpitballerCultYogg
   components:
     - type: Gun
       fireRate: 11
@@ -20,13 +20,22 @@
       size: Normal
     - type: Appearance
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 5
+      rechargeCooldown: 2
     - type: GenericVisualizer
       visuals:
         enum.AmmoVisuals.HasAmmo:
           sprite:
-            False: {state: "icon"}
+            False: {state: "icon-empty"}
             True: {state: "icon"}
+    - type: GunByHasAmmoVisuals
+      spriteLayer: null
+      inhandVisuals:
+        left:
+        - state: fullammo-inhand-left
+          shader: unshaded
+        right:
+        - state: fullammo-inhand-right
+          shader: unshaded
 
 - type: entity
   id: CartridgeAcid

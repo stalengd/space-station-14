@@ -1,7 +1,7 @@
 - type: entity
-  name: testWeapon
+  name: spikegun cult yogg
   parent: BaseItem
-  id: TestWeapon
+  id: SpikegunCultYogg
   components:
     - type: AmmoCounter
     - type: Gun
@@ -25,13 +25,22 @@
     - type: Appearance
     - type: RechargeBasicEntityAmmo
       rechargeCooldown: 10
-    - type: Spikegun
     - type: GenericVisualizer
       visuals:
         enum.AmmoVisuals.HasAmmo:
           sprite:
             False: {state: "icon_noammo"}
             True: {state: "icon_fullammo"}
+    - type: GunByHasAmmoVisuals
+      spriteLayer: null
+      inhandVisuals:
+        left:
+        - state: fullammo-inhand-left
+          shader: unshaded
+        right:
+        - state: fullammo-inhand-right
+          shader: unshaded
+    - type: Irremovable
 
 - type: entity
   id: BaseSpike

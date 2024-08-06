@@ -6,8 +6,6 @@
     - type: Gun
       fireRate: 11
       soundEmpty: null
-    - type: FireExtinguisher
-      hasSafety: false
     - type: BasicEntityAmmoProvider
       proto: CartridgeAcid
       capacity: 1

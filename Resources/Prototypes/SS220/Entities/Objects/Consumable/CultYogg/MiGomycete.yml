@@ -46,7 +46,7 @@
   plantRsi: SS220/Objects/CultYogg/migomycete.rsi
   packetPrototype: MiGoSeedsCult
   productPrototypes:
-    - FoodMi'GomyceteCult
+    - FoodMiGomyceteCult
   lifespan: 25
   maturation: 12
   production: 3

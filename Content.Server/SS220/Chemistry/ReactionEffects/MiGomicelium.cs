@@ -1,7 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
-using Content.Shared.Chemistry.Reagent;
-using Content.Server.Medical;
+using Content.Shared.EntityEffects;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Content.Shared.SS220.CultYogg.Components;
@@ -15,7 +14,7 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
     /// Used when someone eats MiGoShroom
     /// </summary>
     [UsedImplicitly]
-    public sealed partial class MiGomiceliumEffect : ReagentEffect //stub as vomit, will change when figure out
+    public sealed partial class MiGomiceliumEffect : EntityEffect //stub as vomit, will change when figure out
     {
         /// <summary>
         /// Minimum quantity of reagent required to trigger this effect.
@@ -32,8 +31,12 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
 
         [DataField]
         public float Time = 2.0f;
+        public override void Effect(EntityEffectBaseArgs args)
+        {
 
-        public override void Effect(ReagentEffectArgs args)
+        }
+        /*
+        public override void Effect(EntityEffectReagentArgs args)
         {
 
             if (args.Reagent == null || args.Quantity < AmountThreshold)
@@ -63,7 +66,8 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
                 entityManager.System<SharedRaveSystem>().TryApplyRavenness(args.SolutionEntity, time);
             }
         }
-        //DoNot forget to add note in guidebook
+        */
+            //DoNot forget to add note in guidebook
         protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("reagent-effect-guidebook-plant-phalanximine", ("chance", Probability));
     }
 }

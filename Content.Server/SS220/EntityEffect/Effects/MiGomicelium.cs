@@ -8,7 +8,7 @@ using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Server.SS220.CultYogg;
 using Content.Shared.Humanoid;
 
-namespace Content.Server.SS220.Chemistry.ReactionEffects
+namespace Content.Server.SS220.EntityEffect.Effects
 {
     /// <summary>
     /// Used when someone eats MiGoShroom
@@ -33,41 +33,35 @@ namespace Content.Server.SS220.Chemistry.ReactionEffects
         public float Time = 2.0f;
         public override void Effect(EntityEffectBaseArgs args)
         {
-
-        }
-        /*
-        public override void Effect(EntityEffectReagentArgs args)
-        {
-
-            if (args.Reagent == null || args.Quantity < AmountThreshold)
-                return;
-
             var time = Time;
-            time *= args.Scale;
+
+            if (args is EntityEffectReagentArgs reagentArgs)
+                time *= reagentArgs.Scale.Float();
+
 
             var entityManager = args.EntityManager;
 
-            if (entityManager.TryGetComponent<CultYoggComponent>(args.SolutionEntity, out var comp))
+            if (entityManager.TryGetComponent<CultYoggComponent>(args.TargetEntity, out var comp))
             {
-                entityManager.System<SharedCultYoggSystem>().ModifyEatenShrooms(args.SolutionEntity, comp);
+                entityManager.System<SharedCultYoggSystem>().ModifyEatenShrooms(args.TargetEntity, comp);
                 return;
             }
+            //ToDo
             //ADD here galutination + drunk
             //var vomitSys = entityManager.EntitySysManager.GetEntitySystem<VomitSystem>();//delete this after
             //vomitSys.Vomit(args.SolutionEntity, ThirstAmount, HungerAmount);
 
-            if (!entityManager.HasComponent<HumanoidAppearanceComponent>(args.SolutionEntity)) //if its an animal -- corrupt it
+            if (!entityManager.HasComponent<HumanoidAppearanceComponent>(args.TargetEntity)) //if its an animal -- corrupt it
             {
-                entityManager.System<CultYoggAnimalCorruptionSystem>().AnimalCorruption(args.SolutionEntity);
+                entityManager.System<CultYoggAnimalCorruptionSystem>().AnimalCorruption(args.TargetEntity);
             }
 
-            if (entityManager.HasComponent<HumanoidAppearanceComponent>(args.SolutionEntity))
+            if (entityManager.HasComponent<HumanoidAppearanceComponent>(args.TargetEntity))
             {
-                entityManager.System<SharedRaveSystem>().TryApplyRavenness(args.SolutionEntity, time);
+                entityManager.System<SharedRaveSystem>().TryApplyRavenness(args.TargetEntity, time);
             }
         }
-        */
-            //DoNot forget to add note in guidebook
-        protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("reagent-effect-guidebook-plant-phalanximine", ("chance", Probability));
+        //ToDos check the guidebook
+        protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("reagent-effect-guidebook-ss220-corrupt-mind", ("chance", Probability));
     }
 }

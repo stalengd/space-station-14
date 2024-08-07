@@ -336,7 +336,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         //will wait when sw will update ui parts to copy paste, cause rn it has an errors
         if (args.Handled || !TryComp<ActorComponent>(entity, out var actor))
             return;
-        args.Handled = true;
+        //args.Handled = true; // No cooldown for UI
 
         _miGoErectSystem.OpenUI(entity, actor);
     }

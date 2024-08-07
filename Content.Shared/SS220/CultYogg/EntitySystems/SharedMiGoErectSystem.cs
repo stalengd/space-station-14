@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Actions;
+using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Verbs;
-using Content.Shared.Materials;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.Interaction;
@@ -15,6 +16,9 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Robust.Shared.Timing;
+using Robust.Shared.Serialization;
+using Robust.Shared.Map;
+using Robust.Shared.Network;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -30,6 +34,9 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
 
     private readonly List<EntityUid> _dropEntitiesBuffer = [];
 
@@ -39,6 +46,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
         SubscribeLocalEvent<MiGoComponent, MiGoErectBuildMessage>(OnBuildMessage);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEraseMessage>(OnEraseMessage);
+        SubscribeLocalEvent<MiGoComponent, MiGoErectDoAfterEvent>(OnDoAfterErect);
 
         SubscribeLocalEvent<CultYoggBuildingFrameComponent, ComponentInit>(OnBuildingFrameInit);
         SubscribeLocalEvent<CultYoggBuildingFrameComponent, InteractUsingEvent>(OnBuildingFrameInteractUsing);
@@ -64,8 +72,16 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (entity.Owner != args.Actor)
             return;
-        if (!_prototypeManager.TryIndex(args.BuildingId, out var buildingPrototype))
+        if (!_prototypeManager.TryIndex(args.BuildingId, out _))
             return;
+        var erectAction = entity.Comp.MiGoErectActionEntity;
+        if (erectAction == null || !TryComp<InstantActionComponent>(erectAction, out var actionComponent))
+            return;
+        if (actionComponent.Cooldown.HasValue && actionComponent.Cooldown.Value.End > _gameTiming.CurTime)
+        {
+            _popupSystem.PopupEntity(Loc.GetString("cult-yogg-building-cooldown-popup"), entity, entity);
+            return;
+        }
         var location = GetCoordinates(args.Location);
         var tileRef = location.GetTileRef();
         if (tileRef == null || _turfSystem.IsTileBlocked(tileRef.Value, Physics.CollisionGroup.MachineMask))
@@ -73,17 +89,21 @@ public sealed class SharedMiGoErectSystem : EntitySystem
             _popupSystem.PopupEntity(Loc.GetString("cult-yogg-building-tile-blocked-popup"), entity, entity);
             return;
         }
-        var frameEntity = SpawnAtPosition(buildingPrototype.FrameEntityId, location);
-        Transform(frameEntity).LocalRotation = args.Direction.ToAngle();
-        var resultEntityProto = _prototypeManager.Index(buildingPrototype.ResultEntityId);
-        _metaDataSystem.SetEntityName(frameEntity, Loc.GetString("cult-yogg-building-frame-name-template", ("name", resultEntityProto.Name)));
-        var frame = EnsureComp<CultYoggBuildingFrameComponent>(frameEntity);
-        frame.BuildingPrototypeId = buildingPrototype.ID;
-        while (frame.AddedMaterialsAmount.Count < buildingPrototype.Materials.Count)
+        _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, entity, TimeSpan.FromSeconds(entity.Comp.ErectDoAfterSeconds),
+            new MiGoErectDoAfterEvent()
+            {
+                BuildingId = args.BuildingId,
+                Location = args.Location,
+                Direction = args.Direction,
+            }, entity, null, null)
         {
-            frame.AddedMaterialsAmount.Add(0);
-        }
-        Dirty(entity);
+            Broadcast = false,
+            BreakOnDamage = true,
+            BreakOnMove = true,
+            BlockDuplicate = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent,
+        });
     }
 
     private void OnEraseMessage(Entity<MiGoComponent> entity, ref MiGoErectEraseMessage args)
@@ -94,6 +114,26 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         if (!TryComp<CultYoggBuildingFrameComponent>(buildingFrame, out var frame))
             return;
         DestroyFrame((buildingFrame, frame));
+    }
+
+    private void OnDoAfterErect(Entity<MiGoComponent> entity, ref MiGoErectDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled)
+            return;
+        if (_netManager.IsClient)
+            return;
+        if (!_prototypeManager.TryIndex(args.BuildingId, out var buildingPrototype))
+            return;
+
+        var location = GetCoordinates(args.Location);
+        PlaceBuildingFrame(buildingPrototype, location, args.Direction);
+
+        var erectAction = entity.Comp.MiGoErectActionEntity;
+        if (erectAction == null || !TryComp<InstantActionComponent>(erectAction, out var actionComponent))
+            return;
+
+        _actionsSystem.SetCooldown(erectAction, actionComponent.UseDelay ?? TimeSpan.FromSeconds(1));
+        args.Handled = true;
     }
 
     private void OnBuildingFrameInit(Entity<CultYoggBuildingFrameComponent> entity, ref ComponentInit args)
@@ -165,6 +205,22 @@ public sealed class SharedMiGoErectSystem : EntitySystem
                 args.PushMarkup(Loc.GetString(locKey, ("material", materialName), ("currentAmount", addedCount), ("totalAmount", neededMaterial.Count)));
             }
         }
+    }
+
+    private Entity<CultYoggBuildingFrameComponent> PlaceBuildingFrame(CultYoggBuildingPrototype buildingPrototype, EntityCoordinates location, Direction direction)
+    {
+        var frameEntity = SpawnAtPosition(buildingPrototype.FrameEntityId, location);
+        Transform(frameEntity).LocalRotation = direction.ToAngle();
+        var resultEntityProto = _prototypeManager.Index(buildingPrototype.ResultEntityId);
+        _metaDataSystem.SetEntityName(frameEntity, Loc.GetString("cult-yogg-building-frame-name-template", ("name", resultEntityProto.Name)));
+        var frame = EnsureComp<CultYoggBuildingFrameComponent>(frameEntity);
+        frame.BuildingPrototypeId = buildingPrototype.ID;
+        while (frame.AddedMaterialsAmount.Count < buildingPrototype.Materials.Count)
+        {
+            frame.AddedMaterialsAmount.Add(0);
+        }
+        Dirty(new Entity<CultYoggBuildingFrameComponent>(frameEntity, frame));
+        return (frameEntity, frame);
     }
 
     private bool CanInsert(Entity<CultYoggBuildingFrameComponent> entity, EntityUid item)
@@ -287,4 +343,12 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         _dropEntitiesBuffer.Clear();
         Del(entity);
     }
+}
+
+[Serializable, NetSerializable]
+public sealed partial class MiGoErectDoAfterEvent : SimpleDoAfterEvent
+{
+    public ProtoId<CultYoggBuildingPrototype> BuildingId;
+    public NetCoordinates Location;
+    public Direction Direction;
 }

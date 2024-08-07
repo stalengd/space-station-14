@@ -73,6 +73,9 @@ public sealed partial class MiGoComponent : Component
 
     [ViewVariables, DataField, AutoNetworkedField]
     public float UnMaterialMovementSpeed = 18f;//ToDo check this thing
+
+    [ViewVariables, DataField]
+    public float ErectDoAfterSeconds = 3f;
 }
 
 //Visual

@@ -151,7 +151,8 @@ public sealed class MiGoErectBoundUserInterface : BoundUserInterface
             _placementInformation = new PlacementInformation
             {
                 IsTile = false,
-                PlacementOption = typeof(AlignTileEmpty).Name, // API forces this hack
+                Uses = 1,
+                PlacementOption = typeof(SnapgridCenter).Name, // API forces this hack
             };
             _placementManager.BeginPlacing(_placementInformation, hijack);
         }

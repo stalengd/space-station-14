@@ -7,14 +7,15 @@ using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Server.SS220.CultYogg;
 using Content.Shared.Humanoid;
+using Content.Server.EntityEffects.Effects;
 
-namespace Content.Server.SS220.EntityEffect.Effects
+namespace Content.Server.SS220.EntityEffects.Effects
 {
     /// <summary>
     /// Used when someone eats MiGoShroom
     /// </summary>
     [UsedImplicitly]
-    public sealed partial class MiGomiceliumEffect : EntityEffect //stub as vomit, will change when figure out
+    public sealed partial class ChemMiGomicelium : EntityEffect //stub as vomit, will change when figure out
     {
         /// <summary>
         /// Minimum quantity of reagent required to trigger this effect.

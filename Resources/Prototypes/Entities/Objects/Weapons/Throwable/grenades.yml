@@ -59,7 +59,7 @@
 
 - type: entity
   name: flashbang
-  description: Eeeeeeeeeeeeeeeeeeeeee
+  description: Eeeeeeeeeeeeeeeeeeeeee.
   parent: GrenadeBase
   id: GrenadeFlashBang
   components:
@@ -67,6 +67,7 @@
     sprite: Objects/Weapons/Grenades/flashbang.rsi
   - type: FlashOnTrigger
     range: 7
+    stun: true # 220 flash grenade stun
   - type: SoundOnTrigger
     sound:
       path: "/Audio/Effects/flash_bang.ogg"
@@ -386,7 +387,7 @@
         - Scientist
         - Borg
 # Corvax-HiddenDesc-End
-          
+
 - type: entity
   parent: GrenadeBase
   id: SmokeGrenade
@@ -409,7 +410,7 @@
   parent: SmokeGrenade
   id: CleanerGrenade
   name: cleanade
-  description: Special grenade for janitors, releasing large cloud of space cleaner foam
+  description: Special grenade for janitors, releasing large cloud of space cleaner foam.
   components:
   - type: Sprite
     sprite: Objects/Weapons/Grenades/janitor.rsi

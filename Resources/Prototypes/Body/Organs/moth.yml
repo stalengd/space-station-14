@@ -1,13 +1,14 @@
-﻿- type: entity
+- type: entity
   id: OrganMothStomach
   parent: [OrganAnimalStomach, OrganHumanStomach]
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: Stomach
     specialDigestible:
       tags:
       - ClothMade
       - Paper
+      - Omnivorous #SS220 Сult
   - type: SolutionContainerManager
     solutions:
       stomach:

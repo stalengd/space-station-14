@@ -18,7 +18,7 @@
 - type: entity
   abstract: true
   parent: BaseTargetObjective
-  id: BaseCultYoggSacraficeObjective
+  id: CultYoggSacraficeObjective
   components:
   - type: Objective
     unique: false
@@ -27,18 +27,17 @@
       state: icon
   - type: KillPersonCondition
 
-# requires that the god will be summoned
 - type: entity
   abstract: true
-  parent: BaseCultYoggObjective
-  id: BaseCultYoggSummonObjective
+  parent: BaseTargetObjective
+  id: BaseCultYoggSacraficeObjective
   components:
-  - type: HelpProgressCondition
   - type: Objective
     unique: false
     icon:
       sprite: Objects/Weapons/Guns/Pistols/viper.rsi #need to chose an icon for this
       state: icon
+  - type: KillPersonCondition
 
 # requires that the god will be summoned
 - type: entity

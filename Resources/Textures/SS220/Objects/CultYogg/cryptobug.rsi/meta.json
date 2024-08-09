@@ -11,15 +11,32 @@
       "name": "crypt"
     },
     {
-        "name": "crypt_activated",
-        "delays": [
-          [
-            0.2,
-            0.2,
-            0.2,
-            0.2
-          ]
+      "name": "crypt_activated",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
         ]
-      }
+      ]
+    },
+    {
+      "name": "crypt_ondoor",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    }
   ]
 }

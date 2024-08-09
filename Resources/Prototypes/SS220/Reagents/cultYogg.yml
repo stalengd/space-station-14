@@ -11,7 +11,7 @@
   metabolisms:
     Poison:
       effects:
-      - !type:MiGomiceliumEffect
+      - !type:ChemMiGomicelium
         time: 500
       - !type:GenericStatusEffect #ToDo копать здесь, чтобы сделать свой аналог
         key: SeeingRainbows

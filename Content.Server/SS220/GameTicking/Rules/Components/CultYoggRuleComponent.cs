@@ -18,15 +18,12 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public Dictionary<string, string> InitialCultistsNames = new();//Who was cultist on the gamestart.
 
-    [DataField]
-    public Dictionary<string, string> CultistsNames = new();
-
-    public readonly List<EntityUid> CultistMinds = new();
+    public readonly List<EntityUid> InitialCultistMinds = new();
 
     /// <summary>
     /// Storage for a sacraficials
     /// </summary>
-    public readonly List<EntityUid> Sacreficials = new();
+    public readonly List<EntityUid> SacraficialsList = new();
 
     public readonly int[] TierOfSacraficials = [1, 2, 3];//trying to save tier in target, so they might be replaced with the same lvl target
 

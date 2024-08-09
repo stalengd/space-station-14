@@ -7,7 +7,7 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: { sprite: SS220/Interface/actions/bible.rsi, state: exorcism }
+    icon: { sprite: SS220/Interface/Actions/bible.rsi, state: exorcism }
     itemIconStyle: BigAction
     event: !type:ExorcismActionEvent
     useDelay: 10

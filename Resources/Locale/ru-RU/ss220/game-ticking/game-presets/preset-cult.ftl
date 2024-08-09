@@ -13,4 +13,4 @@ cult-yogg-round-end-amount-none = [color=green]Все сторонники ку�
 cult-yogg-round-end-amount-low = [color=green]Почти все сторонники культа были уничтожены.[/color]
 cult-yogg-round-end-amount-medium = [color=yellow]Культ провалил призыв.[/color]
 cult-yogg-round-end-amount-high = [color=crimson]культ был близок к призыву.[/color]
-cult-yogg-round-end-amount-win = [color=darkred]Повелитель явился в наш мир![/color]
+cult-yogg-round-end-win = [color=darkred]Повелитель явился в наш мир![/color]

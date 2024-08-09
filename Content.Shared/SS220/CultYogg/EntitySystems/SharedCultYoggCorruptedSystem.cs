@@ -1,13 +1,16 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Robust.Shared.Network;
-using Robust.Shared.Prototypes;
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
-using System.Diagnostics.CodeAnalysis;
-using Robust.Shared.Serialization;
+using Content.Shared.Stacks;
 using Content.Shared.SS220.CultYogg.Components;
+using Robust.Shared.Serialization;
+using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Containers;
+using Robust.Shared.Random;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -22,9 +25,15 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly SharedStackSystem _stackSystem = default!;
+    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     private readonly TimeSpan _corruptionDuration = TimeSpan.FromSeconds(3);
-    private readonly Dictionary<string, CultYoggCorruptedPrototype> _recipes = [];
+    private readonly Dictionary<ProtoId<EntityPrototype>, CultYoggCorruptedPrototype> _recipesBySourcePrototypeId = [];
+    private readonly Dictionary<ProtoId<StackPrototype>, CultYoggCorruptedPrototype> _recipesBySourceStackType = [];
+    private readonly List<EntityUid> _dropEntitiesBuffer = [];
 
 
     public override void Initialize()
@@ -60,13 +69,21 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     /// </summary>
     /// <param name="corruptedEntity">Corrupted entity to revert</param>
     /// <returns>Newly created original form of the corrupted entity if any, otherwise <see langword="null"/></returns>
-    public EntityUid? RevertCorruption(Entity<CultYoggCorruptedComponent> corruptedEntity)
+    public EntityUid? RevertCorruption(Entity<CultYoggCorruptedComponent> corruptedEntity, out CultYoggCorruptedPrototype? recipe)
     {
-        if (corruptedEntity.Comp.PreviousForm is null)
+        recipe = null;
+        if (corruptedEntity.Comp.OriginalPrototypeId is null)
+            return null;
+        recipe = GetRecipeById(corruptedEntity.Comp.Recipe);
+        if (recipe is null)
             return null;
 
+        TryDropAllContainedEntities(corruptedEntity);
+
         var coords = Transform(corruptedEntity).Coordinates;
-        var normalEntity = Spawn(corruptedEntity.Comp.PreviousForm, coords);
+        var normalEntity = Spawn(corruptedEntity.Comp.OriginalPrototypeId, coords);
+
+        TryTransformStack(recipe, normalEntity, corruptedEntity, normalEntity);
 
         _entityManager.DeleteEntity(corruptedEntity);
         return normalEntity;
@@ -154,13 +171,37 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     /// <param name="corruption">Result recipe</param>
     private bool TryGetCorruptionRecipe(EntityUid uid, [NotNullWhen(true)] out CultYoggCorruptedPrototype? corruption)
     {
+        corruption = GetRecipeBySourcePrototypeId(uid)
+            ?? GetRecipeBySourceStackType(uid);
+        return corruption is not null;
+    }
+
+    /// <summary>
+    /// Just use <see cref="TryGetCorruptionRecipe(EntityUid, out CultYoggCorruptedPrototype?)"/>
+    /// </summary>
+    private CultYoggCorruptedPrototype? GetRecipeBySourcePrototypeId(EntityUid uid)
+    {
         var prototypeId = MetaData(uid).EntityPrototype!.ID;
         if (prototypeId == null)
-        {
-            corruption = null;
-            return false;
-        }
-        return _recipes.TryGetValue(prototypeId, out corruption);
+            return null;
+        return _recipesBySourcePrototypeId.GetValueOrDefault(prototypeId);
+    }
+
+    /// <summary>
+    /// Just use <see cref="TryGetCorruptionRecipe(EntityUid, out CultYoggCorruptedPrototype?)"/>
+    /// </summary>
+    private CultYoggCorruptedPrototype? GetRecipeBySourceStackType(EntityUid uid)
+    {
+        if (!TryComp(uid, out StackComponent? stack))
+            return null;
+        return _recipesBySourceStackType.GetValueOrDefault(stack.StackTypeId);
+    }
+
+    private CultYoggCorruptedPrototype? GetRecipeById(ProtoId<CultYoggCorruptedPrototype>? id)
+    {
+        if (!id.HasValue)
+            return null;
+        return _prototypeManager.Index(id.Value);
     }
 
     /// <summary>
@@ -168,10 +209,16 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     /// </summary>
     private void InitializeRecipes()
     {
-        _recipes.Clear();
+        _recipesBySourcePrototypeId.Clear();
+        _recipesBySourceStackType.Clear();
         foreach (var recipe in _prototypeManager.EnumeratePrototypes<CultYoggCorruptedPrototype>())
         {
-            _recipes.Add(recipe.ID, recipe);
+            if (recipe.FromEntity.PrototypeId.HasValue)
+                _recipesBySourcePrototypeId.Add(recipe.FromEntity.PrototypeId.Value, recipe);
+            else if (recipe.FromEntity.StackType.HasValue)
+                _recipesBySourceStackType.Add(recipe.FromEntity.StackType.Value, recipe);
+            else
+                Log.Warning("CultYoggCorruptedPrototype with id '{0}' has no ways to be used", recipe.ID);
         }
     }
 
@@ -190,15 +237,14 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
 
         _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(user)} used corrupt on {ToPrettyString(entity)} and made {ToPrettyString(corruptedEntity)}");
 
-        //ToDo if object is a storage, it should drop all its items
+        TryDropAllContainedEntities(entity);
 
-        //Every corrupted entity should have this entity at start
-        _entityManager.AddComponent<CultYoggCorruptedComponent>(corruptedEntity);//ToDo save previuos form here, so delete it when you do all the corrupted list
-        if (!_entityManager.TryGetComponent<CultYoggCorruptedComponent>(corruptedEntity, out var corrupted))
-            return null;
+        EnsureComp<CultYoggCorruptedComponent>(corruptedEntity, out var corrupted);
 
-        corrupted.PreviousForm = MetaData(entity).EntityPrototype?.ID;
-        corrupted.CorruptionReverseEffect = recipe.CorruptionReverseEffect;
+        corrupted.OriginalPrototypeId = MetaData(entity).EntityPrototype?.ID;
+        corrupted.Recipe = recipe.ID;
+
+        TryTransformStack(recipe, entity, entity, corruptedEntity);
 
         //Delete previous entity
         _entityManager.DeleteEntity(entity);
@@ -207,6 +253,52 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
             _hands.PickupOrDrop(user, corruptedEntity);
 
         return corruptedEntity;
+    }
+
+    /// <summary>
+    /// Checks and applies changes to <paramref name="entityTo"/> in case of stack curruption. Can be also usen to reverse corruption.
+    /// </summary>
+    /// <param name="recipe">Recipe to currupt/uncorrupt entity from</param>
+    /// <param name="originalEntity">Entity that is considered as an original form of an object</param>
+    /// <param name="entityFrom">Entity to get stack info from</param>
+    /// <param name="entityTo">Entity to set stack info to</param>
+    private bool TryTransformStack(CultYoggCorruptedPrototype recipe, EntityUid originalEntity, EntityUid entityFrom, EntityUid entityTo)
+    {
+        if (TryComp(entityFrom, out StackComponent? stackFrom) &&
+            TryComp(entityTo, out StackComponent? stackTo) &&
+            recipe.FromEntity.StackType == (originalEntity == entityFrom ? stackFrom : stackTo).StackTypeId)
+        {
+            _stackSystem.SetCount(entityTo, stackFrom.Count, stackTo);
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Drops entities from all attached containers
+    /// </summary>
+    private bool TryDropAllContainedEntities(EntityUid entity)
+    {
+        if (!TryComp<ContainerManagerComponent>(entity, out var containerManager))
+            return false;
+
+        _dropEntitiesBuffer.Clear();
+        var coords = Transform(entity).Coordinates;
+        foreach (var container in _containerSystem.GetAllContainers(entity, containerManager))
+        {
+            foreach (var item in container.ContainedEntities)
+            {
+                _dropEntitiesBuffer.Add(item);
+            }
+        }
+        foreach (var item in _dropEntitiesBuffer)
+        {
+            _transformSystem.AttachToGridOrMap(item);
+            _transformSystem.SetCoordinates(item, coords);
+            _transformSystem.SetWorldRotation(item, _random.NextAngle());
+        }
+        _dropEntitiesBuffer.Clear();
+        return true;
     }
 }
 

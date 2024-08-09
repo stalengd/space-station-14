@@ -21,6 +21,9 @@ using Content.Shared.StatusEffect;
 using Robust.Shared.Timing;
 using Content.Shared.NPC.Systems;
 using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.Mobs;
+using Content.Shared.Buckle.Components;
+using System.Linq;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -40,6 +43,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCultYoggHealSystem _heal = default!;
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
@@ -70,6 +74,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         _actions.AddAction(uid, ref uid.Comp.MiGoEnslavementActionEntity, uid.Comp.MiGoEnslavementAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoAstralActionEntity, uid.Comp.MiGoAstralAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoErectActionEntity, uid.Comp.MiGoErectAction);
+        _actions.AddAction(uid, ref uid.Comp.MiGoSacrificeActionEntity, uid.Comp.MiGoSacrificeAction);
     }
     #region Enslave
     private void MiGoEnslave(Entity<MiGoComponent> uid, ref MiGoEnslavementEvent args)
@@ -357,10 +362,86 @@ public abstract class SharedMiGoSystem : EntitySystem
     #region MiGoSacrifice
     private void MiGoSacrifice(Entity<MiGoComponent> uid, ref MiGoSacrificeEvent args)
     {
+        var altarQuery = EntityQueryEnumerator<CultYoggAltarComponent, TransformComponent>();
 
+        while (altarQuery.MoveNext(out var altarUid, out var altarComp, out _))
+        {
+            if (!_transform.InRange(Transform(uid).Coordinates, Transform(altarUid).Coordinates, altarComp.RitualStartRange))
+                continue;
+
+            if (!TryComp<StrapComponent>(altarUid, out var strapComp))
+                continue;
+
+            if (!strapComp.BuckledEntities.Any())
+                continue;
+
+            if (!HasComp<CultYoggSacrificialComponent>(strapComp.BuckledEntities.First()))
+                continue;
+
+            TryDoSacrifice(altarUid, uid, altarComp);
+        }
     }
+    public bool TryDoSacrifice(EntityUid altarUid, EntityUid user, CultYoggAltarComponent altarComp)
+    {
+        if (altarComp == null)
+            return false;
+
+        if (!TryComp<StrapComponent>(altarUid, out var strapComp))
+            return false;
+
+        var targetUid = strapComp.BuckledEntities.FirstOrDefault();
+        var migoQuery = EntityQueryEnumerator<MiGoComponent>();
+        var currentMiGoAmount = 0;
+
+        while (migoQuery.MoveNext(out var migoUid, out var miGoComponent))
+        {
+            if (miGoComponent == null)
+                continue;
+
+            if (_transform.InRange(Transform(migoUid).Coordinates, Transform(altarUid).Coordinates,  altarComp.RitualStartRange))
+                currentMiGoAmount++;
+        }
+
+        if (currentMiGoAmount < altarComp.RequiredAmountMiGo)
+        {
+            if (_net.IsServer)
+                _popup.PopupEntity(Loc.GetString("cult-yogg-altar-not-enough-migo"), user, user);
+
+            return false;
+        }
+
+        var sacrificeDoAfter = new DoAfterArgs(
+        EntityManager,
+        user,
+        altarComp.RutualTime,
+        new MiGoSacrificeDoAfterEvent(),
+        altarUid,
+        target: targetUid
+        )
+        {
+            BreakOnDamage = true,
+            BreakOnMove = true
+        };
+
+        var started = _doAfter.TryStartDoAfter(sacrificeDoAfter);
+
+        if (started)
+        {
+            if (_net.IsServer)
+                _popup.PopupEntity(Loc.GetString("cult-yogg-sacrifice-started", ("user", user), ("target", targetUid)),
+                 altarUid, PopupType.MediumCaution);
+
+            //_audio.PlayPredicted(altarComp.RitualSound, user, user); // TODO: ritual sound(mythic)
+        }
+
+        return started;
+    }
+
     #endregion
 }
+
+[Serializable, NetSerializable]
+public sealed partial class MiGoSacrificeDoAfterEvent : SimpleDoAfterEvent { }
 
 [Serializable, NetSerializable]
 public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent

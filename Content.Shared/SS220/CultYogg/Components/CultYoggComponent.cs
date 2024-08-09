@@ -76,8 +76,6 @@ public sealed partial class CultYoggComponent : Component
 
     public int ConsumedShrooms = 0; //buffer
 
-    public const int NeededForAscended = 3;//How many shrooms need to be consumed before ascension
-
     /// <summary>
     /// This will subtract (not add, don't get this mixed up) from the current hunger of the mob doing micoz
     /// </summary>

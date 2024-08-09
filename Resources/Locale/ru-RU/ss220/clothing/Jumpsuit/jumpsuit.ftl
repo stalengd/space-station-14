@@ -19,11 +19,15 @@ ent-ClothingUniformJumpsuitCargonovich = каргонович
 ent-ClothingUniformJumpsuitSyndicateDiplomatist = костюм дипломата Syndicate
     .desc = Костюм дипломата преступного синдиката, ничего необычного.
 ent-ClothingUniformJumpsuitNTR = униформа НТР
-    .desc = Униформа представителя NanoTrasen. Несите истину корпарации своими руками.
+    .desc = Униформа представителя NanoTrasen. Несите истину корпорации своими руками.
 ent-ClothingUniformJumpsuitFeldsher = униформа фельдшера
     .desc = Только не обижайтесь, вы фельдшер или настоящий врач?
 ent-ClothingUniformJumpsuitMilitaryFeldsher = униформа военного фельдшера
     .desc = Это отнюдь не красная окраска..
 ent-ClothingUniformJumpsuitTrustedLawyer = костюм доверенного юриста NanoTrasen
     .desc = Шикарный костюм для тех, кто следит за безупречным исполнением законов компании. Говорят, что вы способны навязать свои требования даже самому Богу.
+ent-ClothingUniformJumpsuitWarehouseman = рабочий комбинезон заведующего складом
+    .desc = Практичный, удобный, не стесняющий движения и главное стильный комбинезон. У вас с ним связаны плохие воспоминания о прошлом начальнике
+ent-ClothingUniformJumpsuitJanitorBlue = синий костюм уборщика
+    .desc = Костюм таинственного уборщика.
 

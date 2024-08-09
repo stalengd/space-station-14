@@ -154,8 +154,19 @@
   - type: Clothing
     sprite: SS220/Clothing/Uniforms/Jumpsuit/bartender_nt.rsi
 
-# Medical
+  # Уборщик
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitJanitorBlue
+  name: blue janitor's suit
+  description: The costume of the mysterious cleaner.
+  components:
+  - type: Sprite
+    sprite: SS220/Clothing/Uniforms/Jumpsuit/janitor_control.rsi
+  - type: Clothing
+    sprite: SS220/Clothing/Uniforms/Jumpsuit/janitor_control.rsi
 
+# Medical
 
   # Парамед
 - type: entity
@@ -196,6 +207,16 @@
   - type: Clothing
     sprite: SS220/Clothing/Uniforms/Jumpsuit/cargonovich.rsi
 
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitWarehouseman
+  name: the overalls of the warehouse manager
+  description: Practical, comfortable, movement-free and, most importantly, stylish jumpsuit. You have bad memories of your former boss with him.
+  components:
+  - type: Sprite
+    sprite: SS220/Clothing/Uniforms/Jumpsuit/qm_warehouseman.rsi
+  - type: Clothing
+    sprite: SS220/Clothing/Uniforms/Jumpsuit/qm_warehouseman.rsi
 
 # Syndicate
 

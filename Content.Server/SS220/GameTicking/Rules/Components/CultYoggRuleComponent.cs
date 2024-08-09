@@ -18,10 +18,7 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public Dictionary<string, string> InitialCultistsNames = new();//Who was cultist on the gamestart.
 
-    [DataField]
-    public Dictionary<string, string> CultistsNames = new();
-
-    public readonly List<EntityUid> CultistMinds = new();
+    public readonly List<EntityUid> InitialCultistMinds = new();
 
     /// <summary>
     /// Storage for a sacraficials

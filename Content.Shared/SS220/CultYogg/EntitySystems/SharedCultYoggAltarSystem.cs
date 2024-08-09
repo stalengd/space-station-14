@@ -29,22 +29,25 @@ public abstract class SharedCultYoggAltarSystem : EntitySystem
 
     private void OnBuckleAttempt(Entity<CultYoggAltarComponent> ent, ref BuckleAttemptEvent args)
     {
-        if (!HasComp<HumanoidAppearanceComponent>(args.BuckledEntity))
+        if (args.User == null)
+            return;
+
+        if (!HasComp<HumanoidAppearanceComponent>(args.Buckle))
         {
             args.Cancelled = true;
             return;
         }
 
-        if (!HasComp<CultYoggSacrificialComponent>(args.BuckledEntity))
+        if (!HasComp<CultYoggSacrificialComponent>(args.Buckle))
         {
             args.Cancelled = true;
 
             if (_net.IsServer)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-buckle-attempt", ("user", args.BuckledEntity)),
-                 args.BuckledEntity, args.UserEntity, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cult-yogg-buckle-attempt", ("user", args.Buckle)),
+                 args.Buckle, (EntityUid) args.User, PopupType.SmallCaution);
         }
 
-        if (TryComp<BuckleComponent>(args.UserEntity, out var buckleComp) && buckleComp.Buckled)
+        if (TryComp<BuckleComponent>(args.User, out var buckleComp) && buckleComp.Buckled)
             args.Cancelled = true;
     }
 

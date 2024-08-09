@@ -40,7 +40,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-
+    [Dependency] private readonly SharedCultYoggHealSystem _heal = default!;
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
 
@@ -317,11 +317,10 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (args.Handled)
             return;
 
-        //unregistred errors idk how to fix
-        //_entityManager.System<SharedMiGoHealSystem>().TryApplyMiGoHeal(args.Target, uid.Comp.HealingEffectTime);
+        if (!HasComp<CultYoggComponent>(args.Target))
+            return;
 
-        var ev = new MiGoSetHealStatusEvent(args.Target, uid.Comp.HealingEffectTime);
-        RaiseLocalEvent(uid, ref ev);
+        _heal.TryApplyMiGoHeal(args.Target, uid.Comp.HealingEffectTime);
 
         args.Handled = true;
     }

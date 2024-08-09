@@ -22,7 +22,7 @@ public sealed partial class CultYoggHealComponent : Component
             {"Heat", -4},
             {"Cold", -4},
             {"Shock", -4},
-            {"Airloss", -4},
+            {"Airloss", -5},
         }
     };
     /// <summary>

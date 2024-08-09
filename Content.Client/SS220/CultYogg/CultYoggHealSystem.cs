@@ -3,7 +3,7 @@ using Content.Shared.SS220.CultYogg.EntitySystems;
 
 namespace Content.Client.SS220.CultYogg;
 
-public sealed partial class CultYoggHealSystem : SharedMiGoHealSystem
+public sealed partial class CultYoggHealSystem : SharedCultYoggHealSystem
 {
     public override void Initialize()
     {

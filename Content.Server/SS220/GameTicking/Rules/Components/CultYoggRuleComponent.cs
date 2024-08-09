@@ -50,7 +50,7 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public int amountOfSacrifices = 0;
 
-    public int TotalTraitors => CultistMinds.Count;
+    public int TotalTraitors => InitialCultistMinds.Count;
     public enum SelectionState
     {
         WaitingForSpawn = 0,

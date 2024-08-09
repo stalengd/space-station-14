@@ -9,9 +9,9 @@
       soundEmpty: null
       fireRate: 20
       rojectileSpeed: 0.5
-      selectedMode: FullAuto
+      selectedMode: SemiAuto
       availableModes:
-      - FullAuto
+      - SemiAuto
     - type: BasicEntityAmmoProvider
       proto: Spike
       capacity: 15

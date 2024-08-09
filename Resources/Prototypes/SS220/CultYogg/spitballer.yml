@@ -39,20 +39,18 @@
 
 - type: entity
   id: CartridgeAcid
-  name: acid spit
-  parent: BaseCartridge
   noSpawn: true
+  name: acid spit
+  parent: BaseShellShotgun
   components:
     - type: CartridgeAmmo
-      proto: Acid
-      count: 10
-      spread: 45
+      proto: AcidSpitSpread
 
 - type: entity
-  id: Acid
+  id: AcidSpit
+  noSpawn: true
   name: acid spit
   parent: BaseBullet
-  noSpawn: true
   components:
     - type: TimedDespawn
       lifetime: 2
@@ -71,3 +69,13 @@
         - state: xeno_toxic
     - type: Ammo
       muzzleFlash: null
+
+- type: entity
+  id: AcidSpitSpread
+  noSpawn: true
+  parent: AcidSpit
+  components:
+  - type: ProjectileSpread
+    proto: AcidSpit
+    count: 10
+    spread: 45

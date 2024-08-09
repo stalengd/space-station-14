@@ -261,7 +261,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);
 
-        component.CultistMinds.Add(mindId);
+        if (initial)
+            component.CultistMinds.Add(mindId);
 
         // Change the faction
         _npcFaction.RemoveFaction(uid, component.NanoTrasenFaction, false);
@@ -286,7 +287,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (component.Summoned)
         {
-            args.AddLine(Loc.GetString("cult-yogg-round-end-amount-win"));
+            args.AddLine(Loc.GetString("cult-yogg-round-end-win"));
         }
         else
         {
@@ -304,19 +305,30 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         args.AddLine(Loc.GetString("cult-yogg-round-end-initial-count", ("initialCount", component.InitialCultistsNames.Count)));
 
         var antags = _antag.GetAntagIdentifiers(uid);
-        args.AddLine(Loc.GetString("zombie-round-end-initial-count", ("initialCount", antags.Count)));
-        foreach (var (_, data, entName) in antags)
+        //args.AddLine(Loc.GetString("zombie-round-end-initial-count", ("initialCount", antags.Count))); // ToDo Should we add this?
+        foreach (var (mind, data, entName) in antags)
         {
+            if (component.InitialCultistMinds.Contains(mind))
+                continue;
+
             args.AddLine(Loc.GetString("cult-yogg-round-end-user-was-initial",
                 ("name", entName),
                 ("username", data.UserName)));
         }
     }
-    private float GetCultistsFraction()//надо учесть МиГо
+    private float GetCultistsFraction()
     {
         int cultistsCount = 0;
-        var query = EntityQueryEnumerator<HumanoidAppearanceComponent, CultYoggComponent, MobStateComponent>();
-        while (query.MoveNext(out _, out _, out _, out var mob))
+        var queryCultists = EntityQueryEnumerator<HumanoidAppearanceComponent, CultYoggComponent, MobStateComponent>();
+        while (queryCultists.MoveNext(out _, out _, out _, out var mob))
+        {
+            if (mob.CurrentState == MobState.Dead)
+                continue;
+            cultistsCount++;
+        }
+
+        var queryMiGo = EntityQueryEnumerator<MiGoComponent, MobStateComponent>();
+        while (queryMiGo.MoveNext(out _, out _,  out var mob))
         {
             if (mob.CurrentState == MobState.Dead)
                 continue;

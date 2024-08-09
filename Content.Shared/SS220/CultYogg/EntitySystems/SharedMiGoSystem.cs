@@ -318,7 +318,11 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
 
         if (!HasComp<CultYoggComponent>(args.Target))
+        {
+            if (_net.IsServer)
+                _popup.PopupEntity(Loc.GetString("cult-yogg-heal-only-cultists"), uid);
             return;
+        }
 
         _heal.TryApplyMiGoHeal(args.Target, uid.Comp.HealingEffectTime);
 

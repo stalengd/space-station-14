@@ -65,7 +65,7 @@ public sealed class CultYoggHealSystem : SharedCultYoggHealSystem
         if (_mobThreshold.TryGetDeadThreshold(uid, out var threshold) && damageableComp.TotalDamage < threshold)
         {
             _mobState.ChangeMobState(uid, MobState.Critical);
-            _popup.PopupEntity(Loc.GetString("cult-yogg-review-by-heal"), uid, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-resurrected-by-heal", ("target", uid)), uid, PopupType.Medium);
 
             if (!_mind.TryGetMind(uid, out var _, out var mind))
                 return;

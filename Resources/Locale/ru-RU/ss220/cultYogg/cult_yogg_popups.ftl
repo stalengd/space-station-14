@@ -7,3 +7,4 @@ cult-yogg-enslave-should-eat-shroom = Кандидат не имеет спор 
 cult-yogg-enslave-is-sacraficial = Существо ценно, как жертва
 cult-yogg-heal-only-cultists = Оболочка не принадлежит культу
 cult-yogg-digest-no-nutritions = Недостаточно питательных веществ
+cult-yogg-resurrected-by-heal = Мистические силы возвращают к жизнь {$target}

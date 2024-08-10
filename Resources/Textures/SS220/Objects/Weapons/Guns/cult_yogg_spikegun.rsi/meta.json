@@ -31,6 +31,9 @@
     },
     {
       "name": "spike_projectile"
+    },
+    {
+      "name": "spike_static"
     }
   ]
 }

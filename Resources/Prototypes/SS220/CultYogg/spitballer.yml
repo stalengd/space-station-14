@@ -25,7 +25,7 @@
       visuals:
         enum.AmmoVisuals.HasAmmo:
           sprite:
-            False: {state: "icon-empty"}
+            False: {state: "icon_empty"}
             True: {state: "icon"}
     - type: GunByHasAmmoVisuals
       spriteLayer: null

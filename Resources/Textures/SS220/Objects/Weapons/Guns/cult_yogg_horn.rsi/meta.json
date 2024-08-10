@@ -1,17 +1,17 @@
 {
   "version": 1,
   "license": "EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt",
-  "copyright": "Made by MIXnikita for SS220",
+  "copyright": "Made by Plagex for SS220",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
-      "name": "icon_noammo"
+      "name": "icon"
     },
     {
-      "name": "icon_fullammo"
+        "name": "icon-empty"
     },
     {
       "name": "inhand-left",
@@ -28,9 +28,6 @@
     {
       "name": "fullammo-inhand-right",
       "directions": 4
-    },
-    {
-      "name": "spike_projectile"
     }
   ]
 }

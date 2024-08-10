@@ -262,7 +262,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);
 
         if (initial)
-            component.CultistMinds.Add(mindId);
+            component.InitialCultistMinds.Add(mindId);
 
         // Change the faction
         _npcFaction.RemoveFaction(uid, component.NanoTrasenFaction, false);

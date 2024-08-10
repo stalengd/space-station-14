@@ -45,7 +45,7 @@ public sealed partial class MiGoComponent : Component
     public string RequiedEffect = "Rave";
 
     //How long heal effect will occure
-    public float HealingEffectTime = 100;
+    public float HealingEffectTime = 15;
 
     //Astral variables
     [ViewVariables, AutoNetworkedField]

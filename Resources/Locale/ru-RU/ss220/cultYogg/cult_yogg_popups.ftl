@@ -10,3 +10,4 @@ cult-yogg-digest-no-nutritions = Недостаточно питательных
 cult-yogg-altar-not-enough-migo = Недостаточно Ми-Го рядом с алтарём
 cult-yogg-sacrifice-started = {$user} начинает жертвоприношение, тело {$target} медленно поднимается в воздух
 cult-yogg-buckle-attempt = {$user} не является целью жертвоприношения
+cult-yogg-resurrected-by-heal = Мистические силы возвращают к жизнь {$target}

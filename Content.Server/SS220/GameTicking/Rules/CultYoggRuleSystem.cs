@@ -268,7 +268,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _npcFaction.RemoveFaction(uid, component.NanoTrasenFaction, false);
         _npcFaction.AddFaction(uid, component.CultYoggFaction);
 
-        _entityManager.AddComponent<CultYoggComponent>(uid);
+        var CultistComp = EnsureComp<CultYoggComponent>(uid);
+        //ToDo CultYoggComponent -- set current amount of sacrafaces
         _entityManager.AddComponent<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
         _entityManager.AddComponent<ZombieImmuneComponent>(uid);//they are practically mushrooms
 

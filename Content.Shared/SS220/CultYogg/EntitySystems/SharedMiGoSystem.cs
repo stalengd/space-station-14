@@ -119,6 +119,9 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         }
 
+        //ToDo check for a priest
+        //ToDo Remove all holy water
+
         var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new MiGoEnslaveDoAfterEvent(), uid, args.Target)//ToDo estimate time for Enslave
         {
             Broadcast = false,

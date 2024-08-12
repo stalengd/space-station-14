@@ -86,7 +86,9 @@
   id: PowerCellHigh
 
 - type: Tag
-  id: WeaponFlareGun
+# New Qm highrisk
+- type: Tag
+  id: EtchedBrassKnuckles
 
 # SS220 Cult
 - type: Tag

@@ -30,14 +30,14 @@
 - type: entity
   abstract: true
   parent: BaseTargetObjective
-  id: BaseCultYoggSacraficeObjective
+  id: CultYoggAcsendObjective
   components:
   - type: Objective
     unique: false
     icon:
-      sprite: Objects/Weapons/Guns/Pistols/viper.rsi #need to chose an icon for this
-      state: icon
-  - type: KillPersonCondition
+      sprite: SS220/Mobs/CultYogg/Mi'Go.rsi
+      state: alive
+  - type: MiGoAliveCondition
 
 # requires that the god will be summoned
 - type: entity

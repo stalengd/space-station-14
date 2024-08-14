@@ -28,9 +28,10 @@
   - type: KillPersonCondition
 
 - type: entity
-  abstract: true
-  parent: BaseTargetObjective
+  parent: [BaseCultYoggObjective, BaseTargetObjective]
   id: CultYoggAcsendObjective
+  name: Escape to centcom alive and unrestrained.
+  description: One of our undercover agents will debrief you when you arrive. Don't show up in cuffs.
   components:
   - type: Objective
     unique: false

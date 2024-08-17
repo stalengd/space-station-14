@@ -13,6 +13,15 @@ namespace Content.Server.SS220.GameTicking.Rules.Components;
 public sealed partial class CultYoggRuleComponent : Component
 {
     /// <summary>
+    /// General requirements
+    /// </summary>
+    [DataField]
+    public int ReqAmountOfSacrifices = 3;
+
+    [DataField]
+    public int ReqAmountOfMiGo = 3;
+
+    /// <summary>
     /// Storages for an endgame screen title
     /// </summary>
     [DataField]
@@ -27,6 +36,9 @@ public sealed partial class CultYoggRuleComponent : Component
 
     public readonly int[] TierOfSacraficials = [1, 2, 3];//trying to save tier in target, so they might be replaced with the same lvl target
 
+    /// <summary>
+    /// Groups and factions
+    /// </summary>
     [DataField]
     public ProtoId<AntagPrototype> CultYoggPrototypeId = "CultYogg";
 
@@ -39,16 +51,14 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultYoggObjectiveGroups";
 
-
     /// <summary>
     /// Check for an endgame screen title
     /// </summary>
+    [DataField]
+    public int AmountOfSacrifices = 0;
 
     [DataField]
     public bool Summoned = false;
-
-    [DataField]
-    public int AmountOfSacrifices = 0;
     public enum SelectionState
     {
         WaitingForSpawn = 0,

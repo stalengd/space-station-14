@@ -160,7 +160,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         sacrComp.Tier = tier;
 
-        component.SacraficialsList.Add((EntityUid) uid);
+        component.SacraficialsList.Add((EntityUid) uid); //ToDo some wierd bug here -- empty entity
     }
 
     public List<EntityUid> GetAliveHumans()//maybe add here sacraficials and cultists filter
@@ -340,7 +340,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     #endregion
 
-    private void GetCultGameRuleComp(out CultYoggRuleComponent? comp)
+    public void GetCultGameRuleComp(out CultYoggRuleComponent? comp)
     {
         comp = null;
         var query = QueryActiveRules();

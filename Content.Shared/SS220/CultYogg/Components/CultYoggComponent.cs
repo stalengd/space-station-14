@@ -44,6 +44,10 @@ public sealed partial class CultYoggComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? AscendingActionEntity;
 
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField, AutoNetworkedField]
+    public int CurrentStage = 0;
+
     /// <summary>
     /// Sound played while puking MiGoShroom
     /// </summary>

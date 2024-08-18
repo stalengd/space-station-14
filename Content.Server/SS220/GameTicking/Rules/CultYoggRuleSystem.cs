@@ -145,7 +145,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (allSuitable.Count == 0)
         {
-            return PickTieredPerson(allHumans, ++tier);//check this later
+            return PickTieredPerson(allHumans, ++tier);
         }
 
         return _random.Pick(allSuitable);
@@ -160,7 +160,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         sacrComp.Tier = tier;
 
-        component.SacraficialsList.Add((EntityUid) uid); //ToDo some wierd bug here -- empty entity
+        component.SacraficialsList.Add((EntityUid) uid);
     }
 
     public List<EntityUid> GetAliveHumans()//maybe add here sacraficials and cultists filter

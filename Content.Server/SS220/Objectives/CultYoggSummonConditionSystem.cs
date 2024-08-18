@@ -40,9 +40,7 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
 
     private void OnAfterAssign(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveAfterAssignEvent args)
     {
-
-
-        string title = "Призовите темного бога, принеся в жертву:";
+        string title = Loc.GetString("objective-cult-yogg-sacrafice-tart");
 
         var query = EntityQueryEnumerator<CultYoggSacrificialComponent>();
         while (query.MoveNext(out var uid, out var _))
@@ -55,26 +53,8 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
 
             var jobName = _job.MindTryGetJobName(uid);
 
-            title += "\n" + targetName + " в должности " + jobName;
+            title += "\n" + Loc.GetString("objective-condition-cult-yogg-sacrafice-person", ("targetName", targetName), ("job", jobName));
         }
-        /*
-         _cultRule.GetCultGameRuleComp(out var ruleComp);
-
-        if (ruleComp is null)
-            return;
-        foreach (var target in ruleComp.SacraficialsList)
-        {
-            var targetName = "Unknown";
-            if (TryComp<MindComponent>(target, out var mind) && mind.CharacterName != null)
-            {
-                targetName = mind.CharacterName;
-            }
-
-            var jobName = _job.MindTryGetJobName(target);
-
-            title += "\n" + targetName + " в должности " + jobName;
-        }
-        */
 
         _metaData.SetEntityName(ent, title, args.Meta);
     }

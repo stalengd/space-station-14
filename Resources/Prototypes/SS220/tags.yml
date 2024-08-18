@@ -90,7 +90,11 @@
 
 # New Qm highrisk
 - type: Tag
-  id: EtchedBrassKnuckles
+  id: EngravedKnuckleduster
+
+# Офицерский кортик
+- type: Tag
+  id: OfficerCutlass
 
 # SS220 Cult
 - type: Tag

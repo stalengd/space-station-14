@@ -156,7 +156,18 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (uid is null)
             return;
 
-        var sacrComp = EnsureComp<CultYoggSacrificialComponent>((EntityUid) uid);
+        if (!TryComp<MindComponent>(uid, out var mind))
+            return;
+
+        if (mind.Session is null)
+            return;
+
+        if (mind.Session.AttachedEntity is null)
+            return;
+
+        EnsureComp<CultYoggSacrificialMindComponent>((EntityUid) uid);
+
+        var sacrComp = EnsureComp<CultYoggSacrificialComponent>((EntityUid) mind.Session.AttachedEntity);
 
         sacrComp.Tier = tier;
 
@@ -178,6 +189,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
             // the player has to be alive
             if (_mobState.IsAlive(uid, mobState))
+                //allHumans.Add(uid);
                 allHumans.Add(mc.Mind.Value);
         }
 

@@ -38,11 +38,11 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
         ent.Comp.reqSacrAmount = ruleComp.ReqAmountOfMiGo;
     }
 
-    private void OnAfterAssign(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveAfterAssignEvent args)
+    private void OnAfterAssign(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveAfterAssignEvent args) //ToDo error with progress
     {
-        string title = Loc.GetString("objective-cult-yogg-sacrafice-tart");
+        string title = Loc.GetString("objective-cult-yogg-sacrafice-start");
 
-        var query = EntityQueryEnumerator<CultYoggSacrificialComponent>();
+        var query = EntityQueryEnumerator<CultYoggSacrificialMindComponent>();
         while (query.MoveNext(out var uid, out var _))
         {
             var targetName = "Unknown";

@@ -25,7 +25,7 @@ public struct StringBuffer
     // THE SAFEST API EVER!
     /// <summary>
     /// Clears underlying memory and provides reference to <see cref="StringBuilder"/> for formatting.
-    /// You should call <see cref="EndFormat"/> after you done and not use provied <see cref="StringBuilder"/> anymore.
+    /// You should call <see cref="EndFormat"/> after you done and not use provided <see cref="StringBuilder"/> anymore.
     /// </summary>
     public StringBuilder BeginFormat()
     {

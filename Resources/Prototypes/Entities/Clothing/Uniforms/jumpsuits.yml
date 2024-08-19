@@ -342,19 +342,20 @@
     sprite: Clothing/Uniforms/Jumpsuit/hos.rsi
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpsuit/hos.rsi
-  - type: Item
-    inhandVisuals:
-      left:
-      - state: inhand-left
-        color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
-      - state: overlay-inhand-left
-      right:
-      - state: inhand-right
-        color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
-      - state: overlay-inhand-right
-
+  # ss220 error fix start
+  #- type: Item
+  #  inhandVisuals:
+  #    left:
+  #    - state: inhand-left
+  #      color: "#C12D30"
+  #      sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+  #    - state: overlay-inhand-left
+  #    right:
+  #    - state: inhand-right
+  #      color: "#C12D30"
+  #      sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+  #    - state: overlay-inhand-right
+  # ss220 error fix end
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitHoSAlt
@@ -609,18 +610,20 @@
     sprite: Clothing/Uniforms/Jumpsuit/security.rsi
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpsuit/security.rsi
-  - type: Item
-    inhandVisuals:
-      left:
-      - state: inhand-left
-        color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
-      - state: overlay-inhand-left
-      right:
-      - state: inhand-right
-        color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
-      - state: overlay-inhand-right
+  # ss220 error fix start
+  #- type: Item
+  #  inhandVisuals:
+  #    left:
+  #    - state: inhand-left
+  #      color: "#C12D30"
+  #      sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+  #    - state: overlay-inhand-left
+  #    right:
+  #    - state: inhand-right
+  #      color: "#C12D30"
+  #      sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+  #    - state: overlay-inhand-right
+  # ss220 error fix end
 
 - type: entity
   parent: ClothingUniformBase
@@ -654,19 +657,20 @@
     sprite: Clothing/Uniforms/Jumpsuit/warden.rsi
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpsuit/warden.rsi
-  - type: Item
-    inhandVisuals:
-      left:
-      - state: inhand-left
-        color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
-      - state: overlay-inhand-left
-      right:
-      - state: inhand-right
-        color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
-      - state: overlay-inhand-right
-
+  # ss220 error fix start
+  #- type: Item
+  #  inhandVisuals:
+  #    left:
+  #    - state: inhand-left
+  #      color: "#C12D30"
+  #      sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+  #   - state: overlay-inhand-left
+  #    right:
+  #    - state: inhand-right
+  #      color: "#C12D30"
+  #      sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+  #    - state: overlay-inhand-right
+  # ss220 error fix end
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformOveralls
@@ -916,9 +920,9 @@
   description: I don't lose things. I place things in locations which later elude me.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/psychologist.rsi
+    sprite: SS220/Clothing/Uniforms/Jumpsuit/psychologist.rsi #SS220-Psychologist-Resprite
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/psychologist.rsi
+    sprite: SS220/Clothing/Uniforms/Jumpsuit/psychologist.rsi #SS220-Psychologist-Resprite
 
 - type: entity
   parent: ClothingUniformBase

@@ -34,40 +34,24 @@
 
 - type: loadout
   id: UniformJumpsuitFlannelSalvage
-  equipment: UniformJumpsuitFlannelSalvage
   effects:
   - !type:GroupLoadoutEffect
     proto: UniformJumpsuitFlannelSalvage
-
-- type: startingGear
-  id: UniformJumpsuitFlannelSalvage
   equipment:
     jumpsuit: ClothingUniformJumpsuitFlannelSalvage
 
 # Head
 - type: loadout
   id: ClothingHeadHatSalvage
-  equipment: ClothingHeadHatSalvage
-
-- type: startingGear
-  id: ClothingHeadHatSalvage
   equipment:
     head: ClothingHeadHatSalvage
 
 - type: loadout
   id: ClothingHeadBandSalvage
-  equipment: ClothingHeadBandSalvage
-
-- type: startingGear
-  id: ClothingHeadBandSalvage
   equipment:
     head: ClothingHeadBandSalvage
 
 - type: loadout
-  id: ClothingHeadHatHardhatViolet
-  equipment: ClothingHeadHatHardhatViolet
-
-- type: startingGear
   id: ClothingHeadHatHardhatViolet
   equipment:
     head: ClothingHeadHatHardhatViolet

@@ -3,7 +3,7 @@ using System.Text;
 namespace Content.Shared.SS220.Utility;
 
 /// <summary>
-/// Provides mutable string functionality to archieve zero memory re-allocations. Not the safest thing to work with, use under supervision!
+/// Provides mutable string functionality to achieve zero memory re-allocations. Not the safest thing to work with, use under supervision!
 /// </summary>
 public struct StringBuffer
 {

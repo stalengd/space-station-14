@@ -15,7 +15,6 @@ public abstract class SharedCultYoggPodSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -36,7 +35,6 @@ public abstract class SharedCultYoggPodSystem : EntitySystem
     private void OnCompInit(Entity<CultYoggPodComponent> ent, ref ComponentInit args)
     {
         ent.Comp.MobContainer = _container.EnsureContainer<ContainerSlot>(ent, "cultyYoggPod");
-        UpdateAppearance(ent, ent.Comp);
     }
 
     public bool TryInsert(EntityUid entToEnsert, Entity<CultYoggPodComponent> podEnt)

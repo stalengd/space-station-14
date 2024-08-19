@@ -47,7 +47,7 @@ public sealed partial class CultYoggPodSystem : SharedCultYoggPodSystem
             {
                 Act = () => TryInsert(target, ent),
                 Category = VerbCategory.Insert,
-                Text = Loc.GetString("cult-yogg-eject-pod"),
+                Text = Loc.GetString("cult-yogg-ensert-pod"),
                 Priority = 1
             };
 

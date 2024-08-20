@@ -9,4 +9,10 @@ namespace Content.Shared.SS220.CultYogg.Components;
 public sealed partial class CultYoggPodComponent : Component
 {
     public ContainerSlot MobContainer = default!;
+
+    [Serializable, NetSerializable]
+    public enum CultPodVisuals : byte
+    {
+        Inserted,
+    }
 }

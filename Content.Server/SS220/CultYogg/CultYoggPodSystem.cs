@@ -4,12 +4,14 @@ using Content.Shared.DragDrop;
 using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Shared.Verbs;
+using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 
 namespace Content.Server.SS220.CultYogg;
 
 public sealed partial class CultYoggPodSystem : SharedCultYoggPodSystem
 {
+    [Dependency] private readonly AppearanceSystem _appearance = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -74,10 +76,12 @@ public sealed partial class CultYoggPodSystem : SharedCultYoggPodSystem
     private void GotRemoved(Entity<CultYoggPodComponent> ent, ref EntRemovedFromContainerMessage args)
     {
         RemComp<CultYoggHealComponent>(args.Entity);
+        _appearance.SetData(ent, CultYoggPodComponent.CultPodVisuals.Inserted, false);
     }
 
     private void GotInserted(Entity<CultYoggPodComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
         EnsureComp<CultYoggHealComponent>(args.Entity);
+        _appearance.SetData(ent, CultYoggPodComponent.CultPodVisuals.Inserted, true);
     }
 }

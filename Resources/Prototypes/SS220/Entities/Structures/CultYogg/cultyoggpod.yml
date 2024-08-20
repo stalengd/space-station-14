@@ -8,6 +8,7 @@
     noRot: true
     sprite: SS220/Structures/yoggpod.rsi
     state: yoggpod
+    map: ["base"]
   - type: Icon
     sprite: SS220/Structures/yoggpod.rsi
     state: yoggpod
@@ -27,12 +28,10 @@
           acts: [ "Destruction" ]
       - !type:EmptyAllContainersBehaviour
   - type: CultYoggPod
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.05"
-        density: 190
-        mask:
-        - MachineMask
+  - type: Physics
+  - type: GenericVisualizer
+    visuals:
+      enum.CultPodVisuals.Inserted:
+        base:
+          True: { state: yoggpod-in }
+          False: { state: yoggpod }

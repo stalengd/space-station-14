@@ -1,6 +1,9 @@
-﻿using Robust.Server.GameObjects;
+﻿using Content.Server.Popups;
+using Content.Shared.SS220.CultYogg.Components;
+using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Content.Shared.SS220.CultYogg.FungusMachineSystem;
+using Content.Shared.UserInterface;
 
 namespace Content.Server.SS220.CultYogg.Fungus.Systems
 {
@@ -8,17 +11,28 @@ namespace Content.Server.SS220.CultYogg.Fungus.Systems
     {
         [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
         [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
+        [Dependency] private readonly PopupSystem _popupSystem = default!;
 
         public override void Initialize()
         {
             base.Initialize();
 
+            SubscribeLocalEvent<FungusMachineComponent, ActivatableUIOpenAttemptEvent>(OnAttemptOpenUI);
             Subs.BuiEvents<FungusMachineComponent>(FungusMachineUiKey.Key, subs =>
             {
                 subs.Event<BoundUIOpenedEvent>(OnBoundUIOpened);
             });
         }
 
+        private void OnAttemptOpenUI(Entity<FungusMachineComponent> ent, ref ActivatableUIOpenAttemptEvent args)
+        {
+            if (!EntityManager.HasComponent<MiGoComponent>(args.User))
+            {
+                var msg = Loc.GetString("Вы не можете коснуться этого");
+                _popupSystem.PopupEntity(msg, ent);
+                args.Cancel();
+            }
+        }
 
         protected override void OnComponentInit(EntityUid uid, FungusMachineComponent component, ComponentInit args)
         {

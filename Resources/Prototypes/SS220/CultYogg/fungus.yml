@@ -46,13 +46,6 @@
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: Metallic
-  - type: SolutionContainerManager
-    solutions:
-      soil:
-        maxVol: 200
-  - type: RefillableSolution
-    solution: soil
-    maxRefill: 50
   - type: Transform
     anchored: true
   - type: PlantHolderVisuals

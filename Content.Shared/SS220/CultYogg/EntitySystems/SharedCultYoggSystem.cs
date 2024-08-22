@@ -18,6 +18,8 @@ using Content.Shared.Inventory;
 using Content.Shared.Roles;
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.GameObjects;
+using Content.Server.SS220.CultYogg;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -260,6 +262,8 @@ public abstract class SharedCultYoggSystem : EntitySystem
         // Move the mind if there is one and it's supposed to be transferred
         if (_mind.TryGetMind(uid, out var mindId, out var mind))
             _mind.TransferTo(mindId, migo, mind: mind);
+
+        //AddComp<MiGoReplacementComponent>(migo);//ToDo smt with it case it isn't working
 
         //Gib original body
         if (TryComp<BodyComponent>(uid, out var body))

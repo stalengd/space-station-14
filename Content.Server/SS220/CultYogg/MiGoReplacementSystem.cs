@@ -1,15 +1,15 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Shared.SS220.CultYogg.Components;
-using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Server.EUI;
-using Content.Server.Ghost;
+using Robust.Shared.Player;
 using Content.Server.Popups;
 using Content.Shared.Damage;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Popups;
+using Content.Shared.Body.Components;
+using Content.Shared.Mind.Components;
+using Robust.Server.Player;
+using Robust.Shared.Enums;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -21,6 +21,7 @@ public sealed class MiGoReplacementSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     public override void Initialize()
     {
@@ -38,13 +39,13 @@ public sealed class MiGoReplacementSystem : EntitySystem
 
     private void StartTimer(MiGoReplacementComponent comp)
     {
-        сomp.ShouldBeCounted = true;
+        comp.ShouldBeCounted = true;
         comp.ReplacementTimer = 0;
     }
 
     private void StopTimer(MiGoReplacementComponent comp)
     {
-        сomp.ShouldBeCounted = false;
+        comp.ShouldBeCounted = false;
         comp.ReplacementTimer = 0;
         comp.MayBeReplaced = false;
     }
@@ -55,23 +56,23 @@ public sealed class MiGoReplacementSystem : EntitySystem
     private void OnMobState(Entity<MiGoReplacementComponent> uid, ref MobStateChangedEvent args)
     {
         if (args.NewMobState == MobState.Dead)
-            StartTimer(uid.Comp.ShouldBeCounted);
-        else 
-            StopTimer(uid.Comp.ShouldBeCounted);
+            StartTimer(uid.Comp);
+        else
+            StopTimer(uid.Comp);
     }
-        
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
         var query = EntityQueryEnumerator<MiGoReplacementComponent>();
         while (query.MoveNext(out var uid, out var repl))
         {
-            if(!repl.ShouldBeCounted)
+            if (!repl.ShouldBeCounted)
                 continue;
-            
-            repl.NextIncidentTime += frameTime;
 
-            if(repl.NextIncidentTime>= repl.BeforeReplacemetTime)
+            repl.ReplacementTimer += frameTime;
+
+            if (repl.ReplacementTimer >= repl.BeforeReplacemetTime)
             {
                 repl.MayBeReplaced = true;
             }
@@ -91,12 +92,13 @@ public sealed class MiGoReplacementSystem : EntitySystem
                     break;
                 }
 
-                if(TryComp<MiGoReplacementComponent>(e.Session.AttachedEntity, out var comp))
-                    StartTimer(comp);
+                if (TryComp<MiGoReplacementComponent>(e.Session.AttachedEntity, out var compRelp1))
+                    StartTimer(compRelp1);
                 break;
+
             case SessionStatus.Connected:
-                if(TryComp<MiGoReplacementComponent>(e.Session.AttachedEntity, out var comp))
-                    StopTimer(comp);
+                if(TryComp<MiGoReplacementComponent>(e.Session.AttachedEntity, out var compRelp2))
+                    StopTimer(compRelp2);
                 break;
         }
     }

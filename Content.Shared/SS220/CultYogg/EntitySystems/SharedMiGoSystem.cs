@@ -24,6 +24,7 @@ using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Buckle.Components;
 using System.Linq;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -45,6 +46,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly SharedMiGoErectSystem _miGoErectSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCultYoggHealSystem _heal = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
@@ -207,6 +209,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             ChangeForm(uid, uid.Comp, true);
 
             _actions.StartUseDelay(uid.Comp.MiGoAstralActionEntity);
+            _audio.PlayPredicted(uid.Comp.SoundMaterialize, uid, uid);
         }
     }
 
@@ -223,6 +226,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             var cooldownEnd = cooldownStart + uid.Comp.CooldownAfterMaterialize;
 
             _actions.SetCooldown(uid.Comp.MiGoAstralActionEntity, cooldownStart, cooldownEnd);
+            _audio.PlayPredicted(uid.Comp.SoundDeMaterialize, uid, uid);
         }
     }
 

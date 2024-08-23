@@ -2,3 +2,8 @@
   license: "CC0-1.0"
   copyright: "Original is created by DeezSoundzTho"
   source: "https://freesound.org/people/DeezSoundzTho/sounds/383334/"
+
+- files: ["migo_astral_in.ogg","migo_astral_out.ogg"]
+  license: "CC-BY-3.0"
+  copyright: "Original is created by MIXnikita for SS220"
+  source: "https://github.com/SerbiaStrong-22"

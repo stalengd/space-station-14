@@ -3,6 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Content.Shared.SS220.CultYogg.EntitySystems;
+using Robust.Shared.Audio;
 
 namespace Content.Shared.SS220.CultYogg.Components;
 
@@ -41,21 +42,35 @@ public sealed partial class MiGoComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? MiGoSacrificeActionEntity;
 
-    //Enlsavement requirements
+    /// <summary>
+    ///Enlsavement variables
+    /// <summary>
+
+    //Required effect for enslavement
     public string RequiedEffect = "Rave";
 
+    /// <summary>
+    ///Erect variables
+    /// <summary>
+     
     //How long heal effect will occure
     public float HealingEffectTime = 15;
 
-    //Astral variables
+    /// <summary>
+    ///Astral variables
+    /// <summary>
     [ViewVariables, AutoNetworkedField]
     public bool PhysicalForm = true;//Is MiGo in phisycal form?
 
+    [DataField]
+    public SoundSpecifier? SoundMaterialize = new SoundPathSpecifier("/Audio/SS220/CultYogg/migo_astral_out.ogg");
+
+    [DataField]
+    public SoundSpecifier? SoundDeMaterialize = new SoundPathSpecifier("/Audio/SS220/CultYogg/migo_astral_in.ogg");
+
     public TimeSpan CooldownAfterMaterialize = TimeSpan.FromSeconds(3);
 
-    /// <summary>
-    /// How long reaper can stay materialized, depending on stage
-    /// </summary>
+    /// How long reaper can stay dematerialized, depending on stage
     [ViewVariables, DataField, AutoNetworkedField]
     public List<TimeSpan> MaterializeDurations = new()
     {
@@ -63,7 +78,6 @@ public sealed partial class MiGoComponent : Component
         TimeSpan.FromSeconds(20),
         TimeSpan.FromSeconds(40)
     };
-
 
     [ViewVariables]
     public TimeSpan? DeMaterializedStart;
@@ -74,6 +88,9 @@ public sealed partial class MiGoComponent : Component
     [ViewVariables, DataField, AutoNetworkedField]
     public float UnMaterialMovementSpeed = 18f;//ToDo check this thing
 
+    /// <summary>
+    ///Erect variables
+    /// <summary>
     [ViewVariables, DataField]
     public float ErectDoAfterSeconds = 3f;
 }

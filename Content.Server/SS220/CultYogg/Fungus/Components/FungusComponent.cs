@@ -1,5 +1,4 @@
-﻿using Content.Shared.Chemistry.Components;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+﻿using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Content.Server.Botany;
 
 namespace Content.Server.SS220.CultYogg.Fungus.Components;
@@ -32,7 +31,4 @@ public sealed partial class FungusComponent : Component
 
     [ViewVariables(VVAccess.ReadWrite), DataField("seed")]
     public SeedData? Seed;
-
-    [DataField]
-    public Entity<SolutionComponent>? SoilSolution = null;
 }

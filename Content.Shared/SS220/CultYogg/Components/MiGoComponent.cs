@@ -45,16 +45,12 @@ public sealed partial class MiGoComponent : Component
     /// <summary>
     ///Enlsavement variables
     /// <summary>
-
-    //Required effect for enslavement
-    public string RequiedEffect = "Rave";
+    public string RequiedEffect = "Rave";//Required effect for enslavement
 
     /// <summary>
     ///Erect variables
     /// <summary>
-     
-    //How long heal effect will occure
-    public float HealingEffectTime = 15;
+    public float HealingEffectTime = 15;//How long heal effect will occure
 
     /// <summary>
     ///Astral variables

@@ -21,7 +21,7 @@
   - type: NpcFactionMember
     factions:
     - CultYogg
-  - type: RandomMetadata #ToDo нагенерить спец имена
+  - type: RandomMetadata
     nameSegments: [ cult_yogg_migo ]
   - type: Fixtures
     fixtures:

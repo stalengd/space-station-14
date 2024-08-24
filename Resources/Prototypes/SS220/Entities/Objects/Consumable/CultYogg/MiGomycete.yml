@@ -33,16 +33,15 @@
   parent: SeedBase
   name: packet of fly MiGo spores
   description: "The iconic, extremely deadly mushroom to be used for purely ornamental purposes."
-  id: Mi'GoSeedsCult
+  id: MiGoSeedsCult
   components:
     - type: Seed
       seedId: MiGospores
     - type: Sprite
       sprite: SS220/Objects/CultYogg/migomycete.rsi
-      state: seed
 
 - type: seed
-  id: Mi'Gospores
+  id: MiGospores
   name: seeds-MiGo-name
   noun: seeds-noun-spores
   displayName: seeds-flyamanita-display-name
@@ -50,6 +49,7 @@
   packetPrototype: MiGoSeedsCult
   productPrototypes:
     - FoodMiGomyceteCult
+  harvestRepeat: Repeat
   lifespan: 25
   maturation: 12
   production: 3

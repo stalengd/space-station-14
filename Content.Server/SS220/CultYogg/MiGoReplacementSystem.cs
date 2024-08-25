@@ -13,6 +13,8 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Network.Messages;
 using Content.Shared.PAI;
+using Content.Shared.SSDIndicator;
+using Robust.Shared.Player;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -34,6 +36,8 @@ public sealed class MiGoReplacementSystem : EntitySystem
         SubscribeLocalEvent<MiGoReplacementComponent, MobStateChangedEvent>(OnMobState);
         SubscribeLocalEvent<MiGoReplacementComponent, MindAddedMessage>(OnMindAdded);
         SubscribeLocalEvent<MiGoReplacementComponent, MindRemovedMessage>(OnMindRemoved);
+        SubscribeLocalEvent<MiGoReplacementComponent, PlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<MiGoReplacementComponent, PlayerDetachedEvent>(OnPlayerDetached);
     }
 
     public override void Shutdown()
@@ -56,18 +60,48 @@ public sealed class MiGoReplacementSystem : EntitySystem
         comp.ReplacementTimer = 0;
     }
 
+    private void OnPlayerAttached(Entity<MiGoReplacementComponent> ent, ref PlayerAttachedEvent args)
+    {
+        CheckTimerConditions(ent, ent.Comp);
+    }
+    private void OnPlayerDetached(Entity<MiGoReplacementComponent> ent, ref PlayerDetachedEvent args)
+    {
+        CheckTimerConditions(ent, ent.Comp);
+    }
     private void RemoveReplacement(EntityUid uid, MiGoReplacementComponent replComp, MiGoComponent migoComp)
     {
         StopTimer(replComp);
         _migoSystem.MarkupForReplacement(uid, migoComp, false);
     }
-    private void OnMindAdded(Entity<MiGoReplacementComponent> uid, ref MobStateChangedEvent args)
+    private void OnMindAdded(Entity<MiGoReplacementComponent> ent, ref MindAddedMessage args)
     {
-        ;
+        CheckTimerConditions(ent, ent.Comp);
     }
-    private void OnMindRemoved(Entity<MiGoReplacementComponent> uid, ref MobStateChangedEvent args)
+    private void OnMindRemoved(Entity<MiGoReplacementComponent> ent, ref MindRemovedMessage args)
     {
-        ;
+        CheckTimerConditions(ent, ent.Comp);
+    }
+    private void CheckTimerConditions(EntityUid uid, MiGoReplacementComponent replComp) 
+    {
+        if (_mobState.IsDead(uid)) //if you are dead = timer
+            StartTimer(replComp);
+
+        if (!TryComp<MindContainerComponent>(uid, out var mindComp) && (mindComp == null))
+            return;
+
+        if (mindComp.Mind == null) // if you ghosted = timer
+            StartTimer(replComp);
+
+        _mind.TryGetMind(uid, out var mind, out var userMidComp);
+
+        if (userMidComp == null)
+            return;
+
+        if (userMidComp.Session == null) // if you left = timer
+            StartTimer(replComp);
+
+        if (TryComp<MiGoComponent>(uid, out var migoComp))
+            RemoveReplacement(uid, replComp, migoComp);
     }
 
     ///<summary>
@@ -87,21 +121,9 @@ public sealed class MiGoReplacementSystem : EntitySystem
         var query = EntityQueryEnumerator<MindContainerComponent, MiGoReplacementComponent, MiGoComponent, MobStateComponent>();
         while (query.MoveNext(out var uid, out var mc, out var replaceComp, out var migoComp, out var mobState))
         {
-            //check if it has mind
-            if (!mc.HasMind)
-                StartTimer(replaceComp);
-
             //if timer is on count it
             if (!replaceComp.ShouldBeCounted)
                 continue;
-
-            //in case somebody was resurected while he isn't in a body
-            //case we dont have any event for acquiring mind
-            if (mc.HasMind && _mobState.IsAlive(uid, mobState))
-            {
-                RemoveReplacement(uid, replaceComp, migoComp);
-                continue;
-            }
 
             replaceComp.ReplacementTimer += frameTime;
 
@@ -109,7 +131,6 @@ public sealed class MiGoReplacementSystem : EntitySystem
             {
                 _migoSystem.MarkupForReplacement(uid, migoComp, true);
             }
-
         }
     }
 }

@@ -288,7 +288,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         //Add telepathy
         var telepathy = EnsureComp<TelepathyComponent>(uid);
         telepathy.CanSend = false;
-        telepathy.TelepathyChannelPrototype = "TelepathyChannelYoggSothothCult";
+        telepathy.TelepathyChannelPrototype = component.channel;
 
         _entityManager.AddComponent<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
         _entityManager.AddComponent<ZombieImmuneComponent>(uid);//they are practically mushrooms

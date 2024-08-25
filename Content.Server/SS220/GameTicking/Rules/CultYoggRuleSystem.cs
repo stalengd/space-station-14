@@ -23,6 +23,19 @@ using Content.Shared.Roles;
 using Content.Server.Body.Components;
 using Content.Server.SS220.Telepathy;
 using Content.Shared.SS220.Telepathy;
+using Content.Server.Nuke;
+using Content.Server.SS220.CultYogg.Nyarlathotep;
+using Content.Server.Station.Components;
+using Content.Server.Station.Systems;
+using Content.Server.Chat.Systems;
+using Content.Server.RoundEnd;
+using Content.Shared.NukeOps;
+using Robust.Shared.GameObjects;
+using Content.Server.GameTicking.Rules.Components;
+using Content.Shared.Nuke;
+using Robust.Shared.Map;
+using Robust.Shared.Utility;
+using Content.Shared.SS220.Bible;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -39,6 +52,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly SharedJobSystem _job = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
 
     public List<List<String>> SacraficialTiers = new();
 
@@ -48,9 +64,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         SubscribeLocalEvent<CultYoggRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
         SubscribeLocalEvent<CultYoggEnslavedEvent>(MiGoEnslave);//cant receive this shit
-        //SubscribeLocalEvent<MiGoComponent, MobStateChangedEvent>(OnMobStateChanged);
         //SubscribeLocalEvent<CultYoggComponent, CleansedEvent>();
-        //SubscribeLocalEvent<GodSummonedEvent>();
+
+        SubscribeLocalEvent<CultYoggSummonedEvent>(OnGodSummoned);
 
         SubscribeLocalEvent<CultYoggSacrificialComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<CultYoggSacrificialComponent, BeingGibbedEvent>(OnGibbed);
@@ -167,7 +183,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (mind.Session.AttachedEntity is null)
             return;
 
-        EnsureComp<CultYoggSacrificialMindComponent>((EntityUid) uid);
+        EnsureComp<CultYoggSacrificialMindComponent>((EntityUid) uid); //ToDo figure out do i need this?
 
         var sacrComp = EnsureComp<CultYoggSacrificialComponent>((EntityUid) mind.Session.AttachedEntity);
 
@@ -295,6 +311,18 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         return true;
     }
+    #endregion
+
+    #region RoundEnding
+    private void OnGodSummoned(CultYoggSummonedEvent ev)
+    {
+        foreach (var station in _station.GetStations())
+        {
+            _chat.DispatchStationAnnouncement(station, Loc.GetString("cult-yogg-shuttle-call"), colorOverride: Color.Crimson);
+        }
+        _roundEnd.RequestRoundEnd(null, false);
+    }
+
     #endregion
 
     #region EndText

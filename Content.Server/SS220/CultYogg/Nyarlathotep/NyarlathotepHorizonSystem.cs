@@ -11,6 +11,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
+using Content.Shared.SS220.CultYogg.Nyarlathotep.Components;
 using Content.Server.SS220.CultYogg.Nyarlathotep.EntitySystems;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Events;
 using Content.Shared.Damage;

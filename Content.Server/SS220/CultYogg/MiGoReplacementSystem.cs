@@ -12,6 +12,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Network.Messages;
+using Content.Shared.PAI;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -31,6 +32,8 @@ public sealed class MiGoReplacementSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<MiGoReplacementComponent, MobStateChangedEvent>(OnMobState);
+        SubscribeLocalEvent<MiGoReplacementComponent, MindAddedMessage>(OnMindAdded);
+        SubscribeLocalEvent<MiGoReplacementComponent, MindRemovedMessage>(OnMindRemoved);
     }
 
     public override void Shutdown()
@@ -57,6 +60,14 @@ public sealed class MiGoReplacementSystem : EntitySystem
     {
         StopTimer(replComp);
         _migoSystem.MarkupForReplacement(uid, migoComp, false);
+    }
+    private void OnMindAdded(Entity<MiGoReplacementComponent> uid, ref MobStateChangedEvent args)
+    {
+        ;
+    }
+    private void OnMindRemoved(Entity<MiGoReplacementComponent> uid, ref MobStateChangedEvent args)
+    {
+        ;
     }
 
     ///<summary>

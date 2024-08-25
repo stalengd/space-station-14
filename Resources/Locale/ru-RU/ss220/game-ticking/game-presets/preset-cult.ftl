@@ -20,3 +20,5 @@ objective-issuer-cult-yogg = [color=crimson]По Заветам Посланни
 objective-cult-yogg-sacrafice-start = Призовите темного бога, принеся в жертву следующие цели:
 objective-cult-yogg-sacrafice-task-job =  в должности
 objective-condition-cult-yogg-sacrafice-person = {$targetName}, в должности {CAPITALIZE($job)}
+
+cult-yogg-shuttle-call = Мы зафиксировали опасный уровень аномальной активности на станции. Аварийный шаттл был отправлен для эвакуации оставшегося персонала.

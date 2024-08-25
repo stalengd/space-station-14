@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Content.Server.SS220.CultYogg.Nyarlathotep.EntitySystems;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Server.SS220.CultYogg.Nyarlathotep.Components;
+namespace Content.Shared.SS220.CultYogg.Nyarlathotep.Components;
 
 /// <summary>
 /// A component that makes the associated entity destroy other within some distance of itself.

@@ -89,6 +89,9 @@ public sealed partial class MiGoComponent : Component
     /// <summary>
     [ViewVariables, DataField]
     public float ErectDoAfterSeconds = 3f;
+
+    //Marking if entity can be gibbed and replaced
+    public bool MayBeReplaced = false;
 }
 
 //Visual

@@ -37,10 +37,11 @@ public sealed class MiGoAliveConditionSystem : EntitySystem
     {
         float migoCount = 0;//float cause args.Progress is float
         var query = EntityQueryEnumerator<MiGoComponent, MobStateComponent>();
-        while (query.MoveNext(out var uid, out var _, out var mobStateComp))
+        while (query.MoveNext(out var uid, out var migo, out var mobStateComp))
         {
-            if (mobStateComp.CurrentState == MobState.Dead)
+            if (migo.MayBeReplaced) //theoratically includes dead and no mind state
                 continue;
+
             migoCount++;
         }
 

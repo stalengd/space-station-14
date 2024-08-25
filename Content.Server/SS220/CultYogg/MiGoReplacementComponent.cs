@@ -7,14 +7,11 @@ namespace Content.Server.SS220.CultYogg;
 
 public sealed partial class MiGoReplacementComponent : Component
 {
-    //if entity can be gibbed and replaced
-    public bool MayBeReplaced = false;
-
     //Should the timer count down the time
     public bool ShouldBeCounted = false;
 
     //Time to replace MiGo
-    public float BeforeReplacemetTime = 15;
+    public float BeforeReplacemetTime = 15;//ToDo adjust this number
 
     //Timer
     public float ReplacementTimer = 0;

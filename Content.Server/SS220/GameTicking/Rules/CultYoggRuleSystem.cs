@@ -21,6 +21,8 @@ using Content.Shared.Administration;
 using Robust.Shared.Prototypes;
 using Content.Shared.Roles;
 using Content.Server.Body.Components;
+using Content.Server.SS220.Telepathy;
+using Content.Shared.SS220.Telepathy;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -259,7 +261,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     #region Cultists making
     private void AfterEntitySelected(Entity<CultYoggRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
-        MakeCultist(args.EntityUid, ent);
+        MakeCultist(args.EntityUid, ent);//ToDo not quite shure if entiry is a body and not a mind
     }
 
     public bool MakeCultist(EntityUid uid, CultYoggRuleComponent component, bool initial = true)
@@ -281,7 +283,13 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _npcFaction.AddFaction(uid, component.CultYoggFaction);
 
         var CultistComp = EnsureComp<CultYoggComponent>(uid);
-        //ToDo CultYoggComponent -- set current amount of sacrafaces
+        //ToDo CultYoggComponent -- set current amount of sacrafaces for visualisation of stage
+
+        //Add telepathy
+        var telepathy = EnsureComp<TelepathyComponent>(uid);
+        telepathy.CanSend = false;
+        telepathy.TelepathyChannelPrototype = "TelepathyChannelYoggSothothCult";
+
         _entityManager.AddComponent<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
         _entityManager.AddComponent<ZombieImmuneComponent>(uid);//they are practically mushrooms
 

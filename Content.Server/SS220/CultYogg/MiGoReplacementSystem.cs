@@ -1,15 +1,17 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Server.EUI;
-using Robust.Shared.Player;
 using Content.Server.Popups;
 using Content.Shared.Damage;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Body.Components;
 using Content.Shared.Mind.Components;
 using Robust.Server.Player;
-using Robust.Shared.Enums;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Mobs.Components;
+using Content.Shared.SS220.CultYogg.Components;
+using Robust.Shared.Network.Messages;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -22,23 +24,25 @@ public sealed class MiGoReplacementSystem : EntitySystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly MiGoSystem _migoSystem = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _playerManager.PlayerStatusChanged += OnPlayerChange;
 
         SubscribeLocalEvent<MiGoReplacementComponent, MobStateChangedEvent>(OnMobState);
     }
-    
+
     public override void Shutdown()
     {
         base.Shutdown();
-        _playerManager.PlayerStatusChanged -= OnPlayerChange;
     }
 
     private void StartTimer(MiGoReplacementComponent comp)
     {
+        if (comp.ShouldBeCounted)
+            return;
+
         comp.ShouldBeCounted = true;
         comp.ReplacementTimer = 0;
     }
@@ -47,7 +51,12 @@ public sealed class MiGoReplacementSystem : EntitySystem
     {
         comp.ShouldBeCounted = false;
         comp.ReplacementTimer = 0;
-        comp.MayBeReplaced = false;
+    }
+
+    private void RemoveReplacement(EntityUid uid, MiGoReplacementComponent replComp, MiGoComponent migoComp)
+    {
+        StopTimer(replComp);
+        _migoSystem.MarkupForReplacement(uid, migoComp, false);
     }
 
     ///<summary>
@@ -64,42 +73,32 @@ public sealed class MiGoReplacementSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        var query = EntityQueryEnumerator<MiGoReplacementComponent>();
-        while (query.MoveNext(out var uid, out var repl))
+        var query = EntityQueryEnumerator<MindContainerComponent, MiGoReplacementComponent, MiGoComponent, MobStateComponent>();
+        while (query.MoveNext(out var uid, out var mc, out var replaceComp, out var migoComp, out var mobState))
         {
-            if (!repl.ShouldBeCounted)
+            //check if it has mind
+            if (!mc.HasMind)
+                StartTimer(replaceComp);
+
+            //if timer is on count it
+            if (!replaceComp.ShouldBeCounted)
                 continue;
 
-            repl.ReplacementTimer += frameTime;
-
-            if (repl.ReplacementTimer >= repl.BeforeReplacemetTime)
+            //in case somebody was resurected while he isn't in a body
+            //case we dont have any event for acquiring mind
+            if (mc.HasMind && _mobState.IsAlive(uid, mobState))
             {
-                repl.MayBeReplaced = true;
+                RemoveReplacement(uid, replaceComp, migoComp);
+                continue;
             }
 
-        }
-    }
+            replaceComp.ReplacementTimer += frameTime;
 
-    private void OnPlayerChange(object? sender, SessionStatusEventArgs e) //ToDo maybe rewrite it in dictionary us TeleportAFKtoCryoSystem
-    {
-        switch (e.NewStatus)
-        {
-            case SessionStatus.Disconnected:
-                if (e.Session.AttachedEntity is null
-                    || !HasComp<MindContainerComponent>(e.Session.AttachedEntity)
-                    || !HasComp<BodyComponent>(e.Session.AttachedEntity))
-                {
-                    break;
-                }
+            if (replaceComp.ReplacementTimer >= replaceComp.BeforeReplacemetTime)
+            {
+                _migoSystem.MarkupForReplacement(uid, migoComp, true);
+            }
 
-                if (TryComp<MiGoReplacementComponent>(e.Session.AttachedEntity, out var compRelp1))
-                    StartTimer(compRelp1);
-                break;
-
-            case SessionStatus.Connected:
-                if(TryComp<MiGoReplacementComponent>(e.Session.AttachedEntity, out var compRelp2))
-                    StopTimer(compRelp2);
-                break;
         }
     }
 }

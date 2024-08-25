@@ -8,6 +8,9 @@
   components:
   - type: MiGo
   - type: MiGoReplacement
+  - type: Telepathy
+    canSend: true
+    telepathyChannelPrototype: TelepathyChannelYoggSothothCult
   - type: MovementSpeedModifier
     baseWalkSpeed : 6
     baseSprintSpeed : 6
@@ -54,6 +57,10 @@
   - type: UserInterface
     interfaces:
       enum.MiGoErectUiKey.Key:
-       #type: FlatpackCreatorBoundUserInterface #just for check
         type: MiGoErectBoundUserInterface
   - type: ShowCultYoggIcons
+  - type: AntagObjectives
+    objectives:
+    - CultYoggAcsendObjective
+    - CultYoggSacraficeObjective
+

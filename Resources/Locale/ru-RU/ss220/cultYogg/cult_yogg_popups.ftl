@@ -15,6 +15,5 @@ cult-yogg-buckle-attempt = {$user} не является целью жертво
 
 cult-yogg-resurrected-by-heal = Мистические силы возвращают к жизнь {$target}
 
-cult-yogg-acsending-no-replacing = Достигнуто количество Ми-Го и все они живы
 cult-yogg-acsending-have-acsending = Один из членов культа в данный момент возносится
-cult-yogg-acsending-migo-full = Достигнуто количество Ми-Го
+cult-yogg-acsending-migo-full = Достигнуто количество Ми-Го и все они живы

@@ -21,7 +21,6 @@ using Content.Shared.StatusEffect;
 using Robust.Shared.Timing;
 using Content.Shared.NPC.Systems;
 using Content.Shared.SS220.CultYogg.Components;
-using Content.Shared.Mobs;
 using Content.Shared.Buckle.Components;
 using System.Linq;
 using Robust.Shared.Audio.Systems;
@@ -113,6 +112,14 @@ public abstract class SharedMiGoSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-should-eat-shroom"), args.Target, uid);
             return;
         }
+        //ToDo idk how to acsess server component
+        /*
+        if (HasComp<BibleUserComponent>(uid))
+        {
+            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-is-a-priest"), args.Target, uid);
+            return;
+        }
+        */
 
         if (HasComp<CultYoggSacrificialComponent>(uid))
         {
@@ -120,8 +127,6 @@ public abstract class SharedMiGoSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-is-sacraficial"), args.Target, uid);
             return;
         }
-
-        //ToDo check for a priest
         //ToDo Remove all holy water
 
         var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new MiGoEnslaveDoAfterEvent(), uid, args.Target)//ToDo estimate time for Enslave

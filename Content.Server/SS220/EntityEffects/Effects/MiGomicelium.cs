@@ -32,7 +32,7 @@ namespace Content.Server.SS220.EntityEffects.Effects
 
         [DataField]
         public float Time = 2.0f;
-        public override void Effect(EntityEffectBaseArgs args)
+        public override void Effect(EntityEffectBaseArgs args)//ToDo maybe do this us holywater in NarSi PR
         {
             var time = Time;
 
@@ -44,7 +44,7 @@ namespace Content.Server.SS220.EntityEffects.Effects
 
             if (entityManager.TryGetComponent<CultYoggComponent>(args.TargetEntity, out var comp))
             {
-                entityManager.System<SharedCultYoggSystem>().ModifyEatenShrooms(args.TargetEntity, comp);
+                entityManager.System<CultYoggSystem>().ModifyEatenShrooms(args.TargetEntity, comp);
                 return;
             }
             //ToDo
@@ -62,7 +62,7 @@ namespace Content.Server.SS220.EntityEffects.Effects
                 entityManager.System<SharedRaveSystem>().TryApplyRavenness(args.TargetEntity, time);
             }
         }
-        //ToDos check the guidebook
+        //ToDo check the guidebook
         protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("reagent-effect-guidebook-ss220-corrupt-mind", ("chance", Probability));
     }
 }

@@ -37,8 +37,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
 
-    //[Dependency] private readonly CultYoggRuleSystem _cultRule = default!;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -263,70 +261,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
         //Gib original body
         if (TryComp<BodyComponent>(uid, out var body))
             _body.GibBody(uid, body: body);
-    }
-
-    public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent comp)//idk if it is canser or no, will be like that for a time
-    {
-        comp.ConsumedShrooms++; //Add shroom to buffer
-        if (comp.ConsumedShrooms < comp.AmountShroomsToAscend) // if its not enough to ascend go next
-            return;
-
-        if (!AvaliableMiGoCheck())
-            return;
-
-        //ToDo markup that 1 person can be MiGo right now
-
-
-        //Maybe in later version we will detiriorate the body and add some kind of effects
-
-        //IDK how to check if he already has this action, so i did this markup
-        if (_actions.AddAction(uid, ref comp.AscendingActionEntity, out var act, comp.AscendingAction) && act.UseDelay != null)
-        {
-            var start = _gameTiming.CurTime;
-            var end = start + act.UseDelay.Value;
-            _actions.SetCooldown(comp.AscendingActionEntity.Value, start, end);
-        }
-    }
-
-    //Check for avaliable amoiunt of MiGo or gib MiGo to replace
-    private bool AvaliableMiGoCheck()
-    {
-        //ToDo cant find access for server maybe i should move it on server part
-        /*
-        _cultRule.GetCultGameRuleComp(out var ruleComp);
-
-        if (ruleComp is null)
-            return false;
-
-        int reqMiGo = ruleComp.ReqAmountOfMiGo;//check for max amount of migo
-        */
-
-        int reqMiGo = 3;
-
-        List <EntityUid> migoOnDelete = new();
-
-        var query = EntityQueryEnumerator<MiGoComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            reqMiGo--;
-
-            if (comp.MayBeReplaced)
-                migoOnDelete.Add(uid);
-        }
-
-        if (reqMiGo > 0)
-            return true;
-
-        if (migoOnDelete.Count == 0)
-            return false;
-
-        if (TryComp<BodyComponent>(migoOnDelete[0], out var body)) //ToDo check for cancer coding
-        {
-            _body.GibBody(migoOnDelete[0], body: body);
-            return true;
-        }
-
-        return false;
     }
     #endregion
 }

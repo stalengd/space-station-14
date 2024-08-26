@@ -259,7 +259,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
             return false;
 
-        if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists
+        //ToDo remove this when you make a JobRequirement
+        if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists 
             return false;
 
         _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);

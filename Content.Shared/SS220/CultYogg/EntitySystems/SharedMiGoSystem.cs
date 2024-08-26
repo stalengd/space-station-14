@@ -328,7 +328,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!HasComp<CultYoggComponent>(args.Target))
+        if (!HasComp<CultYoggComponent>(args.Target))//ToDo should discuss
         {
             if (_net.IsServer)
                 _popup.PopupEntity(Loc.GetString("cult-yogg-heal-only-cultists"), uid);
@@ -438,9 +438,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 public sealed partial class MiGoSacrificeDoAfterEvent : SimpleDoAfterEvent { }
 
 [Serializable, NetSerializable]
-public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent
-{
-}
+public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent { }
 
 [Serializable, NetSerializable]
 public sealed partial class AfterMaterialize : DoAfterEvent

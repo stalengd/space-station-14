@@ -30,5 +30,5 @@ public sealed partial class CultYoggHealComponent : Component
     /// </summary>
     public float TimeBetweenIncidents = 2.5f; // most balanced value
 
-    public float NextIncidentTime;
+    public float NextIncidentTime;//ToDo make it timespan
 }

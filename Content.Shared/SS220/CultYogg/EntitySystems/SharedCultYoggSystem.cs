@@ -247,11 +247,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
     #region Ascending
     private void AscendingAction(Entity<CultYoggComponent> uid, ref CultYoggAscendingEvent args)
     {
-        /* idk what is this
-        if (!_timing.IsFirstTimePredicted)
-            return;
-        */
-
         if (_net.IsClient)
             return;
 
@@ -265,13 +260,9 @@ public abstract class SharedCultYoggSystem : EntitySystem
         if (_mind.TryGetMind(uid, out var mindId, out var mind))
             _mind.TransferTo(mindId, migo, mind: mind);
 
-        //AddComp<MiGoReplacementComponent>(migo);//ToDo smt with it case it isn't working
-
         //Gib original body
         if (TryComp<BodyComponent>(uid, out var body))
-        {
             _body.GibBody(uid, body: body);
-        }
     }
 
     public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent comp)//idk if it is canser or no, will be like that for a time
@@ -282,6 +273,9 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
         if (!AvaliableMiGoCheck())
             return;
+
+        //ToDo markup that 1 person can be MiGo right now
+
 
         //Maybe in later version we will detiriorate the body and add some kind of effects
 

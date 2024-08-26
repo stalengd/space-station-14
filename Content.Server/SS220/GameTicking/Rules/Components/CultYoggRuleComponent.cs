@@ -22,6 +22,14 @@ public sealed partial class CultYoggRuleComponent : Component
     public int ReqAmountOfMiGo = 3;
 
     /// <summary>
+    /// General requirements
+    /// </summary>
+
+    public readonly List<string> FirstTierJobs = new() { "Captain" };
+    public readonly string SecondTierDepartament = "Command";
+    public readonly List<string> BannedDepartaents = new() { "GhostRoles" };
+
+    /// <summary>
     /// Storages for an endgame screen title
     /// </summary>
     [DataField]
@@ -53,7 +61,7 @@ public sealed partial class CultYoggRuleComponent : Component
 
     //telephaty channel
     [DataField]
-    public string channel = "TelepathyChannelYoggSothothCult";
+    public string Channel = "TelepathyChannelYoggSothothCult";
     /// <summary>
     /// Check for an endgame screen title
     /// </summary>

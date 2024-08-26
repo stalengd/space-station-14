@@ -12,6 +12,7 @@ public sealed partial class MiGoReplacementComponent : Component
 
     //Time to replace MiGo
     public float BeforeReplacemetTime = 15;//ToDo adjust this number
+    //ToDo replace this to timespan
 
     //Timer
     public float ReplacementTimer = 0;

@@ -36,8 +36,8 @@ public sealed class MiGoAliveConditionSystem : EntitySystem
     private void OnGetProgress(Entity<MiGoAliveConditionComponent> ent, ref ObjectiveGetProgressEvent args)
     {
         float migoCount = 0;//float cause args.Progress is float
-        var query = EntityQueryEnumerator<MiGoComponent, MobStateComponent>();
-        while (query.MoveNext(out var uid, out var migo, out var mobStateComp))
+        var query = EntityQueryEnumerator<MiGoComponent>();
+        while (query.MoveNext(out var uid, out var migo))
         {
             if (migo.MayBeReplaced) //theoratically includes dead and no mind state
                 continue;

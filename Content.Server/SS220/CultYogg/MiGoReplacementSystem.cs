@@ -18,7 +18,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.SS220.CultYogg;
 
-public sealed class MiGoReplacementSystem : EntitySystem
+public sealed class MiGoReplacementSystem : EntitySystem //ToDo make it partial
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly EuiManager _euiManager = default!;
@@ -44,22 +44,6 @@ public sealed class MiGoReplacementSystem : EntitySystem
     {
         base.Shutdown();
     }
-
-    private void StartTimer(MiGoReplacementComponent comp)
-    {
-        if (comp.ShouldBeCounted)
-            return;
-
-        comp.ShouldBeCounted = true;
-        comp.ReplacementTimer = 0;
-    }
-
-    private void StopTimer(MiGoReplacementComponent comp)
-    {
-        comp.ShouldBeCounted = false;
-        comp.ReplacementTimer = 0;
-    }
-
     private void OnPlayerAttached(Entity<MiGoReplacementComponent> ent, ref PlayerAttachedEvent args)
     {
         CheckTimerConditions(ent, ent.Comp);
@@ -73,28 +57,26 @@ public sealed class MiGoReplacementSystem : EntitySystem
         StopTimer(replComp);
         _migoSystem.MarkupForReplacement(uid, migoComp, false);
     }
-    private void OnMindAdded(Entity<MiGoReplacementComponent> ent, ref MindAddedMessage args)
+    private void OnMindAdded(Entity<MiGoReplacementComponent> ent, ref MindAddedMessage args)//ToDo check if it is the same us OnPlayerAttached
     {
         CheckTimerConditions(ent, ent.Comp);
     }
-    private void OnMindRemoved(Entity<MiGoReplacementComponent> ent, ref MindRemovedMessage args)
+    private void OnMindRemoved(Entity<MiGoReplacementComponent> ent, ref MindRemovedMessage args)//ToDo check if it is the same us OnPlayerAttached
     {
         CheckTimerConditions(ent, ent.Comp);
     }
-    private void CheckTimerConditions(EntityUid uid, MiGoReplacementComponent replComp) 
+    private void CheckTimerConditions(EntityUid uid, MiGoReplacementComponent replComp)
     {
         if (_mobState.IsDead(uid)) //if you are dead = timer
             StartTimer(replComp);
 
-        if (!TryComp<MindContainerComponent>(uid, out var mindComp) && (mindComp == null))
+        if (!TryComp<MindContainerComponent>(uid, out var mindComp) || (mindComp == null))
             return;
 
         if (mindComp.Mind == null) // if you ghosted = timer
             StartTimer(replComp);
 
-        _mind.TryGetMind(uid, out var mind, out var userMidComp);
-
-        if (userMidComp == null)
+        if (!_mind.TryGetMind(uid, out var _, out var userMidComp) || (userMidComp == null))
             return;
 
         if (userMidComp.Session == null) // if you left = timer
@@ -107,7 +89,7 @@ public sealed class MiGoReplacementSystem : EntitySystem
     ///<summary>
     /// On death removes active comps and gives genetic damage to prevent cloning, reduce this to allow cloning.
     ///</summary>
-    private void OnMobState(Entity<MiGoReplacementComponent> uid, ref MobStateChangedEvent args)
+    private void OnMobState(Entity<MiGoReplacementComponent> uid, ref MobStateChangedEvent args)//ToDo rewrite
     {
         if (args.NewMobState == MobState.Dead)
             StartTimer(uid.Comp);
@@ -118,12 +100,16 @@ public sealed class MiGoReplacementSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        var query = EntityQueryEnumerator<MindContainerComponent, MiGoReplacementComponent, MiGoComponent, MobStateComponent>();
-        while (query.MoveNext(out var uid, out var mc, out var replaceComp, out var migoComp, out var mobState))
+        var query = EntityQueryEnumerator<MiGoReplacementComponent, MiGoComponent>();
+        while (query.MoveNext(out var uid, out var replaceComp, out var migoComp))
         {
             //if timer is on count it
             if (!replaceComp.ShouldBeCounted)
                 continue;
+            /*
+              if (_timing.CurTime < comp.StartTime + TimeSpan.FromSeconds(smoke.Duration) - TimeSpan.FromSeconds(comp.AnimationTime))
+                continue;
+             */
 
             replaceComp.ReplacementTimer += frameTime;
 
@@ -132,5 +118,21 @@ public sealed class MiGoReplacementSystem : EntitySystem
                 _migoSystem.MarkupForReplacement(uid, migoComp, true);
             }
         }
+    }
+
+    //Timer tweaking
+    private void StartTimer(MiGoReplacementComponent comp)
+    {
+        if (comp.ShouldBeCounted)
+            return;
+
+        comp.ShouldBeCounted = true;
+        comp.ReplacementTimer = 0;
+    }
+
+    private void StopTimer(MiGoReplacementComponent comp)
+    {
+        comp.ShouldBeCounted = false;
+        comp.ReplacementTimer = 0;
     }
 }

@@ -46,7 +46,7 @@ public sealed class MiGoSystem : SharedMiGoSystem
         if (telepathy == null)
             return;
 
-        var meta = EnsureComp<MetaDataComponent>(uid);
+        var meta = MetaData(uid);
 
         //sending other cultists informing message
         if (isMarkedToReplace)

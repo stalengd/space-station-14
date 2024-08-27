@@ -7,18 +7,15 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Mind.Components;
 using Robust.Server.Player;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Systems;
-using Content.Shared.Mobs.Components;
 using Content.Shared.SS220.CultYogg.Components;
-using Robust.Shared.Network.Messages;
-using Content.Shared.PAI;
-using Content.Shared.SSDIndicator;
 using Robust.Shared.Player;
+using Content.Shared.SS220.CultYogg.EntitySystems;
+using Content.Shared.SS220.Telepathy;
+using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg;
 
-public sealed class MiGoReplacementSystem : EntitySystem //ToDo make it partial
+public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly EuiManager _euiManager = default!;
@@ -27,112 +24,112 @@ public sealed class MiGoReplacementSystem : EntitySystem //ToDo make it partial
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly MiGoSystem _migoSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<MiGoReplacementComponent, MobStateChangedEvent>(OnMobState);
-        SubscribeLocalEvent<MiGoReplacementComponent, MindAddedMessage>(OnMindAdded);
-        SubscribeLocalEvent<MiGoReplacementComponent, MindRemovedMessage>(OnMindRemoved);
-        SubscribeLocalEvent<MiGoReplacementComponent, PlayerAttachedEvent>(OnPlayerAttached);
-        SubscribeLocalEvent<MiGoReplacementComponent, PlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<MiGoComponent, MobStateChangedEvent>(OnMobState);
+        SubscribeLocalEvent<MiGoComponent, PlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<MiGoComponent, PlayerDetachedEvent>(OnPlayerDetached);
     }
-
-    public override void Shutdown()
-    {
-        base.Shutdown();
-    }
-    private void OnPlayerAttached(Entity<MiGoReplacementComponent> ent, ref PlayerAttachedEvent args)
+    private void OnPlayerAttached(Entity<MiGoComponent> ent, ref PlayerAttachedEvent args)
     {
         CheckTimerConditions(ent, ent.Comp);
     }
-    private void OnPlayerDetached(Entity<MiGoReplacementComponent> ent, ref PlayerDetachedEvent args)
+    private void OnPlayerDetached(Entity<MiGoComponent> ent, ref PlayerDetachedEvent args)
     {
         CheckTimerConditions(ent, ent.Comp);
-    }
-    private void RemoveReplacement(EntityUid uid, MiGoReplacementComponent replComp, MiGoComponent migoComp)
-    {
-        StopTimer(replComp);
-        _migoSystem.MarkupForReplacement(uid, migoComp, false);
-    }
-    private void OnMindAdded(Entity<MiGoReplacementComponent> ent, ref MindAddedMessage args)//ToDo check if it is the same us OnPlayerAttached
-    {
-        CheckTimerConditions(ent, ent.Comp);
-    }
-    private void OnMindRemoved(Entity<MiGoReplacementComponent> ent, ref MindRemovedMessage args)//ToDo check if it is the same us OnPlayerAttached
-    {
-        CheckTimerConditions(ent, ent.Comp);
-    }
-    private void CheckTimerConditions(EntityUid uid, MiGoReplacementComponent replComp)
-    {
-        if (_mobState.IsDead(uid)) //if you are dead = timer
-            StartTimer(replComp);
-
-        if (!TryComp<MindContainerComponent>(uid, out var mindComp) || (mindComp == null))
-            return;
-
-        if (mindComp.Mind == null) // if you ghosted = timer
-            StartTimer(replComp);
-
-        if (!_mind.TryGetMind(uid, out var _, out var userMidComp) || (userMidComp == null))
-            return;
-
-        if (userMidComp.Session == null) // if you left = timer
-            StartTimer(replComp);
-
-        if (TryComp<MiGoComponent>(uid, out var migoComp))
-            RemoveReplacement(uid, replComp, migoComp);
     }
 
     ///<summary>
     /// On death removes active comps and gives genetic damage to prevent cloning, reduce this to allow cloning.
     ///</summary>
-    private void OnMobState(Entity<MiGoReplacementComponent> uid, ref MobStateChangedEvent args)//ToDo rewrite
+    private void OnMobState(Entity<MiGoComponent> ent, ref MobStateChangedEvent args)
     {
-        if (args.NewMobState == MobState.Dead)
-            StartTimer(uid.Comp);
-        else
-            StopTimer(uid.Comp);
+        CheckTimerConditions(ent, ent.Comp);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        var query = EntityQueryEnumerator<MiGoReplacementComponent, MiGoComponent>();
-        while (query.MoveNext(out var uid, out var replaceComp, out var migoComp))
+
+        var query = EntityQueryEnumerator<MiGoComponent>();
+        while (query.MoveNext(out var uid, out var migoComp))
         {
-            //if timer is on count it
-            if (!replaceComp.ShouldBeCounted)
+            //if timer is on then count it
+            if (!migoComp.ShouldBeCounted)
                 continue;
-            /*
-              if (_timing.CurTime < comp.StartTime + TimeSpan.FromSeconds(smoke.Duration) - TimeSpan.FromSeconds(comp.AnimationTime))
+
+            if (migoComp.ReplacementEventTime == null)
                 continue;
-             */
 
-            replaceComp.ReplacementTimer += frameTime;
+            if (_timing.CurTime < migoComp.ReplacementEventTime)
+                continue;
 
-            if (replaceComp.ReplacementTimer >= replaceComp.BeforeReplacemetTime)
-            {
-                _migoSystem.MarkupForReplacement(uid, migoComp, true);
-            }
+            MarkupForReplacement(uid, migoComp, true);
         }
     }
 
     //Timer tweaking
-    private void StartTimer(MiGoReplacementComponent comp)
+    private void StartTimer(MiGoComponent comp)
     {
-        if (comp.ShouldBeCounted)
+        if (comp.ReplacementEventTime != null)
             return;
 
-        comp.ShouldBeCounted = true;
-        comp.ReplacementTimer = 0;
+        comp.ReplacementEventTime = _timing.CurTime + comp.BeforeReplacementCooldown;
     }
 
-    private void StopTimer(MiGoReplacementComponent comp)
+    private void StopTimer(MiGoComponent comp)
     {
-        comp.ShouldBeCounted = false;
-        comp.ReplacementTimer = 0;
+        comp.ReplacementEventTime = null;
+    }
+
+    //Delete replacement marker from a MiGo
+    private void RemoveReplacement(EntityUid uid, MiGoComponent сomp)
+    {
+        StopTimer(сomp);
+        MarkupForReplacement(uid, сomp, false);
+    }
+
+    private void CheckTimerConditions(EntityUid uid, MiGoComponent comp)
+    {
+        if (_mobState.IsDead(uid)) //if you are dead = timer
+            StartTimer(comp);
+
+        if (!TryComp<MindContainerComponent>(uid, out var mindComp) || (mindComp == null))
+            return;
+
+        if (mindComp.Mind == null) // if you ghosted = timer
+            StartTimer(comp);
+
+        if (!_mind.TryGetMind(uid, out var _, out var userMidComp) || (userMidComp == null))
+            return;
+
+        if (userMidComp.Session == null) // if you left = timer
+            StartTimer(comp);
+
+        RemoveReplacement(uid, comp);
+    }
+
+    //Sends special message of replacement to othe cultists
+    private void MarkupForReplacement(EntityUid uid, MiGoComponent comp, bool isMarkedToReplace)
+    {
+        comp.MayBeReplaced = isMarkedToReplace;
+
+        if (TryComp<TelepathyComponent>(uid, out var telepathy))
+            return;
+
+        if (telepathy == null)
+            return;
+
+        var meta = MetaData(uid);
+
+        //sending other cultists informing message
+        if (isMarkedToReplace)
+            RaiseLocalEvent(uid, new TelepathyAnnouncementSendEvent() { Message = Loc.GetString("cult-yogg-migo-can-replace", ("name", meta.EntityName)), TelepathyChannel = telepathy.TelepathyChannelPrototype });
+        else
+            RaiseLocalEvent(uid, new TelepathyAnnouncementSendEvent() { Message = Loc.GetString("cult-yogg-migo-cancel-replace", ("name", meta.EntityName)), TelepathyChannel = telepathy.TelepathyChannelPrototype });
     }
 }

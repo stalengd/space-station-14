@@ -1,0 +1,23 @@
+# © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+
+- type: entity
+  name: beach
+  parent: BaseItem
+  id: BeachCultYogg
+  description: description
+  components:
+  - type: Sprite
+    sprite: SS220/Objects/Weapons/Melee/cult_yogg_beach.rsi
+    state: icon
+  - type: Irremovable
+    inHandItem: true
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 1.5
+    range: 2
+    angle: 100
+    damage:
+      types:
+        Poison: 10
+        Blunt: 10
+        Structural: 15

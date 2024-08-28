@@ -4,7 +4,7 @@
   id: Test1
   order: 0
   frame: CultYoggBuildingFrame
-  result: ComputerShuttleCargo
+  result: CultYoggPod
   materials:
   - stack: Tokl
     count: 10
@@ -17,7 +17,7 @@
   id: Test2
   order: 1
   frame: CultYoggBuildingFrame
-  result: ComputerShuttleCargo
+  result: fungusHydroponic #ToDo wierd bug  with "green" sprite before placement
   materials:
   - stack: Steel
     count: 10

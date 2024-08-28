@@ -37,6 +37,8 @@ using Robust.Shared.Map;
 using Robust.Shared.Utility;
 using Content.Shared.SS220.Bible;
 using System.Collections.Immutable;
+using Content.Server.SS220.CultYogg;
+using Content.Server.Database;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -66,6 +68,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         SubscribeLocalEvent<CultYoggRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
         SubscribeLocalEvent<CultYoggEnslavedEvent>(MiGoEnslave);//cant receive this shit
         //SubscribeLocalEvent<CultYoggComponent, CleansedEvent>();
+
+        SubscribeLocalEvent<SacraficialReplacementEvent>(SacraficialReplacement);
 
         SubscribeLocalEvent<CultYoggSummonedEvent>(OnGodSummoned);
     }
@@ -215,6 +219,33 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     #region Sacraficials Events
 
+    private void SacraficialReplacement(ref SacraficialReplacementEvent args)
+    {
+        GetCultGameRuleComp(out var cultRuleComp);
+
+        if (cultRuleComp == null)
+            return;
+
+        if (!TryComp<CultYoggSacrificialComponent>(args.Entity, out var sacrComp))
+            return;
+
+        if (sacrComp.WasSacraficed)
+            return;
+
+        SetNewSacraficial(cultRuleComp, sacrComp.Tier);
+
+        RemComp<CultYoggSacrificialComponent>(args.Entity);
+
+        if (!_mindSystem.TryGetMind(args.Player, out var mindUid, out var mind))
+            return;
+
+        if (mindUid == null)
+            return;
+
+        cultRuleComp.SacraficialsList.Remove(mindUid.Value);
+
+        RemComp<CultYoggSacrificialMindComponent>(mindUid.Value);
+    }
     private void SetNewSacraficial(CultYoggRuleComponent comp, int tier)
     {
         var allHumans = GetAliveHumans();

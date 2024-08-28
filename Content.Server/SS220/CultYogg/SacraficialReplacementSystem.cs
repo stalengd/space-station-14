@@ -15,6 +15,10 @@ using Robust.Shared.Timing;
 using Content.Server.Body.Components;
 using Robust.Shared.Network;
 using System.Linq;
+using Content.Shared.Actions;
+using System.Collections.Generic;
+using JetBrains.FormatRipper.Elf;
+using Content.Shared.Clothing;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -29,38 +33,52 @@ public sealed partial class SacraficialReplacementSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    private readonly Dictionary<(EntityUid, NetUserId), (TimeSpan, bool)> _entityEnteredSSDTimes = new();
+    private Dictionary<(EntityUid, NetUserId), TimeSpan> _entityEnteredSSDTimes = new();
+
+    private TimeSpan _BeforeReplacementCooldown = TimeSpan.FromSeconds(300);//ToDo set timer
+
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CultYoggSacrificialComponent, BeingGibbedEvent>(OnBeingGibbed);
-        //SubscribeLocalEvent<CultYoggSacrificialComponent, PlayerAttachedEvent>(OnPlayerAttached);
-        //SubscribeLocalEvent<CultYoggSacrificialComponent, PlayerDetachedEvent>(OnPlayerDetached);
-
-        _playerManager.PlayerStatusChanged -= OnPlayerChange;
+        SubscribeLocalEvent<CultYoggSacrificialComponent, PlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<CultYoggSacrificialComponent, PlayerDetachedEvent>(OnPlayerDetached);
     }
-    private void OnBeingGibbed(Entity<CultYoggSacrificialComponent> ent, ref BeingGibbedEvent args)
+    private void OnPlayerAttached(Entity<CultYoggSacrificialComponent> ent, ref PlayerAttachedEvent args)
     {
-        if (ent.Comp.WasSacraficed) // if it died when it was sacraficed -- everything is ok
-            return;
-
-        if (!_mind.TryGetMind(ent, out var mind, out var userMidComp))
-            return;
-
-        int tier = ent.Comp.Tier;//ToDo send this tier to a gamerule
-
-        //remove all components
-        RemComp<CultYoggSacrificialComponent>(ent);
-        RemComp<CultYoggSacrificialMindComponent>(mind);
+        _entityEnteredSSDTimes.Remove((ent, args.Player.UserId));
     }
+
+    private void OnPlayerDetached(Entity<CultYoggSacrificialComponent> ent, ref PlayerDetachedEvent args)
+    {
+        _entityEnteredSSDTimes.Add((ent, args.Player.UserId), _timing.CurTime);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        foreach (var pair in _entityEnteredSSDTimes.Where(uid => HasComp<MindContainerComponent>(uid.Key.Item1)))
+        foreach (var pair in _entityEnteredSSDTimes)
         {
-            if (pair.Value.Item2)
-                _entityEnteredSSDTimes.Remove(pair.Key);
+            if (_timing.CurTime < pair.Value + _BeforeReplacementCooldown)
+                continue;
+
+            var ev = new SacraficialReplacementEvent(pair.Key.Item1, pair.Key.Item2);
+            RaiseLocalEvent(pair.Key.Item1, ref ev, true);
+
+            _entityEnteredSSDTimes.Remove(pair.Key);
         }
+    }
+}
+
+[ByRefEvent, Serializable]
+public sealed class SacraficialReplacementEvent : EntityEventArgs
+{
+    public readonly EntityUid Entity;
+    public readonly NetUserId Player;
+
+    public SacraficialReplacementEvent(EntityUid entity, NetUserId player)
+    {
+        Entity = entity;
+        Player = player;
     }
 }

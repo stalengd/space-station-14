@@ -32,7 +32,7 @@ public sealed class CultYoggHealSystem : SharedCultYoggHealSystem
     {
         uid.Comp.NextIncidentTime = uid.Comp.TimeBetweenIncidents;
     }
-    public override void Update(float frameTime)
+    public override void Update(float frameTime)//ToDo rewrite as Timespan
     {
         base.Update(frameTime);
 

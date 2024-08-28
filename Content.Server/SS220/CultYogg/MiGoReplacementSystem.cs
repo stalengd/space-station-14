@@ -28,8 +28,6 @@ public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
 
     public override void Initialize()
     {
-        base.Initialize();
-
         SubscribeLocalEvent<MiGoComponent, MobStateChangedEvent>(OnMobState);
         SubscribeLocalEvent<MiGoComponent, PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<MiGoComponent, PlayerDetachedEvent>(OnPlayerDetached);

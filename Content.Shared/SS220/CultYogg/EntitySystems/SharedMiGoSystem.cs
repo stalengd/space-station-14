@@ -24,6 +24,7 @@ using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.Buckle.Components;
 using System.Linq;
 using Robust.Shared.Audio.Systems;
+//using Content.Server.Bible.Components;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -64,6 +65,9 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
 
 
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslaveDoAfterEvent>(MiGoEnslaveOnDoAfter);
+
+
         SubscribeLocalEvent<MiGoComponent, AfterMaterialize>(OnAfterMaterialize);
         SubscribeLocalEvent<MiGoComponent, AfterDeMaterialize>(OnAfterDeMaterialize);
     }
@@ -84,8 +88,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
         {
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid);
+            //_popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid); // commenting cause its spamming sevral times
             return;
         }
 
@@ -112,11 +115,12 @@ public abstract class SharedMiGoSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-should-eat-shroom"), args.Target, uid);
             return;
         }
+
         //ToDo idk how to acsess server component
         /*
         if (HasComp<BibleUserComponent>(uid))
         {
-            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-is-a-priest"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-cant-be-a-priest"), args.Target, uid);
             return;
         }
         */
@@ -141,6 +145,17 @@ public abstract class SharedMiGoSystem : EntitySystem
         };
 
         _doAfter.TryStartDoAfter(doafterArgs);
+
+        args.Handled = true;
+    }
+    private void MiGoEnslaveOnDoAfter(Entity<MiGoComponent> uid, ref MiGoEnslaveDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled || args.Target == null)
+            return;
+
+        //ToDo Remove clients effects
+        var ev = new CultYoggEnslavedEvent(args.Target);
+        RaiseLocalEvent(uid, ref ev, true);
 
         args.Handled = true;
     }
@@ -459,3 +474,8 @@ public sealed partial class AfterDeMaterialize : DoAfterEvent
 
 [ByRefEvent]
 public record struct MiGoAstralAppearanceEvent();
+
+
+[ByRefEvent, Serializable]
+public record struct CultYoggEnslavedEvent(EntityUid? Target);
+

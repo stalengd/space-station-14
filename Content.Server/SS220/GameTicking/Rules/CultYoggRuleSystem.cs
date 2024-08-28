@@ -5,6 +5,7 @@ using Content.Server.Zombies;
 using Content.Server.Mind;
 using Content.Server.Antag;
 using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
@@ -37,6 +38,8 @@ using Robust.Shared.Map;
 using Robust.Shared.Utility;
 using Content.Shared.SS220.Bible;
 using System.Collections.Immutable;
+using Content.Server.SS220.CultYogg;
+using Content.Server.Database;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -67,9 +70,14 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         SubscribeLocalEvent<CultYoggEnslavedEvent>(MiGoEnslave);//cant receive this shit
         //SubscribeLocalEvent<CultYoggComponent, CleansedEvent>();
 
+        SubscribeLocalEvent<SacraficialReplacementEvent>(SacraficialReplacement);
+
         SubscribeLocalEvent<CultYoggSummonedEvent>(OnGodSummoned);
     }
 
+
+
+    #region Sacreficials picking
     /// <summary>
     /// Used to generate sacraficials at the start of the gamerule
     /// </summary>
@@ -79,8 +87,6 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         SetSacraficials(component);
     }
-
-    #region Sacreficials picking
 
     //Filling list of jobs fot better range
     private void GenerateJobsList(CultYoggRuleComponent comp)
@@ -215,6 +221,33 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     #region Sacraficials Events
 
+    private void SacraficialReplacement(ref SacraficialReplacementEvent args)
+    {
+        GetCultGameRuleComp(out var cultRuleComp);
+
+        if (cultRuleComp == null)
+            return;
+
+        if (!TryComp<CultYoggSacrificialComponent>(args.Entity, out var sacrComp))
+            return;
+
+        if (sacrComp.WasSacraficed)
+            return;
+
+        SetNewSacraficial(cultRuleComp, sacrComp.Tier);
+
+        RemComp<CultYoggSacrificialComponent>(args.Entity);
+
+        if (!_mindSystem.TryGetMind(args.Player, out var mindUid, out var mind))
+            return;
+
+        if (mindUid == null)
+            return;
+
+        cultRuleComp.SacraficialsList.Remove(mindUid.Value);
+
+        RemComp<CultYoggSacrificialMindComponent>(mindUid.Value);
+    }
     private void SetNewSacraficial(CultYoggRuleComponent comp, int tier)
     {
         var allHumans = GetAliveHumans();
@@ -372,6 +405,3 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         }
     }
 }
-
-[ByRefEvent, Serializable]
-public record struct CultYoggEnslavedEvent(EntityUid? Target);

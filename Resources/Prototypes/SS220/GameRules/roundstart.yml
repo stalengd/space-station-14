@@ -5,16 +5,20 @@
   parent: BaseGameRule
   components:
   - type: GameRule
-    minPlayers: 1 #ToDo calculate around 60
+    minPlayers: 1 #ToDo calculate around min players
     delay: #ToDo tweak numbers
       min: 2
-      max: 60
+      max: 30
   - type: CultYoggRule
   - type: AntagSelection
     definitions:
     - prefRoles: [ CultYogg ]
       max: 4
       playerRatio: 2
+      blacklist:
+        components:
+        - CultYoggSacrificial
+        - CultYoggSacrificialMind
       lateJoinAdditional: true
       mindComponents:
       - type: CultYoggRole

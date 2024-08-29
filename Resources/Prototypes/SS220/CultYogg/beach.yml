@@ -9,6 +9,14 @@
   - type: Sprite
     sprite: SS220/Objects/Weapons/Melee/cult_yogg_beach.rsi
     state: icon
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+#      - state: inhand-left-vox
+      right:
+      - state: inhand-right
+#      - state: inhand-right-vox
   - type: Irremovable
     inHandItem: true
   - type: MeleeWeapon

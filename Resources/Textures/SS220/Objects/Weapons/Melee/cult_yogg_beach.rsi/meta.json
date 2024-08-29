@@ -17,6 +17,14 @@
       {
         "name": "inhand-right",
         "directions": 4
+      },
+      {
+        "name": "inhand-left-vox",
+        "directions": 4
+      },
+      {
+        "name": "inhand-right-vox",
+        "directions": 4
       }
     ]
   }

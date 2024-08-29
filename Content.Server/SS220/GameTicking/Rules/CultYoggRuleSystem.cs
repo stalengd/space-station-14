@@ -40,6 +40,10 @@ using Content.Shared.SS220.Bible;
 using System.Collections.Immutable;
 using Content.Server.SS220.CultYogg;
 using Content.Server.Database;
+using Content.Shared.Audio;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
+using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -61,6 +65,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
 
     private List<List<String>> SacraficialTiers = new();
+    public TimeSpan DefaultShuttleArriving { get; set; } = TimeSpan.FromSeconds(85);
 
     public override void Initialize()
     {
@@ -321,13 +326,13 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     #endregion
 
     #region RoundEnding
-    private void OnGodSummoned(CultYoggSummonedEvent ev)
+    private void OnGodSummoned(ref CultYoggSummonedEvent ev)
     {
         foreach (var station in _station.GetStations())
         {
             _chat.DispatchStationAnnouncement(station, Loc.GetString("cult-yogg-shuttle-call"), colorOverride: Color.Crimson);
         }
-        _roundEnd.RequestRoundEnd(null, false);
+        _roundEnd.RequestRoundEnd(DefaultShuttleArriving, null);
     }
 
     #endregion
@@ -340,6 +345,11 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     ref RoundEndTextAppendEvent args)
     {
         base.AppendRoundEndText(uid, component, gameRule, ref args);
+
+
+        bool summoned = false;
+
+        var query = EntityQueryEnumerator<NyarlathotepComponent>();//ToDo maybe some altrenative
 
         if (component.Summoned)
         {

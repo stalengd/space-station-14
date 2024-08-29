@@ -12,5 +12,5 @@ namespace Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 public sealed partial class NyarlathotepComponent : Component
 {
     [DataField("summonMusic")]
-    public SoundSpecifier SummonMusic = new SoundCollectionSpecifier("NukeMusic");//ToDo make own
+    public SoundSpecifier SummonMusic = new SoundCollectionSpecifier("CultYoggMusic");//ToDo make own
 }

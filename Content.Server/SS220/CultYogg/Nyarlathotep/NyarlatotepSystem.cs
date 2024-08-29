@@ -32,6 +32,9 @@ public sealed class NyarlathotepSystem : EntitySystem
         string _selectedNukeSong = _audio.GetSound(uid.Comp.SummonMusic);
         if (!string.IsNullOrEmpty(_selectedNukeSong))
             _sound.DispatchStationEventMusic(uid, _selectedNukeSong, StationEventMusicType.Nuke);
+
+        var ev = new CultYoggSummonedEvent();
+        RaiseLocalEvent(uid, ref ev, true);
     }
 
 
@@ -59,7 +62,5 @@ public sealed class NyarlathotepSystem : EntitySystem
 /// <summary>
 ///     Raised when god summoned to markup winning
 /// </summary>
-public sealed class CultYoggSummonedEvent : EntityEventArgs //ToDo not sure about this
-{
-
-}
+[ByRefEvent, Serializable]
+public record struct CultYoggSummonedEvent { }

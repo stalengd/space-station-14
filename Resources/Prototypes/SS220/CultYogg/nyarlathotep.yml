@@ -38,7 +38,7 @@
       path: /Audio/SS220/Music/hellmarch.ogg
   - type: Fixtures
     fixtures:
-      NyarlathotepHorizonCollider:
+      NyarlathotepHorizonCollider: #ToDo make it at leaslt close to entity
         shape:
           !type:PhysShapeCircle
             radius: 0.35
@@ -54,9 +54,10 @@
         - AllMask
         layer:
         - AllMask
+  - type: Nyarlathotep
   - type: NyarlathotepHorizon
     radius: 0.6
-    consumeEntities: false
+    consumeEntities: true
     colliderFixtureId: NyarlathotepHorizonCollider
     consumerFixtureId: NyarlathotepHorizonConsumer
   - type: NyarlathotepSearchTargets

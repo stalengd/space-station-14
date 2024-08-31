@@ -21,10 +21,10 @@ using Content.Shared.StatusEffect;
 using Robust.Shared.Timing;
 using Content.Shared.NPC.Systems;
 using Content.Shared.SS220.CultYogg.Components;
-using Content.Shared.Mobs;
 using Content.Shared.Buckle.Components;
 using System.Linq;
 using Robust.Shared.Audio.Systems;
+//using Content.Server.Bible.Components;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -65,6 +65,9 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
 
 
+        SubscribeLocalEvent<MiGoComponent, MiGoEnslaveDoAfterEvent>(MiGoEnslaveOnDoAfter);
+
+
         SubscribeLocalEvent<MiGoComponent, AfterMaterialize>(OnAfterMaterialize);
         SubscribeLocalEvent<MiGoComponent, AfterDeMaterialize>(OnAfterDeMaterialize);
     }
@@ -85,8 +88,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 
         if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
         {
-            if (_net.IsClient)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid);
+            //_popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid); // commenting cause its spamming sevral times
             return;
         }
 
@@ -114,14 +116,21 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
         }
 
+        //ToDo idk how to acsess server component
+        /*
+        if (HasComp<BibleUserComponent>(uid))
+        {
+            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-cant-be-a-priest"), args.Target, uid);
+            return;
+        }
+        */
+
         if (HasComp<CultYoggSacrificialComponent>(uid))
         {
             if (_net.IsClient)
                 _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-is-sacraficial"), args.Target, uid);
             return;
         }
-
-        //ToDo check for a priest
         //ToDo Remove all holy water
 
         var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(3), new MiGoEnslaveDoAfterEvent(), uid, args.Target)//ToDo estimate time for Enslave
@@ -136,6 +145,17 @@ public abstract class SharedMiGoSystem : EntitySystem
         };
 
         _doAfter.TryStartDoAfter(doafterArgs);
+
+        args.Handled = true;
+    }
+    private void MiGoEnslaveOnDoAfter(Entity<MiGoComponent> uid, ref MiGoEnslaveDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled || args.Target == null)
+            return;
+
+        //ToDo Remove clients effects
+        var ev = new CultYoggEnslavedEvent(args.Target);
+        RaiseLocalEvent(uid, ref ev, true);
 
         args.Handled = true;
     }
@@ -328,7 +348,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!HasComp<CultYoggComponent>(args.Target))
+        if (!HasComp<CultYoggComponent>(args.Target))//ToDo should discuss
         {
             if (_net.IsServer)
                 _popup.PopupEntity(Loc.GetString("cult-yogg-heal-only-cultists"), uid);
@@ -438,9 +458,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 public sealed partial class MiGoSacrificeDoAfterEvent : SimpleDoAfterEvent { }
 
 [Serializable, NetSerializable]
-public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent
-{
-}
+public sealed partial class MiGoEnslaveDoAfterEvent : SimpleDoAfterEvent { }
 
 [Serializable, NetSerializable]
 public sealed partial class AfterMaterialize : DoAfterEvent
@@ -456,3 +474,8 @@ public sealed partial class AfterDeMaterialize : DoAfterEvent
 
 [ByRefEvent]
 public record struct MiGoAstralAppearanceEvent();
+
+
+[ByRefEvent, Serializable]
+public record struct CultYoggEnslavedEvent(EntityUid? Target);
+

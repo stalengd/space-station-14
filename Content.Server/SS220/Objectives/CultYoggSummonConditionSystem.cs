@@ -53,7 +53,7 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
 
             var jobName = _job.MindTryGetJobName(uid);
 
-            title += "\n" + Loc.GetString("objective-condition-cult-yogg-sacrafice-person", ("targetName", targetName), ("job", jobName));
+            title += "\n" + Loc.GetString("objective-condition-cult-yogg-sacrafice-person", ("targetName", targetName), ("job", jobName));//ToDo собирать строку через string builder
         }
 
         _metaData.SetEntityName(ent, title, args.Meta);

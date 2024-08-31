@@ -22,6 +22,14 @@ public sealed partial class CultYoggRuleComponent : Component
     public int ReqAmountOfMiGo = 3;
 
     /// <summary>
+    /// General requirements
+    /// </summary>
+
+    public readonly List<string> FirstTierJobs = new() { "Captain" };
+    public readonly string SecondTierDepartament = "Command";
+    public readonly List<string> BannedDepartaents = new() { "GhostRoles" };
+
+    /// <summary>
     /// Storages for an endgame screen title
     /// </summary>
     [DataField]
@@ -48,12 +56,15 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public ProtoId<NpcFactionPrototype> CultYoggFaction = "CultYogg";
 
+    //ToDo maybe delete this
+    /*
     [DataField]
     public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultYoggObjectiveGroups";
+    */
 
     //telephaty channel
     [DataField]
-    public string channel = "TelepathyChannelYoggSothothCult";
+    public string Channel = "TelepathyChannelYoggSothothCult";
     /// <summary>
     /// Check for an endgame screen title
     /// </summary>

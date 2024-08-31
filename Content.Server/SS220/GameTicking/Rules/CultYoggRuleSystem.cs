@@ -5,6 +5,7 @@ using Content.Server.Zombies;
 using Content.Server.Mind;
 using Content.Server.Antag;
 using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
@@ -36,6 +37,13 @@ using Content.Shared.Nuke;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 using Content.Shared.SS220.Bible;
+using System.Collections.Immutable;
+using Content.Server.SS220.CultYogg;
+using Content.Server.Database;
+using Content.Shared.Audio;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
+using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -56,7 +64,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
 
-    public List<List<String>> SacraficialTiers = new();
+    private List<List<String>> SacraficialTiers = new();
+    public TimeSpan DefaultShuttleArriving { get; set; } = TimeSpan.FromSeconds(85);
 
     public override void Initialize()
     {
@@ -66,72 +75,70 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         SubscribeLocalEvent<CultYoggEnslavedEvent>(MiGoEnslave);//cant receive this shit
         //SubscribeLocalEvent<CultYoggComponent, CleansedEvent>();
 
-        SubscribeLocalEvent<CultYoggSummonedEvent>(OnGodSummoned);
+        SubscribeLocalEvent<SacraficialReplacementEvent>(SacraficialReplacement);
 
-        SubscribeLocalEvent<CultYoggSacrificialComponent, MobStateChangedEvent>(OnMobStateChanged);
-        SubscribeLocalEvent<CultYoggSacrificialComponent, BeingGibbedEvent>(OnGibbed);
-        //SubscribeLocalEvent<NukeOperativeComponent, EntityZombifiedEvent>(OnOperativeZombified);
+        SubscribeLocalEvent<CultYoggSummonedEvent>(OnGodSummoned);
     }
 
+
+
+    #region Sacreficials picking
     /// <summary>
     /// Used to generate sacraficials at the start of the gamerule
     /// </summary>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-        GenerateJobsList();
+        GenerateJobsList(component);
 
         SetSacraficials(component);
     }
 
-    #region Sacreficials picking
-
     //Filling list of jobs fot better range
-    public void GenerateJobsList()
+    private void GenerateJobsList(CultYoggRuleComponent comp)
     {
+        List<string> firstTier = comp.FirstTierJobs;//just captain as main target
 
-        List<string> FirstTier = new List<string> { "Captain" };//just captain as main target
+        List<string> secondTier = new();//heads
 
-        List<string> SecondTier = new ();//heads
-
-        if(!_proto.TryIndex<DepartmentPrototype>("Command", out var commandList))
+        if (!_proto.TryIndex<DepartmentPrototype>(comp.SecondTierDepartament, out var commandList))
             return;
 
         foreach (ProtoId<JobPrototype> role in commandList.Roles)
         {
-            if (FirstTier.Contains(role.Id))
+            if (firstTier.Contains(role.Id))
                 continue;
 
-            SecondTier.Add(role.Id);
+            secondTier.Add(role.Id);
         }
 
-        List<string> ThirdTier = new();//everybody else except heads
+        List<string> thirdTier = new();//everybody else except heads
 
-        foreach(var departament in _proto.EnumeratePrototypes<DepartmentPrototype>())
+        foreach (var departament in _proto.EnumeratePrototypes<DepartmentPrototype>())
         {
-            if (departament.ID == "GhostRoles")
+            if (comp.BannedDepartaents.Contains(departament.ID))
                 continue;
 
-            if (departament.ID == "Command")
+            if (departament.ID == comp.SecondTierDepartament)
                 continue;
 
             foreach (ProtoId<JobPrototype> role in departament.Roles)
             {
-                if (FirstTier.Contains(role.Id))
+                if (firstTier.Contains(role.Id))
                     continue;
 
-                if (SecondTier.Contains(role.Id))
+                if (secondTier.Contains(role.Id))
                     continue;
 
-                ThirdTier.Add(role.Id);
+                thirdTier.Add(role.Id);
             }
         }
 
-        SacraficialTiers.Add(FirstTier);
-        SacraficialTiers.Add(SecondTier);
-        SacraficialTiers.Add(ThirdTier);
+        SacraficialTiers.Add(firstTier);
+        SacraficialTiers.Add(secondTier);
+        SacraficialTiers.Add(thirdTier);
     }
 
-    public void SetSacraficials(CultYoggRuleComponent component)
+    private void SetSacraficials(CultYoggRuleComponent component)
     {
         var allHumans = GetAliveHumans();
 
@@ -140,11 +147,11 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         for (int i = 0; i < SacraficialTiers.Count; i++)
         {
-            SetSacraficeTarget(component, PickTieredPerson(allHumans, i), i);
+            SetSacraficeTarget(component, PickFromTierPerson(allHumans, i), i);
         }
     }
 
-    public EntityUid? PickTieredPerson(List<EntityUid> allHumans, int tier)
+    public EntityUid? PickFromTierPerson(List<EntityUid> allHumans, int tier)//ToDo wierd naming
     {
         if (tier >= SacraficialTiers.Count)
             return null;
@@ -157,19 +164,22 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
             if (!_job.MindTryGetJob(mind, out _, out var prototype))
                 continue;
 
+            if (HasComp<CultYoggSacrificialMindComponent>(mind))//shouldn't be already a target
+                continue;
+
             if (SacraficialTiers[tier].Contains(prototype.ID))
                 allSuitable.Add(mind);
         }
 
         if (allSuitable.Count == 0)
         {
-            return PickTieredPerson(allHumans, ++tier);
+            return PickFromTierPerson(allHumans, ++tier);
         }
 
         return _random.Pick(allSuitable);
     }
 
-    public void SetSacraficeTarget(CultYoggRuleComponent component, EntityUid? uid, int tier)
+    private void SetSacraficeTarget(CultYoggRuleComponent component, EntityUid? uid, int tier)
     {
         if (uid is null)
             return;
@@ -183,16 +193,16 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (mind.Session.AttachedEntity is null)
             return;
 
-        EnsureComp<CultYoggSacrificialMindComponent>((EntityUid) uid); //ToDo figure out do i need this?
+        EnsureComp<CultYoggSacrificialMindComponent>(uid.Value); //ToDo figure out do i need this?
 
-        var sacrComp = EnsureComp<CultYoggSacrificialComponent>((EntityUid) mind.Session.AttachedEntity);
+        var sacrComp = EnsureComp<CultYoggSacrificialComponent>(mind.Session.AttachedEntity.Value);
 
         sacrComp.Tier = tier;
 
-        component.SacraficialsList.Add((EntityUid) uid);
+        component.SacraficialsList.Add(uid.Value);
     }
 
-    public List<EntityUid> GetAliveHumans()//maybe add here sacraficials and cultists filter
+    private List<EntityUid> GetAliveHumans()//maybe add here sacraficials and cultists filter
     {
         var mindQuery = EntityQuery<MindComponent>();
 
@@ -207,7 +217,6 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
             // the player has to be alive
             if (_mobState.IsAlive(uid, mobState))
-                //allHumans.Add(uid);
                 allHumans.Add(mc.Mind.Value);
         }
 
@@ -216,32 +225,34 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     #endregion
 
     #region Sacraficials Events
-    private void OnMobStateChanged(Entity<CultYoggSacrificialComponent> uid, ref MobStateChangedEvent args)
+
+    private void SacraficialReplacement(ref SacraficialReplacementEvent args)
     {
-        if (uid.Comp.WasSacraficed)
+        GetCultGameRuleComp(out var cultRuleComp);
+
+        if (cultRuleComp == null)
             return;
 
-        if (args.NewMobState != MobState.Dead)
+        if (!TryComp<CultYoggSacrificialComponent>(args.Entity, out var sacrComp))
             return;
 
-        //ToDo set timer after which we will change target
+        if (sacrComp.WasSacraficed)
+            return;
+
+        SetNewSacraficial(cultRuleComp, sacrComp.Tier);
+
+        RemComp<CultYoggSacrificialComponent>(args.Entity);
+
+        if (!_mindSystem.TryGetMind(args.Player, out var mindUid, out var mind))
+            return;
+
+        if (mindUid == null)
+            return;
+
+        cultRuleComp.SacraficialsList.Remove(mindUid.Value);
+
+        RemComp<CultYoggSacrificialMindComponent>(mindUid.Value);
     }
-
-    private void OnGibbed(Entity<CultYoggSacrificialComponent> uid, ref BeingGibbedEvent args)
-    {
-        if (uid.Comp.WasSacraficed)//if it was sacraficed we dont pick the new one
-            return;
-
-        GetCultGameRuleComp(out var ruleComp);
-
-        if (ruleComp is null)
-            return;
-
-        ruleComp.SacraficialsList.Remove(uid);
-
-        SetNewSacraficial(ruleComp, uid.Comp.Tier);
-    }
-
     private void SetNewSacraficial(CultYoggRuleComponent comp, int tier)
     {
         var allHumans = GetAliveHumans();
@@ -249,7 +260,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (allHumans is null)
             return;
 
-        SetSacraficeTarget(comp, PickTieredPerson(allHumans, tier), tier);
+        SetSacraficeTarget(comp, PickFromTierPerson(allHumans, tier), tier);
     }
     #endregion
 
@@ -268,7 +279,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (cultRuleComp == null)
             return;
 
-        MakeCultist((EntityUid) args.Target, cultRuleComp, false);
+        MakeCultist(args.Target.Value, cultRuleComp, false);
 
         //args.Handled = true;
     }
@@ -277,7 +288,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     #region Cultists making
     private void AfterEntitySelected(Entity<CultYoggRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
-        MakeCultist(args.EntityUid, ent);//ToDo not quite shure if entiry is a body and not a mind
+        MakeCultist(args.EntityUid, ent);//ToDo not quite shure if entiry is a body or a mind
     }
 
     public bool MakeCultist(EntityUid uid, CultYoggRuleComponent component, bool initial = true)
@@ -286,7 +297,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
             return false;
 
-        if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists
+        //ToDo remove this when you make a JobRequirement
+        if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists 
             return false;
 
         _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);
@@ -304,23 +316,23 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         //Add telepathy
         var telepathy = EnsureComp<TelepathyComponent>(uid);
         telepathy.CanSend = false;
-        telepathy.TelepathyChannelPrototype = component.channel;
+        telepathy.TelepathyChannelPrototype = component.Channel;
 
-        _entityManager.AddComponent<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
-        _entityManager.AddComponent<ZombieImmuneComponent>(uid);//they are practically mushrooms
+        AddComp<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
+        AddComp<ZombieImmuneComponent>(uid);//they are practically mushrooms
 
         return true;
     }
     #endregion
 
     #region RoundEnding
-    private void OnGodSummoned(CultYoggSummonedEvent ev)
+    private void OnGodSummoned(ref CultYoggSummonedEvent ev)
     {
         foreach (var station in _station.GetStations())
         {
             _chat.DispatchStationAnnouncement(station, Loc.GetString("cult-yogg-shuttle-call"), colorOverride: Color.Crimson);
         }
-        _roundEnd.RequestRoundEnd(null, false);
+        _roundEnd.RequestRoundEnd(DefaultShuttleArriving, null);
     }
 
     #endregion
@@ -333,6 +345,11 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     ref RoundEndTextAppendEvent args)
     {
         base.AppendRoundEndText(uid, component, gameRule, ref args);
+
+
+        bool summoned = false;
+
+        var query = EntityQueryEnumerator<NyarlathotepComponent>();//ToDo maybe some altrenative
 
         if (component.Summoned)
         {
@@ -398,6 +415,3 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         }
     }
 }
-
-[ByRefEvent, Serializable]
-public record struct CultYoggEnslavedEvent(EntityUid? Target);

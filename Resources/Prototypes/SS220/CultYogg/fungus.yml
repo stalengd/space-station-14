@@ -1,6 +1,7 @@
 - type: entity
   name: fungus hydroponic
-  parent: SmallConstructibleMachine
+  parent: BaseStructure
+  #parent: SmallConstructibleMachine#ToDo maybe create our own parrent
   id: fungusHydroponic
   description: desc
   placement:

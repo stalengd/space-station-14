@@ -90,8 +90,27 @@ public sealed partial class MiGoComponent : Component
     [ViewVariables, DataField]
     public float ErectDoAfterSeconds = 3f;
 
+    /// <summary>
+    ///Replacement variables
+    /// <summary>
+
     //Marking if entity can be gibbed and replaced
     public bool MayBeReplaced = false;
+
+    //Should the timer count down the time
+    public bool ShouldBeCounted = false;
+
+    /// <summary>
+    /// How long it takes to unlock another destination once one is taken.
+    /// </summary>
+    [DataField]
+    public TimeSpan BeforeReplacementCooldown = TimeSpan.FromSeconds(300);
+
+    /// <summary>
+    /// Buffer to markup when time has come
+    /// </summary>
+    [DataField]
+    public TimeSpan? ReplacementEventTime;
 }
 
 //Visual

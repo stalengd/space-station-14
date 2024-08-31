@@ -7,7 +7,13 @@ cult-yogg-enslave-should-eat-shroom = Кандидат не имеет спор 
 cult-yogg-enslave-is-sacraficial = Существо ценно, как жертва
 cult-yogg-heal-only-cultists = Оболочка не принадлежит культу
 cult-yogg-digest-no-nutritions = Недостаточно питательных веществ
+
+
 cult-yogg-altar-not-enough-migo = Недостаточно Ми-Го рядом с алтарём
 cult-yogg-sacrifice-started = {$user} начинает жертвоприношение, тело {$target} медленно поднимается в воздух
 cult-yogg-buckle-attempt = {$user} не является целью жертвоприношения
+
 cult-yogg-resurrected-by-heal = Мистические силы возвращают к жизнь {$target}
+
+cult-yogg-acsending-have-acsending = Один из членов культа в данный момент возносится
+cult-yogg-acsending-migo-full = Достигнуто количество Ми-Го и все они живы

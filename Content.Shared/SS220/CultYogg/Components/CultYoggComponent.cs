@@ -80,6 +80,9 @@ public sealed partial class CultYoggComponent : Component
 
     public int ConsumedShrooms = 0; //buffer
 
+    //ToDo maybe replace it with special component
+    public bool IsAscending = false; //to prevent multiple acsendings at the same time
+
     /// <summary>
     /// This will subtract (not add, don't get this mixed up) from the current hunger of the mob doing micoz
     /// </summary>

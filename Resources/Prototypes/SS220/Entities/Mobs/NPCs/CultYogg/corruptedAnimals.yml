@@ -17,7 +17,7 @@
           true
     - type: NpcFactionMember
       factions:
-        - Cult
+        - CultYogg
     - type: CombatMode
     - type: Physics
     - type: Fixtures

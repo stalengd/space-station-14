@@ -8,7 +8,7 @@
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
       soundEmpty: null
       fireRate: 20
-      rojectileSpeed: 0.5
+      projectileSpeed: 0.5
       selectedMode: SemiAuto
       availableModes:
       - SemiAuto

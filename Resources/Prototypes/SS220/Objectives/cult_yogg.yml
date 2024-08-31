@@ -30,7 +30,7 @@
 - type: entity
   parent: BaseCultYoggObjective
   id: CultYoggAcsendObjective
-  name: Вознесите 3 МиГо
+  name: Вознесите 3 Ми-Го
   description: Призыв это работа для высших существ. Необходимо выбрать кандидатов, защищать их, заменить в случае утери.
   components:
   - type: Objective

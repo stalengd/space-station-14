@@ -29,7 +29,7 @@ namespace Content.Server.SS220.CultYogg.Fungus.Systems
             if (HasComp<MiGoComponent>(args.User))
                 return;
 
-            _popupSystem.PopupEntity(Loc.GetString("cult-yogg-buckle-attempt"), ent, args.User);
+            _popupSystem.PopupEntity(Loc.GetString("cult-yogg-fungus-denied-to-use"), ent, args.User);
             args.Cancel();
         }
 

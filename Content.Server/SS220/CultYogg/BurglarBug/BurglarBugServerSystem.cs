@@ -3,30 +3,21 @@ using Content.Server.Explosion.EntitySystems;
 using Content.Server.Popups;
 using Content.Server.Sticky.Components;
 using Content.Server.Sticky.Events;
-using Content.Shared.Access;
-using Content.Shared.Access.Components;
-using Content.Shared.Access.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
-using Content.Shared.Doors.Systems;
+using Content.Shared.Emag.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
-using Content.Shared.Item.ItemToggle;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Sticky;
-using Robust.Server.GameObjects;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg.BurglarBug;
 
 public sealed class BurglarBugServerSystem : EntitySystem
 {
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
-    [Dependency] private readonly SharedDoorSystem _doorSystem = default!;
-    [Dependency] private readonly AccessReaderSystem _access = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
@@ -60,25 +51,17 @@ public sealed class BurglarBugServerSystem : EntitySystem
     }
     private void OpenDoor(EntityUid uid, BurglarBugComponent component)
     {
-            if (!TryComp<StickyComponent>(uid, out var stickyComponent))
+            if (!HasComp<StickyComponent>(uid))
                 return;
 
-            if (!TryComp<DoorComponent>(stickyComponent.StuckTo,
-                    out var doorComponent))
-                return;
-
-            if (doorComponent.State == DoorState.Closed)
-                _doorSystem.StartOpening(stickyComponent.StuckTo.Value, doorComponent);
-
-            if (!TryComp<DoorBoltComponent>(stickyComponent.StuckTo,
-                    out var doorBoltComponent))
-                return;
-            _doorSystem.SetBoltsDown((stickyComponent.StuckTo.Value, doorBoltComponent), true);
-
-            if (!TryComp<AccessReaderComponent>(stickyComponent.StuckTo,
-                    out var accessReaderComponent))
-                return;
-            accessReaderComponent.AccessLists.Clear();
+            if (TryComp<DoorComponent>(component.Door, out var door))
+            {
+                door.ClickOpen = true;
+                door.BumpOpen = true;
+                Dirty(component.Door.Value, door);
+                var emaggedEvent = new GotEmaggedEvent();
+                RaiseLocalEvent(component.Door.Value, ref emaggedEvent);
+            }
 
             AfterUsed((uid, component));
         }
@@ -86,9 +69,12 @@ public sealed class BurglarBugServerSystem : EntitySystem
     {
         if (args.Cancelled)
         {
-            if (!TryComp<AccessReaderComponent>(entity.Comp.Door, out var accessReaderComponent))
-                return;
-            accessReaderComponent.AccessLists = new List<HashSet<ProtoId<AccessLevelPrototype>>> (entity.Comp.AccessLists);
+            if (TryComp<DoorComponent>(entity.Comp.Door, out var dor))
+            {
+                dor.ClickOpen = true;
+                dor.BumpOpen = true;
+                Dirty(entity.Comp.Door.Value, dor);
+            }
             entity.Comp.Activated = false;
             return;
         }
@@ -127,13 +113,13 @@ public sealed class BurglarBugServerSystem : EntitySystem
             args.Cancelled = true;
             return;
         }
-        if (!_access.GetMainAccessReader(args.Target, out var accessReaderComponent))
-                return;
-        entity.Comp.Door = args.Target;
-        entity.Comp.AccessLists = new List<HashSet<ProtoId<AccessLevelPrototype>>>(accessReaderComponent.AccessLists);
-        accessReaderComponent.AccessLists.Clear();
-        _toggle.TryDeactivate(entity.Comp.Door, user: entity.Owner);
-        //_access.SetAccesses(entity.Comp.Door, accessReaderComponent, ["Some hard code"]);//Переделать(?) Посмотреть ниндзя
+        if (TryComp<DoorComponent>(args.Target, out var door))
+        {
+            entity.Comp.Door = (args.Target, door);
+            door.ClickOpen = false;
+            door.BumpOpen = false;
+            Dirty(args.Target, door);
+        }
     }
 
     private void HandleTrigger(Entity<BurglarBugComponent> entity, ref TriggerEvent args)
@@ -153,13 +139,13 @@ public sealed class BurglarBugServerSystem : EntitySystem
             {
                 _damageable.TryChangeDamage(target, damage, component.IgnoreResistances);
             }
+
             AfterUsed(entity);
         }
     }
 
     private void AfterUsed(Entity<BurglarBugComponent> entity)
     {
-        //Вернуть доступы (?)
-        EntityManager.DeleteEntity(entity);
+        Del(entity);
     }
 }

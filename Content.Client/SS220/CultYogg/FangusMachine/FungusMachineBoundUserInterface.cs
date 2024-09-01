@@ -60,7 +60,7 @@ namespace Content.Client.SS220.CultYogg.FangusMachine.UI
             if (selectedItem == null)
                 return;
 
-            SendMessage(new FungusSelectedID(selectedItem.ID)); //переписать название
+            SendMessage(new FungusSelectedID(selectedItem.ID));
         }
 
         private void OnSearchChanged(string? filter)

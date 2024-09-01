@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Access;
 using Content.Shared.Damage;
+using Content.Shared.Doors.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.SS220.CultYogg.BurglarBug;
@@ -41,7 +42,7 @@ public sealed partial class BurglarBugComponent : Component
     public DamageSpecifier Damage = default!;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public EntityUid Door;
+    public Entity<DoorComponent>? Door;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan? DoorOpenTime;

@@ -29,8 +29,8 @@
   - type: ChasingWalk
     minSpeed: 0.2
     maxSpeed: 1
-    ChangeVectorMinInterval: 99999
-    ChangeVectorMaxInterval: 100000
+    changeVectorMinInterval: 99999
+    changeVectorMaxInterval: 100000
     chasingComponent:
     - type: NyarlathotepTarget
   - type: EmitSoundOnSpawn

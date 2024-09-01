@@ -10,6 +10,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.FungusMachineSystem;
 using Robust.Server.GameObjects;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg.Fungus.Systems;
@@ -21,7 +22,7 @@ public sealed class FungusSystem : EntitySystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
 
 
     public override void Initialize()
@@ -31,9 +32,9 @@ public sealed class FungusSystem : EntitySystem
         SubscribeLocalEvent<FungusComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<FungusComponent, InteractHandEvent>(OnInteractHand);
 
-        Subs.BuiEvents<FungusMachineComponent>(SharedFungusMachineSystem.FungusMachineUiKey.Key, subs =>
+        Subs.BuiEvents<FungusMachineComponent>(FungusMachineUiKey.Key, subs =>
         {
-            subs.Event<SharedFungusMachineSystem.FungusMachineMessage>(OnUIButton);
+            subs.Event<FungusSelectedID>(OnUIButton);
         });
     }
 
@@ -48,10 +49,15 @@ public sealed class FungusSystem : EntitySystem
                 continue;
             plantHolder.NextUpdate = _gameTiming.CurTime + plantHolder.UpdateDelay;
 
-            Update(uid, plantHolder);
+            UpdateFungus(uid, plantHolder);
         }
     }
 
+    /// <summary>
+    /// Method returning the stage of plant germination within the limits specified in Seed.GrowthStages
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns>Current stage number</returns>
     private int GetCurrentGrowthStage(Entity<FungusComponent> entity)
     {
         var (uid, component) = entity;
@@ -88,7 +94,7 @@ public sealed class FungusSystem : EntitySystem
         DoHarvest(entity, args.User, entity.Comp);
     }
 
-    public void Update(EntityUid uid, FungusComponent? component = null)
+    public void UpdateFungus(EntityUid uid, FungusComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
@@ -140,26 +146,25 @@ public sealed class FungusSystem : EntitySystem
             return false;
 
 
-        if (component.HarvestReady)
+        if (!component.HarvestReady)
+            return false;
+
+        if (TryComp<HandsComponent>(user, out var hands))
         {
-            if (TryComp<HandsComponent>(user, out var hands))
-            {
-                if (!_botany.CanHarvest(component.Seed, hands.ActiveHandEntity))
-                {
-                    return false;
-                }
-            }
-            else if (!_botany.CanHarvest(component.Seed))
+            if (!_botany.CanHarvest(component.Seed, hands.ActiveHandEntity))
             {
                 return false;
             }
-
-            _botany.Harvest(component.Seed, user);
-            AfterHarvest(uid, component);
-            return true;
+        }
+        else if (!_botany.CanHarvest(component.Seed))
+        {
+            return false;
         }
 
-        return false;
+        _botany.Harvest(component.Seed, user);
+        AfterHarvest(uid, component);
+        return true;
+
     }
 
     private void AfterHarvest(EntityUid uid, FungusComponent? component = null)
@@ -196,7 +201,7 @@ public sealed class FungusSystem : EntitySystem
         return component.Inventory.GetValueOrDefault(entryId);
     }
 
-    private void OnUIButton(Entity<FungusMachineComponent> entity, ref SharedFungusMachineSystem.FungusMachineMessage args)
+    private void OnUIButton(Entity<FungusMachineComponent> entity, ref FungusSelectedID args)
     {
         var (uid, component) = entity;
 
@@ -214,11 +219,11 @@ public sealed class FungusSystem : EntitySystem
         if (string.IsNullOrEmpty(entry.ID))
             return;
 
-        var tempSeed = Spawn(entry.ID, _transform.GetMapCoordinates(uid));
+        var proto = _prototype.Index(entry.ID);
 
-        if(EntityManager.TryGetComponent(component.Owner, out FungusComponent? fungusComponent))
+        if(TryComp(uid, out FungusComponent? fungusComponent))
         {
-            if (EntityManager.TryGetComponent(tempSeed, out SeedComponent? seedComponent))
+            if (proto.TryGetComponent<SeedComponent>("Seed", out var seedComponent))
             {
                 if (!_botany.TryGetSeed(seedComponent, out var seed))
                     return;
@@ -233,7 +238,6 @@ public sealed class FungusSystem : EntitySystem
                 fungusComponent.LastCycle = _gameTiming.CurTime;
                 UpdateSprite(uid, fungusComponent);
             }
-            EntityManager.DeleteEntity(tempSeed);
         }
     }
 

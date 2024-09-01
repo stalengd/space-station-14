@@ -3,18 +3,16 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Events;
 using Content.Shared.Ghost;
 using Content.Server.Administration.Logs;
+using Content.Server.Body.Systems;
 using Content.Server.Station.Components;
 using Content.Shared.Database;
 using Content.Shared.Mind.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Containers;
-using Robust.Shared.Map;
 using Robust.Shared.Timing;
-using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 using Content.Shared.SS220.CultYogg.Nyarlathotep.Components;
 using Content.Server.SS220.CultYogg.Nyarlathotep.EntitySystems;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Events;
-using Content.Shared.Damage;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.SS220.CultYogg.Components;
@@ -31,42 +29,32 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
     #region Dependencies
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
     [Dependency] private readonly SharedTransformSystem _xformSystem = default!;
     [Dependency] private readonly TagSystem _tagSystem = default!;
     [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly BodySystem _bodySystem = default!;
     #endregion Dependencies
 
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<NyarlathotepHorizonComponent, MapInitEvent>(OnHorizonMapInit);
+        SubscribeLocalEvent<NyarlathotepHorizonComponent, StartCollideEvent>(OnStartCollide);
+
         SubscribeLocalEvent<MapGridComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsume);
         SubscribeLocalEvent<GhostComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsume);
         SubscribeLocalEvent<StationDataComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsume);
         SubscribeLocalEvent<MobStateComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsumeMobs);
-        SubscribeLocalEvent<NyarlathotepHorizonComponent, MapInitEvent>(OnHorizonMapInit);
-        SubscribeLocalEvent<NyarlathotepHorizonComponent, StartCollideEvent>(OnStartCollide);
-        SubscribeLocalEvent<ContainerManagerComponent, NyarlathotepHorizonConsumedEntityEvent>(OnContainerConsumed);
 
-        var vvHandle = Vvm.GetTypeHandler<NyarlathotepHorizonComponent>();
-        vvHandle.AddPath(nameof(NyarlathotepHorizonComponent.TargetConsumePeriod), (_, comp) => comp.TargetConsumePeriod, SetConsumePeriod);
+        SubscribeLocalEvent<ContainerManagerComponent, NyarlathotepHorizonConsumedEntityEvent>(OnContainerConsumed);
     }
 
     private void OnHorizonMapInit(Entity<NyarlathotepHorizonComponent> component, ref MapInitEvent args)
     {
         component.Comp.NextConsumeWaveTime = _timing.CurTime;
-    }
-
-    public override void Shutdown()
-    {
-        var vvHandle = Vvm.GetTypeHandler<NyarlathotepHorizonComponent>();
-        vvHandle.RemovePath(nameof(NyarlathotepHorizonComponent.TargetConsumePeriod));
-
-        base.Shutdown();
     }
 
     /// <summary>
@@ -80,14 +68,14 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         {
             var curTime = _timing.CurTime;
             if (NyarlathotepHorizon.NextConsumeWaveTime <= curTime)
-                Update(uid, NyarlathotepHorizon, xform);
+                UpdateHorizon(uid, NyarlathotepHorizon, xform);
         }
     }
 
     /// <summary>
     /// Makes an horizon consume everything nearby and resets the cooldown it for the next automated wave.
     /// </summary>
-    public void Update(EntityUid uid, NyarlathotepHorizonComponent? nyarlathotepHorizon = null, TransformComponent? xform = null)
+    public void UpdateHorizon(EntityUid uid, NyarlathotepHorizonComponent? nyarlathotepHorizon = null, TransformComponent? xform = null)
     {
         if (!Resolve(uid, ref nyarlathotepHorizon))
             return;
@@ -97,29 +85,17 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         if (!Resolve(uid, ref xform))
             return;
 
-        // Handle singularities some admin smited into a locker.
         if (_containerSystem.TryGetContainingContainer(uid, out var container, transform: xform)
         && !AttemptConsumeEntity(uid, container.Owner, nyarlathotepHorizon))
-        {
-            // Locker is indestructible. Consume everything else in the locker instead of magically teleporting out.
             ConsumeEntitiesInContainer(uid, container, nyarlathotepHorizon, container);
-            return;
-        }
-
-        if (nyarlathotepHorizon.Radius > 0.0f)
-            ConsumeEverythingInRange(uid, nyarlathotepHorizon.Radius, xform, nyarlathotepHorizon);
     }
-
-    #region Consume
-
-    #region Consume Entities
 
     /// <summary>
     /// Makes an horizon consume a given entity.
     /// </summary>
     public void ConsumeEntity(EntityUid nyarlathotep, EntityUid entityToConsume, NyarlathotepHorizonComponent nyarlathotepHorizon, BaseContainer? outerContainer = null)
     {
-        if (!EntityManager.IsQueuedForDeletion(entityToConsume) // I saw it log twice a few times for some reason?
+        if (!EntityManager.IsQueuedForDeletion(entityToConsume)
         && (HasComp<MindContainerComponent>(entityToConsume)
             || _tagSystem.HasTag(entityToConsume, "HighRiskItem")))
         {
@@ -127,9 +103,7 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         }
 
         EntityManager.QueueDeleteEntity(entityToConsume);
-        var evSelf = new NyarlathotepConsumedByEventHorizonEvent(entityToConsume, nyarlathotep, nyarlathotepHorizon, outerContainer);
         var evEaten = new NyarlathotepHorizonConsumedEntityEvent(entityToConsume, nyarlathotep, nyarlathotepHorizon, outerContainer);
-        RaiseLocalEvent(nyarlathotep, ref evSelf);
         RaiseLocalEvent(entityToConsume, ref evEaten);
     }
 
@@ -214,18 +188,6 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         }
     }
 
-    #endregion Consume Entities
-    public void ConsumeEverythingInRange(EntityUid nyarlathotep, float range, TransformComponent? xform = null, NyarlathotepHorizonComponent? nyarlathotepHorizon = null)
-    {
-        if (!Resolve(nyarlathotep, ref xform, ref nyarlathotepHorizon))
-            return;
-
-        if (nyarlathotepHorizon.ConsumeEntities)
-            ConsumeEntitiesInRange(nyarlathotep, range, xform, nyarlathotepHorizon);
-    }
-
-    #endregion Consume
-
     #region Getters/Setters
 
     /// <summary>
@@ -247,7 +209,7 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
 
         var curTime = _timing.CurTime;
         if (nyarlathotepHorizon.NextConsumeWaveTime < curTime)
-            Update(nyarlathotep, nyarlathotepHorizon);
+            UpdateHorizon(nyarlathotep, nyarlathotepHorizon);
     }
 
     #endregion Getters/Setters
@@ -274,15 +236,7 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
     {
         PreventConsume(comp.Owner, comp.Comp, ref args);
         if (_mob.IsAlive(args.entity) && !HasComp<MiGoComponent>(args.entity))
-        {
-            DamageSpecifier damage = new();
-            damage.DamageDict.Add("Cold", 100);//Надо решить какой тип урона
-            _damageable.TryChangeDamage(comp.Owner, damage, true);
-            if (HasComp<NyarlathotepTargetComponent>(comp.Owner))
-            {
-                EntityManager.RemoveComponent(comp.Owner, EntityManager.GetComponent<NyarlathotepTargetComponent>(comp.Owner));
-            }
-        }
+            _bodySystem.GibBody(comp.Owner);
     }
 
     /// <summary>
@@ -299,9 +253,7 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
     /// </summary>
     private void OnStartCollide(Entity<NyarlathotepHorizonComponent> comp, ref StartCollideEvent args)
     {
-        if (args.OurFixtureId != comp.Comp.ConsumerFixtureId)
-            return;
-        if (args.OurFixtureId != comp.Comp.ConsumerFixtureId)
+        if (args.OurFixtureId != comp.Comp.ColliderFixtureId)
             return;
 
         AttemptConsumeEntity(comp.Owner, args.OtherEntity, comp.Comp);

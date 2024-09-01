@@ -2,7 +2,4 @@
 
 namespace Content.Client.SS220.CultYogg.FangusMachine;
 
-public sealed class FungusMachineSystem : SharedFungusMachineSystem
-{
-
-}
+public sealed class FungusMachineSystem : SharedFungusMachineSystem;

@@ -7,7 +7,7 @@ namespace Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 /// <summary>
 /// Component for entities to be attacked by Nyarlathotep.
 /// </summary>
-[RegisterComponent, Access(typeof(NyarlathotepSystem))]
+[RegisterComponent]
 public sealed partial class NyarlathotepTargetComponent : Component
 {
 

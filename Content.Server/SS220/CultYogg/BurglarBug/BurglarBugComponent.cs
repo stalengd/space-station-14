@@ -44,5 +44,5 @@ public sealed partial class BurglarBugComponent : Component
     public EntityUid Door;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public TimeSpan DoorOpenTime;
+    public TimeSpan? DoorOpenTime;
 }

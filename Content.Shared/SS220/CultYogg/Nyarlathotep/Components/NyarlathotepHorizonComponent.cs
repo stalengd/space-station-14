@@ -15,29 +15,6 @@ namespace Content.Shared.SS220.CultYogg.Nyarlathotep.Components;
 public sealed partial class NyarlathotepHorizonComponent : Component
 {
     /// <summary>
-    /// The radius of the horizon within which it will destroy all entities and tiles.
-    /// If &lt; 0.0 this behavior will not be active.
-    /// If you want to set this go through <see cref="SharedNyarlathotepHorizonSystem.SetRadius"/>.
-    /// </summary>
-    [DataField("radius")]
-    public float Radius;
-
-    /// <summary>
-    /// involves periodically destroying entities within a specified radius. Does not affect collide destruction of entities.
-    /// </summary>
-    [DataField]
-    public bool ConsumeEntities = true;
-
-    /// <summary>
-    /// The ID of the fixture used to detect if the event horizon has collided with any physics objects.
-    /// Can be set to null, in which case no such fixture is used.
-    /// If you want to set this go through <see cref="SharedNyarlathotepHorizonSystem.SetConsumerFixtureId"/>.
-    /// </summary>
-    [DataField("consumerFixtureId")]
-    [ViewVariables(VVAccess.ReadWrite)]
-    public string? ConsumerFixtureId;
-
-    /// <summary>
     /// The ID of the fixture used to detect if the event horizon has collided with any physics objects.
     /// Can be set to null, in which case no such fixture is used.
     /// If you want to set this go through <see cref="SharedNyarlathotepHorizonSystem.SetColliderFixtureId"/>.

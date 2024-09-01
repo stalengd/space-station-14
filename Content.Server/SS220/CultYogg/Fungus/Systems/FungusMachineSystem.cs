@@ -26,12 +26,11 @@ namespace Content.Server.SS220.CultYogg.Fungus.Systems
 
         private void OnAttemptOpenUI(Entity<FungusMachineComponent> ent, ref ActivatableUIOpenAttemptEvent args)
         {
-            if (!EntityManager.HasComponent<MiGoComponent>(args.User))
-            {
-                var msg = Loc.GetString("Вы не можете коснуться этого");
-                _popupSystem.PopupEntity(msg, ent);
-                args.Cancel();
-            }
+            if (HasComp<MiGoComponent>(args.User))
+                return;
+
+            _popupSystem.PopupEntity(Loc.GetString("cult-yogg-buckle-attempt"), ent, args.User);
+            args.Cancel();
         }
 
         protected override void OnComponentInit(EntityUid uid, FungusMachineComponent component, ComponentInit args)

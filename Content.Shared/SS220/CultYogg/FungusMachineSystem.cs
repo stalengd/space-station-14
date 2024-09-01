@@ -3,7 +3,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.SS220.CultYogg.FungusMachineSystem;
 
-public abstract partial class    SharedFungusMachineSystem : EntitySystem
+public abstract partial class SharedFungusMachineSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
@@ -51,38 +51,39 @@ public abstract partial class    SharedFungusMachineSystem : EntitySystem
 
         foreach (var (id, amount) in entries)
         {
-            if (_prototypeManager.HasIndex<EntityPrototype>(id))
-            {
-                var restock = amount;
-                inventory.Add(id, new FungusMachineInventoryEntry(id, restock));
-            }
+            if (!_prototypeManager.HasIndex<EntityPrototype>(id))
+                continue;
+
+            var restock = amount;
+            inventory.Add(id, new FungusMachineInventoryEntry(id, restock));
         }
     }
+}
 
-    [NetSerializable, Serializable]
-    public sealed class FungusMachineInterfaceState : BoundUserInterfaceState
+
+[NetSerializable, Serializable]
+public sealed class FungusMachineInterfaceState : BoundUserInterfaceState
+{
+    public List<FungusMachineInventoryEntry> Inventory;
+
+    public FungusMachineInterfaceState(List<FungusMachineInventoryEntry> inventory)
     {
-        public List<FungusMachineInventoryEntry> Inventory;
-
-        public FungusMachineInterfaceState(List<FungusMachineInventoryEntry> inventory)
-        {
-            Inventory = inventory;
-        }
+        Inventory = inventory;
     }
+}
 
-    [Serializable, NetSerializable]
-    public sealed class FungusMachineMessage : BoundUserInterfaceMessage
+[Serializable, NetSerializable]
+public sealed class FungusSelectedID : BoundUserInterfaceMessage
+{
+    public readonly string ID;
+    public FungusSelectedID( string id)
     {
-        public readonly string ID;
-        public FungusMachineMessage( string id)
-        {
-            ID = id;
-        }
+        ID = id;
     }
+}
 
-    [Serializable, NetSerializable]
-    public enum FungusMachineUiKey
-    {
-        Key,
-    }
+[Serializable, NetSerializable]
+public enum FungusMachineUiKey
+{
+    Key,
 }

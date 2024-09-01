@@ -298,7 +298,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
             return false;
 
         //ToDo remove this when you make a JobRequirement
-        if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists 
+        if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists
             return false;
 
         _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);
@@ -349,7 +349,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         bool summoned = false;
 
-        var query = EntityQueryEnumerator<NyarlathotepComponent>();//ToDo maybe some altrenative
+        var query = EntityQueryEnumerator<NyarlathotepSearchTargetsComponent>();//ToDo maybe some altrenative
 
         if (component.Summoned)
         {

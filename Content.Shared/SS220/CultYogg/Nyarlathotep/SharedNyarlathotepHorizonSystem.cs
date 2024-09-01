@@ -26,45 +26,17 @@ public abstract class SharedNyarlathotepHorizonSystem : EntitySystem
         SubscribeLocalEvent<NyarlathotepHorizonComponent, PreventCollideEvent>(OnPreventCollide);
 
         var vvHandle = Vvm.GetTypeHandler<NyarlathotepHorizonComponent>();
-        vvHandle.AddPath(nameof(NyarlathotepHorizonComponent.Radius), (_, comp) => comp.Radius, (uid, value, comp) => SetRadius(uid, value, nyarlathotepHorizon: comp));
         vvHandle.AddPath(nameof(NyarlathotepHorizonComponent.ColliderFixtureId), (_, comp) => comp.ColliderFixtureId, (uid, value, comp) => SetColliderFixtureId(uid, value, nyarlathotepHorizon: comp));
-        vvHandle.AddPath(nameof(NyarlathotepHorizonComponent.ConsumerFixtureId), (_, comp) => comp.ConsumerFixtureId, (uid, value, comp) => SetConsumerFixtureId(uid, value, nyarlathotepHorizon: comp));
-    }
+            }
 
     public override void Shutdown()
     {
         var vvHandle = Vvm.GetTypeHandler<NyarlathotepHorizonComponent>();
-        vvHandle.RemovePath(nameof(NyarlathotepHorizonComponent.Radius));
         vvHandle.RemovePath(nameof(NyarlathotepHorizonComponent.ColliderFixtureId));
-        vvHandle.RemovePath(nameof(NyarlathotepHorizonComponent.ConsumerFixtureId));
 
         base.Shutdown();
     }
     #region Getters/Setters
-
-    /// <summary>
-    /// Setter for <see cref="NyarlathotepHorizonComponent.Radius"/>
-    /// May also update the fixture associated with the Nyarlathotep horizon.
-    /// </summary>
-    /// <param name="uid">The uid of Nyarlathotept change the horizon radius.</param>
-    /// <param name="value">The new radius of the horizon.</param>
-    /// <param name="updateFixture">Whether to update the associated fixture upon changing the radius of the horizon.</param>
-    /// <param name="nyarlathotepHorizon">The state of the Nyarlathotepto horizon to change the radius of.</param>
-    public void SetRadius(EntityUid uid, float value, bool updateFixture = true, NyarlathotepHorizonComponent? nyarlathotepHorizon = null)
-    {
-        if (!Resolve(uid, ref nyarlathotepHorizon))
-            return;
-
-        var oldValue = nyarlathotepHorizon.Radius;
-        if (value == oldValue)
-            return;
-
-        nyarlathotepHorizon.Radius = value;
-        Dirty(uid, nyarlathotepHorizon);
-        if (updateFixture)
-            UpdateNyarlathotepHorizonFixture(uid, nyarlathotepHorizon: nyarlathotepHorizon);
-    }
-
     /// <summary>
     /// Setter for <see cref="NyarlathotepHorizonComponent.HorizonFixtureId"/>
     /// May also update the fixture associated with the Nyarlathotep horizon.
@@ -89,29 +61,6 @@ public abstract class SharedNyarlathotepHorizonSystem : EntitySystem
     }
 
     /// <summary>
-    /// Setter for <see cref="NyarlathotepHorizonComponent.HorizonFixtureId"/>
-    /// May also update the fixture associated with the Nyarlathotep horizon.
-    /// </summary>
-    /// <param name="uid">The uid of the Nyarlathotep horizon with the fixture ID to change.</param>
-    /// <param name="value">The new fixture ID to associate the Nyarlathotep horizon with.</param>
-    /// <param name="updateFixture">Whether to update the associated fixture upon changing the Nyarlathotep horizon.</param>
-    /// <param name="nyarlathotepHorizon">The state of the Nyarlathotep horizon with the fixture ID to change.</param>
-    public void SetConsumerFixtureId(EntityUid uid, string? value, bool updateFixture = true, NyarlathotepHorizonComponent? nyarlathotepHorizon = null)
-    {
-        if (!Resolve(uid, ref nyarlathotepHorizon))
-            return;
-
-        var oldValue = nyarlathotepHorizon.ConsumerFixtureId;
-        if (value == oldValue)
-            return;
-
-        nyarlathotepHorizon.ConsumerFixtureId = value;
-        Dirty(uid, nyarlathotepHorizon);
-        if (updateFixture)
-            UpdateNyarlathotepHorizonFixture(uid, nyarlathotepHorizon: nyarlathotepHorizon);
-    }
-
-    /// <summary>
     /// Updates the state of the fixture associated with the Nyarlathotep horizon.
     /// </summary>
     /// <param name="uid">The uid of the Nyarlathotep horizon associated with the fixture to update.</param>
@@ -122,23 +71,13 @@ public abstract class SharedNyarlathotepHorizonSystem : EntitySystem
         if (!Resolve(uid, ref nyarlathotepHorizon))
             return;
 
-        var consumerId = nyarlathotepHorizon.ConsumerFixtureId;
         var colliderId = nyarlathotepHorizon.ColliderFixtureId;
-        if (consumerId == null || colliderId == null
-        || !Resolve(uid, ref fixtures, logMissing: false))
+        if (colliderId == null || !Resolve(uid, ref fixtures, logMissing: false))
             return;
-
-        var consumer = _fixtures.GetFixtureOrNull(uid, consumerId, fixtures);
-        if (consumer != null)
-        {
-            _physics.SetRadius(uid, consumerId, consumer, consumer.Shape, nyarlathotepHorizon.Radius, fixtures);
-            _physics.SetHard(uid, consumer, false, fixtures);
-        }
 
         var collider = _fixtures.GetFixtureOrNull(uid, colliderId, fixtures);
         if (collider != null)
         {
-            _physics.SetRadius(uid, colliderId, collider, collider.Shape, nyarlathotepHorizon.Radius, fixtures);
             _physics.SetHard(uid, collider, false, fixtures);
         }
 

@@ -60,9 +60,6 @@
     interfaces:
       enum.FungusMachineUiKey.Key:
         type: FungusMachineBoundUserInterface
-  - type: Construction
-    graph: fungusHydroponic
-    node: fungusHydroponic
 
 - type: fungusMachineInventory
   id: CondimenttInventory

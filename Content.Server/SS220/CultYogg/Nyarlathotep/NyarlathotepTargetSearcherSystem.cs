@@ -32,7 +32,7 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
         SubscribeLocalEvent<NyarlathotepSearchTargetsComponent, ComponentStartup>(OnCompInit);
     }
 
-    protected void OnCompInit(Entity<NyarlathotepSearchTargetsComponent> uid, ref ComponentStartup args)
+    private void OnCompInit(Entity<NyarlathotepSearchTargetsComponent> uid, ref ComponentStartup args)
     {
         var selectedSong = _audio.GetSound(uid.Comp.SummonMusic);
         if (!string.IsNullOrEmpty(selectedSong))
@@ -49,7 +49,7 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
     /// </summary>
     public void SearchNearNyarlathotep(EntityUid user, float range)
     {
-        foreach (var target in _entityLookupSystem.GetComponentsInRange<MobStateComponent>(_transform.GetMapCoordinates(user), range))
+        foreach (var target in _entityLookupSystem.GetEntitiesInRange<MobStateComponent>(_transform.GetMapCoordinates(user), range))
         {
             if (HasComp<MiGoComponent>(target.Owner))
                 continue;
@@ -96,4 +96,10 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
 ///     Raised when god summoned to markup winning
 /// </summary>
 [ByRefEvent, Serializable]
-public record struct CultYoggSummonedEvent { }
+public record struct CultYoggSummonedEvent;
+
+/// <summary>
+/// Component for entities to be attacked by Nyarlathotep.
+/// </summary>
+[RegisterComponent]
+public sealed partial class NyarlathotepTargetComponent : Component;

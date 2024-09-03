@@ -2,7 +2,7 @@
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
-using Content.Shared.SS220.CultYogg.FungusMachineSystem;
+using Content.Shared.SS220.CultYogg.FungusMachine.Systems;
 using Content.Shared.UserInterface;
 
 namespace Content.Server.SS220.CultYogg.Fungus.Systems
@@ -54,10 +54,7 @@ namespace Content.Server.SS220.CultYogg.Fungus.Systems
 
         private FungusMachineInventoryEntry? GetEntry(EntityUid uid, string entryId, FungusMachineComponent? component = null)
         {
-            if (!Resolve(uid, ref component))
-                return null;
-
-            return component.Inventory.GetValueOrDefault(entryId);
+            return !Resolve(uid, ref component) ? null : component.Inventory.GetValueOrDefault(entryId);
         }
     }
 }

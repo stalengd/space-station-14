@@ -34,7 +34,7 @@ public sealed partial class BurglarBugComponent : Component
     public string? OpenedDoorStickPopupCancellation;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public bool Activated = false;
+    public bool Activated;
 
     [DataField("ignoreResistances")] public bool IgnoreResistances = false;
 

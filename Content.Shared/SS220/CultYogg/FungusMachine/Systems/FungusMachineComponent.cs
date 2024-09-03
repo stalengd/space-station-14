@@ -1,14 +1,9 @@
-﻿using Content.Shared.Actions;
-using Content.Shared.Whitelist;
-using Robust.Shared.Audio;
-using Robust.Shared.Containers;
+﻿using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Shared.SS220.CultYogg.FungusMachineSystem
+namespace Content.Shared.SS220.CultYogg.FungusMachine.Systems
 {
     [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
     public sealed partial class FungusMachineComponent : Component
@@ -38,10 +33,10 @@ namespace Content.Shared.SS220.CultYogg.FungusMachineSystem
     public sealed class FungusMachineInventoryEntry
     {
         [ViewVariables(VVAccess.ReadWrite)]
-        public string ID;
+        public string Id;
         public FungusMachineInventoryEntry( string id, uint amount)
         {
-            ID = id;
+            Id = id;
         }
     }
 }

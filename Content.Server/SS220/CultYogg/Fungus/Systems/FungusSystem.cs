@@ -8,7 +8,7 @@ using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
-using Content.Shared.SS220.CultYogg.FungusMachineSystem;
+using Content.Shared.SS220.CultYogg.FungusMachine.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -32,9 +32,10 @@ public sealed class FungusSystem : EntitySystem
         SubscribeLocalEvent<FungusComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<FungusComponent, InteractHandEvent>(OnInteractHand);
 
-        Subs.BuiEvents<FungusMachineComponent>(FungusMachineUiKey.Key, subs =>
+        Subs.BuiEvents<FungusMachineComponent>(FungusMachineUiKey.Key,
+            subs =>
         {
-            subs.Event<FungusSelectedID>(OnUIButton);
+            subs.Event<FungusSelectedId>(OnUIButton);
         });
     }
 
@@ -60,7 +61,7 @@ public sealed class FungusSystem : EntitySystem
     /// <returns>Current stage number</returns>
     private int GetCurrentGrowthStage(Entity<FungusComponent> entity)
     {
-        var (uid, component) = entity;
+        var (_, component) = entity;
 
         if (component.Seed == null)
             return 0;
@@ -74,18 +75,11 @@ public sealed class FungusSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
-        var (uid, component) = entity;
-
         using (args.PushGroup(nameof(FungusComponent)))
         {
-            if (component.Seed == null)
-            {
-                args.PushMarkup(Loc.GetString("plant-holder-component-nothing-planted-message"));
-            }
-            else
-            {
-                args.PushMarkup(Loc.GetString("plant-holder-component-dead-plant-matter-message"));
-            }
+            args.PushMarkup(entity.Comp.Seed == null
+                ? Loc.GetString("plant-holder-component-nothing-planted-message")
+                : Loc.GetString("plant-holder-component-dead-plant-matter-message"));
         }
     }
 
@@ -201,14 +195,14 @@ public sealed class FungusSystem : EntitySystem
         return component.Inventory.GetValueOrDefault(entryId);
     }
 
-    private void OnUIButton(Entity<FungusMachineComponent> entity, ref FungusSelectedID args)
+    private void OnUIButton(Entity<FungusMachineComponent> entity, ref FungusSelectedId args)
     {
         var (uid, component) = entity;
 
         if (args.Actor is not { Valid: true } entit || Deleted(entit))
             return;
 
-        var entry = GetEntry(uid, args.ID, component);
+        var entry = GetEntry(uid, args.Id, component);
 
         if (entry == null)
         {
@@ -216,10 +210,10 @@ public sealed class FungusSystem : EntitySystem
             return;
         }
 
-        if (string.IsNullOrEmpty(entry.ID))
+        if (string.IsNullOrEmpty(entry.Id))
             return;
 
-        var proto = _prototype.Index(entry.ID);
+        var proto = _prototype.Index(entry.Id);
 
         if(TryComp(uid, out FungusComponent? fungusComponent))
         {
@@ -248,7 +242,7 @@ public sealed class FungusSystem : EntitySystem
 
         component.UpdateSpriteAfterUpdate = false;
 
-        if (component.Seed != null && component.Seed.Bioluminescent)
+        if (component.Seed is {Bioluminescent: true})
         {
             var light = EnsureComp<PointLightComponent>(uid);
             _pointLight.SetRadius(uid, component.Seed.BioluminescentRadius, light);

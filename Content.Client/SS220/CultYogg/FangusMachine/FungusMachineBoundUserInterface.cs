@@ -1,4 +1,4 @@
-﻿using Content.Shared.SS220.CultYogg.FungusMachineSystem;
+﻿using Content.Shared.SS220.CultYogg.FungusMachine.Systems;
 using Robust.Client.UserInterface.Controls;
 using System.Linq;
 using Robust.Client.UserInterface;
@@ -24,7 +24,7 @@ namespace Content.Client.SS220.CultYogg.FangusMachine.UI
         {
             base.Open();
 
-            var fungusMachineSys = EntMan.System<FungusMachineSystem>();
+            var fungusMachineSys = EntMan.System<SharedFungusMachineSystem>();
 
             _cachedInventory = fungusMachineSys.GetInventory(Owner);
 
@@ -60,7 +60,7 @@ namespace Content.Client.SS220.CultYogg.FangusMachine.UI
             if (selectedItem == null)
                 return;
 
-            SendMessage(new FungusSelectedID(selectedItem.ID));
+            SendMessage(new FungusSelectedId(selectedItem.Id));
         }
 
         private void OnSearchChanged(string? filter)

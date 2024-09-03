@@ -1,12 +1,13 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+
+using Content.Shared.Ghost;
 using Content.Shared.SS220.CultYogg.Nyarlathotep.Components;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
-using Content.Shared.Ghost;
-using Robust.Shared.Physics;
 
-namespace Content.Server.SS220.CultYogg.Nyarlathotep.EntitySystems;
+namespace Content.Shared.SS220.CultYogg.Nyarlathotep;
 
 /// <summary>
 /// The general part of the Nyarlathotep system is primarily responsible for consuming entities <see cref="NyarlathotepHorizonComponent"/>s.
@@ -38,7 +39,7 @@ public abstract class SharedNyarlathotepHorizonSystem : EntitySystem
     }
     #region Getters/Setters
     /// <summary>
-    /// Setter for <see cref="NyarlathotepHorizonComponent.HorizonFixtureId"/>
+    /// Setter for <see cref="NyarlathotepHorizonComponent.ColliderFixtureId"/>
     /// May also update the fixture associated with the Nyarlathotep horizon.
     /// </summary>
     /// <param name="uid">The uid of the Nyarlathotep horizon with the fixture ID to change.</param>

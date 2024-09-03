@@ -19,7 +19,6 @@ using Content.Shared.Roles;
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.GameObjects;
-using Content.Server.SS220.CultYogg;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 

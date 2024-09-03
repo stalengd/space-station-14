@@ -1,9 +1,9 @@
 ﻿using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.SS220.CultYogg.FungusMachineSystem;
+namespace Content.Shared.SS220.CultYogg.FungusMachine.Systems;
 
-public abstract partial class SharedFungusMachineSystem : EntitySystem
+public abstract class SharedFungusMachineSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
@@ -46,8 +46,7 @@ public abstract partial class SharedFungusMachineSystem : EntitySystem
             return;
         }
 
-        Dictionary<string, FungusMachineInventoryEntry> inventory;
-        inventory = component.Inventory;
+        var inventory = component.Inventory;
 
         foreach (var (id, amount) in entries)
         {
@@ -62,24 +61,15 @@ public abstract partial class SharedFungusMachineSystem : EntitySystem
 
 
 [NetSerializable, Serializable]
-public sealed class FungusMachineInterfaceState : BoundUserInterfaceState
+public sealed class FungusMachineInterfaceState(List<FungusMachineInventoryEntry> inventory) : BoundUserInterfaceState
 {
-    public List<FungusMachineInventoryEntry> Inventory;
-
-    public FungusMachineInterfaceState(List<FungusMachineInventoryEntry> inventory)
-    {
-        Inventory = inventory;
-    }
+    public List<FungusMachineInventoryEntry> Inventory = inventory;
 }
 
 [Serializable, NetSerializable]
-public sealed class FungusSelectedID : BoundUserInterfaceMessage
+public sealed class FungusSelectedId(string id) : BoundUserInterfaceMessage
 {
-    public readonly string ID;
-    public FungusSelectedID( string id)
-    {
-        ID = id;
-    }
+    public readonly string Id = id;
 }
 
 [Serializable, NetSerializable]

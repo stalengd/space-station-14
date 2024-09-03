@@ -27,7 +27,8 @@
     layers:
     - state: nyarlatoteph
   - type: ChasingWalk
-    minSpeed: 3
+    impulseInterval: 1
+    minSpeed: 4
     maxSpeed: 5
     changeVectorMinInterval: 120
     changeVectorMaxInterval: 600

@@ -3,29 +3,21 @@ using Content.Server.Explosion.EntitySystems;
 using Content.Server.Popups;
 using Content.Server.Sticky.Components;
 using Content.Server.Sticky.Events;
-using Content.Shared.Access;
-using Content.Shared.Access.Components;
-using Content.Shared.Access.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
-using Content.Shared.Doors.Systems;
+using Content.Shared.Emag.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Sticky;
-using Robust.Server.GameObjects;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg.BurglarBug;
 
 public sealed class BurglarBugServerSystem : EntitySystem
 {
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly SharedDoorSystem _doorSystem = default!;
-    [Dependency] private readonly AccessReaderSystem _access = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
@@ -42,7 +34,6 @@ public sealed class BurglarBugServerSystem : EntitySystem
         SubscribeLocalEvent<BurglarBugComponent, UseInHandEvent>(OnActivate);
         SubscribeLocalEvent<BurglarBugComponent, AttemptEntityStickEvent>(OnStick);
         SubscribeLocalEvent<BurglarBugComponent, StickyDoAfterEvent>(OnBreak);
-
     }
 
     public override void Update(float frameTime)
@@ -60,25 +51,17 @@ public sealed class BurglarBugServerSystem : EntitySystem
     }
     private void OpenDoor(EntityUid uid, BurglarBugComponent component)
     {
-            if (!EntityManager.TryGetComponent<StickyComponent>(uid, out var stickyComponent))
+            if (!HasComp<StickyComponent>(uid))
                 return;
 
-            if (!EntityManager.TryGetComponent<DoorComponent>(stickyComponent.StuckTo,
-                    out var doorComponent))
-                return;
-
-            if(doorComponent.State == DoorState.Closed)
-                _doorSystem.StartOpening(doorComponent.Owner, doorComponent);
-
-            if (!EntityManager.TryGetComponent<DoorBoltComponent>(stickyComponent.StuckTo,
-                    out var doorBoltComponent))
-                return;
-            _doorSystem.SetBoltsDown((doorBoltComponent.Owner, doorBoltComponent), true);
-
-            if (!EntityManager.TryGetComponent<AccessReaderComponent>(stickyComponent.StuckTo,
-                    out var accessReaderComponent))
-                return;
-            accessReaderComponent.AccessLists.Clear();
+            if (TryComp<DoorComponent>(component.Door, out var door))
+            {
+                door.ClickOpen = true;
+                door.BumpOpen = true;
+                Dirty(component.Door.Value, door);
+                var emaggedEvent = new GotEmaggedEvent();
+                RaiseLocalEvent(component.Door.Value, ref emaggedEvent);
+            }
 
             AfterUsed((uid, component));
         }
@@ -86,15 +69,17 @@ public sealed class BurglarBugServerSystem : EntitySystem
     {
         if (args.Cancelled)
         {
-            if (!EntityManager.TryGetComponent<AccessReaderComponent>(entity.Comp.Door, out var accessReaderComponent))
-                return;
-            accessReaderComponent.AccessLists = new List<HashSet<ProtoId<AccessLevelPrototype>>> (entity.Comp.AccessLists);
+            if (TryComp<DoorComponent>(entity.Comp.Door, out var dor))
+            {
+                dor.ClickOpen = true;
+                dor.BumpOpen = true;
+                Dirty(entity.Comp.Door.Value, dor);
+            }
             entity.Comp.Activated = false;
+            return;
         }
-        else
-        {
-            entity.Comp.DoorOpenTime = _gameTiming.CurTime + TimeSpan.FromSeconds(entity.Comp.TimeToOpen);
-        }
+
+        entity.Comp.DoorOpenTime = _gameTiming.CurTime + TimeSpan.FromSeconds(entity.Comp.TimeToOpen);
     }
     private void OnActivate(Entity<BurglarBugComponent> entity, ref UseInHandEvent args)
     {
@@ -105,7 +90,7 @@ public sealed class BurglarBugServerSystem : EntitySystem
     {
         if (entity.Comp.OpenedDoorStickPopupCancellation != null)
         {
-            if (EntityManager.TryGetComponent<DoorComponent>(args.Target,
+            if (TryComp<DoorComponent>(args.Target,
                     out var doorComponent) &&  doorComponent.State != DoorState.Closed)
             {
                 args.Cancelled = true;
@@ -128,36 +113,39 @@ public sealed class BurglarBugServerSystem : EntitySystem
             args.Cancelled = true;
             return;
         }
-        if (!_access.GetMainAccessReader(args.Target, out var accessReaderComponent))
-                return;
-        entity.Comp.Door = accessReaderComponent.Owner;
-        entity.Comp.AccessLists = new List<HashSet<ProtoId<AccessLevelPrototype>>>(accessReaderComponent.AccessLists);
-        accessReaderComponent.AccessLists.Clear();
-        _access.SetAccesses(accessReaderComponent.Owner, accessReaderComponent, ["Some hard code"]);
+        if (TryComp<DoorComponent>(args.Target, out var door))
+        {
+            entity.Comp.Door = (args.Target, door);
+            door.ClickOpen = false;
+            door.BumpOpen = false;
+            Dirty(args.Target, door);
+        }
     }
 
     private void HandleTrigger(Entity<BurglarBugComponent> entity, ref TriggerEvent args)
     {
         var (uid, component) = entity;
 
-        if (!EntityManager.TryGetComponent<StickyComponent>(uid, out var stickyComponent))
+        if (!TryComp<StickyComponent>(uid, out var stickyComponent))
             return;
 
         if (stickyComponent.StuckTo == null)
         {
             var damage = new DamageSpecifier(component.Damage);
+            var targets = _entityLookupSystem.GetEntitiesInRange(uid, component.DamageRange);
+            targets.RemoveWhere(s => !HasComp<MobStateComponent>(s));
             foreach (var target
-                     in _entityLookupSystem.GetComponentsInRange<MobStateComponent>(
-                         _transform.GetMapCoordinates(entity.Owner), component.DamageRange))
+                     in targets)
             {
-                _damageable.TryChangeDamage(target.Owner, damage, component.IgnoreResistances);
+                _damageable.TryChangeDamage(target, damage, component.IgnoreResistances);
             }
+
             AfterUsed(entity);
         }
     }
 
     private void AfterUsed(Entity<BurglarBugComponent> entity)
     {
-        EntityManager.DeleteEntity(entity);
+        Del(entity);
     }
 }

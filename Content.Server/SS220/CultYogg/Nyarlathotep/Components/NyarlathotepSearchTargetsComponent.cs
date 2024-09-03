@@ -1,6 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Server.SS220.CultYogg.Nyarlathotep;
-using Robust.Shared.Prototypes;
+using Robust.Shared.Audio;
 
 namespace Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 
@@ -10,6 +9,10 @@ namespace Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 [RegisterComponent, Access(typeof(NyarlathotepTargetSearcherSystem)), AutoGenerateComponentPause]
 public sealed partial class NyarlathotepSearchTargetsComponent : Component
 {
+    [DataField("summonMusic")]
+    public SoundSpecifier SummonMusic = new SoundCollectionSpecifier("CultYoggMusic");//ToDo make own
+
+
     /// <summary>
     /// Minimum interval between searches.
     /// </summary>

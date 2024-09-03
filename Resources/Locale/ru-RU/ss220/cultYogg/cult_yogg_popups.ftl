@@ -17,3 +17,5 @@ cult-yogg-resurrected-by-heal = Мистические силы возвраща
 
 cult-yogg-acsending-have-acsending = Один из членов культа в данный момент возносится
 cult-yogg-acsending-migo-full = Достигнуто количество Ми-Го и все они живы
+
+cult-yogg-fungus-denied-to-use = Вы не можете коснуться этого

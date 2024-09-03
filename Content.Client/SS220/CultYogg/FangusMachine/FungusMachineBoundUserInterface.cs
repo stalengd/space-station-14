@@ -1,4 +1,4 @@
-﻿using Content.Shared.SS220.CultYogg.FungusMachineSystem;
+﻿using Content.Shared.SS220.CultYogg.FungusMachine.Systems;
 using Robust.Client.UserInterface.Controls;
 using System.Linq;
 using Robust.Client.UserInterface;
@@ -24,7 +24,7 @@ namespace Content.Client.SS220.CultYogg.FangusMachine.UI
         {
             base.Open();
 
-            var fungusMachineSys = EntMan.System<FungusMachineSystem>();
+            var fungusMachineSys = EntMan.System<SharedFungusMachineSystem>();
 
             _cachedInventory = fungusMachineSys.GetInventory(Owner);
 
@@ -42,7 +42,7 @@ namespace Content.Client.SS220.CultYogg.FangusMachine.UI
         {
             base.UpdateState(state);
 
-            if (state is not SharedFungusMachineSystem.FungusMachineInterfaceState newState)
+            if (state is not FungusMachineInterfaceState newState)
                 return;
 
             _cachedInventory = newState.Inventory;
@@ -60,21 +60,7 @@ namespace Content.Client.SS220.CultYogg.FangusMachine.UI
             if (selectedItem == null)
                 return;
 
-            SendMessage(new SharedFungusMachineSystem.FungusMachineMessage(selectedItem.ID));
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            if (!disposing)
-                return;
-
-            if (_menu == null)
-                return;
-
-            _menu.OnItemSelected -= OnItemSelected;
-            _menu.OnClose -= Close;
-            _menu.Dispose();
+            SendMessage(new FungusSelectedId(selectedItem.Id));
         }
 
         private void OnSearchChanged(string? filter)

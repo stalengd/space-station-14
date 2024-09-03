@@ -2,10 +2,10 @@
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 
-namespace Content.Shared.SS220.CultYogg.FungusMachineSystem
+namespace Content.Shared.SS220.CultYogg.FungusMachine.Systems
 {
     [Serializable, NetSerializable, Prototype("fungusMachineInventory")]
-    public sealed partial class FungusMachineInventoryPrototype : IPrototype
+    public sealed class FungusMachineInventoryPrototype : IPrototype
     {
         [ViewVariables]
         [IdDataField]

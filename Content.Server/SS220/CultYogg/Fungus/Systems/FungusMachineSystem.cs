@@ -2,7 +2,7 @@
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
-using Content.Shared.SS220.CultYogg.FungusMachineSystem;
+using Content.Shared.SS220.CultYogg.FungusMachine.Systems;
 using Content.Shared.UserInterface;
 
 namespace Content.Server.SS220.CultYogg.Fungus.Systems
@@ -26,12 +26,11 @@ namespace Content.Server.SS220.CultYogg.Fungus.Systems
 
         private void OnAttemptOpenUI(Entity<FungusMachineComponent> ent, ref ActivatableUIOpenAttemptEvent args)
         {
-            if (!EntityManager.HasComponent<MiGoComponent>(args.User))
-            {
-                var msg = Loc.GetString("Вы не можете коснуться этого");
-                _popupSystem.PopupEntity(msg, ent);
-                args.Cancel();
-            }
+            if (HasComp<MiGoComponent>(args.User))
+                return;
+
+            _popupSystem.PopupEntity(Loc.GetString("cult-yogg-fungus-denied-to-use"), ent, args.User);
+            args.Cancel();
         }
 
         protected override void OnComponentInit(EntityUid uid, FungusMachineComponent component, ComponentInit args)
@@ -55,10 +54,7 @@ namespace Content.Server.SS220.CultYogg.Fungus.Systems
 
         private FungusMachineInventoryEntry? GetEntry(EntityUid uid, string entryId, FungusMachineComponent? component = null)
         {
-            if (!Resolve(uid, ref component))
-                return null;
-
-            return component.Inventory.GetValueOrDefault(entryId);
+            return !Resolve(uid, ref component) ? null : component.Inventory.GetValueOrDefault(entryId);
         }
     }
 }

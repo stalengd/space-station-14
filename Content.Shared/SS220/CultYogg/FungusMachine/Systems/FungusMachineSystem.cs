@@ -1,9 +1,9 @@
 ﻿using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.SS220.CultYogg.FungusMachineSystem;
+namespace Content.Shared.SS220.CultYogg.FungusMachine.Systems;
 
-public abstract partial class    SharedFungusMachineSystem : EntitySystem
+public abstract class SharedFungusMachineSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
@@ -46,43 +46,34 @@ public abstract partial class    SharedFungusMachineSystem : EntitySystem
             return;
         }
 
-        Dictionary<string, FungusMachineInventoryEntry> inventory;
-        inventory = component.Inventory;
+        var inventory = component.Inventory;
 
         foreach (var (id, amount) in entries)
         {
-            if (_prototypeManager.HasIndex<EntityPrototype>(id))
-            {
-                var restock = amount;
-                inventory.Add(id, new FungusMachineInventoryEntry(id, restock));
-            }
+            if (!_prototypeManager.HasIndex<EntityPrototype>(id))
+                continue;
+
+            var restock = amount;
+            inventory.Add(id, new FungusMachineInventoryEntry(id, restock));
         }
     }
+}
 
-    [NetSerializable, Serializable]
-    public sealed class FungusMachineInterfaceState : BoundUserInterfaceState
-    {
-        public List<FungusMachineInventoryEntry> Inventory;
 
-        public FungusMachineInterfaceState(List<FungusMachineInventoryEntry> inventory)
-        {
-            Inventory = inventory;
-        }
-    }
+[NetSerializable, Serializable]
+public sealed class FungusMachineInterfaceState(List<FungusMachineInventoryEntry> inventory) : BoundUserInterfaceState
+{
+    public List<FungusMachineInventoryEntry> Inventory = inventory;
+}
 
-    [Serializable, NetSerializable]
-    public sealed class FungusMachineMessage : BoundUserInterfaceMessage
-    {
-        public readonly string ID;
-        public FungusMachineMessage( string id)
-        {
-            ID = id;
-        }
-    }
+[Serializable, NetSerializable]
+public sealed class FungusSelectedId(string id) : BoundUserInterfaceMessage
+{
+    public readonly string Id = id;
+}
 
-    [Serializable, NetSerializable]
-    public enum FungusMachineUiKey
-    {
-        Key,
-    }
+[Serializable, NetSerializable]
+public enum FungusMachineUiKey
+{
+    Key,
 }

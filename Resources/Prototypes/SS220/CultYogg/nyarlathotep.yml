@@ -27,10 +27,11 @@
     layers:
     - state: nyarlatoteph
   - type: ChasingWalk
-    minSpeed: 0.2
-    maxSpeed: 1
-    changeVectorMinInterval: 99999
-    changeVectorMaxInterval: 100000
+    impulseInterval: 1
+    minSpeed: 4
+    maxSpeed: 5
+    changeVectorMinInterval: 120
+    changeVectorMaxInterval: 600
     chasingComponent:
     - type: NyarlathotepTarget
   - type: EmitSoundOnSpawn
@@ -40,26 +41,22 @@
     fixtures:
       NyarlathotepHorizonCollider: #ToDo make it at leaslt close to entity
         shape:
-          !type:PhysShapeCircle
-            radius: 0.35
+          !type:PolygonShape
+            vertices:
+            - -2.5,-2
+            - 2.5,-2
+            - 2,1
+            - -2,1
+            - 1,4
+            - -1,4
+            - 0,4.5
+            - 0,-4.5
         mask:
         - AllMask
         layer:
         - AllMask
-      NyarlathotepHorizonConsumer:
-        shape:
-          !type:PhysShapeCircle
-            radius: 0.35
-        mask:
-        - AllMask
-        layer:
-        - AllMask
-  - type: Nyarlathotep
   - type: NyarlathotepHorizon
-    radius: 0.6
-    consumeEntities: true
     colliderFixtureId: NyarlathotepHorizonCollider
-    consumerFixtureId: NyarlathotepHorizonConsumer
   - type: NyarlathotepSearchTargets
     searchRange: 100
 

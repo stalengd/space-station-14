@@ -21,6 +21,7 @@
     receiveFrequencyId: SurveillanceCameraSecurity
     transmitFrequencyId: SurveillanceCamera
   - type: SurveillanceCamera
+    active: false 
     setupAvailableNetworks:
       - SurveillanceCameraSecurity
     isOffable: true
@@ -34,7 +35,6 @@
         - BodyCameraBase
   - type: ActiveListener
     range: 10
-  - type: DetectiveCamera
   - type: DetectiveCameraAttach
   - type: Tag
     tags:
@@ -47,5 +47,6 @@
   description: Used for covert surveillance
   components:
   - type: SurveillanceCamera
+    active: false 
     networkSet: true
     id: "Detective camera"

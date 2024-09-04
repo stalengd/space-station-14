@@ -18,7 +18,7 @@ public sealed partial class TelepathyComponent : Component
     public string TelepathyChannelPrototype;
 }
 
-public sealed partial class TelepathySendEvent //ToDo consult with somebody about "InstantActionEvent" - part
+public sealed partial class TelepathySendEvent : InstantActionEvent //ToDo consult with somebody about "InstantActionEvent" - part
 {
     public string Message { get; init; }
 }

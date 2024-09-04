@@ -1,3 +1,5 @@
 ﻿- type: telepathyChannel
   id: TelepathyChannelYoggSothothCult
   name: chat-telepathy-yoggsothothcult
+  color: Brown
+

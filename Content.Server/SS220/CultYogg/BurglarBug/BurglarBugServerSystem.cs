@@ -1,8 +1,9 @@
-﻿using Content.Server.Administration.Logs;
+using Content.Server.Administration.Logs;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Popups;
-using Content.Server.Sticky.Components;
-using Content.Server.Sticky.Events;
+using Content.Shared.Sticky.Components;
+using Content.Shared.Sticky;
+using Content.Shared.Sticky.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
@@ -11,7 +12,6 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
-using Content.Shared.Sticky;
 using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg.BurglarBug;

@@ -14,9 +14,18 @@ public sealed class WearableCameraSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<WearableCameraComponent, ComponentStartup>(OnComponentStartup);
         SubscribeLocalEvent<WearableCameraComponent, DetectiveCameraToggledEvent>(OnCameraToggled);
         SubscribeLocalEvent<WearableCameraComponent, ClothingGotEquippedEvent>(OnEquipped);
         SubscribeLocalEvent<WearableCameraComponent, ClothingGotUnequippedEvent>(OnUnequipped);
+    }
+
+    private void OnComponentStartup(Entity<WearableCameraComponent> entity, ref ComponentStartup args)
+    {
+        if (!TryComp<SurveillanceCameraComponent>(entity, out var camera))
+            return;
+
+        _cameraSystem.SetActive(entity, false, camera);
     }
 
     private void OnCameraToggled(Entity<WearableCameraComponent> entity, ref DetectiveCameraToggledEvent args)

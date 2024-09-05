@@ -25,7 +25,6 @@ public sealed partial class SurveillanceCameraComponent : Component
     // If this camera is active or not. Deactivating a camera
     // will not allow it to obtain any new viewers.
     [ViewVariables]
-    [DataField("active")] // SS220 detective cameras
     public bool Active { get; set; } = true;
 
     // This one isn't easy to deal with. Will require a UI

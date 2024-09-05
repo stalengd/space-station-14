@@ -3,14 +3,14 @@
 #list of corrupted recepies
 - type: corrupted
   id: WeaponRifleAk
-  from: 
+  from:
     prototypeId: WeaponRifleAk
   result: FoodSnackMREBrownie
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: WeaponLaserCarbine
-  from: 
+  from:
     prototypeId: WeaponLaserCarbine
   result: FoodPacketMRETrash
   corruptionReverseEffect: ExorcismUncorruptEffect
@@ -20,4 +20,11 @@
   from:
     stackType: Steel
   result: SheetTokl
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: LanternFlashCult
+  from:
+    prototypeId: Lantern
+  result: LanternFlashCult
   corruptionReverseEffect: ExorcismUncorruptEffect

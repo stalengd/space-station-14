@@ -19,3 +19,4 @@ cult-yogg-acsending-have-acsending = Один из членов культа в 
 cult-yogg-acsending-migo-full = Достигнуто количество Ми-Го и все они живы
 
 cult-yogg-fungus-denied-to-use = Вы не можете коснуться этого
+injector-component-draw-better-success-message = Вы набираете { $amount }ед. { $reagent } из { $target }.

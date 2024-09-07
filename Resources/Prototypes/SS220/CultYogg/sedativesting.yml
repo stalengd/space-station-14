@@ -18,3 +18,5 @@
     transferAmount: 10
     injectOnly: true
     onlyAffectsMobs: true
+  - type: RoleItem
+    roleId: CultYogg

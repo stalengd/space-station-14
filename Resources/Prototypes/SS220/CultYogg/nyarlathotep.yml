@@ -28,8 +28,8 @@
     - state: nyarlatoteph
   - type: ChasingWalk
     impulseInterval: 1
-    minSpeed: 4
-    maxSpeed: 5
+    minSpeed: 3
+    maxSpeed: 4
     changeVectorMinInterval: 120
     changeVectorMaxInterval: 600
     chasingComponent:

@@ -18,5 +18,8 @@ cult-yogg-resurrected-by-heal = Мистические силы возвраща
 cult-yogg-acsending-have-acsending = Один из членов культа в данный момент возносится
 cult-yogg-acsending-migo-full = Достигнуто количество Ми-Го и все они живы
 
+cult-yogg-burglar-bug-stick-success = Вы прикрепили жука-взломщика
+cult-yogg-burglar-bug-unstick-started = Вы пытаетесь отцепить жука-взломщика...
+cult-yogg-burglar-bug-unstick-success = Вы открепили жука-взломщика
 cult-yogg-fungus-denied-to-use = Вы не можете коснуться этого
 injector-component-draw-better-success-message = Вы набираете { $amount }ед. { $reagent } из { $target }.

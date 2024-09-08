@@ -8,7 +8,6 @@
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
       soundEmpty: null
       fireRate: 20
-      projectileSpeed: 0.5
       selectedMode: SemiAuto
       availableModes:
       - SemiAuto
@@ -44,14 +43,15 @@
       inHandItem: true
 
 - type: entity
-  id: BaseSpike
-  name: base spike
+  id: Spike
+  name: spike
+  parent: BaseBullet
+  noSpawn: true
   description: description
-  abstract: true
   components:
   - type: Reflective
-  - type: FlyBySound
-  - type: Clickable
+    reflective:
+      - NonEnergy
   - type: Sprite
     noRot: false
     sprite: SS220/Objects/Weapons/Guns/cult_yogg_spikegun.rsi
@@ -62,44 +62,11 @@
     bodyType: Dynamic
     linearDamping: 0.3
     angularDamping: 0
-  - type: Fixtures
-    fixtures:
-      projectile:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.1,-0.1,0.1,0.1"
-        hard: false
-        mask:
-        - Impassable
-        - BulletImpassable
-      fly-by: &flybyfixture
-        shape: !type:PhysShapeCircle
-          radius: 1.5
-        layer:
-        - Impassable
-        - MidImpassable
-        - HighImpassable
-        - LowImpassable
-        hard: False
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
       types:
         Piercing: 10
-    soundHit:
-      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
-
-- type: entity
-  id: Spike
-  name: spike
-  parent: BaseSpike
-  noSpawn: true
-  description: description
-  components:
-  - type: Reflective
-    reflective:
-      - NonEnergy
   - type: TimedDespawn
-    lifetime: 0.4
+    lifetime: 0.6
   - type: GatheringProjectile
-

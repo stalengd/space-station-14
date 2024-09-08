@@ -44,6 +44,8 @@ using Content.Shared.Audio;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
+using static Content.Shared.SS220.CultYogg.EntitySystems.SharedCultYoggSystem;
+using Content.Shared.PDA;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -228,7 +230,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     private void SacraficialReplacement(ref SacraficialReplacementEvent args)
     {
-        GetCultGameRuleComp(out var cultRuleComp);
+        GetCultGameRule(out var cultRuleEnt, out var cultRuleComp);
 
         if (cultRuleComp == null)
             return;
@@ -274,14 +276,12 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (args.Target == null)
             return;
 
-        GetCultGameRuleComp(out var cultRuleComp);
+        GetCultGameRule(out var cultRuleEnt, out var cultRuleComp);
 
         if (cultRuleComp == null)
             return;
 
         MakeCultist(args.Target.Value, cultRuleComp, false);
-
-        //args.Handled = true;
     }
     #endregion
 
@@ -326,13 +326,29 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     #endregion
 
     #region RoundEnding
-    private void OnGodSummoned(ref CultYoggSummonedEvent ev)
+    private void OnGodSummoned(ref CultYoggSummonedEvent args)
     {
         foreach (var station in _station.GetStations())
         {
             _chat.DispatchStationAnnouncement(station, Loc.GetString("cult-yogg-shuttle-call"), colorOverride: Color.Crimson);
         }
         _roundEnd.RequestRoundEnd(DefaultShuttleArriving, null);
+
+        GetCultGameRule(out var cultRuleEnt, out var cultRuleComp);
+
+        if (cultRuleEnt == null || cultRuleComp == null)
+            return;
+
+        cultRuleComp.Summoned = true;//Win EndText
+
+        var ev = new CultYoggForceAscendingEvent();
+
+        //Event hadn't raised on Cultists even with broadcast, so i made this
+        var query = EntityQueryEnumerator<CultYoggComponent>();
+        while (query.MoveNext(out var ent, out var comp))
+        {
+            RaiseLocalEvent(ent, ref ev);//Make all cultists MiGo
+        }
     }
 
     #endregion
@@ -405,13 +421,15 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     #endregion
 
-    public void GetCultGameRuleComp(out CultYoggRuleComponent? comp)
+    public void GetCultGameRule(out EntityUid? ent, out CultYoggRuleComponent? comp)
     {
         comp = null;
+        ent = null;
         var query = QueryActiveRules();
         while (query.MoveNext(out var uid, out _, out var cultComp, out _))
         {
             comp = cultComp;
+            ent = uid;
         }
     }
 }

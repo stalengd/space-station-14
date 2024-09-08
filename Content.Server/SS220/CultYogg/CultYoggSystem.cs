@@ -7,7 +7,6 @@ using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Robust.Shared.Timing;
-using System;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -60,7 +59,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     private bool AvaliableMiGoCheck()
     {
         //Check number of MiGo in gamerule
-        _cultRule.GetCultGameRuleComp(out var ruleComp);
+        _cultRule.GetCultGameRule(out var cultRuleEnt, out var ruleComp);
 
         if (ruleComp is null)
             return false;

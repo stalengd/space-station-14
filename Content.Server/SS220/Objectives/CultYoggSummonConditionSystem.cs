@@ -30,7 +30,7 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
     //check if gamerule was rewritten
     private void OnInit(Entity<CultYoggSummonConditionComponent> ent, ref ComponentInit args)
     {
-        _cultRule.GetCultGameRuleComp(out var ruleComp);
+        _cultRule.GetCultGameRule(out var cultRuleEnt, out var ruleComp);
 
         if (ruleComp is null)
             return;
@@ -60,7 +60,7 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
     }
     private void OnGetProgress(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveGetProgressEvent args)
     {
-        _cultRule.GetCultGameRuleComp(out var ruleComp);
+        _cultRule.GetCultGameRule(out var cultRuleEnt, out var ruleComp);
 
         if (ruleComp is null)
             return;

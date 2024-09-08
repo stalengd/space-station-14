@@ -23,7 +23,7 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
         SubscribeLocalEvent<CultYoggSacrificialComponent, GetStatusIconsEvent>(OnGetSacraficialIconsEvent);
     }
 
-    private void OnGetCultistsIconsEvent(EntityUid uid, ShowCultYoggIconsComponent _, ref GetStatusIconsEvent ev)
+    private void OnGetCultistsIconsEvent(Entity<ShowCultYoggIconsComponent> uid, ref GetStatusIconsEvent ev)
     {
         var iconId = JobIconForNoId;
 
@@ -32,12 +32,12 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
             iconId = cultComp.StatusIcon;
         }
 
-        if (_prototype.TryIndex<StatusIconPrototype>(iconId, out var iconPrototype))
+        if (_prototype.TryIndex<FactionIconPrototype>(iconId, out var iconPrototype))
             ev.StatusIcons.Add(iconPrototype);
         else
             Log.Error($"Invalid job icon prototype: {iconPrototype}");
     }
-    private void OnGetSacraficialIconsEvent(EntityUid uid, CultYoggSacrificialComponent _, ref GetStatusIconsEvent ev)
+    private void OnGetSacraficialIconsEvent(Entity<CultYoggSacrificialComponent> uid, ref GetStatusIconsEvent ev)
     {
         var viewer = _playerManager.LocalSession?.AttachedEntity;
         if (viewer == uid)
@@ -50,7 +50,7 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
             iconId = sacrComp.StatusIcon;
         }
 
-        if (_prototype.TryIndex<StatusIconPrototype>(iconId, out var iconPrototype))
+        if (_prototype.TryIndex<FactionIconPrototype>(iconId, out var iconPrototype))
             ev.StatusIcons.Add(iconPrototype);
         else
             Log.Error($"Invalid job icon prototype: {iconPrototype}");

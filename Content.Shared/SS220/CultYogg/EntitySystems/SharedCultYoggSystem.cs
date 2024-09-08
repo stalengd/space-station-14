@@ -51,7 +51,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemInHandEvent>(CorruptItemInHandAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
 
-        SubscribeLocalEvent<CultYoggComponent, CultYoggForceAscendingEvent>(ForcedAcending);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggForceAscendingEvent>(ForcedAcsending);
     }
 
     protected virtual void OnCompInit(Entity<CultYoggComponent> uid, ref ComponentStartup args)
@@ -264,7 +264,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         if (TryComp<BodyComponent>(uid, out var body))
             _body.GibBody(uid, body: body);
     }
-    private void ForcedAcending(Entity<CultYoggComponent> uid, ref CultYoggForceAscendingEvent args)
+    private void ForcedAcsending(Entity<CultYoggComponent> uid, ref CultYoggForceAscendingEvent args)
     {
         if (_net.IsClient)
             return;

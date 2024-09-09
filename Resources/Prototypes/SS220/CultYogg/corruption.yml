@@ -3,14 +3,14 @@
 #list of corrupted recepies
 - type: corrupted
   id: WeaponRifleAk
-  from: 
+  from:
     prototypeId: WeaponRifleAk
   result: FoodSnackMREBrownie
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: WeaponLaserCarbine
-  from: 
+  from:
     prototypeId: WeaponLaserCarbine
   result: FoodPacketMRETrash
   corruptionReverseEffect: ExorcismUncorruptEffect
@@ -41,4 +41,17 @@
   from:
     stackType: Cable
   result: CableApcStack1Live
+
+- type: corrupted
+  id: CultHandcuffs
+  from:
+    prototypeId: Cablecuffs
+  result: CultHandcuffs
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: CultHandcuffss
+  from:
+    prototypeId: Zipties
+  result: CultHandcuffs
   corruptionReverseEffect: ExorcismUncorruptEffect

@@ -14,10 +14,12 @@
     energy: 2.5
     color: "#FFC458"
   - type: Flash
-  - type: UseDelay # проблема - не уходит в кулдаун после удара
+  - type: UseDelay # не уходит в кулдаун после удара, фиксить кодом либо удалением компонента оружия
     delay: 120
   - type: MeleeWeapon
     damage:
       types:
         Blunt: 0 # melee weapon to allow flashing individual targets
-  - type: Appearance
+#  - type: Appearance
+  - type: RoleItem # ломает анимацию подбора предмета
+    roleId: CultYogg

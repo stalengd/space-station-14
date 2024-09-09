@@ -12,7 +12,7 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
-    [ValidatePrototypeId<StatusIconPrototype>]
+    [ValidatePrototypeId<FactionIconPrototype>]
     private const string JobIconForNoId = "JobIconNoId";
 
     public override void Initialize()
@@ -35,7 +35,7 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
         if (_prototype.TryIndex<FactionIconPrototype>(iconId, out var iconPrototype))
             ev.StatusIcons.Add(iconPrototype);
         else
-            Log.Error($"Invalid job icon prototype: {iconPrototype}");
+            Log.Error($"Invalid faction icon prototype: {iconPrototype}");
     }
     private void OnGetSacraficialIconsEvent(Entity<CultYoggSacrificialComponent> uid, ref GetStatusIconsEvent ev)
     {
@@ -53,6 +53,6 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
         if (_prototype.TryIndex<FactionIconPrototype>(iconId, out var iconPrototype))
             ev.StatusIcons.Add(iconPrototype);
         else
-            Log.Error($"Invalid job icon prototype: {iconPrototype}");
+            Log.Error($"Invalid faction icon prototype: {iconPrototype}");
     }
 }

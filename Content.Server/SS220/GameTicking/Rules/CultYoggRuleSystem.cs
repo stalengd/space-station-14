@@ -29,6 +29,7 @@ using Content.Server.RoundEnd;
 using Content.Server.SS220.CultYogg;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 using static Content.Shared.SS220.CultYogg.EntitySystems.SharedCultYoggSystem;
+using Content.Shared.StatusEffect;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -48,6 +49,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
+
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
 
     private List<List<String>> SacraficialTiers = new();
     public TimeSpan DefaultShuttleArriving { get; set; } = TimeSpan.FromSeconds(85);
@@ -283,6 +286,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         //ToDo remove this when you make a JobRequirement
         if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists
             return false;
+
+        _statusEffectsSystem.TryRemoveStatusEffect(uid, component.RequiedEffect);
 
         _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);
 

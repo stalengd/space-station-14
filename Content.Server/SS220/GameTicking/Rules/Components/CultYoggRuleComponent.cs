@@ -56,11 +56,10 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public ProtoId<NpcFactionPrototype> CultYoggFaction = "CultYogg";
 
-    //ToDo maybe delete this
-    /*
-    [DataField]
-    public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultYoggObjectiveGroups";
-    */
+    /// <summary>
+    ///Enlsavement variables
+    /// <summary>
+    public string RequiedEffect = "Rave";//Required effect for enslavement
 
     //telephaty channel
     [DataField]

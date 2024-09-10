@@ -125,12 +125,9 @@ public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
         var meta = MetaData(uid);
 
         //sending other cultists informing message
-        //ToDo it was deleted, idk
-        /*
         if (isMarkedToReplace)
             RaiseLocalEvent(uid, new TelepathyAnnouncementSendEvent() { Message = Loc.GetString("cult-yogg-migo-can-replace", ("name", meta.EntityName)), TelepathyChannel = telepathy.TelepathyChannelPrototype });
         else
             RaiseLocalEvent(uid, new TelepathyAnnouncementSendEvent() { Message = Loc.GetString("cult-yogg-migo-cancel-replace", ("name", meta.EntityName)), TelepathyChannel = telepathy.TelepathyChannelPrototype });
-        */
     }
 }

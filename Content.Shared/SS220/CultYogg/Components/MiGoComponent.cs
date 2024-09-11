@@ -47,6 +47,9 @@ public sealed partial class MiGoComponent : Component
     /// <summary>
     public string RequiedEffect = "Rave";//Required effect for enslavement
 
+    [DataField]
+    public SoundSpecifier? EnslavingSound = new SoundPathSpecifier("/Audio/SS220/CultYogg/migo_slave.ogg");
+
     /// <summary>
     ///Erect variables
     /// <summary>

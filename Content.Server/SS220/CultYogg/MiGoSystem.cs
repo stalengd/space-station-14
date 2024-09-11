@@ -17,6 +17,7 @@ using Content.Server.Bible.Components;
 using Content.Shared.Popups;
 using Content.Shared.Mobs.Systems;
 using System.ComponentModel;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -29,6 +30,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -99,6 +101,9 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         };
 
         _doAfter.TryStartDoAfter(doafterArgs);
+
+        // Play attached to our entity because the projectile may immediately delete or the likes.
+        _audio.PlayPredicted(uid.Comp.EnslavingSound, args.Target, args.Target);
 
         args.Handled = true;
     }

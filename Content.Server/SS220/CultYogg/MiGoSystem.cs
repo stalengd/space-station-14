@@ -16,6 +16,7 @@ using Content.Shared.Mind;
 using Content.Server.Bible.Components;
 using Content.Shared.Popups;
 using Content.Shared.Mobs.Systems;
+using System.ComponentModel;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -108,6 +109,8 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
 
         var ev = new CultYoggEnslavedEvent(args.Target);
         RaiseLocalEvent(uid, ref ev, true);
+
+        _statusEffectsSystem.TryRemoveStatusEffect(args.Target.Value, uid.Comp.RequiedEffect); //Remove Rave
 
         args.Handled = true;
     }

@@ -30,6 +30,7 @@ using Content.Server.SS220.CultYogg;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 using static Content.Shared.SS220.CultYogg.EntitySystems.SharedCultYoggSystem;
 using Content.Shared.StatusEffect;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -66,6 +67,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         SubscribeLocalEvent<SacraficialReplacementEvent>(SacraficialReplacement);
 
         SubscribeLocalEvent<CultYoggSummonedEvent>(OnGodSummoned);
+
+        SubscribeLocalEvent<CultYoggAnouncementEvent>(SendCultAnounce);
     }
 
 
@@ -237,6 +240,10 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (mindUid == null)
             return;
 
+        var meta = MetaData(args.Entity);
+        var ev = new CultYoggAnouncementEvent(args.Entity, Loc.GetString("cult-yogg-migo-can-replace", ("name", meta.EntityName)));
+        RaiseLocalEvent(args.Entity, ref ev, true);
+
         cultRuleComp.SacraficialsList.Remove(mindUid.Value);
 
         RemComp<CultYoggSacrificialMindComponent>(mindUid.Value);
@@ -287,8 +294,6 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists
             return false;
 
-        _statusEffectsSystem.TryRemoveStatusEffect(uid, component.RequiedEffect);
-
         _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);
 
         if (initial)
@@ -298,13 +303,13 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _npcFaction.RemoveFaction(uid, component.NanoTrasenFaction, false);
         _npcFaction.AddFaction(uid, component.CultYoggFaction);
 
-        var CultistComp = EnsureComp<CultYoggComponent>(uid);
+        var сultistComp = EnsureComp<CultYoggComponent>(uid);
         //ToDo CultYoggComponent -- set current amount of sacrafaces for visualisation of stage
 
         //Add telepathy
         var telepathy = EnsureComp<TelepathyComponent>(uid);
         telepathy.CanSend = false;
-        telepathy.TelepathyChannelPrototype = component.Channel;
+        telepathy.TelepathyChannelPrototype = component.TelepathyChannel;
 
         AddComp<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
         AddComp<ZombieImmuneComponent>(uid);//they are practically mushrooms
@@ -313,8 +318,20 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     #endregion
 
+    #region Anounce
+    private void SendCultAnounce(ref CultYoggAnouncementEvent args)
+    {
+        GetCultGameRule(out var ent, out var comp);
+
+        if (comp == null || ent == null)
+            return;
+
+        RaiseLocalEvent(args.Entity, new TelepathyAnnouncementSendEvent() { Message = args.Message, TelepathyChannel = comp.TelepathyChannel });
+    }
+    #endregion
+
     #region RoundEnding
-    private void OnGodSummoned(ref CultYoggSummonedEvent args)
+        private void OnGodSummoned(ref CultYoggSummonedEvent args)
     {
         foreach (var station in _station.GetStations())
         {
@@ -419,5 +436,21 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
             comp = cultComp;
             ent = uid;
         }
+    }
+}
+
+/// <summary>
+///     Raised when god summoned to markup winning
+/// </summary>
+[ByRefEvent, Serializable]
+public sealed class CultYoggAnouncementEvent : EntityEventArgs
+{
+    public readonly EntityUid Entity;
+    public readonly String Message;
+
+    public CultYoggAnouncementEvent(EntityUid entity, string message)
+    {
+        Entity = entity;
+        Message = message;
     }
 }

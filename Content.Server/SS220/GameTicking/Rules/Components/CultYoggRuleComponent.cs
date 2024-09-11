@@ -56,14 +56,9 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public ProtoId<NpcFactionPrototype> CultYoggFaction = "CultYogg";
 
-    /// <summary>
-    ///Enlsavement variables
-    /// <summary>
-    public string RequiedEffect = "Rave";//Required effect for enslavement
-
     //telephaty channel
     [DataField]
-    public string Channel = "TelepathyChannelYoggSothothCult";
+    public string TelepathyChannel = "TelepathyChannelYoggSothothCult";
     /// <summary>
     /// Check for an endgame screen title
     /// </summary>

@@ -24,4 +24,7 @@ public sealed partial class CultYoggSacrificialComponent : Component
 
     [DataField]
     public bool WasSacraficed = false;
+
+    [DataField]
+    public bool ReplacementAnnounceWereSend = false;
 }

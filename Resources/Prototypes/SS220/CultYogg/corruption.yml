@@ -55,3 +55,10 @@
     prototypeId: Zipties
   result: CultHandcuffs
   corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: LanternFlashCult
+  from:
+    prototypeId: Lantern
+  result: LanternFlashCult
+  corruptionReverseEffect: ExorcismUncorruptEffect

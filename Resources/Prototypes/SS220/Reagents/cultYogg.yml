@@ -5,17 +5,11 @@
   name: reagent-name-yoggs-blood
   group: Toxins
   desc: reagent-desc-yoggs-blood
-  physicalDesc: reagent-physical-desc-odorless
+  physicalDesc: reagent-physical-desc-putrid
   flavor: menacing
   color: "#afdd9a" #change color to a shroom color
   metabolisms:
     Poison:
       effects:
       - !type:ChemMiGomicelium
-        time: 500
-      - !type:GenericStatusEffect #ToDo копать здесь, чтобы сделать свой аналог
-        key: SeeingRainbows
-        component: SeeingRainbows
-        type: Add
-        time: 500
-        refresh: false
+        time: 500 #ToDo set timer

@@ -10,8 +10,8 @@ using Robust.Server.Player;
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Player;
 using Content.Shared.SS220.CultYogg.EntitySystems;
-using Content.Shared.SS220.Telepathy;
 using Robust.Shared.Timing;
+using Content.Server.SS220.GameTicking.Rules;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -66,7 +66,10 @@ public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
             if (_timing.CurTime < migoComp.ReplacementEventTime)
                 continue;
 
-            MarkupForReplacement(uid, migoComp, true);
+            var meta = MetaData(uid);
+
+            var ev = new CultYoggAnouncementEvent(uid, Loc.GetString("cult-yogg-migo-can-replace", ("name", meta.EntityName)));
+            RaiseLocalEvent(uid, ref ev, true);
         }
     }
 
@@ -79,16 +82,15 @@ public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
         comp.ReplacementEventTime = _timing.CurTime + comp.BeforeReplacementCooldown;
     }
 
-    private void StopTimer(MiGoComponent comp)
-    {
-        comp.ReplacementEventTime = null;
-    }
-
     //Delete replacement marker from a MiGo
     private void RemoveReplacement(EntityUid uid, MiGoComponent сomp)
     {
-        StopTimer(сomp);
-        MarkupForReplacement(uid, сomp, false);
+        сomp.ReplacementEventTime = null;
+
+        var meta = MetaData(uid);
+
+        var ev = new CultYoggAnouncementEvent(uid, Loc.GetString("cult-yogg-migo-cancel-replace", ("name", meta.EntityName)));
+        RaiseLocalEvent(uid, ref ev, true);
     }
 
     private void CheckTimerConditions(EntityUid uid, MiGoComponent comp)
@@ -109,28 +111,5 @@ public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
             StartTimer(comp);
 
         RemoveReplacement(uid, comp);
-    }
-
-    //Sends special message of replacement to othe cultists
-    private void MarkupForReplacement(EntityUid uid, MiGoComponent comp, bool isMarkedToReplace)
-    {
-        comp.MayBeReplaced = isMarkedToReplace;
-
-        if (TryComp<TelepathyComponent>(uid, out var telepathy))
-            return;
-
-        if (telepathy == null)
-            return;
-
-        var meta = MetaData(uid);
-
-        //sending other cultists informing message
-        //ToDo it was deleted, idk
-        /*
-        if (isMarkedToReplace)
-            RaiseLocalEvent(uid, new TelepathyAnnouncementSendEvent() { Message = Loc.GetString("cult-yogg-migo-can-replace", ("name", meta.EntityName)), TelepathyChannel = telepathy.TelepathyChannelPrototype });
-        else
-            RaiseLocalEvent(uid, new TelepathyAnnouncementSendEvent() { Message = Loc.GetString("cult-yogg-migo-cancel-replace", ("name", meta.EntityName)), TelepathyChannel = telepathy.TelepathyChannelPrototype });
-        */
     }
 }

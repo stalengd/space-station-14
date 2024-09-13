@@ -50,6 +50,8 @@ public abstract class SharedCultYoggSystem : EntitySystem
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemEvent>(CorruptItemAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemInHandEvent>(CorruptItemInHandAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
+
+        SubscribeLocalEvent<CultYoggComponent, CultYoggForceAscendingEvent>(ForcedAcsending);
     }
 
     protected virtual void OnCompInit(Entity<CultYoggComponent> uid, ref ComponentStartup args)
@@ -66,6 +68,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         }
     }
 
+    #region Stage
     private void UpdateStage(EntityUid uid, CultYoggComponent component)
     {
         //rework stage's update for cultist's
@@ -143,7 +146,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
         args.PushMarkup($"[color=green]{Loc.GetString("Глаза горят неестественно зелёным пламенем", ("ent", uid))}[/color]"); // no locale for right now
     }
-
+    #endregion
     #region Puke
     private void PukeAction(Entity<CultYoggComponent> uid, ref CultYoggPukeShroomEvent args)
     {
@@ -261,5 +264,26 @@ public abstract class SharedCultYoggSystem : EntitySystem
         if (TryComp<BodyComponent>(uid, out var body))
             _body.GibBody(uid, body: body);
     }
+    private void ForcedAcsending(Entity<CultYoggComponent> uid, ref CultYoggForceAscendingEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        if (TerminatingOrDeleted(uid))
+            return;
+
+        // Get original body position and spawn MiGo here
+        var migo = _entityManager.SpawnAtPosition(uid.Comp.AscendedEntity, Transform(uid).Coordinates);
+
+        // Move the mind if there is one and it's supposed to be transferred
+        if (_mind.TryGetMind(uid, out var mindId, out var mind))
+            _mind.TransferTo(mindId, migo, mind: mind);
+
+        //Gib original body
+        if (TryComp<BodyComponent>(uid, out var body))
+            _body.GibBody(uid, body: body);
+    }
+    [ByRefEvent, Serializable]
+    public record struct CultYoggForceAscendingEvent;
     #endregion
 }

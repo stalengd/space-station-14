@@ -21,29 +21,16 @@ using System.Linq;
 using Content.Shared.Administration;
 using Robust.Shared.Prototypes;
 using Content.Shared.Roles;
-using Content.Server.Body.Components;
-using Content.Server.SS220.Telepathy;
 using Content.Shared.SS220.Telepathy;
-using Content.Server.Nuke;
 using Content.Server.SS220.CultYogg.Nyarlathotep;
-using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.RoundEnd;
-using Content.Shared.NukeOps;
-using Robust.Shared.GameObjects;
-using Content.Server.GameTicking.Rules.Components;
-using Content.Shared.Nuke;
-using Robust.Shared.Map;
-using Robust.Shared.Utility;
-using Content.Shared.SS220.Bible;
-using System.Collections.Immutable;
 using Content.Server.SS220.CultYogg;
-using Content.Server.Database;
-using Content.Shared.Audio;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
+using static Content.Shared.SS220.CultYogg.EntitySystems.SharedCultYoggSystem;
+using Content.Shared.StatusEffect;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -64,6 +51,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
 
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+
     private List<List<String>> SacraficialTiers = new();
     public TimeSpan DefaultShuttleArriving { get; set; } = TimeSpan.FromSeconds(85);
 
@@ -78,6 +67,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         SubscribeLocalEvent<SacraficialReplacementEvent>(SacraficialReplacement);
 
         SubscribeLocalEvent<CultYoggSummonedEvent>(OnGodSummoned);
+
+        SubscribeLocalEvent<CultYoggAnouncementEvent>(SendCultAnounce);
     }
 
 
@@ -228,7 +219,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     private void SacraficialReplacement(ref SacraficialReplacementEvent args)
     {
-        GetCultGameRuleComp(out var cultRuleComp);
+        GetCultGameRule(out var cultRuleEnt, out var cultRuleComp);
 
         if (cultRuleComp == null)
             return;
@@ -248,6 +239,10 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (mindUid == null)
             return;
+
+        var meta = MetaData(args.Entity);
+        var ev = new CultYoggAnouncementEvent(args.Entity, Loc.GetString("cult-yogg-migo-can-replace", ("name", meta.EntityName)));
+        RaiseLocalEvent(args.Entity, ref ev, true);
 
         cultRuleComp.SacraficialsList.Remove(mindUid.Value);
 
@@ -274,14 +269,12 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (args.Target == null)
             return;
 
-        GetCultGameRuleComp(out var cultRuleComp);
+        GetCultGameRule(out var cultRuleEnt, out var cultRuleComp);
 
         if (cultRuleComp == null)
             return;
 
         MakeCultist(args.Target.Value, cultRuleComp, false);
-
-        //args.Handled = true;
     }
     #endregion
 
@@ -310,13 +303,13 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _npcFaction.RemoveFaction(uid, component.NanoTrasenFaction, false);
         _npcFaction.AddFaction(uid, component.CultYoggFaction);
 
-        var CultistComp = EnsureComp<CultYoggComponent>(uid);
+        var сultistComp = EnsureComp<CultYoggComponent>(uid);
         //ToDo CultYoggComponent -- set current amount of sacrafaces for visualisation of stage
 
         //Add telepathy
         var telepathy = EnsureComp<TelepathyComponent>(uid);
         telepathy.CanSend = false;
-        telepathy.TelepathyChannelPrototype = component.Channel;
+        telepathy.TelepathyChannelPrototype = component.TelepathyChannel;
 
         AddComp<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
         AddComp<ZombieImmuneComponent>(uid);//they are practically mushrooms
@@ -325,14 +318,42 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     #endregion
 
+    #region Anounce
+    private void SendCultAnounce(ref CultYoggAnouncementEvent args)
+    {
+        GetCultGameRule(out var ent, out var comp);
+
+        if (comp == null || ent == null)
+            return;
+
+        RaiseLocalEvent(args.Entity, new TelepathyAnnouncementSendEvent() { Message = args.Message, TelepathyChannel = comp.TelepathyChannel });
+    }
+    #endregion
+
     #region RoundEnding
-    private void OnGodSummoned(ref CultYoggSummonedEvent ev)
+        private void OnGodSummoned(ref CultYoggSummonedEvent args)
     {
         foreach (var station in _station.GetStations())
         {
             _chat.DispatchStationAnnouncement(station, Loc.GetString("cult-yogg-shuttle-call"), colorOverride: Color.Crimson);
         }
         _roundEnd.RequestRoundEnd(DefaultShuttleArriving, null);
+
+        GetCultGameRule(out var cultRuleEnt, out var cultRuleComp);
+
+        if (cultRuleEnt == null || cultRuleComp == null)
+            return;
+
+        cultRuleComp.Summoned = true;//Win EndText
+
+        var ev = new CultYoggForceAscendingEvent();
+
+        //Event hadn't raised on Cultists even with broadcast, so i made this
+        var query = EntityQueryEnumerator<CultYoggComponent>();
+        while (query.MoveNext(out var ent, out var comp))
+        {
+            RaiseLocalEvent(ent, ref ev);//Make all cultists MiGo
+        }
     }
 
     #endregion
@@ -405,13 +426,31 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     #endregion
 
-    public void GetCultGameRuleComp(out CultYoggRuleComponent? comp)
+    public void GetCultGameRule(out EntityUid? ent, out CultYoggRuleComponent? comp)
     {
         comp = null;
+        ent = null;
         var query = QueryActiveRules();
         while (query.MoveNext(out var uid, out _, out var cultComp, out _))
         {
             comp = cultComp;
+            ent = uid;
         }
+    }
+}
+
+/// <summary>
+///     Raised when god summoned to markup winning
+/// </summary>
+[ByRefEvent, Serializable]
+public sealed class CultYoggAnouncementEvent : EntityEventArgs
+{
+    public readonly EntityUid Entity;
+    public readonly String Message;
+
+    public CultYoggAnouncementEvent(EntityUid entity, string message)
+    {
+        Entity = entity;
+        Message = message;
     }
 }

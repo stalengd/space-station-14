@@ -20,5 +20,5 @@ public sealed partial class ShowCultYoggIconsComponent : Component
     /// Cultists icon
     /// </summary>
     [DataField]
-    public ProtoId<StatusIconPrototype> StatusIcon = "CultYoggFaction";
+    public ProtoId<FactionIconPrototype> StatusIcon = "CultYoggFaction";
 }

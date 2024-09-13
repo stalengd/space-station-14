@@ -36,9 +36,9 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
     {
         var selectedSong = _audio.GetSound(uid.Comp.SummonMusic);
         if (!string.IsNullOrEmpty(selectedSong))
-            _sound.DispatchStationEventMusic(uid, selectedSong, StationEventMusicType.Nuke);
+            _sound.DispatchStationEventMusic(uid, selectedSong, StationEventMusicType.Nuke);//ToDo should i rename?
 
-        var ev = new CultYoggSummonedEvent();
+        var ev = new CultYoggSummonedEvent(uid);
         RaiseLocalEvent(uid, ref ev, true);
     }
 
@@ -96,8 +96,15 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
 ///     Raised when god summoned to markup winning
 /// </summary>
 [ByRefEvent, Serializable]
-public record struct CultYoggSummonedEvent;
+public sealed class CultYoggSummonedEvent : EntityEventArgs
+{
+    public readonly EntityUid Entity;
 
+    public CultYoggSummonedEvent(EntityUid entity)
+    {
+        Entity = entity;
+    }
+}
 /// <summary>
 /// Component for entities to be attacked by Nyarlathotep.
 /// </summary>

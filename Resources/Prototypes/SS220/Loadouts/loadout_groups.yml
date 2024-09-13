@@ -73,6 +73,24 @@
   - OfficerCutlass
   # Глава службы безопасности (Конец)
 
+  # Офицер СБ (Начало)
+- type: loadoutGroup
+  id: SecurityMask
+  name: loadout-group-security-mask
+  minLimit: 0
+  loadouts:
+  - MaskTacSec
+
+- type: loadoutGroup
+  id: DetectiveSecBackpack
+  name: loadout-group-security-backpack
+  loadouts:
+    - SecurityBackpack
+    - SecuritySatchel
+    - SecurityDuffel
+    - DetectiveNoirSatchel
+  # Офицер СБ (Конец)
+
   # Инструктор СБ (Начало)
 - type: loadoutGroup
   id: SeniorSecJumpsuit
@@ -385,6 +403,16 @@
 
   #Ботаник (конец)
 
+ # Уборщик (Начало)
+- type: loadoutGroup
+  id: JanitorShoes
+  name: loadout-group-janitor-shoes
+  loadouts:
+  - ShoesColorPurple
+  - JanitorGaloshes
+  - JanitorOrangeShoes
+  # Уборщик (Конец)
+
 #! Сервис
 
 #! Разное
@@ -399,12 +427,3 @@
   - GlovesBlack
   - GlovesRed
   - GlovesBlue
-
- # Уборщик (Начало)
-- type: loadoutGroup
-  id: JanitorShoesOrange
-  name: loadout-group-janitor-shoes
-  loadouts:
-  - JanitorGaloshes
-  - JanitorOrangeShoes
-  # Уборщик (Конец)

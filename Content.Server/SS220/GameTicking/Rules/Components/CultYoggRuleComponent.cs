@@ -56,15 +56,9 @@ public sealed partial class CultYoggRuleComponent : Component
     [DataField]
     public ProtoId<NpcFactionPrototype> CultYoggFaction = "CultYogg";
 
-    //ToDo maybe delete this
-    /*
-    [DataField]
-    public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "CultYoggObjectiveGroups";
-    */
-
     //telephaty channel
     [DataField]
-    public string Channel = "TelepathyChannelYoggSothothCult";
+    public string TelepathyChannel = "TelepathyChannelYoggSothothCult";
     /// <summary>
     /// Check for an endgame screen title
     /// </summary>

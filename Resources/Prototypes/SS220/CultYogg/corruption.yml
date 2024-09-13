@@ -23,8 +23,35 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: LanternFlashCult
+  id: CableHVlive
   from:
-    prototypeId: Lantern
-  result: LanternFlashCult
+    stackType: CableHV
+  result: CableHVStack1Live
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: CableMVlive
+  from:
+    stackType: CableMV
+  result: CableMVStack1Live
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: Cablelive
+  from:
+    stackType: Cable
+  result: CableApcStack1Live
+
+- type: corrupted
+  id: CultHandcuffs
+  from:
+    prototypeId: Cablecuffs
+  result: CultHandcuffs
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: CultHandcuffss
+  from:
+    prototypeId: Zipties
+  result: CultHandcuffs
   corruptionReverseEffect: ExorcismUncorruptEffect

@@ -28,8 +28,8 @@
     angle: 100
     damage:
       types:
-        Poison: 15
-        Blunt: 15
+#        Poison: 15
+        Blunt: 30
         Structural: 20
     soundHit:
       path: "/Audio/Items/wirecutter.ogg" # звук удара, заменить

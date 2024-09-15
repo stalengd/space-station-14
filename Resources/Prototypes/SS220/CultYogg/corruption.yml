@@ -57,15 +57,8 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: ClawCultYoggWirecutter
+  id: LanternFlashCult
   from:
-    prototypeId: Wirecutter
-  result: ClawCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-
-- type: corrupted
-  id: ClawCultYoggJawsOfLife
-  from:
-    prototypeId: JawsOfLife
-  result: ClawCultYogg
+    prototypeId: Lantern
+  result: LanternFlashCult
   corruptionReverseEffect: ExorcismUncorruptEffect

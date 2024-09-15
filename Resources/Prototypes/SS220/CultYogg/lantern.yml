@@ -1,0 +1,25 @@
+- type: entity
+  name: cult lantern
+  parent: BaseItem
+  id: LanternFlashCult
+  description: description
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/lantern.rsi # спрайта нет
+    layers:
+    - state: lantern
+      shader: unshaded
+  - type: PointLight
+    radius: 3
+    energy: 2.5
+    color: "#FFC458"
+  - type: Flash
+  - type: UseDelay # не уходит в кулдаун после удара, фиксить кодом либо удалением компонента оружия
+    delay: 120
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 0 # melee weapon to allow flashing individual targets
+#  - type: Appearance
+  - type: RoleItem # ломает анимацию подбора предмета
+    roleId: CultYogg

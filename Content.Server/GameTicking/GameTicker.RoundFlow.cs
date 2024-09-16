@@ -353,7 +353,10 @@ namespace Content.Server.GameTicking
             _adminLogger.Add(LogType.EmergencyShuttle, LogImpact.High, $"Round ended, showing summary");
 
             //Tell every client the round has ended.
-            var gamemodeTitle = CurrentPreset != null ? Loc.GetString(CurrentPreset.ModeTitle) : string.Empty;
+            // SS220 Round End Titles begin 
+            //var gamemodeTitle = CurrentPreset != null ? Loc.GetString(CurrentPreset.ModeTitle) : string.Empty;
+            var gamemodeTitle = CurrentPreset != null ? CurrentPresetTitleOverride ?? Loc.GetString(CurrentPreset.ModeTitle) : string.Empty;
+            // SS220 Round End Titles end 
 
             // Let things add text here.
             var textEv = new RoundEndTextAppendEvent();
@@ -366,6 +369,7 @@ namespace Content.Server.GameTicking
 
             //Generate a list of basic player info to display in the end round summary.
             var listOfPlayerInfo = new List<RoundEndMessageEvent.RoundEndPlayerInfo>();
+            var listOfSponsors = new List<RoundEndMessageEvent.RoundEndSponsorInfo>(); // SS220 Round End Titles
             // Grab the great big book of all the Minds, we'll need them for this.
             var allMinds = EntityQueryEnumerator<MindComponent>();
             var pvsOverride = _configurationManager.GetCVar(CCVars.RoundEndPVSOverrides);
@@ -425,6 +429,17 @@ namespace Content.Server.GameTicking
                     Connected = connected
                 };
                 listOfPlayerInfo.Add(playerEndRoundInfo);
+                // SS220 Round End Titles begin
+                var tiers = contentPlayerData?.SponsorInfo?.Tiers;
+                if (tiers is { Length: > 0 })
+                {
+                    listOfSponsors.Add(new()
+                    {
+                        PlayerOOCName = playerEndRoundInfo.PlayerOOCName,
+                        Tiers = tiers,
+                    });
+                }
+                // SS220 Round End Titles end
             }
 
             // This ordering mechanism isn't great (no ordering of minds) but functions
@@ -438,6 +453,7 @@ namespace Content.Server.GameTicking
                 RoundId,
                 listOfPlayerInfoFinal.Length,
                 listOfPlayerInfoFinal,
+                listOfSponsors.ToArray(), // SS220 Round End Titles
                 sound
             );
             RaiseNetworkEvent(roundEndMessageEvent);
@@ -577,6 +593,7 @@ namespace Content.Server.GameTicking
             // Clear up any game rules.
             ClearGameRules();
             CurrentPreset = null;
+            CurrentPresetTitleOverride = null; // SS220 Round End Titles
 
             _allPreviousGameRules.Clear();
 

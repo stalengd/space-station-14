@@ -12,6 +12,12 @@ public sealed class CCVars220
         CVarDef.Create("bloom_lighting.enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
+    /// How Round End Titles are shown for player
+    /// </summary>
+    public static readonly CVarDef<RoundEndTitlesMode> RoundEndTitlesOpenMode =
+        CVarDef.Create("round_end_titles.open_mode", RoundEndTitlesMode.Fullscreen, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
     /// Whether to rotate doors when map is loaded
     /// </summary>
     public static readonly CVarDef<bool> MigrationAlignDoors =

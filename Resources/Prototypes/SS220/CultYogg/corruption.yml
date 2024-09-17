@@ -62,3 +62,17 @@
     prototypeId: Lantern
   result: LanternFlashCult
   corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: ClawCultYoggWirecutter
+  from:
+    prototypeId: Wirecutter
+  result: ClawCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: ClawCultYoggJawsOfLife
+  from:
+    prototypeId: JawsOfLife
+  result: ClawCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect

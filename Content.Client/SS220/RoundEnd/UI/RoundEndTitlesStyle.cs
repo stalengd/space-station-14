@@ -93,13 +93,14 @@ public sealed class RoundEndTitlesStyle : QuickStyle
             "Cargo" => "Cargo_dep.png",
             "Civilian" => "Serv_dep.png",
             "Command" => "Cmd_dep.png",
+            "CentralCommand" => "Centcom_dep.png",
             "Engineering" => "Eng_dep.png",
             "Medical" => "Med_dep.png",
             "Security" => "Sec_dep.png",
             "Science" => "Sci_dep.png",
             "Cryo" => "empty.png",
-            "Specific" => "empty.png",
-            "GhostRoles" => "empty.png",
+            "Silicon" => "Silicon_dep.png",
+            "GhostRoles" => "Ghost_dep.png",
             _ => "empty.png",
         });
     }

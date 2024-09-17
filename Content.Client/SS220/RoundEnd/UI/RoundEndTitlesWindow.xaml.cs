@@ -261,12 +261,16 @@ public sealed partial class RoundEndTitlesWindow : BaseWindow
         var departmentsWorkers = new Dictionary<DepartmentPrototype, List<WorkerInfo>>();
         foreach (var (_, department) in departments.OrderBy(x => x.Value.Sort))
         {
+            if (department.RoundEndTitlesHidden)
+                continue;
             var departmentWorkers = new List<WorkerInfo>();
             departmentsWorkers.Add(department, departmentWorkers);
             foreach (var jobPrototypeId in department.Roles)
             {
                 var job = jobs[jobPrototypeId];
                 jobColors.TryAdd(job, department.Color);
+                if (job.DepartmentsToIgnoreInTitles?.Contains(department.ID) ?? false)
+                    continue;
                 foreach (var player in players)
                 {
                     if (!player.JobPrototypes.Contains(jobPrototypeId.Id))
@@ -291,9 +295,10 @@ public sealed partial class RoundEndTitlesWindow : BaseWindow
         var i = 0;
         foreach (var worker in workers)
         {
+            var name = worker.Job.DontUseNameForTitles ? Loc.GetString(worker.Player.Role) : worker.Job.LocalizedName;
             var role = new RoundEndTitlesRole(worker.Player.PlayerOOCName,
                 worker.Player.PlayerICName ?? "",
-                worker.Job.LocalizedName,
+                name,
                 i,
                 colors.GetValueOrDefault(worker.Job, Color.White),
                 worker.Player.PlayerNetEntity);

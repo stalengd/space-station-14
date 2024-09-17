@@ -170,6 +170,7 @@
   - Zookeeper
 #  - Psychologist SS220-psychologist-chat-color-fix
   primary: false
+  roundEndTitlesHidden: true # SS220 Round End Titles
 
 - type: department
   id: GhostRoles

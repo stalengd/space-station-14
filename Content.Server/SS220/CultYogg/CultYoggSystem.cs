@@ -9,6 +9,7 @@ using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Robust.Shared.Timing;
 using Content.Server.SS220.DarkForces.Saint.Reagent;
+using Robust.Shared.Network;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -16,10 +17,10 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
 {
 
     [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly CultYoggRuleSystem _cultRule = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -51,7 +52,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         //IDK how to check if he already has this action, so i did this markup
         if (_actions.AddAction(uid, ref comp.AscendingActionEntity, out var act, comp.AscendingAction) && act.UseDelay != null)
         {
-            var start = _gameTiming.CurTime;
+            var start = _timing.CurTime;
             var end = start + act.UseDelay.Value;
             _actions.SetCooldown(comp.AscendingActionEntity.Value, start, end);
 
@@ -63,7 +64,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     private bool AvaliableMiGoCheck()
     {
         //Check number of MiGo in gamerule
-        _cultRule.GetCultGameRule(out var cultRuleEnt, out var ruleComp);
+        _cultRule.GetCultGameRule(out var ruleComp);
 
         if (ruleComp is null)
             return false;
@@ -116,5 +117,10 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     {
         EnsureComp<CultYoggCleansedComponent>(uid, out var cleansedComp);
         cleansedComp.AmountOfHolyWater += args.SaintWaterAmount;
+
+        if (cleansedComp.AmountOfHolyWater >= cleansedComp.AmountToCleance)
+            RemComp<CultYoggComponent>(uid);
+
+        cleansedComp.CleansingDecayEventTime = _timing.CurTime + cleansedComp.BeforeDeclinesTime; //setting timer, when cleansing will be removed
     }
 }

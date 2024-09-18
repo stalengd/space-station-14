@@ -13,7 +13,17 @@ public sealed partial class CultYoggCleansedComponent : Component
     /// </summary>
     public Vector2 TimeBetweenIncidents = new Vector2(0, 5); //ToDo maybe add some damage or screams? should discuss
 
-    public float BeforeDeclinesTime = 500;//ToDo maybe it should be elsewere
+    /// <summary>
+    /// Buffer to markup when time has come
+    /// </summary>
+    [DataField]
+    public TimeSpan? CleansingDecayEventTime;
+
+    /// <summary>
+    /// Amount of time requierd to requied for cleansind removal
+    /// </summary>
+    [DataField]
+    public TimeSpan BeforeDeclinesTime = TimeSpan.FromSeconds(500);
 
     public FixedPoint2 AmountOfHolyWater = 0;
 

@@ -29,7 +29,7 @@ public sealed class RoundEndSummaryUIController : UIController,
     [Dependency] private readonly IInputManager _input = default!;
     [Dependency] private readonly IConfigurationManager _configurationManager = default!;
 
-    private const bool IS_DEBUG_MODE = true; // ALWAYS turn this off when pushing to repo
+    private const bool IS_DEBUG_MODE = false; // ALWAYS turn this off when pushing to repo
 
     private RoundEndSummaryWindow? _window;
     private RoundEndTitlesWindow? _titles;

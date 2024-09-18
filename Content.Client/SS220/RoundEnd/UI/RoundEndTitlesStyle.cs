@@ -51,10 +51,6 @@ public sealed class RoundEndTitlesStyle : QuickStyle
                 PatchMarginRight = 6f,
                 PatchMarginBottom = 6f,
                 PatchMarginLeft = 6f,
-                ExpandMarginTop = 6f,
-                ExpandMarginRight = 6f,
-                ExpandMarginBottom = 6f,
-                ExpandMarginLeft = 6f,
                 Texture = Tex("/Textures/SS220/Interface/RoundEnd/RoundEndTitlesBackround.png"),
                 TextureScale = new(2f),
             });

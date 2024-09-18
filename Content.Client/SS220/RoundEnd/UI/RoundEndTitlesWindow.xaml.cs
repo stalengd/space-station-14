@@ -151,6 +151,7 @@ public sealed partial class RoundEndTitlesWindow : BaseWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
+        TitlesScroll.DefaultCursorShape = DefaultCursorShape; // Reasons
         _timer += args.DeltaSeconds;
         if (_isAutoScrollEnabled)
         {

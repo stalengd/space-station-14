@@ -196,6 +196,12 @@ namespace Content.Shared.GameTicking
             [DataField]
             public string PlayerOOCName;
             public SS220.Discord.SponsorTier[] Tiers;
+
+            public RoundEndSponsorInfo(string playerOOCName, SS220.Discord.SponsorTier[] tiers)
+            {
+                PlayerOOCName = playerOOCName;
+                Tiers = tiers;
+            }
         }
         // SS220 Round End Titles end
 

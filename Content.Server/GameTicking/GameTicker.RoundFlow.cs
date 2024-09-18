@@ -429,22 +429,30 @@ namespace Content.Server.GameTicking
                     Connected = connected
                 };
                 listOfPlayerInfo.Add(playerEndRoundInfo);
-                // SS220 Round End Titles begin
-                var tiers = contentPlayerData?.SponsorInfo?.Tiers;
-                if (tiers is { Length: > 0 })
-                {
-                    listOfSponsors.Add(new()
-                    {
-                        PlayerOOCName = playerEndRoundInfo.PlayerOOCName,
-                        Tiers = tiers,
-                    });
-                }
-                // SS220 Round End Titles end
             }
 
             // This ordering mechanism isn't great (no ordering of minds) but functions
             var listOfPlayerInfoFinal = listOfPlayerInfo.OrderBy(pi => pi.PlayerOOCName).ToArray();
             var sound = RoundEndSoundCollection == null ? null : _audio.GetSound(new SoundCollectionSpecifier(RoundEndSoundCollection));
+
+            // SS220 Round End Titles begin
+            var discordManager = IoCManager.Resolve<SS220.Discord.DiscordPlayerManager>();
+            void AddSponsorsTierFrom(Shared.SS220.Discord.SponsorTier tier, IReadOnlyList<string> names)
+            {
+                foreach (var sponsor in names)
+                {
+                    listOfSponsors.Add(new(sponsor, [tier]));
+                }
+            }
+            if (discordManager.CachedSponsorUsers is { } sponsorUsers)
+            {
+                AddSponsorsTierFrom(Shared.SS220.Discord.SponsorTier.CriticalMassShlopa, sponsorUsers.CriticalMassShlopas);
+                AddSponsorsTierFrom(Shared.SS220.Discord.SponsorTier.GoldenShlopa, sponsorUsers.GoldenShlopas);
+                AddSponsorsTierFrom(Shared.SS220.Discord.SponsorTier.HugeShlopa, sponsorUsers.HugeShlopas);
+                AddSponsorsTierFrom(Shared.SS220.Discord.SponsorTier.BigShlopa, sponsorUsers.BigShlopas);
+                AddSponsorsTierFrom(Shared.SS220.Discord.SponsorTier.Shlopa, sponsorUsers.Shlopas);
+            }
+            // SS220 Round End Titles end
 
             var roundEndMessageEvent = new RoundEndMessageEvent(
                 gamemodeTitle,

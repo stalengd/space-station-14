@@ -245,7 +245,7 @@ public sealed partial class RoundEndTitlesWindow : BaseWindow
                 antag.Player.PlayerICName ?? "",
                 Loc.GetString(antag.Antag.Name),
                 i,
-                antag.Antag.AntagColor,
+                antag.Antag.LightAntagColor ?? antag.Antag.AntagColor,
                 antag.Player.PlayerNetEntity);
             section.RolesContainer.AddChild(role);
             i++;
@@ -268,7 +268,7 @@ public sealed partial class RoundEndTitlesWindow : BaseWindow
             foreach (var jobPrototypeId in department.Roles)
             {
                 var job = jobs[jobPrototypeId];
-                jobColors.TryAdd(job, department.Color);
+                jobColors.TryAdd(job, department.LightColor ?? department.Color);
                 if (job.DepartmentsToIgnoreInTitles?.Contains(department.ID) ?? false)
                     continue;
                 foreach (var player in players)

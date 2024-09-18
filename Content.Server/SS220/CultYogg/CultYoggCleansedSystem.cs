@@ -21,7 +21,7 @@ public sealed class CultYoggCleansedSystem : EntitySystem
             cleansedComp.BeforeDeclinesTime -= frameTime;
 
             if (cleansedComp.AmountOfHolyWater >= cleansedComp.AmountToCleance)
-                RemComp<CultYoggComponent>(uid);
+                RemComp<CultYoggComponent>(uid);//ToDo move it into an event
 
             if (cleansedComp.BeforeDeclinesTime > 0)
                 continue;

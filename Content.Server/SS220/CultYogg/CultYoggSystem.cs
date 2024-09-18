@@ -1,4 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Content.Server.SS220.DarkForces.Saint.Reagent.Events;
 using Content.Server.SS220.GameTicking.Rules;
 using Content.Shared.Actions;
 using Content.Shared.Body.Components;
@@ -7,6 +8,7 @@ using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Robust.Shared.Timing;
+using Content.Server.SS220.DarkForces.Saint.Reagent;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -21,6 +23,8 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     public override void Initialize()
     {
         base.Initialize();
+
+        SubscribeLocalEvent<CultYoggComponent, OnSaintWaterDrinkEvent>(OnSaintWaterDrinked);
     }
 
     #region Ascending
@@ -108,4 +112,9 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         return false;
     }
     #endregion
+    private void OnSaintWaterDrinked(Entity<CultYoggComponent> uid, ref OnSaintWaterDrinkEvent args)
+    {
+        EnsureComp<CultYoggCleansedComponent>(uid, out var cleansedComp);
+        cleansedComp.AmountOfHolyWater += args.SaintWaterAmount;
+    }
 }

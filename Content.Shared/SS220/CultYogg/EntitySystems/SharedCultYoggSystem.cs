@@ -18,7 +18,6 @@ using Content.Shared.Inventory;
 using Content.Shared.Roles;
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Prototypes;
-using Robust.Shared.GameObjects;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -147,6 +146,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         args.PushMarkup($"[color=green]{Loc.GetString("Глаза горят неестественно зелёным пламенем", ("ent", uid))}[/color]"); // no locale for right now
     }
     #endregion
+
     #region Puke
     private void PukeAction(Entity<CultYoggComponent> uid, ref CultYoggPukeShroomEvent args)
     {

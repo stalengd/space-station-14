@@ -1054,8 +1054,7 @@
       - !type:SatiateThirst
         factor: 3
       #SS220 Cult start
-      - !type:CultYoggCleanse
-        time: 500
+      - !type:SaintWaterDrinkEffect
       #SS220 Cult end
     Medicine:
       effects:

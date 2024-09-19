@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Shared.Corvax.CCCVars;
 using Content.Shared.Players;
+using Content.Shared.SS220.CCVars;
 using Content.Shared.SS220.Discord;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
@@ -56,8 +57,8 @@ public sealed class DiscordPlayerManager : IPostInjectInit, IDisposable
                 _cachedSponsorUsers = await GetSponsorUsers();
             },
             state: null,
-            dueTime: TimeSpan.FromSeconds(_cfg.GetCVar(CCCVars.DiscordSponsorsCacheLoadDelaySeconds)),
-            period: TimeSpan.FromSeconds(_cfg.GetCVar(CCCVars.DiscordSponsorsCacheRefreshIntervalSeconds))
+            dueTime: TimeSpan.FromSeconds(_cfg.GetCVar(CCVars220.DiscordSponsorsCacheLoadDelaySeconds)),
+            period: TimeSpan.FromSeconds(_cfg.GetCVar(CCVars220.DiscordSponsorsCacheRefreshIntervalSeconds))
         );
     }
 

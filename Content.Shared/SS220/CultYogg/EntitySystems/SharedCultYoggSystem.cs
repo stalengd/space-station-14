@@ -52,12 +52,12 @@ public abstract class SharedCultYoggSystem : EntitySystem
         SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
 
         SubscribeLocalEvent<CultYoggComponent, CultYoggForceAscendingEvent>(ForcedAcsending);
+
+        SubscribeLocalEvent<CultYoggComponent, ComponentRemove>(OnRemove);
     }
 
     protected virtual void OnCompInit(Entity<CultYoggComponent> uid, ref ComponentStartup args)
     {
-        //_actions.AddAction(uid, ref comp.PukeShroomActionEntity, comp.PukeShroomAction);//delete after testing
-        //_actions.AddAction(uid, ref uid.Comp.AscendingActionEntity, uid.Comp.AscendingAction);//delete after testing
         _actions.AddAction(uid, ref uid.Comp.CorruptItemActionEntity, uid.Comp.CorruptItemAction);
         _actions.AddAction(uid, ref uid.Comp.CorruptItemInHandActionEntity, uid.Comp.CorruptItemInHandAction);
         if (_actions.AddAction(uid, ref uid.Comp.PukeShroomActionEntity, out var act, uid.Comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
@@ -147,6 +147,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         args.PushMarkup($"[color=green]{Loc.GetString("Глаза горят неестественно зелёным пламенем", ("ent", uid))}[/color]"); // no locale for right now
     }
     #endregion
+
     #region Puke
     private void PukeAction(Entity<CultYoggComponent> uid, ref CultYoggPukeShroomEvent args)
     {
@@ -286,4 +287,26 @@ public abstract class SharedCultYoggSystem : EntitySystem
     [ByRefEvent, Serializable]
     public record struct CultYoggForceAscendingEvent;
     #endregion
+
+    public void OnRemove(Entity<CultYoggComponent> uid, ref ComponentRemove args)
+    {
+        RemComp<CultYoggCleansedComponent>(uid);
+
+        var ev = new CultYoggDeCultingEvent(uid);
+        RaiseLocalEvent(uid, ref ev);
+
+        //ToDo CultYoggComponent remove stages visualization
+    }
 }
+
+[ByRefEvent, Serializable]
+public sealed class CultYoggDeCultingEvent : EntityEventArgs
+{
+    public readonly EntityUid Entity;
+
+    public CultYoggDeCultingEvent(EntityUid entity)
+    {
+        Entity = entity;
+    }
+}
+

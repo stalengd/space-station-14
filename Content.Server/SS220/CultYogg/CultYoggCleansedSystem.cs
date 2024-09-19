@@ -2,11 +2,14 @@
 using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg;
 
 public sealed class CultYoggCleansedSystem : EntitySystem
 {
+
+    [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -18,12 +21,7 @@ public sealed class CultYoggCleansedSystem : EntitySystem
         var query = EntityQueryEnumerator<CultYoggCleansedComponent>();
         while (query.MoveNext(out var uid, out var cleansedComp))
         {
-            cleansedComp.BeforeDeclinesTime -= frameTime;
-
-            if (cleansedComp.AmountOfHolyWater >= cleansedComp.AmountToCleance)
-                RemComp<CultYoggComponent>(uid);
-
-            if (cleansedComp.BeforeDeclinesTime > 0)
+            if (_timing.CurTime < cleansedComp.CleansingDecayEventTime)
                 continue;
 
             RemComp<CultYoggCleansedComponent>(uid);

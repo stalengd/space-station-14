@@ -12,8 +12,6 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
-    [ValidatePrototypeId<FactionIconPrototype>]
-    private const string JobIconForNoId = "JobIconNoId";
 
     public override void Initialize()
     {
@@ -25,12 +23,11 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
 
     private void OnGetCultistsIconsEvent(Entity<ShowCultYoggIconsComponent> uid, ref GetStatusIconsEvent ev)
     {
-        var iconId = JobIconForNoId;
 
-        if (TryComp<ShowCultYoggIconsComponent>(uid, out var cultComp))
-        {
-            iconId = cultComp.StatusIcon;
-        }
+        if (!TryComp<ShowCultYoggIconsComponent>(uid, out var cultComp))
+            return;
+
+        var iconId = cultComp.StatusIcon;
 
         if (_prototype.TryIndex<FactionIconPrototype>(iconId, out var iconPrototype))
             ev.StatusIcons.Add(iconPrototype);
@@ -43,12 +40,10 @@ public sealed class ShowCultYoggIconsSystem : EntitySystem
         if (viewer == uid)
             return;
 
-        var iconId = JobIconForNoId;
+        if (!TryComp<CultYoggSacrificialComponent>(uid, out var sacrComp))
+            return;
 
-        if (TryComp<CultYoggSacrificialComponent>(uid, out var sacrComp))
-        {
-            iconId = sacrComp.StatusIcon;
-        }
+        var iconId = sacrComp.StatusIcon;
 
         if (_prototype.TryIndex<FactionIconPrototype>(iconId, out var iconPrototype))
             ev.StatusIcons.Add(iconPrototype);

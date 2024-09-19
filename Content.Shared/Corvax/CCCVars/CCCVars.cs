@@ -140,20 +140,4 @@ public sealed class CCCVars
     /// </summary>
     public static readonly CVarDef<string> DiscordAuthApiKey =
         CVarDef.Create("discord_auth.api_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
-
-    /*
-     * Discord Sponsors Cache
-     */
-
-    /// <summary>
-    ///     Delay in seconds before first load of the discord sponsors data.
-    /// </summary>
-    public static readonly CVarDef<float> DiscordSponsorsCacheLoadDelaySeconds =
-        CVarDef.Create("discord_sponsors_cache.load_delay_seconds", 10f, CVar.SERVERONLY);
-
-    /// <summary>
-    ///     Interval in seconds between refreshes of the discord sponsors data.
-    /// </summary>
-    public static readonly CVarDef<float> DiscordSponsorsCacheRefreshIntervalSeconds =
-        CVarDef.Create("discord_sponsors_cache.refresh_interval_seconds", 60f * 60f * 4f, CVar.SERVERONLY);
 }

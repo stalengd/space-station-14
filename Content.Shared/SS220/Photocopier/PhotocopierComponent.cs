@@ -185,20 +185,3 @@ public sealed partial class PhotocopierComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public float? ManualButtBurnAnimationRemainingTime;
 }
-
-public struct PrintableDocumentData(Dictionary<Type, IPhotocopiedComponentData> data, PhotocopyableMetaData metaData)
-{
-    /// <summary>
-    /// Contains fields of components that will be copied.
-    /// Is applied to a new entity that is created as a result of photocopying.
-    /// </summary>
-    [ViewVariables]
-    public Dictionary<Type, IPhotocopiedComponentData> Data = data;
-
-    /// <summary>
-    /// Contains metadata that will be copied.
-    /// Is applied to a new entity that is created as a result of photocopying.
-    /// </summary>
-    public PhotocopyableMetaData MetaData = metaData;
-}
-

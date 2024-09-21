@@ -77,6 +77,7 @@
   result: ClawCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
+# Hardsuit beginning
 - type: corrupted
   id: HardsuitCultYoggEngineering
   from:
@@ -97,3 +98,146 @@
     prototypeId: ClothingOuterHardsuitSecurity
   result: ClothingOuterHardsuitCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+# Hardsuit end
+
+# Backpack beginning
+- type: corrupted
+  id: BackpackCultYoggBlack
+  from:
+    prototypeId: ClothingBackpack
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggEngineering
+  from:
+    prototypeId: ClothingBackpackEngineering
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggChemistry
+  from:
+    prototypeId: ClothingBackpackChemistry
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggMedical
+  from:
+    prototypeId: ClothingBackpackMedical
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggVirology
+  from:
+    prototypeId: ClothingBackpackVirology
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggGenetics
+  from:
+    prototypeId: ClothingBackpackGenetics
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggScience
+  from:
+    prototypeId: ClothingBackpackScience
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggBrigmedic
+  from:
+    prototypeId: ClothingBackpackBrigmedic
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggWhiteCaptain
+  from:
+    prototypeId: ClothingBackpackWhiteCaptain
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggCaptain
+  from:
+    prototypeId: ClothingBackpackCaptain
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggCargo
+  from:
+    prototypeId: ClothingBackpackCargo
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggSalvage
+  from:
+    prototypeId: ClothingBackpackSalvage
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYogg
+  from:
+    prototypeId:
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggAtmospherics
+  from:
+    prototypeId: ClothingBackpackAtmospherics
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggCE
+  from:
+    prototypeId: ClothingBackpackCE
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggSecurity
+  from:
+    prototypeId: ClothingBackpackSecurity
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggIan
+  from:
+    prototypeId: ClothingBackpackIan
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggMime
+  from:
+    prototypeId: ClothingBackpackMime
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggClown
+  from:
+    prototypeId: ClothingBackpackClown
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BackpackCultYoggHydroponics
+  from:
+    prototypeId: ClothingBackpackHydroponics
+  result: ClothingBackpackCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+# Backpack end

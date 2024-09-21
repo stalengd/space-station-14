@@ -12,7 +12,7 @@
   - stack: MetalRod
     count: 10
     icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: metal_rod }
- 
+
 - type: cultYoggBuilding
   id: Test2
   order: 1
@@ -25,7 +25,7 @@
   - stack: Tokl
     count: 5
     icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl }
-  
+
 - type: cultYoggBuilding
   id: Test3
   order: 2
@@ -38,3 +38,16 @@
   - stack: Glass
     count: 1
     icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: glass }
+
+- type: cultYoggBuilding
+  id: CultYoggAltarBuilding
+  order: 3
+  frame: CultYoggBuildingFrame
+  result: CultYoggAltar
+  materials:
+  - stack: Steel
+    count: 15
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: steel }
+  - stack: Tokl
+    count: 8
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl }

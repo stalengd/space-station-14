@@ -2,7 +2,9 @@
 
 using Content.Server.Body.Systems;
 using Content.Server.Destructible;
+using Content.Server.SS220.GameTicking.Rules.Components;
 using Content.Shared.Buckle.Components;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.SS220.CultYogg;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -32,8 +34,17 @@ public sealed partial class CultYoggAltarSystem : SharedCultYoggAltarSystem
         ent.Comp.Used = true;
 
         RemComp<StrapComponent>(ent);
-        RemComp<CultYoggAltarComponent>(ent);
         RemComp<DestructibleComponent>(ent);
+
+        var query = EntityQueryEnumerator<GameRuleComponent, CultYoggRuleComponent>();
+
+        while (query.MoveNext(out _, out var cultRule))
+        {
+            cultRule.AmountOfSacrifices++;
+
+            if (cultRule.AmountOfSacrifices == cultRule.ReqAmountOfSacrifices)
+                SpawnAtPosition("Nyarlathotep", Transform(ent).Coordinates);
+        }
 
         UpdateAppearance(ent, ent.Comp, appearanceComp);
     }

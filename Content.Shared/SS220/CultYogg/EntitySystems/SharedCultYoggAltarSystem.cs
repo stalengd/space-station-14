@@ -32,6 +32,9 @@ public abstract class SharedCultYoggAltarSystem : EntitySystem
         if (args.User == null)
             return;
 
+        if (ent.Comp.Used)
+            return;
+
         if (!HasComp<HumanoidAppearanceComponent>(args.Buckle))
         {
             args.Cancelled = true;

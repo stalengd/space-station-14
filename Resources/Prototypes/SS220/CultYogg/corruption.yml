@@ -76,3 +76,24 @@
     prototypeId: JawsOfLife
   result: ClawCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: HardsuitCultYoggEngineering
+  from:
+    prototypeId: ClothingOuterHardsuitEngineering
+  result: ClothingOuterHardsuitCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: HardsuitCultYoggSpatio
+  from:
+    prototypeId: ClothingOuterHardsuitSpatio
+  result: ClothingOuterHardsuitCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: HardsuitCultYoggSecurity
+  from:
+    prototypeId: ClothingOuterHardsuitSecurity
+  result: ClothingOuterHardsuitCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect

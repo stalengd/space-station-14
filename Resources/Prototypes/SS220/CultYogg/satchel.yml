@@ -2,12 +2,12 @@
 
 - type: entity
   parent: ClothingBackpack
-  id: ClothingBackpackCultYogg
-  name: cult backpack
+  id: ClothingBackpackSatchelCultYogg
+  name: cult satchel
   description: description
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/backpack.rsi # спрайта нет
+    sprite: Clothing/Back/Satchels/satchel.rsi # спрайта нет
   - type: Storage
     maxItemSize: Huge
     grid:

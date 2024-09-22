@@ -2,16 +2,20 @@
 
 - type: entity
   parent: ClothingBackpack
-  id: ClothingBackpackCultYogg
-  name: cult backpack
+  id: ClothingBackpackDuffelCultYogg
+  name: cult duffel bag
   description: description
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/backpack.rsi # спрайта нет
+    sprite: Clothing/Back/Duffels/duffel.rsi
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,9,5
+    - 0,0,13,5
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 0.9
+  - type: HeldSpeedModifier
   - type: RoleStorage
     roleId: CultYogg
   - type: Irremovable

@@ -293,7 +293,13 @@ public abstract class SharedCultYoggSystem : EntitySystem
         RemComp<CultYoggCleansedComponent>(uid);
 
         var ev = new CultYoggDeCultingEvent(uid);
-        RaiseLocalEvent(uid, ref ev);
+        RaiseLocalEvent(uid, ref ev, true);
+
+        //remove all actions cause they won't disappear with component
+        _actions.RemoveAction(uid.Comp.CorruptItemActionEntity);
+        _actions.RemoveAction(uid.Comp.CorruptItemInHandActionEntity);
+        _actions.RemoveAction(uid.Comp.DigestActionEntity);
+        _actions.RemoveAction(uid.Comp.PukeShroomActionEntity);
 
         //ToDo CultYoggComponent remove stages visualization
     }

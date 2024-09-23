@@ -1,4 +1,4 @@
-﻿using Content.Server.Botany;
+using Content.Server.Botany;
 using Content.Server.Botany.Components;
 using Content.Server.Botany.Systems;
 using Content.Server.Popups;
@@ -242,6 +242,7 @@ public sealed class FungusSystem : EntitySystem
 
         component.UpdateSpriteAfterUpdate = false;
 
+        /*
         if (component.Seed is {Bioluminescent: true})
         {
             var light = EnsureComp<PointLightComponent>(uid);
@@ -254,6 +255,7 @@ public sealed class FungusSystem : EntitySystem
         {
             RemComp<PointLightComponent>(uid);
         }
+        */
 
         if (!TryComp<AppearanceComponent>(uid, out var app))
             return;

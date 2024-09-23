@@ -107,7 +107,8 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         var query = EntityQueryEnumerator<CultYoggComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (comp.IsAscending)
+            if (comp.IsAscending) //ToDo set as checking status effect
+
                 return true;
         }
         return false;

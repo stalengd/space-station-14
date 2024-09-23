@@ -242,19 +242,6 @@ public sealed class FungusSystem : EntitySystem
 
         component.UpdateSpriteAfterUpdate = false;
 
-        if (component.Seed is {Bioluminescent: true})
-        {
-            var light = EnsureComp<PointLightComponent>(uid);
-            _pointLight.SetRadius(uid, component.Seed.BioluminescentRadius, light);
-            _pointLight.SetColor(uid, component.Seed.BioluminescentColor, light);
-            _pointLight.SetCastShadows(uid, false, light);
-            Dirty(uid, light);
-        }
-        else
-        {
-            RemComp<PointLightComponent>(uid);
-        }
-
         if (!TryComp<AppearanceComponent>(uid, out var app))
             return;
 

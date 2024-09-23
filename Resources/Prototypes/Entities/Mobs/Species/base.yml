@@ -136,6 +136,7 @@
     - RadiationProtection
     - Drowsiness
     - TemporaryWaddle  #SS220 Temporary waddle status effect
+    - Adrenaline
     - Rave #SS220 cult
     - MiGoHeal  #SS220 cult
   - type: Body
@@ -216,6 +217,7 @@
     - FootstepSound
     - DoorBumpOpener
     - ZombifyableByMelee
+    - AnomalyHost
 
 - type: entity
   save: false

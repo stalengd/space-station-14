@@ -32,6 +32,9 @@
   id: ElWyccoAxe
 
 - type: Tag
+  id: WyccoAxe
+
+- type: Tag
   id: Meatwheat
 
 # ss220 detective-camera
@@ -107,6 +110,10 @@
 # EscapePod
 - type: Tag
   id: EscapePod
+
+# SS220 to put lighter in a cigarette pack
+- type: Tag
+  id: Lighter
 
 # SS220 Cult
 - type: Tag

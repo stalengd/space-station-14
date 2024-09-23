@@ -1,4 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Content.Server.Humanoid;
 using Content.Server.SS220.DarkForces.Saint.Reagent.Events;
 using Content.Server.SS220.GameTicking.Rules;
 using Content.Shared.Actions;
@@ -8,6 +9,9 @@ using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Robust.Shared.Timing;
+using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Markings;
+using Robust.Shared.Prototypes;
 using Content.Server.SS220.DarkForces.Saint.Reagent;
 using Robust.Shared.Network;
 
@@ -21,11 +25,78 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     [Dependency] private readonly CultYoggRuleSystem _cultRule = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CultYoggComponent, OnSaintWaterDrinkEvent>(OnSaintWaterDrinked);
+    }
+
+    private void UpdateStage(Entity<CultYoggComponent> entity)
+    {
+        if (!HasComp<CultYoggComponent>(entity))
+            return;
+
+        if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
+            return;
+
+        switch (entity.Comp.CurrentStage)
+        {
+            case 0:
+                return;
+            case 1:
+                huAp.EyeColor = Color.Green;
+                break;
+            case 2:
+                if (!_prototype.HasIndex<MarkingPrototype>("CultStage-Halo"))
+                {
+                    Log.Error("CultStage-Halo marking doesn't exist");
+                    return;
+                }
+
+                if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Special))
+                {
+                    huAp.MarkingSet.Markings.Add(MarkingCategories.Special, new List<Marking>([new Marking("CultStage-Halo", colorCount:1)]));
+                    Dirty(entity.Owner, huAp);
+                }
+                else
+                {
+                    _humanoidAppearance.SetMarkingId(entity.Owner,
+                        MarkingCategories.Special,
+                        0,
+                        "CultStage-Halo",
+                        huAp);
+                }
+
+                var newMarkingId = $"CultStage-{huAp.Species}";
+
+                if (!_prototype.HasIndex<MarkingPrototype>(newMarkingId))
+                {
+                    Log.Error($"{newMarkingId} marking doesn't exist");
+                    return;
+                }
+
+                if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Tail) &&
+                    newMarkingId != "CultStage-Halo")
+                {
+                    _humanoidAppearance.SetMarkingId(entity.Owner,
+                        MarkingCategories.Tail,
+                        0,
+                        newMarkingId,
+                        huAp);
+                }
+                break;
+            case 3:
+                //Here will be logic here to turn the player into a migo
+                break;
+            default:
+                Log.Error("Something went wrong with CultYogg stages");
+                break;
+        }
+        Dirty(entity.Owner, huAp);
     }
 
     #region Ascending

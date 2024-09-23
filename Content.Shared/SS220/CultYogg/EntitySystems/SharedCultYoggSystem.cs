@@ -69,70 +69,20 @@ public abstract class SharedCultYoggSystem : EntitySystem
     }
 
     #region Stage
-    private void UpdateStage(EntityUid uid, CultYoggComponent component)
-    {
-        //rework stage's update for cultist's
-        if (!HasComp<CultYoggComponent>(uid))
-        {
-            return;
-        }
-        if (component.CurrentStage >= 1)
-        {
-            if (TryComp<HumanoidAppearanceComponent>(uid, out var huAp))
-            {
-                huAp.EyeColor = Color.Green; // eye color
-                Dirty(uid, huAp);
-                // need reworking for eyes sprite
-            }
-        }
-
-        if (component.CurrentStage == 2)
-        {
-            // if u need use the golden crown from proto
-
-            /*
-
-            var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
-
-            if (!prototypeManager.TryIndex<StartingGearPrototype>("CultGear", out var startingGear))
-                return;
-
-            if (_inventory.TryGetSlots(uid, out var slotDefinitions))
-            {
-                foreach (var slot in slotDefinitions)
-                {
-                    var equipmentStr = ((IEquipmentLoadout) startingGear).GetGear(slot.Name);
-                    if (!string.IsNullOrEmpty(equipmentStr))
-                    {
-                        _inventory.TryUnequip(uid, slot.Name, true, true);
-                        var equipmentEntity = EntityManager.SpawnEntity(equipmentStr, EntityManager.GetComponent<TransformComponent>(uid).Coordinates);
-                        _inventory.TryEquip(uid, equipmentEntity, slot.Name, silent: true, force: true);
-                    }
-                }
-            }
-            */
-        }
-    }
-
     private void OnExamined(EntityUid uid, CultYoggComponent component, ExaminedEvent args)
     {
         if (component.CurrentStage == 0)
-        {
             return;
-        }
+
         if (TryComp<InventoryComponent>(uid, out var item)
             && _inventory.TryGetSlotEntity(uid, "eyes", out _, item))
-        {
             return;
-        }
 
         if (_inventory.TryGetSlotEntity(uid, "head", out var itemHead, item))
         {
             if (TryComp(itemHead, out IdentityBlockerComponent? block)
                 && (block.Coverage == IdentityBlockerCoverage.EYES || block.Coverage == IdentityBlockerCoverage.FULL))
-            {
                 return;
-            }
         }
 
         if (_inventory.TryGetSlotEntity(uid, "mask", out var itemMask, item))

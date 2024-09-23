@@ -9,9 +9,17 @@ namespace Content.Server.SS220.CultYogg;
 public sealed partial class RaveComponent : SharedRaveComponent
 {
     /// <summary>
-    /// The random time between incidents, (min, max).
+    /// The random time between incidents: min, max.
     /// </summary>
     public Vector2 TimeBetweenIncidents = new Vector2(0, 5);
+
+    public TimeSpan MinIntervalPhrase = TimeSpan.FromSeconds(20);
+
+    public TimeSpan MaxIntervalPhrase = TimeSpan.FromSeconds(40);
+
+    public TimeSpan MinIntervalSound = TimeSpan.FromSeconds(20);
+
+    public TimeSpan MaxIntervalSound = TimeSpan.FromSeconds(40);
 
     public float NextIncidentTime;
 }

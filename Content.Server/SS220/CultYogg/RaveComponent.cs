@@ -27,12 +27,12 @@ public sealed partial class RaveComponent : SharedRaveComponent
     /// The minimum time in seconds between playing the sound.
     /// </summary>
     [DataField]
-    public TimeSpan MinIntervalSound = TimeSpan.FromSeconds(5);
+    public TimeSpan MinIntervalSound = TimeSpan.FromSeconds(15);
     /// <summary>
     /// The maximum time in seconds between playing the sound.
     /// </summary>
     [DataField]
-    public TimeSpan MaxIntervalSound = TimeSpan.FromSeconds(10);
+    public TimeSpan MaxIntervalSound = TimeSpan.FromSeconds(35);
     /// <summary>
     /// Buffer that contains next event
     /// </summary>

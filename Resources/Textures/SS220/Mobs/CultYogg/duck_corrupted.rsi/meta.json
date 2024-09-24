@@ -13,6 +13,9 @@
     {
       "name": "duck",
       "directions": 4
+    },
+    {
+        "name": "icon"
     }
   ]
 }

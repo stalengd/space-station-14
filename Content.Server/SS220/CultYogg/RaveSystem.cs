@@ -44,7 +44,7 @@ public sealed class RaveSystem : SharedRaveSystem
 
             if (raving.NextSoundTime <= _timing.CurTime)
             {
-                _audio.PlayEntity(raving.RaveSoundCollection, uid, uid);//ToDo idk why it isn't playing sound
+                _audio.PlayEntity(raving.RaveSoundCollection, uid, uid);
                 SetNextSoundTimer(raving);
             }
         }

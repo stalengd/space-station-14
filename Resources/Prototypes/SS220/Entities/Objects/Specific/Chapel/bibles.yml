@@ -4,7 +4,7 @@
   id: ActionExorcism
   name: Экзорцизм
   description: Прочитайте молитву, которая снимает порчу.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
     icon: { sprite: SS220/Interface/Actions/bible.rsi, state: exorcism }

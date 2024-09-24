@@ -46,7 +46,7 @@
   name: tesla gun lightning
   id: HornGunBullet
   parent: BaseBullet
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: TimedDespawn
     lifetime: 2
@@ -67,7 +67,7 @@
   parent: CollideRune
   id: HornExplotionPart
   name: HornExplotionPart
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
     - type: Explosive
       explosionType: Default

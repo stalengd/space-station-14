@@ -46,7 +46,7 @@
   id: Spike
   name: spike
   parent: BaseBullet
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   description: description
   components:
   - type: Reflective

@@ -5,7 +5,7 @@
   id: ActionCultYoggCorruptItem
   name: Преобразовать предмет через прикосновение
   description: Исказить предмет даровав ему форму заложенную создателем.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
     event: !type:CultYoggCorruptItemEvent
@@ -17,7 +17,7 @@
   id: ActionCultYoggCorruptItemInHand
   name: Преобразовать предмет в руках
   description: Исказить предмет даровав ему форму заложенную создателем.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
     useDelay: 15
@@ -29,7 +29,7 @@
   id: ActionCultYoggPukeShroom
   name: Извергнуть
   description: Извергнуть выращенный в желудке гриб.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
     useDelay: 10
@@ -42,7 +42,7 @@
   id: ActionCultYoggDigest
   name: Микоз
   description: Отдать часть калорий, чтобы переварить новый гриб
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
     useDelay: 10
@@ -55,7 +55,7 @@
   id: ActionCultYoggAscending
   name: Возвышение
   description: Проявить свою истинную сущность.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
     useDelay: 30
@@ -68,7 +68,7 @@
   id: ActionMiGoEnslavement
   name: Порабощение
   description: Ввергни плоть в реки ваших мыслей и чувств.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
     useDelay: 15
@@ -80,7 +80,7 @@
   id: ActionMiGoHeal
   name: Исцеление
   description: Ускорьте процессы восстановления прислужника.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
     useDelay: 15
@@ -92,7 +92,7 @@
   id: ActionMiGoAstral
   name: Выход в астрал
   description: Войдите в междумирье.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
     useDelay: 15
@@ -105,7 +105,7 @@
   id: ActionMiGoErect
   name: Воздвигнуть
   description: Воплотите основание великих алтарей.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
     useDelay: 15
@@ -117,7 +117,7 @@
   id: ActionMiGoSacrifice
   name: Призыв
   description: Принестите жертву и призовите своего хозяина.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
     useDelay: 15

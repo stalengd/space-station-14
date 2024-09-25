@@ -17,8 +17,6 @@ using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Roles;
 using Content.Shared.SS220.CultYogg.Components;
-using Robust.Shared.Prototypes;
-using Robust.Shared.GameObjects;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -49,9 +47,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
         SubscribeLocalEvent<CultYoggComponent, CultYoggDigestEvent>(DigestAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemEvent>(CorruptItemAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemInHandEvent>(CorruptItemInHandAction);
-        SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
-
-        SubscribeLocalEvent<CultYoggComponent, CultYoggForceAscendingEvent>(ForcedAcsending);
 
         SubscribeLocalEvent<CultYoggComponent, ComponentRemove>(OnRemove);
     }
@@ -193,49 +188,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
         }
         args.Handled = true;
     }
-    #endregion
-
-    #region Ascending
-    private void AscendingAction(Entity<CultYoggComponent> uid, ref CultYoggAscendingEvent args)
-    {
-        if (_net.IsClient)
-            return;
-
-        if (TerminatingOrDeleted(uid))
-            return;
-
-        // Get original body position and spawn MiGo here
-        var migo = _entityManager.SpawnAtPosition(uid.Comp.AscendedEntity, Transform(uid).Coordinates);
-
-        // Move the mind if there is one and it's supposed to be transferred
-        if (_mind.TryGetMind(uid, out var mindId, out var mind))
-            _mind.TransferTo(mindId, migo, mind: mind);
-
-        //Gib original body
-        if (TryComp<BodyComponent>(uid, out var body))
-            _body.GibBody(uid, body: body);
-    }
-    private void ForcedAcsending(Entity<CultYoggComponent> uid, ref CultYoggForceAscendingEvent args)
-    {
-        if (_net.IsClient)
-            return;
-
-        if (TerminatingOrDeleted(uid))
-            return;
-
-        // Get original body position and spawn MiGo here
-        var migo = _entityManager.SpawnAtPosition(uid.Comp.AscendedEntity, Transform(uid).Coordinates);
-
-        // Move the mind if there is one and it's supposed to be transferred
-        if (_mind.TryGetMind(uid, out var mindId, out var mind))
-            _mind.TransferTo(mindId, migo, mind: mind);
-
-        //Gib original body
-        if (TryComp<BodyComponent>(uid, out var body))
-            _body.GibBody(uid, body: body);
-    }
-    [ByRefEvent, Serializable]
-    public record struct CultYoggForceAscendingEvent;
     #endregion
 
     public void OnRemove(Entity<CultYoggComponent> uid, ref ComponentRemove args)

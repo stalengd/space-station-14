@@ -5,6 +5,9 @@ using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Shared.Dataset;
 using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+using Robust.Shared.GameObjects;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -14,6 +17,8 @@ public sealed class RaveSystem : SharedRaveSystem
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     [ValidatePrototypeId<DatasetPrototype>]
     private const string PhrasesPlaceholders = "CultRlehPhrases";
@@ -31,16 +36,17 @@ public sealed class RaveSystem : SharedRaveSystem
         var query = EntityQueryEnumerator<RaveComponent>();
         while (query.MoveNext(out var uid, out var raving))
         {
-            raving.NextIncidentTime -= frameTime;
+            if (raving.NextPhraseTime <= _timing.CurTime)
+            {
+                _chat.TrySendInGameICMessage(uid, PickPhrase(PhrasesPlaceholders), InGameICChatType.Speak, ChatTransmitRange.Normal);
+                SetNextPhraseTimer(raving);
+            }
 
-            if (raving.NextIncidentTime >= 0)
-                continue;
-
-            // Set the new time.
-            raving.NextIncidentTime +=
-                _random.NextFloat(raving.TimeBetweenIncidents.X, raving.TimeBetweenIncidents.Y);
-
-            _chat.TrySendInGameICMessage(uid, PickPhrase(PhrasesPlaceholders), InGameICChatType.Speak, ChatTransmitRange.Normal);
+            if (raving.NextSoundTime <= _timing.CurTime)
+            {
+                _audio.PlayEntity(raving.RaveSoundCollection, uid, uid);
+                SetNextSoundTimer(raving);
+            }
         }
     }
 
@@ -71,8 +77,22 @@ public sealed class RaveSystem : SharedRaveSystem
 
     private void SetupRaving(Entity<RaveComponent> uid, ref ComponentStartup args)
     {
-        uid.Comp.NextIncidentTime =
-            _random.NextFloat(uid.Comp.TimeBetweenIncidents.X, uid.Comp.TimeBetweenIncidents.Y);
+        SetNextPhraseTimer(uid.Comp);
+        SetNextSoundTimer(uid.Comp);
+    }
+
+    private void SetNextPhraseTimer(RaveComponent comp)
+    {
+        comp.NextPhraseTime = _timing.CurTime + ((comp.MinIntervalPhrase < comp.MaxIntervalPhrase)
+        ? _random.Next(comp.MinIntervalPhrase, comp.MaxIntervalPhrase)
+        : comp.MaxIntervalPhrase);
+    }
+
+    private void SetNextSoundTimer(RaveComponent comp)
+    {
+        comp.NextSoundTime = _timing.CurTime + ((comp.MinIntervalSound < comp.MaxIntervalSound )
+        ? _random.Next(comp.MinIntervalSound, comp.MaxIntervalSound)
+        : comp.MaxIntervalSound);
     }
 
     private string PickPhrase(string name)

@@ -15,6 +15,8 @@ using Content.Shared.Humanoid.Markings;
 using Robust.Shared.Prototypes;
 using Content.Server.SS220.DarkForces.Saint.Reagent;
 using Robust.Shared.Network;
+using Content.Shared.SS220.CultYogg;
+using Content.Shared.Mind;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -28,14 +30,17 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-
+    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
+    
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CultYoggComponent, OnSaintWaterDrinkEvent>(OnSaintWaterDrinked);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggForceAscendingEvent>(ForcedAcsending);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
         SubscribeLocalEvent<CultYoggComponent, ChangeCultYoggStageEvent>(UpdateStage);
-
     }
 
     private void UpdateStage(Entity<CultYoggComponent> entity, ref ChangeCultYoggStageEvent args)
@@ -130,12 +135,48 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         }
         Dirty(entity.Owner, huAp);
     }
+    
+    #region Ascending
+    private void AscendingAction(Entity<CultYoggComponent> uid, ref CultYoggAscendingEvent args)
+    {
+        if (TerminatingOrDeleted(uid))
+            return;
+
+        // Get original body position and spawn MiGo here
+        var migo = _entityManager.SpawnAtPosition(uid.Comp.AscendedEntity, Transform(uid).Coordinates);
+
+        // Move the mind if there is one and it's supposed to be transferred
+        if (_mind.TryGetMind(uid, out var mindId, out var mind))
+            _mind.TransferTo(mindId, migo, mind: mind);
+
+        //Gib original body
+        if (TryComp<BodyComponent>(uid, out var body))
+            _body.GibBody(uid, body: body);
+    }
+    private void ForcedAcsending(Entity<CultYoggComponent> uid, ref CultYoggForceAscendingEvent args)
+    {
+
+        if (TerminatingOrDeleted(uid))
+            return;
+
+        // Get original body position and spawn MiGo here
+        var migo = _entityManager.SpawnAtPosition(uid.Comp.AscendedEntity, Transform(uid).Coordinates);
+
+        // Move the mind if there is one and it's supposed to be transferred
+        if (_mind.TryGetMind(uid, out var mindId, out var mind))
+            _mind.TransferTo(mindId, migo, mind: mind);
+
+        //Gib original body
+        if (TryComp<BodyComponent>(uid, out var body))
+            _body.GibBody(uid, body: body);
+    }
+    #endregion
 
     #region Ascending
     public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent comp)//idk if it is canser or no, will be like that for a time
     {
         comp.ConsumedShrooms++; //Add shroom to buffer
-        if (comp.ConsumedShrooms < comp.AmountShroomsToAscend) // if its not enough to ascend go next
+        if (comp.ConsumedShrooms <= comp.AmountShroomsToAscend) // if its not enough to ascend
             return;
 
         if (!AcsendingCultistCheck())//to prevent becaming MiGo at the same time
@@ -153,14 +194,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         //Maybe in later version we will detiriorate the body and add some kind of effects
 
         //IDK how to check if he already has this action, so i did this markup
-        if (_actions.AddAction(uid, ref comp.AscendingActionEntity, out var act, comp.AscendingAction) && act.UseDelay != null)
-        {
-            var start = _timing.CurTime;
-            var end = start + act.UseDelay.Value;
-            _actions.SetCooldown(comp.AscendingActionEntity.Value, start, end);
-
-            comp.IsAscending = true;
-        }
+        EnsureComp<AcsendingComponent>(uid);
     }
 
     //Check for avaliable amoiunt of MiGo or gib MiGo to replace
@@ -207,14 +241,12 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     }
     private bool AcsendingCultistCheck()//if anybody else is acsending
     {
-        var query = EntityQueryEnumerator<CultYoggComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        var query = EntityQueryEnumerator<CultYoggComponent, AcsendingComponent>();
+        while (query.MoveNext(out var uid, out var comp, out var acsComp))
         {
-            if (comp.IsAscending) //ToDo set as checking status effect
-
-                return true;
+            return false;
         }
-        return false;
+        return true;
     }
     #endregion
     private void OnSaintWaterDrinked(Entity<CultYoggComponent> uid, ref OnSaintWaterDrinkEvent args)
@@ -228,3 +260,5 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         cleansedComp.CleansingDecayEventTime = _timing.CurTime + cleansedComp.BeforeDeclinesTime; //setting timer, when cleansing will be removed
     }
 }
+[ByRefEvent, Serializable]
+public record struct CultYoggForceAscendingEvent;

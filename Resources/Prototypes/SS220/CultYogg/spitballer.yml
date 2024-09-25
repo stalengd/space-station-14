@@ -39,7 +39,7 @@
 
 - type: entity
   id: CartridgeAcid
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   name: acid spit
   parent: BaseShellShotgun
   components:
@@ -48,7 +48,7 @@
 
 - type: entity
   id: AcidSpit
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   name: acid spit
   parent: BaseBullet
   components:
@@ -72,7 +72,7 @@
 
 - type: entity
   id: AcidSpitSpread
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   parent: AcidSpit
   components:
   - type: ProjectileSpread

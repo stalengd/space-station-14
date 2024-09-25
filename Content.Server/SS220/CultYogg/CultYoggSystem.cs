@@ -32,7 +32,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
-    
+
     public override void Initialize()
     {
         base.Initialize();
@@ -135,7 +135,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         }
         Dirty(entity.Owner, huAp);
     }
-    
+
     #region Ascending
     private void AscendingAction(Entity<CultYoggComponent> uid, ref CultYoggAscendingEvent args)
     {
@@ -170,9 +170,6 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         if (TryComp<BodyComponent>(uid, out var body))
             _body.GibBody(uid, body: body);
     }
-    #endregion
-
-    #region Ascending
     public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent comp)//idk if it is canser or no, will be like that for a time
     {
         comp.ConsumedShrooms++; //Add shroom to buffer

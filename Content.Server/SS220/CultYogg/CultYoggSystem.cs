@@ -45,7 +45,6 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
 
     private void UpdateStage(Entity<CultYoggComponent> entity, ref ChangeCultYoggStageEvent args)
     {
-        Log.Error("AAAAAAAA");
         if (!HasComp<CultYoggComponent>(entity))
             return;
 

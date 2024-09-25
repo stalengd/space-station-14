@@ -1,4 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using System.Linq;
 using Content.Server.Humanoid;
 using Content.Server.SS220.DarkForces.Saint.Reagent.Events;
 using Content.Server.SS220.GameTicking.Rules;
@@ -33,10 +34,13 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         base.Initialize();
 
         SubscribeLocalEvent<CultYoggComponent, OnSaintWaterDrinkEvent>(OnSaintWaterDrinked);
+        SubscribeLocalEvent<CultYoggComponent, ChangeCultYoggStageEvent>(UpdateStage);
+
     }
 
-    private void UpdateStage(Entity<CultYoggComponent> entity)
+    private void UpdateStage(Entity<CultYoggComponent> entity, ref ChangeCultYoggStageEvent args)
     {
+        Log.Error("AAAAAAAA");
         if (!HasComp<CultYoggComponent>(entity))
             return;
 
@@ -48,6 +52,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
             case 0:
                 return;
             case 1:
+                entity.Comp.PreviousEyeColor = new Color(huAp.EyeColor.R,huAp.EyeColor.G,huAp.EyeColor.B,huAp.EyeColor.A);
                 huAp.EyeColor = Color.Green;
                 break;
             case 2:
@@ -82,6 +87,8 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
                 if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Tail) &&
                     newMarkingId != "CultStage-Halo")
                 {
+                    if(huAp.MarkingSet.Markings[MarkingCategories.Tail].FirstOrDefault() != null)
+                        entity.Comp.PreviousTail = huAp.MarkingSet.Markings[MarkingCategories.Tail].FirstOrDefault();
                     _humanoidAppearance.SetMarkingId(entity.Owner,
                         MarkingCategories.Tail,
                         0,
@@ -90,11 +97,36 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
                 }
                 break;
             case 3:
-                //Here will be logic here to turn the player into a migo
+                //Here will be logic here to turn player into a migo
                 break;
             default:
                 Log.Error("Something went wrong with CultYogg stages");
                 break;
+        }
+        Dirty(entity.Owner, huAp);
+    }
+
+    private void DeleteVisual(Entity<CultYoggComponent> entity)
+    {
+        if (!HasComp<CultYoggComponent>(entity))
+            return;
+
+        if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
+            return;
+        huAp.EyeColor = entity.Comp.PreviousEyeColor;
+        if (huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Special))
+        {
+            huAp.MarkingSet.Markings.Remove(MarkingCategories.Special);
+        }
+
+        if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Tail) &&
+            entity.Comp.PreviousTail != null)
+        {
+            _humanoidAppearance.SetMarkingId(entity.Owner,
+                MarkingCategories.Tail,
+                0,
+                entity.Comp.PreviousTail.MarkingId,
+                huAp);
         }
         Dirty(entity.Owner, huAp);
     }

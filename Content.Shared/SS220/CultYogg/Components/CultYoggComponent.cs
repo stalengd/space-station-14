@@ -1,4 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Content.Shared.Humanoid.Markings;
 using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
@@ -95,4 +96,11 @@ public sealed partial class CultYoggComponent : Component
     /// </summary>
     [DataField("cultYoggRoleId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]
     public string CultYoggRoleId = "CultYogg";
+
+    [DataField]
+    public Color PreviousEyeColor;
+
+
+    [DataField]
+    public Marking? PreviousTail;
 }

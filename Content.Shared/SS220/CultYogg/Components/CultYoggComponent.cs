@@ -95,7 +95,7 @@ public sealed partial class CultYoggComponent : Component
     public string CultYoggRoleId = "CultYogg";
 
     [DataField]
-    public Color PreviousEyeColor;
+    public Color? PreviousEyeColor;
 
 
     [DataField]

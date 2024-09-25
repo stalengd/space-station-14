@@ -48,7 +48,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
             return;
 
-        switch (entity.Comp.CurrentStage)
+        switch (args.Stage)
         {
             case 0:
                 return;
@@ -111,7 +111,10 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     {
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
             return;
-        huAp.EyeColor = entity.Comp.PreviousEyeColor;
+
+        if(entity.Comp.PreviousEyeColor != null)
+            huAp.EyeColor = entity.Comp.PreviousEyeColor.Value;
+
         if (huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Special))
         {
             huAp.MarkingSet.Markings.Remove(MarkingCategories.Special);

@@ -45,9 +45,6 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
 
     private void UpdateStage(Entity<CultYoggComponent> entity, ref ChangeCultYoggStageEvent args)
     {
-        if (!HasComp<CultYoggComponent>(entity))
-            return;
-
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
             return;
 

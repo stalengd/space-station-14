@@ -109,9 +109,6 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
 
     private void DeleteVisual(Entity<CultYoggComponent> entity)
     {
-        if (!HasComp<CultYoggComponent>(entity))
-            return;
-
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
             return;
         huAp.EyeColor = entity.Comp.PreviousEyeColor;

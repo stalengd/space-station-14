@@ -21,6 +21,7 @@ using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Server.Medical;
 using Content.Server.Nutrition;
+using Robust.Shared.GameObjects;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -61,12 +62,14 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
             return;
 
+        entity.Comp.CurrentStage = args.Stage;//Upgating stage in component
+
         switch (args.Stage)
         {
             case 0:
                 return;
             case 1:
-                entity.Comp.PreviousEyeColor = new Color(huAp.EyeColor.R,huAp.EyeColor.G,huAp.EyeColor.B,huAp.EyeColor.A);
+                entity.Comp.PreviousEyeColor = new Color(huAp.EyeColor.R, huAp.EyeColor.G, huAp.EyeColor.B, huAp.EyeColor.A);
                 huAp.EyeColor = Color.Green;
                 break;
             case 2:
@@ -78,7 +81,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
 
                 if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Special))
                 {
-                    huAp.MarkingSet.Markings.Add(MarkingCategories.Special, new List<Marking>([new Marking("CultStage-Halo", colorCount:1)]));
+                    huAp.MarkingSet.Markings.Add(MarkingCategories.Special, new List<Marking>([new Marking("CultStage-Halo", colorCount: 1)]));
                     Dirty(entity.Owner, huAp);
                 }
                 else
@@ -101,7 +104,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
                 if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Tail) &&
                     newMarkingId != "CultStage-Halo")
                 {
-                    if(huAp.MarkingSet.Markings[MarkingCategories.Tail].FirstOrDefault() != null)
+                    if (huAp.MarkingSet.Markings[MarkingCategories.Tail].FirstOrDefault() != null)
                         entity.Comp.PreviousTail = huAp.MarkingSet.Markings[MarkingCategories.Tail].FirstOrDefault();
                     _humanoidAppearance.SetMarkingId(entity.Owner,
                         MarkingCategories.Tail,
@@ -111,7 +114,9 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
                 }
                 break;
             case 3:
-                //Here will be logic here to turn player into a migo
+                var ev = new CultYoggForceAscendingEvent();//making cultist MiGo
+                RaiseLocalEvent(entity, ref ev);
+
                 break;
             default:
                 Log.Error("Something went wrong with CultYogg stages");

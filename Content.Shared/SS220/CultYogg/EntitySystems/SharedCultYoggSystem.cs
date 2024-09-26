@@ -89,8 +89,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
     }
     #endregion
 
-
-
     #region Corruption
     private void CorruptItemAction(Entity<CultYoggComponent> uid, ref CultYoggCorruptItemEvent args)
     {

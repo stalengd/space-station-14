@@ -49,28 +49,20 @@ public sealed partial class CultYoggComponent : Component
     [DataField, AutoNetworkedField]
     public int CurrentStage = 0;
 
-    /// <summary>
-    /// Sound played while puking MiGoShroom
-    /// </summary>
-    [ViewVariables, DataField, AutoNetworkedField]
-    public SoundSpecifier PukeSound = new SoundPathSpecifier("/Audio/SS220/CultYogg/puke.ogg", new()
-    {
-        MaxDistance = 3
-    });
-
     [ViewVariables, DataField, AutoNetworkedField]
     public string PukedEntity = "FoodMiGomyceteCult"; //what will be puked out
-
-    [ViewVariables, DataField, AutoNetworkedField]
-    public string PukedLiquid = "PuddleVomit"; //maybe should be special liquid?
 
     /// <summary>
     /// The lowest hunger threshold that this mob can be in before it's allowed to digest another shroom.
     /// </summary>
-    [DataField("minHungerThreshold")]
-    [ViewVariables(VVAccess.ReadWrite)]
-    [AutoNetworkedField]
-    public HungerThreshold MinHungerThreshold = HungerThreshold.Okay;
+    [DataField("minHungerThreshold"), ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    public HungerThreshold MinHungerThreshold = HungerThreshold.Starving;
+
+    /// <summary>
+    /// The lowest thirst threshold that this mob can be in before it's allowed to digest another shroom.
+    /// </summary>
+    [DataField("minThirstThreshold"), ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    public ThirstThreshold MinThirstThreshold = ThirstThreshold.Parched;
 
     /// <summary>
     /// Entity the cultist will ascend into
@@ -86,7 +78,10 @@ public sealed partial class CultYoggComponent : Component
     /// </summary>
 
     [ViewVariables, DataField, AutoNetworkedField]
-    public float HungerCost = 5f;
+    public float HungerCost = 50f;
+
+    [ViewVariables, DataField, AutoNetworkedField]
+    public float ThirstCost = 100f;
 
     /// <summary>
     /// The role prototype of the culsist antag role

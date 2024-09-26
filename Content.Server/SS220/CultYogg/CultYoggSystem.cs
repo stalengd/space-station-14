@@ -17,6 +17,10 @@ using Content.Server.SS220.DarkForces.Saint.Reagent;
 using Robust.Shared.Network;
 using Content.Shared.SS220.CultYogg;
 using Content.Shared.Mind;
+using Content.Shared.Nutrition.Components;
+using Content.Shared.Nutrition.EntitySystems;
+using Content.Server.Medical;
+using Content.Server.Nutrition;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -32,17 +36,26 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly HungerSystem _hungerSystem = default!;
+    [Dependency] private readonly ThirstSystem _thirstSystem = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly VomitSystem _vomitSystem = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        // actions
+        SubscribeLocalEvent<CultYoggComponent, CultYoggPukeShroomEvent>(PukeAction);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggDigestEvent>(DigestAction);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
+
         SubscribeLocalEvent<CultYoggComponent, OnSaintWaterDrinkEvent>(OnSaintWaterDrinked);
         SubscribeLocalEvent<CultYoggComponent, CultYoggForceAscendingEvent>(ForcedAcsending);
-        SubscribeLocalEvent<CultYoggComponent, CultYoggAscendingEvent>(AscendingAction);
         SubscribeLocalEvent<CultYoggComponent, ChangeCultYoggStageEvent>(UpdateStage);
     }
 
+    #region StageUpdating
     private void UpdateStage(Entity<CultYoggComponent> entity, ref ChangeCultYoggStageEvent args)
     {
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
@@ -112,7 +125,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
             return;
 
-        if(entity.Comp.PreviousEyeColor != null)
+        if (entity.Comp.PreviousEyeColor != null)
             huAp.EyeColor = entity.Comp.PreviousEyeColor.Value;
 
         if (huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Special))
@@ -131,6 +144,57 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         }
         Dirty(entity.Owner, huAp);
     }
+    #endregion
+
+    #region Puke
+    private void PukeAction(Entity<CultYoggComponent> uid, ref CultYoggPukeShroomEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+
+        _vomitSystem.Vomit(uid);
+        var shroom = _entityManager.SpawnEntity(uid.Comp.PukedEntity, Transform(uid).Coordinates);
+
+        _actions.RemoveAction(uid, uid.Comp.PukeShroomActionEntity);
+        _actions.AddAction(uid, ref uid.Comp.DigestActionEntity, uid.Comp.DigestAction);
+    }
+    private void DigestAction(Entity<CultYoggComponent> uid, ref CultYoggDigestEvent args)
+    {
+        if (!TryComp<HungerComponent>(uid, out var hungerComp))
+            return;
+
+        if (!TryComp<ThirstComponent>(uid, out var thirstComp))
+            return;
+
+        if (hungerComp.CurrentHunger <= uid.Comp.HungerCost || hungerComp.CurrentThreshold == uid.Comp.MinHungerThreshold)
+        {
+            _popup.PopupEntity(Loc.GetString("cult-yogg-digest-no-nutritions"), uid);
+            //_popup.PopupClient(Loc.GetString("cult-yogg-digest-no-nutritions"), uid, uid);//idk if it isn't working, but OnSericultureStart is an ok
+            return;
+        }
+
+        if (thirstComp.CurrentThirst <= uid.Comp.ThirstCost || thirstComp.CurrentThirstThreshold == uid.Comp.MinThirstThreshold)
+        {
+            _popup.PopupEntity(Loc.GetString("cult-yogg-digest-no-water"), uid);
+            return;
+        }
+
+        _hungerSystem.ModifyHunger(uid, -uid.Comp.HungerCost);
+
+        _thirstSystem.ModifyThirst(uid, thirstComp, -uid.Comp.ThirstCost);
+
+        _actions.RemoveAction(uid, uid.Comp.DigestActionEntity);//if we digested, we should puke after
+
+        if (_actions.AddAction(uid, ref uid.Comp.PukeShroomActionEntity, out var act, uid.Comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
+        {
+            var start = _gameTiming.CurTime;
+            var end = start + act.UseDelay.Value;
+            _actions.SetCooldown(uid.Comp.PukeShroomActionEntity.Value, start, end);
+        }
+    }
+    #endregion
 
     #region Ascending
     private void AscendingAction(Entity<CultYoggComponent> uid, ref CultYoggAscendingEvent args)

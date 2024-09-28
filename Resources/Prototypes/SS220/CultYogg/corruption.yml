@@ -5,14 +5,21 @@
   id: WeaponRifleAk
   from:
     prototypeId: WeaponRifleAk
-  result: FoodSnackMREBrownie
+  result: CultYoggCocoonSpikegun
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: WeaponLaserCarbine
   from:
     prototypeId: WeaponLaserCarbine
-  result: FoodPacketMRETrash
+  result: CultYoggCocoonHorn
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: WeaponShotgunBulldog
+  from:
+    prototypeId: WeaponShotgunBulldog
+  result: CultYoggCocoonSpitballer
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
@@ -67,14 +74,14 @@
   id: ClawCultYoggWirecutter
   from:
     prototypeId: Wirecutter
-  result: ClawCultYogg
+  result: CultYoggCocoonClaw
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: ClawCultYoggJawsOfLife
   from:
     prototypeId: JawsOfLife
-  result: ClawCultYogg
+  result: CultYoggCocoonClaw
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 # Hardsuit beginning

@@ -15,8 +15,8 @@ using Content.Shared.Examine;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Inventory;
-using Content.Shared.Roles;
 using Content.Shared.SS220.CultYogg.Components;
+
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -29,7 +29,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly HungerSystem _hungerSystem = default!;
     [Dependency] private readonly SharedCultYoggCorruptedSystem _cultYoggCorruptedSystem = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
@@ -42,9 +41,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
 
         SubscribeLocalEvent<CultYoggComponent, ExaminedEvent>(OnExamined);
 
-        // actions
-        SubscribeLocalEvent<CultYoggComponent, CultYoggPukeShroomEvent>(PukeAction);
-        SubscribeLocalEvent<CultYoggComponent, CultYoggDigestEvent>(DigestAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemEvent>(CorruptItemAction);
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptItemInHandEvent>(CorruptItemInHandAction);
 
@@ -90,53 +86,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
         }
 
         args.PushMarkup($"[color=green]{Loc.GetString("Глаза горят неестественно зелёным пламенем", ("ent", uid))}[/color]"); // no locale for right now
-    }
-    #endregion
-
-    #region Puke
-    private void PukeAction(Entity<CultYoggComponent> uid, ref CultYoggPukeShroomEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        if (_net.IsClient) // Have to do this because spawning stuff in shared is CBT.
-            return;
-
-        _entityManager.SpawnEntity(uid.Comp.PukedLiquid, Transform(uid).Coordinates);
-        var shroom = _entityManager.SpawnEntity(uid.Comp.PukedEntity, Transform(uid).Coordinates);
-        _audio.PlayPredicted(uid.Comp.PukeSound, uid, shroom);
-
-        args.Handled = true;
-
-        _actions.RemoveAction(uid, uid.Comp.PukeShroomActionEntity);
-        _actions.AddAction(uid, ref uid.Comp.DigestActionEntity, uid.Comp.DigestAction);
-    }
-    private void DigestAction(Entity<CultYoggComponent> uid, ref CultYoggDigestEvent args)
-    {
-        if (TryComp<HungerComponent>(uid, out var hungerComp)
-        && _hungerSystem.IsHungerBelowState(uid, uid.Comp.MinHungerThreshold, hungerComp.CurrentHunger - uid.Comp.HungerCost, hungerComp))
-        {
-            _popup.PopupEntity(Loc.GetString("cult-yogg-digest-no-nutritions"), uid);
-            //_popup.PopupClient(Loc.GetString("cult-yogg-digest-no-nutritions"), uid, uid);//idk if it isn't working, but OnSericultureStart is an ok
-            return;
-        }
-
-        _hungerSystem.ModifyHunger(uid, -uid.Comp.HungerCost);
-
-        //maybe add thist
-        /*
-        if (TryComp<ThirstComponent>(uid, out var thirst))
-            _thirst.ModifyThirst(uid, thirst, thirstAdded);
-        */
-
-        _actions.RemoveAction(uid, uid.Comp.DigestActionEntity);//if we digested, we should puke after
-
-        if (_actions.AddAction(uid, ref uid.Comp.PukeShroomActionEntity, out var act, uid.Comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
-        {
-            var start = _gameTiming.CurTime;
-            var end = start + act.UseDelay.Value;
-            _actions.SetCooldown(uid.Comp.PukeShroomActionEntity.Value, start, end);
-        }
     }
     #endregion
 

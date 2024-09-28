@@ -15,7 +15,7 @@ namespace Content.Server.SS220.EntityEffects.Effects
     /// Used when someone eats MiGoShroom
     /// </summary>
     [UsedImplicitly]
-    public sealed partial class ChemMiGomicelium : EntityEffect //stub as vomit, will change when figure out
+    public sealed partial class ChemMiGomicelium : EntityEffect
     {
         /// <summary>
         /// Minimum quantity of reagent required to trigger this effect.
@@ -23,22 +23,14 @@ namespace Content.Server.SS220.EntityEffects.Effects
         [DataField]
         public float AmountThreshold = 0.5f;
 
-        /// How many units of thirst to add each time we vomit
-        [DataField]
-        public float ThirstAmount = -8f;
-        /// How many units of hunger to add each time we vomit
-        [DataField]
-        public float HungerAmount = -8f;
-
         [DataField]
         public float Time = 2.0f;
-        public override void Effect(EntityEffectBaseArgs args)//ToDo maybe do this us holywater in NarSi PR
+        public override void Effect(EntityEffectBaseArgs args)
         {
             var time = Time;
 
             if (args is EntityEffectReagentArgs reagentArgs)
                 time *= reagentArgs.Scale.Float();
-
 
             var entityManager = args.EntityManager;
 
@@ -47,10 +39,6 @@ namespace Content.Server.SS220.EntityEffects.Effects
                 entityManager.System<CultYoggSystem>().ModifyEatenShrooms(args.TargetEntity, comp);
                 return;
             }
-            //ToDo
-            //ADD here galutination + drunk
-            //var vomitSys = entityManager.EntitySysManager.GetEntitySystem<VomitSystem>();//delete this after
-            //vomitSys.Vomit(args.SolutionEntity, ThirstAmount, HungerAmount);
 
             if (!entityManager.HasComponent<HumanoidAppearanceComponent>(args.TargetEntity)) //if its an animal -- corrupt it
             {

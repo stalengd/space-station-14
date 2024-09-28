@@ -1,11 +1,11 @@
 - type: entity
   name: sedative sting
   parent: BaseItem
-  id: Sedativesting
+  id: SedativestingCultYogg
   components:
   - type: Sprite
-    sprite: Objects/Misc/pens.rsi
-    state: pen
+    sprite: SS220/Objects/Weapons/Melee/cult_yogg_sedativesting.rsi
+    state: icon
   - type: SolutionContainerManager
     solutions:
       hypospray:

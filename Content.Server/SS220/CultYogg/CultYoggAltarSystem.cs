@@ -45,7 +45,7 @@ public sealed partial class CultYoggAltarSystem : SharedCultYoggAltarSystem
             stage = ++cultRule.AmountOfSacrifices;
 
             if (cultRule.AmountOfSacrifices == cultRule.ReqAmountOfSacrifices)
-                SpawnAtPosition("Nyarlathotep", Transform(ent).Coordinates);
+                Spawn("Nyarlathotep", Transform(ent).Coordinates);
         }
 
         //sending all cultists updating stage event

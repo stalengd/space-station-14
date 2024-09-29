@@ -14,7 +14,6 @@
   - type: Pullable
   - type: Appearance
   - type: CultYoggAltar
-  - type: Prayable
   - type: Strap
     position: Down
     rotation: -90

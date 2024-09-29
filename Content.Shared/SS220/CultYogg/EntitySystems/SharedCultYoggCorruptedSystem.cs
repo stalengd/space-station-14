@@ -5,7 +5,9 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Stacks;
+using Content.Shared.Tag;
 using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.SoftDelete;
 using Robust.Shared.Serialization;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -29,12 +31,16 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedSoftDeleteSystem _softDeleteSystem = default!;
 
     private readonly TimeSpan _corruptionDuration = TimeSpan.FromSeconds(3);
     private readonly Dictionary<ProtoId<EntityPrototype>, CultYoggCorruptedPrototype> _recipesBySourcePrototypeId = [];
     private readonly Dictionary<ProtoId<StackPrototype>, CultYoggCorruptedPrototype> _recipesBySourceStackType = [];
+    private readonly Dictionary<ProtoId<EntityPrototype>, CultYoggCorruptedPrototype> _recipiesByParentPrototypeId = [];
+    private readonly Dictionary<ProtoId<TagPrototype>, CultYoggCorruptedPrototype> _recipiesBySourceTag = [];
     private readonly List<EntityUid> _dropEntitiesBuffer = [];
 
+    private readonly List<(Func<EntityUid, CultYoggCorruptedPrototype?> source, string sourceName)> _recipeSources = new();
 
     public override void Initialize()
     {
@@ -42,6 +48,11 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
 
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<CultYoggComponent, CultYoggCorruptDoAfterEvent>(OnDoAfterCorruption);
+
+        _recipeSources.Add((GetRecipeBySourcePrototypeId, "Prototype Id"));
+        _recipeSources.Add((GetRecipeBySourceStackType, "Stack Type"));
+        _recipeSources.Add((GetRecipeByParentPrototypeId, "Parent Prototype Id"));
+        _recipeSources.Add((GetRecipeBySourceTag, "Tag"));
     }
 
     /// <summary>
@@ -71,21 +82,31 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     /// <returns>Newly created original form of the corrupted entity if any, otherwise <see langword="null"/></returns>
     public EntityUid? RevertCorruption(Entity<CultYoggCorruptedComponent> corruptedEntity, out CultYoggCorruptedPrototype? recipe)
     {
-        recipe = null;
-        if (corruptedEntity.Comp.OriginalPrototypeId is null)
-            return null;
         recipe = GetRecipeById(corruptedEntity.Comp.Recipe);
         if (recipe is null)
             return null;
+        _containerSystem.TryRemoveFromContainer(corruptedEntity, force: true);
+        var coords = Transform(corruptedEntity).Coordinates;
+        EntityUid normalEntity;
+        if (corruptedEntity.Comp.SoftDeletedOriginalEntity is { } originalEntity)
+        {
+            _softDeleteSystem.TryRestore(originalEntity);
+            _transformSystem.SetCoordinates(originalEntity, coords);
+            normalEntity = originalEntity;
+        }
+        else if (corruptedEntity.Comp.OriginalPrototypeId is { } originalPrototypeId)
+        {
+            normalEntity = Spawn(originalPrototypeId, coords);
+            TryTransformStack(recipe, normalEntity, corruptedEntity, normalEntity);
+        }
+        else
+        {
+            return null;
+        }
 
         TryDropAllContainedEntities(corruptedEntity);
-
-        var coords = Transform(corruptedEntity).Coordinates;
-        var normalEntity = Spawn(corruptedEntity.Comp.OriginalPrototypeId, coords);
-
-        TryTransformStack(recipe, normalEntity, corruptedEntity, normalEntity);
-
         _entityManager.DeleteEntity(corruptedEntity);
+
         return normalEntity;
     }
 
@@ -171,9 +192,16 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     /// <param name="corruption">Result recipe</param>
     private bool TryGetCorruptionRecipe(EntityUid uid, [NotNullWhen(true)] out CultYoggCorruptedPrototype? corruption)
     {
-        corruption = GetRecipeBySourcePrototypeId(uid)
-            ?? GetRecipeBySourceStackType(uid);
-        return corruption is not null;
+        corruption = null;
+        foreach (var (sourceFunc, sourceName) in _recipeSources)
+        {
+            corruption = sourceFunc(uid);
+            if (corruption is null)
+                continue;
+            Log.Debug("Founded corruption recipe {0} for {1} via {2}", corruption.ID, ToPrettyString(uid), sourceName);
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -181,7 +209,7 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     /// </summary>
     private CultYoggCorruptedPrototype? GetRecipeBySourcePrototypeId(EntityUid uid)
     {
-        var prototypeId = MetaData(uid).EntityPrototype!.ID;
+        var prototypeId = MetaData(uid).EntityPrototype?.ID;
         if (prototypeId == null)
             return null;
         return _recipesBySourcePrototypeId.GetValueOrDefault(prototypeId);
@@ -195,6 +223,37 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
         if (!TryComp(uid, out StackComponent? stack))
             return null;
         return _recipesBySourceStackType.GetValueOrDefault(stack.StackTypeId);
+    }
+
+    /// <summary>
+    /// Just use <see cref="TryGetCorruptionRecipe(EntityUid, out CultYoggCorruptedPrototype?)"/>
+    /// </summary>
+    private CultYoggCorruptedPrototype? GetRecipeByParentPrototypeId(EntityUid uid)
+    {
+        var parents = MetaData(uid).EntityPrototype?.Parents;
+        if (parents == null)
+            return null;
+        foreach (var parentId in parents)
+        {
+            if (_recipiesByParentPrototypeId.TryGetValue(parentId, out var recipe))
+                return recipe;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Just use <see cref="TryGetCorruptionRecipe(EntityUid, out CultYoggCorruptedPrototype?)"/>
+    /// </summary>
+    private CultYoggCorruptedPrototype? GetRecipeBySourceTag(EntityUid uid)
+    {
+        if (!TryComp(uid, out TagComponent? tagComponent))
+            return null;
+        foreach (var tag in tagComponent.Tags)
+        {
+            if (_recipiesBySourceTag.TryGetValue(tag, out var recipe))
+                return recipe;
+        }
+        return null;
     }
 
     private CultYoggCorruptedPrototype? GetRecipeById(ProtoId<CultYoggCorruptedPrototype>? id)
@@ -211,12 +270,18 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     {
         _recipesBySourcePrototypeId.Clear();
         _recipesBySourceStackType.Clear();
+        _recipiesByParentPrototypeId.Clear();
+        _recipiesBySourceTag.Clear();
         foreach (var recipe in _prototypeManager.EnumeratePrototypes<CultYoggCorruptedPrototype>())
         {
-            if (recipe.FromEntity.PrototypeId.HasValue)
-                _recipesBySourcePrototypeId.Add(recipe.FromEntity.PrototypeId.Value, recipe);
-            else if (recipe.FromEntity.StackType.HasValue)
-                _recipesBySourceStackType.Add(recipe.FromEntity.StackType.Value, recipe);
+            if (recipe.FromEntity.PrototypeId is { } prototypeId)
+                _recipesBySourcePrototypeId.Add(prototypeId, recipe);
+            else if (recipe.FromEntity.StackType is { } stackType)
+                _recipesBySourceStackType.Add(stackType, recipe);
+            else if (recipe.FromEntity.ParentPrototypeId is { } parentPrototypeId)
+                _recipiesByParentPrototypeId.Add(parentPrototypeId, recipe);
+            else if (recipe.FromEntity.Tag is { } tag)
+                _recipiesBySourceTag.Add(tag, recipe);
             else
                 Log.Warning("CultYoggCorruptedPrototype with id '{0}' has no ways to be used", recipe.ID);
         }
@@ -237,17 +302,18 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
 
         _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(user)} used corrupt on {ToPrettyString(entity)} and made {ToPrettyString(corruptedEntity)}");
 
+        if (isInHand)
+            _hands.TryDrop(user, entity);
         TryDropAllContainedEntities(entity);
 
         EnsureComp<CultYoggCorruptedComponent>(corruptedEntity, out var corrupted);
 
-        corrupted.OriginalPrototypeId = MetaData(entity).EntityPrototype?.ID;
+        corrupted.SoftDeletedOriginalEntity = entity;
         corrupted.Recipe = recipe.ID;
 
         TryTransformStack(recipe, entity, entity, corruptedEntity);
 
-        //Delete previous entity
-        _entityManager.DeleteEntity(entity);
+        _softDeleteSystem.SoftDelete(entity);
 
         if (isInHand)
             _hands.PickupOrDrop(user, corruptedEntity);

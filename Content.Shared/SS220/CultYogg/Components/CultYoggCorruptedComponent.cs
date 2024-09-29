@@ -13,14 +13,21 @@ public sealed partial class CultYoggCorruptedComponent : Component
 {
     /// <summary>
     /// Prototype ID of the original entity, <see langword="null"/> if none.
-    /// Note that this field is required to reverse corruption.
+    /// This field is used to reverse corruption if <see cref="SoftDeletedOriginalEntity"/> is not set.
     /// </summary>
     [DataField]
     public ProtoId<EntityPrototype>? OriginalPrototypeId;
+
     /// <summary>
     /// Prototype ID of the corruption recipe used to currupt entity, <see langword="null"/> if none.
-    /// Note that this field is required to reverse corruption.
+    /// This field is required to reverse corruption.
     /// </summary>
     [DataField]
     public ProtoId<CultYoggCorruptedPrototype>? Recipe;
+
+    /// <summary>
+    /// If corruption happend in runtime, entity got "soft deleted, this is its uid.
+    /// This field is used to reverse corruption, <see cref="OriginalPrototypeId"/> will be used if <see langword="null"/>.
+    /// </summary>
+    public EntityUid? SoftDeletedOriginalEntity;
 }

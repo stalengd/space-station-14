@@ -1,5 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Shared.Stacks;
+using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
@@ -39,6 +40,8 @@ namespace Content.Shared.SS220.CultYogg
     [Serializable, NetSerializable]
     public partial struct CorruptionInitialEntityUnion
     {
+        // The properties here are arranged in descending order of priority, so the first one will be checked first. 
+
         /// <summary>
         /// Defines that source entity should be spawned from specified prototype id 
         /// </summary>
@@ -50,5 +53,17 @@ namespace Content.Shared.SS220.CultYogg
         /// </summary>
         [DataField("stackType")]
         public ProtoId<StackPrototype>? StackType { get; private set; }
+
+        /// <summary>
+        /// Defines that source entity should be spawned from prototype, inheriting the prototype with specified id 
+        /// </summary>
+        [DataField("parentPrototypeId")]
+        public ProtoId<EntityPrototype>? ParentPrototypeId { get; private set; }
+
+        /// <summary>
+        /// Defines that source entity should be tagged with specified tag
+        /// </summary>
+        [DataField("tag")]
+        public ProtoId<TagPrototype>? Tag { get; private set; }
     }
 }

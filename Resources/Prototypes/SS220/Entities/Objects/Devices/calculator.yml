@@ -1,0 +1,26 @@
+# © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+- type: entity
+  name: calculator
+  parent: BaseItem
+  id: DeviceCalculator
+  components:
+  - type: Sprite
+    sprite: SS220/Objects/Devices/calculator.rsi
+    layers:
+    - state: icon
+    - state: display-unlit
+      shader: unshaded
+  - type: Item
+    sprite: SS220/Objects/Devices/calculator.rsi
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/multitool_drop.ogg
+  - type: ActivatableUI
+    key: enum.CalculatorUiKey.Key
+    singleUser: true
+  - type: UserInterface
+    interfaces:
+      enum.CalculatorUiKey.Key:
+        type: CalculatorBoundUserInterface
+        interactionRange: 0.5
+  - type: Calculator

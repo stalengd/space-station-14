@@ -1,15 +1,14 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 using Content.Shared.Buckle.Components;
-using Content.Shared.Humanoid;
+using Content.Shared.Construction.Components;
 using Content.Shared.Popups;
-using Content.Shared.Pulling.Events;
 using Content.Shared.SS220.CultYogg.Components;
 using Robust.Shared.Network;
 
 namespace Content.Shared.SS220.CultYogg;
 
-public abstract class SharedCultYoggAltarSystem : EntitySystem
+public abstract partial class SharedCultYoggAltarSystem : EntitySystem
 {
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -17,29 +16,30 @@ public abstract class SharedCultYoggAltarSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CultYoggAltarComponent, BuckleAttemptEvent>(OnBuckleAttempt);
-        SubscribeLocalEvent<CultYoggSacrificialComponent, BeingPulledAttemptEvent>(OnBeingPulled);
+        SubscribeLocalEvent<CultYoggAltarComponent, StrapAttemptEvent>(OnStrapAttempt);
+        SubscribeLocalEvent<CultYoggAltarComponent, UnstrapAttemptEvent>(OnUnstrapAttempt);
+        SubscribeLocalEvent<CultYoggAltarComponent, UnanchorAttemptEvent>(OnUnanchorAttempt);
     }
 
-    private void OnBeingPulled(Entity<CultYoggSacrificialComponent> ent, ref BeingPulledAttemptEvent args)
+    private void OnUnanchorAttempt(Entity<CultYoggAltarComponent> ent, ref UnanchorAttemptEvent args)
     {
-        if (TryComp<BuckleComponent>(ent, out var buckleComp) && HasComp<CultYoggAltarComponent>(buckleComp.BuckledTo))
+        if (ent.Comp.Used)
             args.Cancel();
     }
 
-    private void OnBuckleAttempt(Entity<CultYoggAltarComponent> ent, ref BuckleAttemptEvent args)
+    private void OnUnstrapAttempt(Entity<CultYoggAltarComponent> ent, ref UnstrapAttemptEvent args)
+    {
+        if (args.Buckle == args.User)
+            args.Cancelled = true;
+    }
+
+    private void OnStrapAttempt(Entity<CultYoggAltarComponent> ent, ref StrapAttemptEvent args)
     {
         if (args.User == null)
             return;
 
         if (ent.Comp.Used)
             return;
-
-        if (!HasComp<HumanoidAppearanceComponent>(args.Buckle))
-        {
-            args.Cancelled = true;
-            return;
-        }
 
         if (!HasComp<CultYoggSacrificialComponent>(args.Buckle))
         {

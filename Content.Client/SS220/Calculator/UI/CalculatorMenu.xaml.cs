@@ -56,9 +56,8 @@ public sealed partial class CalculatorMenu : BaseWindow
     {
         var builder = _numberTextBuffer.BeginFormat();
         WriteNumber(builder, number, fractionLength);
-        NumberDisplayLabel.Text = builder.ToString();
         _numberTextBuffer.EndFormat();
-        //NumberDisplayLabel.TextMemory = _numberTextBuffer;
+        NumberDisplayLabel.TextMemory = _numberTextBuffer;
     }
 
     protected override DragMode GetDragModeFor(Vector2 relativeMousePos)

@@ -59,7 +59,9 @@ public sealed partial class MiGoComponent : Component
     ///Astral variables
     /// <summary>
     [ViewVariables, AutoNetworkedField]
-    public bool PhysicalForm = true;//Is MiGo in phisycal form?
+    public bool isPhysicalForm = true;//Is MiGo in phisycal form?
+
+    public bool AudioPlayed = false; //
 
     [DataField]
     public SoundSpecifier? SoundMaterialize = new SoundPathSpecifier("/Audio/SS220/CultYogg/migo_astral_out.ogg");
@@ -67,16 +69,11 @@ public sealed partial class MiGoComponent : Component
     [DataField]
     public SoundSpecifier? SoundDeMaterialize = new SoundPathSpecifier("/Audio/SS220/CultYogg/migo_astral_in.ogg");
 
-    public TimeSpan CooldownAfterMaterialize = TimeSpan.FromSeconds(3);
+    public TimeSpan CooldownAfterDematerialize = TimeSpan.FromSeconds(3);
 
     /// How long reaper can stay dematerialized, depending on stage
     [ViewVariables, DataField, AutoNetworkedField]
-    public List<TimeSpan> MaterializeDurations = new()
-    {
-        TimeSpan.FromSeconds(15),
-        TimeSpan.FromSeconds(20),
-        TimeSpan.FromSeconds(40)
-    };
+    public TimeSpan MaterializeDuration = TimeSpan.FromSeconds(10);
 
     [ViewVariables]
     public TimeSpan? DeMaterializedStart;

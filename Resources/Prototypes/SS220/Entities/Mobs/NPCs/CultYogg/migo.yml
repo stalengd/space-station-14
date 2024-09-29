@@ -13,12 +13,20 @@
   - type: MovementSpeedModifier
     baseWalkSpeed : 6
     baseSprintSpeed : 6
+  - type: MovementIgnoreGravity
+  - type: NoSlip
   - type: Sprite
     drawdepth: Mobs
     sprite: SS220/Mobs/CultYogg/Mi'Go.rsi
     layers:
       - map: [ "enum.MiGoVisual.Base" ]
         state: alive
+  - type: GenericVisualizer
+    visuals:
+      enum.MiGoVisual.Base:
+        base:
+          True: { state: alive }
+          False: { state: alive }
   - type: Physics
   - type: NpcFactionMember
     factions:
@@ -37,6 +45,8 @@
         layer:
           - FlyingMobLayer
   - type: MobState
+  - type: Visibility
+    layer: 1
   - type: MobThresholds
     thresholds:
       0: Alive

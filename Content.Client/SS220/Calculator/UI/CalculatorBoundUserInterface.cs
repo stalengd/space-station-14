@@ -1,11 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Shared.CCVar;
 using Content.Shared.SS220.Calculator;
 using JetBrains.Annotations;
-using Robust.Client.Audio;
-using Robust.Shared;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Configuration;
 
 namespace Content.Client.SS220.Calculator.UI;
 
@@ -17,9 +12,7 @@ public sealed class CalculatorBoundUserInterface : BoundUserInterface
 
     private readonly ISawmill _sawmill;
     private readonly CalculatorSystem _calculatorSystem;
-    private readonly AudioSystem _audioSystem;
     private readonly Entity<CalculatorComponent> _calculator;
-
 
     [ViewVariables]
     private CalculatorMenu? _menu;
@@ -28,7 +21,6 @@ public sealed class CalculatorBoundUserInterface : BoundUserInterface
     {
         _sawmill = _logManager.GetSawmill(nameof(CalculatorBoundUserInterface));
         _calculatorSystem = _entityManager.System<CalculatorSystem>();
-        _audioSystem = _entityManager.System<AudioSystem>();
         if (!_entityManager.TryGetComponent<CalculatorComponent>(owner, out var calculatorComponent))
         {
             _sawmill.Error("Can not be initialized, owner should have {0}", nameof(CalculatorComponent));

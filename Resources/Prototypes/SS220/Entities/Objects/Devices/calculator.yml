@@ -24,3 +24,17 @@
         type: CalculatorBoundUserInterface
         interactionRange: 0.5
   - type: Calculator
+    buttonSound: 
+      collection: CalculatorButtonPush
+      params:
+        volume: -4
+        maxDistance: 5
+        variation: 0.01
+
+- type: soundCollection
+  id: CalculatorButtonPush
+  files:
+    - /Audio/SS220/Items/Devices/Calculator/Calculator_Click_0.ogg
+    - /Audio/SS220/Items/Devices/Calculator/Calculator_Click_1.ogg
+    - /Audio/SS220/Items/Devices/Calculator/Calculator_Click_2.ogg
+    - /Audio/SS220/Items/Devices/Calculator/Calculator_Click_3.ogg

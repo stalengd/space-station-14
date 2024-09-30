@@ -1,4 +1,6 @@
 // EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Components;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -7,15 +9,24 @@ namespace Content.Shared.SS220.Calculator;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CalculatorComponent : Component
 {
-    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
-    public CalculatorState State;
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int DigitsLimit = 8;
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public SoundSpecifier? ButtonSound;
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public TimeSpan MinIntervalToPopup = TimeSpan.FromSeconds(10f);
+
+    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    public CalculatorState State;
 
     /// <summary>
     /// Server only
     /// </summary>
     public EntityUid? LastUser;
+    /// <summary>
+    /// Server only
+    /// </summary>
+    public TimeSpan? LastPopupTimestamp;
 }
 
 [Serializable, NetSerializable]

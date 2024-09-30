@@ -89,5 +89,6 @@ ghost-role-information-pet-spacecat-description = { ent-MobSpaceCatPet.desc }
 ent-MobENGhostRole = { ent-MobEN }
     .desc = { ent-MobEN.desc }
 ent-SpawnMobENGhostRole = Спавнер { ent-MobEN }
-ghost-role-information-en-name = Борги Е-Н
-ghost-role-information-en-description = Самый хороший мальчик робототехники.
+
+ghost-role-information-taxibot-name = { ent-MobTaxiBot }
+ghost-role-information-taxibot-description = { ent-MobTaxiBot.desc }

@@ -68,14 +68,12 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
     #region Astral
     private void MiGoAstral(Entity<MiGoComponent> uid, ref MiGoAstralEvent args)
     {
-        if (!uid.Comp.isPhysicalForm)
+        if (!uid.Comp.IsPhysicalForm)
         {
             var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(1.25), new AfterMaterialize(), uid)
             {
                 Broadcast = false,
                 BreakOnDamage = false,
-                //BreakOnTargetMove = false,
-                //BreakOnUserMove = false,
                 NeedHand = false,
                 BlockDuplicate = true,
                 CancelDuplicate = false
@@ -95,8 +93,6 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             {
                 Broadcast = false,
                 BreakOnDamage = false,
-                //BreakOnTargetMove = false,
-                //BreakOnUserMove = false,
                 NeedHand = false,
                 BlockDuplicate = true,
                 CancelDuplicate = false
@@ -142,7 +138,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
 
     public void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial)
     {
-        comp.isPhysicalForm = isMaterial;
+        comp.IsPhysicalForm = isMaterial;
 
         if (TryComp<FixturesComponent>(uid, out var fixturesComp))
         {
@@ -191,8 +187,6 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
 
         _visibility.RefreshVisibility(uid, vis);
 
-
-
         UpdateMovementSpeed(uid, comp);
 
         Dirty(uid, comp);
@@ -203,7 +197,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         if (!TryComp<MovementSpeedModifierComponent>(uid, out var modifComp))
             return;
 
-        var speed = comp.isPhysicalForm ? comp.MaterialMovementSpeed : comp.UnMaterialMovementSpeed;
+        var speed = comp.IsPhysicalForm ? comp.MaterialMovementSpeed : comp.UnMaterialMovementSpeed;
         _speedModifier.ChangeBaseSpeed(uid, speed, speed, modifComp.Acceleration, modifComp);
     }
     // Update loop
@@ -220,14 +214,13 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             if (comp.DeMaterializedStart == null)
                 continue;
 
-            if (_timing.CurTime <= comp.DeMaterializedStart.Value + comp.MaterializeDuration)//ToDo set by stages
+            if (_timing.CurTime <= comp.DeMaterializedStart.Value + comp.MaterializeDuration)
                 continue;
 
             ChangeForm(uid, comp, true);
             if (!comp.AudioPlayed)
             {
                 _audio.PlayEntity(comp.SoundMaterialize, uid, uid);
-                //_audio.PlayPredicted(comp.SoundMaterialize, uid, uid);
                 comp.AudioPlayed = true;
             }
             _actions.StartUseDelay(comp.MiGoAstralActionEntity);

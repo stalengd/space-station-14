@@ -14,6 +14,8 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Timing;
 using Robust.Shared.Spawners;
 using Robust.Shared.Player;
+using Robust.Shared.Containers;
+using Content.Shared.Hands.Components;
 
 namespace Content.Server.SS220.Bible;
 
@@ -29,6 +31,7 @@ public sealed class ExorcismPerformerSystem : SharedExorcismPerformerSystem
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly AppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {
@@ -73,6 +76,9 @@ public sealed class ExorcismPerformerSystem : SharedExorcismPerformerSystem
         RaiseLocalEvent(ref args);
         foreach (var other in entitiesInRange)
         {
+            if (_container.TryGetOuterContainer(other, Transform(other), out var container))
+                continue;
+
             RaiseLocalEvent(other, ref args);
         }
         PlayPerformanceEffects((entity, entity.Comp));

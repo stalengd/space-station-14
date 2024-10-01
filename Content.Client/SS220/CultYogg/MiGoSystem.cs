@@ -37,8 +37,8 @@ public sealed class MiHoSystem : SharedMiGoSystem
 
         if (sprite.LayerMapTryGet(MiGoVisual.Base, out var layerIndex))
         {
-            sprite.LayerSetVisible(layerIndex, (canSeeGhosted || uid.Comp.isPhysicalForm));
-            sprite.LayerSetColor(layerIndex, (canSeeGhosted && !uid.Comp.isPhysicalForm) ? MiGoAstralColor : Color.White);
+            sprite.LayerSetVisible(layerIndex, (canSeeGhosted || uid.Comp.IsPhysicalForm));
+            sprite.LayerSetColor(layerIndex, (canSeeGhosted && !uid.Comp.IsPhysicalForm) ? MiGoAstralColor : Color.White);
         }
     }
 }

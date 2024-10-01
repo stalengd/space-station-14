@@ -59,7 +59,7 @@ public sealed partial class MiGoComponent : Component
     ///Astral variables
     /// <summary>
     [ViewVariables, AutoNetworkedField]
-    public bool isPhysicalForm = true;//Is MiGo in phisycal form?
+    public bool IsPhysicalForm = true;//Is MiGo in phisycal form?
 
     public bool AudioPlayed = false; //
 

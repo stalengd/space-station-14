@@ -19,6 +19,7 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
         SubscribeLocalEvent<IrremovableComponent, GotEquippedEvent>(GotEquipped);
         SubscribeLocalEvent<IrremovableComponent, GotEquippedHandEvent>(GotPickuped);
         SubscribeLocalEvent<MobStateChangedEvent>(OnDeath);
+        SubscribeLocalEvent<DropAllIrremovableEvent>(OnRemoveAll);
     }
 
     private void OnDeath(MobStateChangedEvent ev)
@@ -26,6 +27,29 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
         if (ev.NewMobState != MobState.Dead)
             return;
 
+        if (!_inventory.TryGetSlots(ev.Target, out var slots))
+            return;
+        // trying to unequip all item's with component
+        foreach (var slot in slots)
+        {
+            if (!_inventory.TryGetSlotEntity(ev.Target, slot.Name, out var entity))
+                continue;
+
+            if (!TryComp<IrremovableComponent>(entity, out var irremovableComp))
+                continue;
+
+            if (irremovableComp.ShouldDropOnDeath)
+            {
+                if (irremovableComp.InHandItem)
+                    _hand.TryDrop(ev.Target); // trying to drop inhand item (that's sucks i know)
+
+                _inventory.TryUnequip(ev.Target, slot.Name, true, true);
+            }
+        }
+    }
+
+    private void OnRemoveAll(ref DropAllIrremovableEvent ev)
+    {
         if (!_inventory.TryGetSlots(ev.Target, out var slots))
             return;
         // trying to unequip all item's with component
@@ -63,5 +87,19 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
 
         EnsureComp<UnremoveableComponent>(entity, out var comp);
         comp.DeleteOnDrop = false;
+    }
+}
+
+/// <summary>
+///     Raised when we need to remove all irremovable objects
+/// </summary>
+[ByRefEvent, Serializable]
+public sealed class DropAllIrremovableEvent : EntityEventArgs
+{
+    public readonly EntityUid Target;
+
+    public DropAllIrremovableEvent(EntityUid target)
+    {
+        Target = target;
     }
 }

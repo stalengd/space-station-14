@@ -31,6 +31,7 @@ using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
 using static Content.Shared.SS220.CultYogg.EntitySystems.SharedCultYoggSystem;
 using Content.Shared.StatusEffect;
 using Microsoft.EntityFrameworkCore.Design.Internal;
+using Content.Shared.SS220.Irremovable;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -329,6 +330,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     public void DeMakeCultist(EntityUid uid, CultYoggRuleComponent component)
     {
+        var ev = new DropAllIrremovableEvent(uid);
+        RaiseLocalEvent(uid, ref ev, true);
+
         // Change the faction
         _npcFaction.RemoveFaction(uid, component.CultYoggFaction, false);
         _npcFaction.AddFaction(uid, component.NanoTrasenFaction);

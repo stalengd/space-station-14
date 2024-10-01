@@ -29,3 +29,5 @@
         Poison: 10
         Blunt: 10
         Structural: 15
+  - type: KnockingWeaponOutOfHands
+    chance: 30

@@ -58,7 +58,7 @@ public sealed class CalculatorSystem : SharedCalculatorSystem
             currentTime - lastPopupTimestamp > calculator.Comp.MinIntervalToPopup)
         {
             var message = Loc.GetString("calculator-popup-buttons-press");
-            _popupSystem.PopupEntity(message, calculator, Shared.Popups.PopupType.Small);
+            _popupSystem.PopupEntity(message, args.Actor, Shared.Popups.PopupType.Small);
             calculator.Comp.LastPopupTimestamp = currentTime;
         }
     }

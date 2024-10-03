@@ -32,6 +32,7 @@ using static Content.Shared.SS220.CultYogg.EntitySystems.SharedCultYoggSystem;
 using Content.Shared.StatusEffect;
 using Microsoft.EntityFrameworkCore.Design.Internal;
 using Content.Shared.SS220.Irremovable;
+using Content.Server.SS220.Roles;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -51,6 +52,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
+    [Dependency] private readonly SharedRoleSystem _role = default!;
 
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
 
@@ -330,6 +332,13 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     public void DeMakeCultist(EntityUid uid, CultYoggRuleComponent component)
     {
+
+        if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
+            return;
+
+        _role.MindRemoveRole<CultYoggRoleComponent>(mindId);
+
+        //Remove all corrupted items
         var ev = new DropAllIrremovableEvent(uid);
         RaiseLocalEvent(uid, ref ev, true);
 

@@ -23,6 +23,7 @@
     - id: Telescopichka # SS220 Telescopic Baton
     - id: ClothingWristWatchGold # SS220 Wrist Watch
     - id: GlassCaseEngravedKnuckledusterFilled # SS220 New Qm highrisk
+    - id: AstroNavCartridge
     - id: DeviceCalculator # SS220 Calculator
 
 - type: entity
@@ -174,6 +175,7 @@
     - id: RubberStampCE
     - id: Telescopichka
     - id: ClothingWristWatchGold # SS220 Wrist Watch
+    - id: CigPackENG #SS220 Cigarettes
     - id: DeviceCalculator # SS220 Calculator
 
 # Hardsuit table, used for suit storage as well
@@ -234,6 +236,7 @@
     - id: RubberStampCMO
     - id: Telescopichka # SS220 Telescopic Baton
     - id: ClothingWristWatchGold # SS220 Wrist Watch
+    - id: CigPackMED #SS220 Cigarettes
 
 # Hardsuit table, used for suit storage as well
 - type: entityTable
@@ -286,6 +289,7 @@
     - id: RubberStampRd
     - id: ClothingWristWatchGold # SS220 Wrist Watch
     - id: Telescopichka # SS220 Telescopic Baton
+    - id: CigPackRnD #SS220 Cigarettes
     - id: DeviceCalculator # SS220 Calculator
 
 # Hardsuit table, used for suit storage as well
@@ -348,6 +352,7 @@
     - id: ClothingWristWatchGold # SS220 Wrist Watch
     - id: WeaponMultiPhaseEnergyGun #SS220 MultiPhaze Energy Gun
     - id: BodySecurityCamera #SS220-Bodycam
+    - id: CigPackSEC #SS220 Cigarettes
     - id: WantedListCartridge
 
 # Hardsuit table, used for suit storage as well

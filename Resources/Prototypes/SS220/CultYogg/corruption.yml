@@ -84,6 +84,64 @@
   result: CultYoggCocoonClaw
   corruptionReverseEffect: ExorcismUncorruptEffect
 
+#SedativeSting beginning
+- type: corrupted
+  id: PenCultYoggCocoonSedativesting
+  from:
+    prototypeId: Pen
+  result: CultYoggCocoonSedativesting
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: HypopenCultYoggCocoonSedativesting
+  from:
+    prototypeId: Hypopen
+  result: CultYoggCocoonSedativesting
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: SyringeCultYoggCocoonSedativesting
+  from:
+    prototypeId: Syringe
+  result: CultYoggCocoonSedativesting
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: ScrewdriverCultYoggCocoonSedativesting
+  from:
+    prototypeId: Screwdriver
+  result: CultYoggCocoonSedativesting
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: ForkPlasticCultYoggCocoonSedativesting
+  from:
+    prototypeId: ForkPlastic
+  result: CultYoggCocoonSedativesting
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: KnifePlasticCultYoggCocoonSedativesting
+  from:
+    prototypeId: KnifePlastic
+  result: CultYoggCocoonSedativesting
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: ForkCultYoggCocoonSedativesting
+  from:
+    prototypeId: Fork
+  result: CultYoggCocoonSedativesting
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: KitchenKnifeCultYoggCocoonSedativesting
+  from:
+    prototypeId: KitchenKnife
+  result: CultYoggCocoonSedativesting
+  corruptionReverseEffect: ExorcismUncorruptEffect
+#SedativeSting end
+
 # Hardsuit beginning
 - type: corrupted
   id: HardsuitCultYoggEngineering

@@ -1,5 +1,5 @@
 - type: entity
-  name: Алтарь культа Йогг
+  name: Алтарь жертвоприношений
   id: CultYoggAltar
   parent: BaseStructure
   description: Загадочный алтарь культа

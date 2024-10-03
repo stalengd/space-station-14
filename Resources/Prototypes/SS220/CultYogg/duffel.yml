@@ -7,7 +7,7 @@
   description: description
   components:
   - type: Sprite
-    sprite: Clothing/Back/Duffels/duffel.rsi
+    sprite: SS220/Clothing/Back/Backpacks/cultYogg_backpack.rsi
   - type: Storage
     maxItemSize: Huge
     grid:

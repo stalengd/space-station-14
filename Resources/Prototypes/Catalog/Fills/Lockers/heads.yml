@@ -23,6 +23,7 @@
     - id: Telescopichka # SS220 Telescopic Baton
     - id: ClothingWristWatchGold # SS220 Wrist Watch
     - id: GlassCaseEngravedKnuckledusterFilled # SS220 New Qm highrisk
+    - id: DeviceCalculator # SS220 Calculator
 
 - type: entity
   id: LockerQuarterMasterFilled
@@ -173,6 +174,7 @@
     - id: RubberStampCE
     - id: Telescopichka
     - id: ClothingWristWatchGold # SS220 Wrist Watch
+    - id: DeviceCalculator # SS220 Calculator
 
 # Hardsuit table, used for suit storage as well
 - type: entityTable
@@ -284,6 +286,7 @@
     - id: RubberStampRd
     - id: ClothingWristWatchGold # SS220 Wrist Watch
     - id: Telescopichka # SS220 Telescopic Baton
+    - id: DeviceCalculator # SS220 Calculator
 
 # Hardsuit table, used for suit storage as well
 - type: entityTable

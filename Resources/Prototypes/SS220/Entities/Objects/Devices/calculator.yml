@@ -12,6 +12,8 @@
       shader: unshaded
   - type: Item
     sprite: SS220/Objects/Devices/calculator.rsi
+  - type: StaticPrice
+    price: 25
   - type: EmitSoundOnLand
     sound:
       path: /Audio/Items/multitool_drop.ogg

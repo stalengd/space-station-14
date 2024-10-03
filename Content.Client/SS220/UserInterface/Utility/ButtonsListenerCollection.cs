@@ -83,7 +83,7 @@ public sealed class ButtonsListenerCollection
         _buttons.Clear();
     }
 
-    public void PressButton(BaseButton button, TimeSpan pressedDuration)
+    public void PressButton(BaseButton button, TimeSpan pressedDuration, BaseButton.ButtonEventArgs? args = null)
     {
         button.SetClickPressed(true);
         if (_fakePressedButton is { })
@@ -92,7 +92,7 @@ public sealed class ButtonsListenerCollection
         }
         _stopPressingTimer = pressedDuration;
         _fakePressedButton = button;
-        NotifyButtonListeners(button, null);
+        NotifyButtonListeners(button, args);
     }
 
     public void NotifyButtonListeners(BaseButton button, BaseButton.ButtonEventArgs? args)

@@ -1,12 +1,47 @@
 // EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using System.Numerics;
+using Content.Client.SS220.Animations;
 using Content.Client.SS220.StyleTools;
 using Content.Client.SS220.UserInterface;
+using Content.Shared.SS220.Maths;
+using Robust.Client.Animations;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.SS220.Calculator.UI;
 
 public sealed class CalculatorStyle : QuickStyle
 {
+    public Animation OpenAnimation { get; } = new AnimationBuilder(0.4f)
+        .WithControlPropertyTrack<Vector2>(nameof(CalculatorMenu.BodyOffset), x => x
+            .WithEasing(Easing.OutQuint)
+            .From(new Vector2(0, -100))
+            .To(Vector2.Zero))
+        .WithControlPropertyTrack<Color>(nameof(Control.Modulate), x => x
+            .WithEasing(Easing.OutQuint)
+            .From(Color.White.WithAlpha(0))
+            .To(Color.White))
+        .Build();
+
+    public Animation CloseAnimation { get; } = new AnimationBuilder(0.2f)
+        .WithControlPropertyTrack<Vector2>(nameof(CalculatorMenu.BodyOffset), x => x
+            .WithEasing(Easing.OutCubic)
+            .From(Vector2.Zero)
+            .To(new Vector2(0, -100)))
+        .WithControlPropertyTrack<Color>(nameof(Control.Modulate), x => x
+            .WithEasing(Easing.OutExpo)
+            .From(Color.White)
+            .To(Color.White.WithAlpha(0)))
+        .Build();
+
+    public Animation PressAnimation(Vector2 to) => new AnimationBuilder(0.2f)
+        .WithControlPropertyTrack<Vector2>(nameof(CalculatorMenu.BodyOffset), x => x
+            .WithEasing(Easing.OutCubic)
+            .From(Vector2.Zero)
+            .AppendKeyFrame(to, AnimationTiming.Relative(0.3f))
+            .To(Vector2.Zero))
+        .Build();
+
     protected override void CreateRules()
     {
         Builder

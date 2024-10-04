@@ -7,8 +7,8 @@
   - type: GameRule
     minPlayers: 1 #ToDo calculate around min players
     delay: #ToDo tweak numbers
-      min: 2
-      max: 30
+      min: 60
+      max: 100
   - type: CultYoggRule
   - type: AntagSelection
     definitions:

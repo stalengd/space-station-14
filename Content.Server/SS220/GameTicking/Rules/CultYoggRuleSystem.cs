@@ -134,7 +134,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     private void SetSacraficials(CultYoggRuleComponent component)
     {
-        var allHumans = GetAliveHumans();
+        var allHumans = GetAliveNoneCultHumans();
 
         if (allHumans is null)
             return;
@@ -196,7 +196,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         component.SacraficialsList.Add(uid.Value);
     }
 
-    private List<EntityUid> GetAliveHumans()//maybe add here sacraficials and cultists filter
+    private List<EntityUid> GetAliveNoneCultHumans()//maybe add here sacraficials and cultists filter
     {
         var mindQuery = EntityQuery<MindComponent>();
 
@@ -207,6 +207,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         {
             // the player needs to have a mind and not be the excluded one
             if (mc.Mind == null)
+                continue;
+
+            if (HasComp<CultYoggComponent>(uid))
                 continue;
 
             // the player has to be alive
@@ -253,7 +256,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     private void SetNewSacraficial(CultYoggRuleComponent comp, int tier)
     {
-        var allHumans = GetAliveHumans();
+        var allHumans = GetAliveNoneCultHumans();
 
         if (allHumans is null)
             return;

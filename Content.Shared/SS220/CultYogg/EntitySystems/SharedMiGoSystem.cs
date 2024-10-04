@@ -73,12 +73,22 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (args.Handled)
             return;
 
+        /*
         if (!HasComp<CultYoggComponent>(args.Target))//ToDo should discuss
         {
             if (_net.IsServer)
                 _popup.PopupEntity(Loc.GetString("cult-yogg-heal-only-cultists"), uid);
             return;
         }
+        */
+        /*
+        //check if effect is already applyed 
+        if (_statusEffectsSystem.HasStatusEffect(args.Target, uid.Comp.RequiedEffect))
+        {
+            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-should-eat-shroom"), args.Target, uid);
+            return;
+        }
+        */
 
         _heal.TryApplyMiGoHeal(args.Target, uid.Comp.HealingEffectTime);
 

@@ -13,7 +13,6 @@
   - type: MovementSpeedModifier
     baseWalkSpeed : 6
     baseSprintSpeed : 6
-  - type: MovementIgnoreGravity
   - type: NoSlip
   - type: Sprite
     drawdepth: Mobs

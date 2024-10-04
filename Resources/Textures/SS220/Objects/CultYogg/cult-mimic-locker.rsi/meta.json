@@ -13,20 +13,24 @@
 	{
       "name": "mimic-locker-open",
 	  "delays": [
-      [
+        [
         0.25,
         0.25,
         0.25,
         0.25
+        ]
+      ]
     },
 	{
       "name": "mimic-locker-closed",
 	  "delays": [
-      [
+        [
         0.25,
         0.25,
         0.25,
         0.25
+        ]
+      ]
     }
   ]
 }

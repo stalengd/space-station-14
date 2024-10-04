@@ -2,7 +2,7 @@
   name: cult handcuffs
   description: Used to detain criminals and other assholes.
   id: CultHandcuffs
-  parent: [BaseItem, BaseRestrictedContraband]
+  parent: BaseItem
   components:
   - type: Item
     size: Small

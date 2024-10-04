@@ -78,10 +78,24 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: ClawCultYoggJawsOfLife
+  id: CrowbarCultYoggCocoonBeach
   from:
-    prototypeId: JawsOfLife
-  result: CultYoggCocoonClaw
+    prototypeId: Crowbar
+  result: CultYoggCocoonBeach
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BaseBallBatCultYoggCocoonBeach
+  from:
+    prototypeId: BaseBallBat
+  result: CultYoggCocoonBeach
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: StunbatonCultYoggCocoonBeach
+  from:
+    prototypeId: Stunbaton
+  result: CultYoggCocoonBeach
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 #SedativeSting beginning

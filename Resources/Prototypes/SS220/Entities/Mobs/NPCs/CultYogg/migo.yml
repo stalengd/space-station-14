@@ -10,6 +10,7 @@
   - type: Telepathy
     canSend: true
     telepathyChannelPrototype: TelepathyChannelYoggSothothCult
+  - type: Insulated
   - type: MovementSpeedModifier
     baseWalkSpeed : 6
     baseSprintSpeed : 6

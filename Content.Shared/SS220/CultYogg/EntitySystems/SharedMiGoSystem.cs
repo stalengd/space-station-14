@@ -206,3 +206,10 @@ public sealed partial class AfterDeMaterialize : DoAfterEvent
 [ByRefEvent, Serializable]
 public record struct CultYoggEnslavedEvent(EntityUid? Target);
 
+[NetSerializable, Serializable]
+public enum MiGoTimerVisualLayers : byte
+{
+    Digit1,
+    Digit2,
+    Digit3
+}

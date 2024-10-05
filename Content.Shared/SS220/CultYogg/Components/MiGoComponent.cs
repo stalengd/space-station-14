@@ -4,6 +4,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Robust.Shared.Audio;
+using Content.Shared.Alert;
 
 namespace Content.Shared.SS220.CultYogg.Components;
 
@@ -11,6 +12,7 @@ namespace Content.Shared.SS220.CultYogg.Components;
 [Access(typeof(SharedMiGoSystem), Friend = AccessPermissions.ReadWriteExecute, Other = AccessPermissions.Read)]
 public sealed partial class MiGoComponent : Component
 {
+    #region Abilities
     /// ABILITIES ///
     [DataField]
     public EntProtoId MiGoEnslavementAction = "ActionMiGoEnslavement";
@@ -41,6 +43,7 @@ public sealed partial class MiGoComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityUid? MiGoSacrificeActionEntity;
+    #endregion
 
     /// <summary>
     ///Enlsavement variables
@@ -56,12 +59,19 @@ public sealed partial class MiGoComponent : Component
     public float HealingEffectTime = 15;//How long heal effect will occure
 
     /// <summary>
+    ///Erect variables
+    /// <summary>
+    [ViewVariables, DataField]
+    public float ErectDoAfterSeconds = 3f;
+
+    #region Astral
+    /// <summary>
     ///Astral variables
     /// <summary>
     [ViewVariables, AutoNetworkedField]
     public bool IsPhysicalForm = true;//Is MiGo in phisycal form?
 
-    public bool AudioPlayed = false; //
+    public bool AudioPlayed = false; //it should be played once in timer, but this shit being called several times somehow
 
     [DataField]
     public SoundSpecifier? SoundMaterialize = new SoundPathSpecifier("/Audio/SS220/CultYogg/migo_astral_out.ogg");
@@ -76,7 +86,7 @@ public sealed partial class MiGoComponent : Component
     public TimeSpan MaterializeDuration = TimeSpan.FromSeconds(10);
 
     [ViewVariables]
-    public TimeSpan? DeMaterializedStart;
+    public TimeSpan? DeMaterializedStart;//does dematerialization was started
 
     [ViewVariables, DataField, AutoNetworkedField]
     public float MaterialMovementSpeed = 6f; //ToDo check this thing
@@ -84,14 +94,13 @@ public sealed partial class MiGoComponent : Component
     [ViewVariables, DataField, AutoNetworkedField]
     public float UnMaterialMovementSpeed = 18f;//ToDo check this thing
 
-    /// <summary>
-    ///Erect variables
-    /// <summary>
-    [ViewVariables, DataField]
-    public float ErectDoAfterSeconds = 3f;
+    [DataField]
+    public ProtoId<AlertPrototype> AstralAlert = "MiGoAstral";
+    #endregion
 
+    #region Replacement
     /// <summary>
-    ///Replacement variables
+    ///Replacement required cause MiGo is key character among
     /// <summary>
 
     //Marking if entity can be gibbed and replaced
@@ -111,6 +120,7 @@ public sealed partial class MiGoComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan? ReplacementEventTime;
+    #endregion
 }
 
 //Visual

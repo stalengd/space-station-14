@@ -29,6 +29,7 @@ using Content.Shared.Movement.Systems;
 using Robust.Shared.Timing;
 using Content.Shared.Tag;
 using System.ComponentModel;
+using Content.Shared.Alert;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -50,6 +51,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private readonly AlertsSystem _alerts = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -159,6 +161,8 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             _tag.AddTag(uid, "DoorBumpOpener");
             comp.DeMaterializedStart = null;
 
+            _alerts.ClearAlert(uid, comp.AstralAlert);
+
             EnsureComp<MovementIgnoreGravityComponent>(uid);
 
             _visibility.AddLayer((uid, vis), (int)VisibilityFlags.Normal, false);
@@ -177,12 +181,14 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             comp.AudioPlayed = false;
             _tag.RemoveTag(uid, "DoorBumpOpener");
 
+            _alerts.ShowAlert(uid, comp.AstralAlert);
+
             RemComp<MovementIgnoreGravityComponent>(uid);
 
             if (HasComp<NpcFactionMemberComponent>(uid))
             {
                 _npcFaction.ClearFactions(uid);
-                _npcFaction.AddFaction(uid, "npcFaction");
+                _npcFaction.AddFaction(uid, "SimpleNeutral");
             }
             _visibility.AddLayer((uid, vis), (int)VisibilityFlags.Ghost, false);
             _visibility.RemoveLayer((uid, vis), (int)VisibilityFlags.Normal, false);
@@ -229,6 +235,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
                 comp.AudioPlayed = true;
             }
             _actions.StartUseDelay(comp.MiGoAstralActionEntity);
+            //_alerts.ShowAlert(uid, component.EssenceAlert);
         }
     }
     #endregion

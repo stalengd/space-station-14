@@ -159,6 +159,8 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             _tag.AddTag(uid, "DoorBumpOpener");
             comp.DeMaterializedStart = null;
 
+            EnsureComp<MovementIgnoreGravityComponent>(uid);
+
             _visibility.AddLayer((uid, vis), (int)VisibilityFlags.Normal, false);
             _visibility.RemoveLayer((uid, vis), (int)VisibilityFlags.Ghost, false);
 
@@ -167,17 +169,20 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             if (HasComp<NpcFactionMemberComponent>(uid))
             {
                 _npcFaction.ClearFactions(uid);
-                _npcFaction.AddFaction(uid, "SimpleHostile");
+                _npcFaction.AddFaction(uid, "CultYogg");
             }
         }
         else
         {
             comp.AudioPlayed = false;
             _tag.RemoveTag(uid, "DoorBumpOpener");
+
+            RemComp<MovementIgnoreGravityComponent>(uid);
+
             if (HasComp<NpcFactionMemberComponent>(uid))
             {
                 _npcFaction.ClearFactions(uid);
-                _npcFaction.AddFaction(uid, "CultYogg");
+                _npcFaction.AddFaction(uid, "npcFaction");
             }
             _visibility.AddLayer((uid, vis), (int)VisibilityFlags.Ghost, false);
             _visibility.RemoveLayer((uid, vis), (int)VisibilityFlags.Normal, false);

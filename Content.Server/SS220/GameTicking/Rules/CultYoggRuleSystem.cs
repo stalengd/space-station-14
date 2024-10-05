@@ -70,8 +70,6 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         SubscribeLocalEvent<CultYoggAnouncementEvent>(SendCultAnounce);
     }
 
-
-
     #region Sacreficials picking
     /// <summary>
     /// Used to generate sacraficials at the start of the gamerule
@@ -305,8 +303,11 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _npcFaction.RemoveFaction(uid, component.NanoTrasenFaction, false);
         _npcFaction.AddFaction(uid, component.CultYoggFaction);
 
-        var сultistComp = EnsureComp<CultYoggComponent>(uid);
-        //ToDo CultYoggComponent -- set current amount of sacrafaces for visualisation of stage
+        EnsureComp<CultYoggComponent>(uid);
+
+        //update stage cause it might be midstage
+        var ev = new ChangeCultYoggStageEvent(component.AmountOfSacrifices);
+        RaiseLocalEvent(uid, ev, true);
 
         //Add telepathy
         var telepathy = EnsureComp<TelepathyComponent>(uid);

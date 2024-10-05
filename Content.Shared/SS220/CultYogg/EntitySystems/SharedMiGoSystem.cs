@@ -2,9 +2,6 @@
 using Content.Shared.Actions;
 using Content.Shared.Zombies;
 using Content.Shared.Mind;
-using Content.Shared.Revolutionary.Components;
-using Content.Shared.Mindshield.Components;
-using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.DoAfter;
@@ -12,7 +9,6 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Physics.Systems;
 using Content.Shared.Tag;
-
 using Robust.Shared.Serialization;
 using Content.Shared.StatusEffect;
 using Robust.Shared.Timing;
@@ -21,7 +17,6 @@ using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.Buckle.Components;
 using System.Linq;
 using Robust.Shared.Audio.Systems;
-//using Content.Server.Bible.Components;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 

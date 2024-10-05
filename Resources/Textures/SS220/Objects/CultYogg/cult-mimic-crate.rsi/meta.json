@@ -8,7 +8,7 @@
   },
   "states": [
 	{
-      "name": "mimiс-crate-closed",
+      "name": "mimic-crate-closed",
 	  "delays": [
         [
         0.25,

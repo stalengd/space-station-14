@@ -36,7 +36,9 @@ namespace Content.Shared.SS220.CultYogg
         public ProtoId<EntityPrototype>? CorruptionReverseEffect { get; private set; }
 
         /// <summary>
-        /// Should we empty the storage when corrupt
+        /// Should we empty the storage when it corrpted.
+        /// Used to prevent wierd bugs like hardsuits helmet or ammo in guns.
+        /// Set "true" if it has a pocket or smt that can make valuable items unreachable
         /// </summary>
         [DataField("emptyStorage", required: false)]
         public bool EmptyStorage { get; private set; }

@@ -83,9 +83,12 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
     public EntityUid? RevertCorruption(Entity<CultYoggCorruptedComponent> corruptedEntity, out CultYoggCorruptedPrototype? recipe)
     {
         recipe = GetRecipeById(corruptedEntity.Comp.Recipe);
+
         if (recipe is null)
             return null;
+
         _containerSystem.TryRemoveFromContainer(corruptedEntity, force: true);
+
         var coords = Transform(corruptedEntity).Coordinates;
         EntityUid normalEntity;
         if (corruptedEntity.Comp.SoftDeletedOriginalEntity is { } originalEntity)
@@ -304,7 +307,9 @@ public sealed class SharedCultYoggCorruptedSystem : EntitySystem
 
         if (isInHand)
             _hands.TryDrop(user, entity);
-        TryDropAllContainedEntities(entity);
+
+        if (recipe.EmptyStorage)
+            TryDropAllContainedEntities(entity);
 
         EnsureComp<CultYoggCorruptedComponent>(corruptedEntity, out var corrupted);
 

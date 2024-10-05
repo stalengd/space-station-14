@@ -186,6 +186,7 @@
     prototypeId: ClothingBackpack
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggEngineering
@@ -193,6 +194,7 @@
     prototypeId: ClothingBackpackEngineering
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggChemistry
@@ -200,6 +202,7 @@
     prototypeId: ClothingBackpackChemistry
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggMedical
@@ -207,6 +210,7 @@
     prototypeId: ClothingBackpackMedical
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggVirology
@@ -214,6 +218,7 @@
     prototypeId: ClothingBackpackVirology
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggGenetics
@@ -221,6 +226,7 @@
     prototypeId: ClothingBackpackGenetics
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggScience
@@ -228,6 +234,7 @@
     prototypeId: ClothingBackpackScience
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggBrigmedic
@@ -235,6 +242,7 @@
     prototypeId: ClothingBackpackBrigmedic
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggWhiteCaptain
@@ -242,6 +250,7 @@
     prototypeId: ClothingBackpackWhiteCaptain
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggCaptain
@@ -249,6 +258,7 @@
     prototypeId: ClothingBackpackCaptain
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggCargo
@@ -256,6 +266,7 @@
     prototypeId: ClothingBackpackCargo
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggSalvage
@@ -263,6 +274,7 @@
     prototypeId: ClothingBackpackSalvage
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggAtmospherics
@@ -270,6 +282,7 @@
     prototypeId: ClothingBackpackAtmospherics
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggCE
@@ -277,6 +290,7 @@
     prototypeId: ClothingBackpackCE
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggSecurity
@@ -284,6 +298,7 @@
     prototypeId: ClothingBackpackSecurity
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggIan
@@ -291,6 +306,7 @@
     prototypeId: ClothingBackpackIan
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggMime
@@ -298,6 +314,7 @@
     prototypeId: ClothingBackpackMime
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggClown
@@ -305,6 +322,7 @@
     prototypeId: ClothingBackpackClown
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackCultYoggHydroponics
@@ -312,6 +330,7 @@
     prototypeId: ClothingBackpackHydroponics
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 # Backpack end
 
 # Satchel beginning
@@ -321,6 +340,7 @@
     prototypeId: ClothingBackpackSatchelChemistry
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggMedical
@@ -328,6 +348,7 @@
     prototypeId: ClothingBackpackSatchelMedical
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggGenetics
@@ -335,6 +356,7 @@
     prototypeId: ClothingBackpackSatchelGenetics
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggScience
@@ -342,6 +364,7 @@
     prototypeId: ClothingBackpackSatchelScience
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggVirology
@@ -349,6 +372,7 @@
     prototypeId: ClothingBackpackSatchelVirology
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggHydroponics
@@ -356,6 +380,7 @@
     prototypeId: ClothingBackpackSatchelHydroponics
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggSalvage
@@ -363,6 +388,7 @@
     prototypeId: ClothingBackpackSatchelSalvage
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggCargo
@@ -370,6 +396,7 @@
     prototypeId: ClothingBackpackSatchelCargo
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggEngineering
@@ -377,6 +404,7 @@
     prototypeId: ClothingBackpackSatchelEngineering
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggAtmospherics
@@ -384,6 +412,7 @@
     prototypeId: ClothingBackpackSatchelAtmospherics
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggCE
@@ -391,6 +420,7 @@
     prototypeId: ClothingBackpackSatchelCE
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggSecurity
@@ -398,6 +428,7 @@
     prototypeId: ClothingBackpackSatchelSecurity
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggBrigmedic
@@ -405,6 +436,7 @@
     prototypeId: ClothingBackpackSatchelBrigmedic
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggClown
@@ -412,6 +444,7 @@
     prototypeId: ClothingBackpackSatchelClown
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggMime
@@ -419,6 +452,7 @@
     prototypeId: ClothingBackpackSatchelMime
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggCaptain
@@ -426,6 +460,7 @@
     prototypeId: ClothingBackpackSatchelCaptain
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggWhiteCaptain
@@ -433,6 +468,7 @@
     prototypeId: ClothingBackpackWhiteSatchelCaptain
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggLeather
@@ -440,6 +476,7 @@
     prototypeId: ClothingBackpackSatchelLeather
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggNoir
@@ -447,6 +484,7 @@
     prototypeId: ClothingBackpackNoirSatchel
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackSatchelCultYoggBlack
@@ -454,6 +492,7 @@
     prototypeId: ClothingBackpackSatchel
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 # Satchel end
 
 # Duffel beginning
@@ -463,6 +502,7 @@
     prototypeId: ClothingBackpackDuffel
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggMedical
@@ -470,6 +510,7 @@
     prototypeId: ClothingBackpackDuffelMedical
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggGenetics
@@ -477,6 +518,7 @@
     prototypeId: ClothingBackpackDuffelGenetics
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggVirology
@@ -484,6 +526,7 @@
     prototypeId: ClothingBackpackDuffelVirology
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggScience
@@ -491,6 +534,7 @@
     prototypeId: ClothingBackpackDuffelScience
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggBrigmedic
@@ -498,6 +542,7 @@
     prototypeId: ClothingBackpackDuffelBrigmedic
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggSecurity
@@ -505,6 +550,7 @@
     prototypeId: ClothingBackpackDuffelSecurity
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggChemistry
@@ -512,6 +558,7 @@
     prototypeId: ClothingBackpackDuffelChemistry
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggEngineering
@@ -519,6 +566,7 @@
     prototypeId: ClothingBackpackDuffelEngineering
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggAtmospherics
@@ -526,6 +574,7 @@
     prototypeId: ClothingBackpackDuffelAtmospherics
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggCE
@@ -533,6 +582,7 @@
     prototypeId: ClothingBackpackDuffelCE
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggHydroponics
@@ -540,6 +590,7 @@
     prototypeId: ClothingBackpackDuffelHydroponics
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggClown
@@ -547,6 +598,7 @@
     prototypeId: ClothingBackpackDuffelClown
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggMime
@@ -554,6 +606,7 @@
     prototypeId: ClothingBackpackDuffelMime
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggCargo
@@ -561,6 +614,7 @@
     prototypeId: ClothingBackpackDuffelCargo
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggSalvage
@@ -568,6 +622,7 @@
     prototypeId: ClothingBackpackDuffelSalvage
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggCaptain
@@ -575,6 +630,7 @@
     prototypeId: ClothingBackpackDuffelCaptain
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 
 - type: corrupted
   id: BackpackDuffelCultYoggWhiteCaptain
@@ -582,4 +638,5 @@
     prototypeId: ClothingBackpackWhiteDuffelCaptain
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
 # Duffel end

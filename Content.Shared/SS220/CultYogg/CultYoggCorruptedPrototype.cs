@@ -18,7 +18,7 @@ namespace Content.Shared.SS220.CultYogg
         public string ID { get; private set; } = default!;
 
         /// <summary>
-        /// Defines entity to which this corruption can be applied 
+        /// Defines entity to which this corruption can be applied
         /// </summary>
         [DataField("from", required: true)]
         public CorruptionInitialEntityUnion FromEntity { get; private set; }
@@ -34,16 +34,23 @@ namespace Content.Shared.SS220.CultYogg
         /// </summary>
         [DataField("corruptionReverseEffect")]
         public ProtoId<EntityPrototype>? CorruptionReverseEffect { get; private set; }
+
+        /// <summary>
+        /// Should we empty the storage when corrupt
+        /// </summary>
+        [DataField("emptyStorage", required: false)]
+        public bool EmptyStorage { get; private set; }
+
     }
 
     [DataDefinition]
     [Serializable, NetSerializable]
     public partial struct CorruptionInitialEntityUnion
     {
-        // The properties here are arranged in descending order of priority, so the first one will be checked first. 
+        // The properties here are arranged in descending order of priority, so the first one will be checked first.
 
         /// <summary>
-        /// Defines that source entity should be spawned from specified prototype id 
+        /// Defines that source entity should be spawned from specified prototype id
         /// </summary>
         [DataField("prototypeId")]
         public ProtoId<EntityPrototype>? PrototypeId { get; private set; }
@@ -55,7 +62,7 @@ namespace Content.Shared.SS220.CultYogg
         public ProtoId<StackPrototype>? StackType { get; private set; }
 
         /// <summary>
-        /// Defines that source entity should be spawned from prototype, inheriting the prototype with specified id 
+        /// Defines that source entity should be spawned from prototype, inheriting the prototype with specified id
         /// </summary>
         [DataField("parentPrototypeId")]
         public ProtoId<EntityPrototype>? ParentPrototypeId { get; private set; }

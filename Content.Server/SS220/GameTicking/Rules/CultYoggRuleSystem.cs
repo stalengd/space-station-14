@@ -17,8 +17,6 @@ using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Roles.Jobs;
 using Robust.Shared.Random;
-using System.Linq;
-using Content.Shared.Administration;
 using Robust.Shared.Prototypes;
 using Content.Shared.Roles;
 using Content.Shared.SS220.Telepathy;
@@ -28,9 +26,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.RoundEnd;
 using Content.Server.SS220.CultYogg;
 using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
-using static Content.Shared.SS220.CultYogg.EntitySystems.SharedCultYoggSystem;
 using Content.Shared.StatusEffect;
-using Microsoft.EntityFrameworkCore.Design.Internal;
 using Content.Shared.SS220.Irremovable;
 using Content.Server.SS220.Roles;
 

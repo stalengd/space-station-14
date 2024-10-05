@@ -64,14 +64,3 @@
     sound:
       path: /Audio/Effects/unwrap.ogg
 
-
-- type: entity
-  id: CultYoggCocoonSedativesting
-  parent: [CultYoggCocoonBase, BaseItem]
-  suffix: Sedativesting
-  components:
-  - type: SpawnItemsOnUse
-    items:
-      - id: SedativestingCultYogg
-    sound:
-      path: /Audio/Effects/unwrap.ogg

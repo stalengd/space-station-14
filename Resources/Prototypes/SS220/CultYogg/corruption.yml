@@ -100,59 +100,59 @@
 
 #SedativeSting beginning
 - type: corrupted
-  id: PenCultYoggCocoonSedativesting
+  id: PenSedativestingCultYogg
   from:
     prototypeId: Pen
-  result: CultYoggCocoonSedativesting
+  result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: HypopenCultYoggCocoonSedativesting
+  id: HypopenSedativestingCultYogg
   from:
     prototypeId: Hypopen
-  result: CultYoggCocoonSedativesting
+  result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: SyringeCultYoggCocoonSedativesting
+  id: SyringeSedativestingCultYogg
   from:
     prototypeId: Syringe
-  result: CultYoggCocoonSedativesting
+  result: CultYoggSedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: ScrewdriverCultYoggCocoonSedativesting
+  id: ScrewdriverSedativestingCultYogg
   from:
     prototypeId: Screwdriver
-  result: CultYoggCocoonSedativesting
+  result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: ForkPlasticCultYoggCocoonSedativesting
+  id: ForkPlasticSedativestingCultYogg
   from:
     prototypeId: ForkPlastic
-  result: CultYoggCocoonSedativesting
+  result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: KnifePlasticCultYoggCocoonSedativesting
+  id: KnifePlasticSedativestingCultYogg
   from:
     prototypeId: KnifePlastic
-  result: CultYoggCocoonSedativesting
+  result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: ForkCultYoggCocoonSedativesting
+  id: ForkSedativestingCultYogg
   from:
     prototypeId: Fork
-  result: CultYoggCocoonSedativesting
+  result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: KitchenKnifeCultYoggCocoonSedativesting
+  id: KitchenKnifeSedativestingCultYogg
   from:
     prototypeId: KitchenKnife
-  result: CultYoggCocoonSedativesting
+  result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 #SedativeSting end
 

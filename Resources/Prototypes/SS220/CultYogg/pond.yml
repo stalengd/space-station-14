@@ -1,7 +1,7 @@
 - type: entity
   name: cult pond
   parent: BaseStructure
-  id: CultPond
+  id: CultYoggPond
   placement:
     mode: SnapgridCenter
   components:

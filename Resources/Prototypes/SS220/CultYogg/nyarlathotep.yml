@@ -34,9 +34,6 @@
     changeVectorMaxInterval: 600
     chasingComponent:
     - type: NyarlathotepTarget
-  - type: EmitSoundOnSpawn
-    sound:
-      path: /Audio/SS220/Music/hellmarch.ogg
   - type: Fixtures
     fixtures:
       NyarlathotepHorizonCollider: #ToDo make it at leaslt close to entity

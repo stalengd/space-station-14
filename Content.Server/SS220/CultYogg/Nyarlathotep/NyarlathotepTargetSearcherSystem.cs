@@ -37,7 +37,6 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
         var selectedSong = _audio.GetSound(uid.Comp.SummonMusic);
         if (!string.IsNullOrEmpty(selectedSong))
             _sound.DispatchStationEventMusic(uid, selectedSong, StationEventMusicType.Nuke);//ToDo should i rename?
-
         var ev = new CultYoggSummonedEvent(uid);
         RaiseLocalEvent(uid, ref ev, true);
     }

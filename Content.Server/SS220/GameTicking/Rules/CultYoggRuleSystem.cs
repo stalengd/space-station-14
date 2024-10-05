@@ -388,7 +388,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         var query = EntityQueryEnumerator<CultYoggComponent>();
         while (query.MoveNext(out var ent, out var comp))
         {
-            RaiseLocalEvent(ent, ref ev);//Make all cultists MiGo
+            RaiseLocalEvent(ent, ref ev, true);//Make all cultists MiGo
         }
     }
 

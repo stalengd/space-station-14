@@ -154,14 +154,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             return false;
         }
 
-        var sacrificeDoAfter = new DoAfterArgs(
-        EntityManager,
-        user,
-        altarComp.RutualTime,
-        new MiGoSacrificeDoAfterEvent(),
-        altarUid,
-        target: targetUid
-        )
+        var sacrificeDoAfter = new DoAfterArgs(EntityManager, user, altarComp.RutualTime, new MiGoSacrificeDoAfterEvent(), altarUid, target: targetUid)
         {
             BreakOnDamage = true,
             BreakOnMove = true
@@ -202,7 +195,6 @@ public sealed partial class AfterDeMaterialize : DoAfterEvent
     public override DoAfterEvent Clone() => this;
 }
 
-
 [ByRefEvent, Serializable]
 public record struct CultYoggEnslavedEvent(EntityUid? Target);
 
@@ -212,4 +204,10 @@ public enum MiGoTimerVisualLayers : byte
     Digit1,
     Digit2,
     Digit3
+}
+[Serializable, NetSerializable]
+public enum MiGoVisual
+{
+    Base,
+    Astral
 }

@@ -3,11 +3,9 @@ using Content.Shared.Actions;
 using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Server.SS220.GameTicking.Rules;
-using Robust.Shared.GameObjects;
 using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
 using Content.Shared.Mindshield.Components;
-using Content.Shared.Mobs;
 using Content.Shared.Revolutionary.Components;
 using Content.Shared.SS220.CultYogg;
 using Content.Shared.StatusEffect;
@@ -28,7 +26,6 @@ using Content.Shared.NPC.Systems;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.Timing;
 using Content.Shared.Tag;
-using System.ComponentModel;
 using Content.Shared.Alert;
 
 namespace Content.Server.SS220.CultYogg;
@@ -163,18 +160,24 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
 
         if (isMaterial)
         {
+            //no opening door during astral
             _tag.AddTag(uid, "DoorBumpOpener");
             comp.DeMaterializedStart = null;
 
             _alerts.ClearAlert(uid, comp.AstralAlert);
 
+            //no phisyc during astral
             EnsureComp<MovementIgnoreGravityComponent>(uid);
 
+            //some copypaste invisibility shit
             _visibility.AddLayer((uid, vis), (int)VisibilityFlags.Normal, false);
             _visibility.RemoveLayer((uid, vis), (int)VisibilityFlags.Ghost, false);
 
-            _appearance.SetData(uid, MiGoVisual.Base, true);
+            //trying make migo transpartent visout sprite, like reaper
+            _appearance.SetData(uid, MiGoVisual.Base, false);
+            _appearance.RemoveData(uid, MiGoVisual.Astral);
 
+            //for agro and turrets
             if (HasComp<NpcFactionMemberComponent>(uid))
             {
                 _npcFaction.ClearFactions(uid);
@@ -198,7 +201,8 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             _visibility.AddLayer((uid, vis), (int)VisibilityFlags.Ghost, false);
             _visibility.RemoveLayer((uid, vis), (int)VisibilityFlags.Normal, false);
 
-            _appearance.SetData(uid, MiGoVisual.Base, false);
+            _appearance.SetData(uid, MiGoVisual.Astral, false);
+            _appearance.RemoveData(uid, MiGoVisual.Base);
         }
 
         _visibility.RefreshVisibility(uid, vis);
@@ -208,6 +212,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         Dirty(uid, comp);
     }
 
+    //moving in astral faster
     private void UpdateMovementSpeed(EntityUid uid, MiGoComponent comp)
     {
         if (!TryComp<MovementSpeedModifierComponent>(uid, out var modifComp))

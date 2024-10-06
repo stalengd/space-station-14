@@ -43,12 +43,6 @@
         Base: dead
       Dead:
         Base: dead
-  - type: GenericVisualizer
-    visuals:
-      enum.MiGoVisual.Base:
-        base:
-          True: { state: alive }
-          False: { state: alive }
   - type: Visibility
     layer: 1
   - type: MovementSpeedModifier

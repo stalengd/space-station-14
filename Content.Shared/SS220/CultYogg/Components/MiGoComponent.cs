@@ -122,10 +122,3 @@ public sealed partial class MiGoComponent : Component
     public TimeSpan? ReplacementEventTime;
     #endregion
 }
-
-//Visual
-[Serializable, NetSerializable]
-public enum MiGoVisual
-{
-    Base
-}

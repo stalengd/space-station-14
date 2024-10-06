@@ -26,25 +26,17 @@ public sealed class MiHoSystem : SharedMiGoSystem
         SubscribeLocalEvent<MiGoComponent, AppearanceChangeEvent>(OnAppearanceChange);
         SubscribeLocalEvent<MiGoComponent, UpdateAlertSpriteEvent>(OnUpdateAlert);
     }
+    //copypaste from reaper, trying make MiGo transparent without a sprite
     private void OnAppearanceChange(Entity<MiGoComponent> uid, ref AppearanceChangeEvent args)
     {
-        var controlled = _playerManager.LocalSession?.AttachedEntity;
-        var isOwn = controlled == uid;
-        var canSeeOthers = controlled.HasValue &&
-                          (HasComp<GhostComponent>(controlled) ||
-                           HasComp<MiGoComponent>(controlled) ||
-                           HasComp<RevenantComponent>(controlled));
-        var canSeeGhosted = isOwn || canSeeOthers;
-
         if (!TryComp<SpriteComponent>(uid, out var sprite))
             return;
+        if (!sprite.LayerMapTryGet(MiGoVisual.Base, out var layerIndex))
+            return;
 
-        if (sprite.LayerMapTryGet(MiGoVisual.Base, out var layerIndex))
-        {
-            sprite.LayerSetVisible(layerIndex, (canSeeGhosted || uid.Comp.IsPhysicalForm));
-            sprite.LayerSetColor(layerIndex, (canSeeGhosted && !uid.Comp.IsPhysicalForm) ? MiGoAstralColor : Color.White);
-        }
+        sprite.LayerSetColor(layerIndex, uid.Comp.IsPhysicalForm ? Color.White : MiGoAstralColor);
     }
+    //trying to make alert revenant-like
     private void OnUpdateAlert(Entity<MiGoComponent> ent, ref UpdateAlertSpriteEvent args)
     {
         if (ent.Comp.DeMaterializedStart is null)

@@ -52,6 +52,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private readonly SharedEyeSystem _eye = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -152,6 +153,10 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
                 _physics.SetCollisionLayer(uid, "fix1", fixture, layer);
             }
         }
+
+        //full vision during astral
+        if (TryComp<EyeComponent>(uid, out var eye))
+            _eye.SetDrawFov(uid, isMaterial, eye);
 
         if (!TryComp<VisibilityComponent>(uid, out var vis))
             return;

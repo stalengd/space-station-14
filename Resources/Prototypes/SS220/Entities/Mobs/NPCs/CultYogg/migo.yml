@@ -6,33 +6,56 @@
   description: Дитя темного бога
   id: MiGoCultYogg
   components:
+  #cultists comps
   - type: MiGo
   - type: Telepathy
     canSend: true
     telepathyChannelPrototype: TelepathyChannelYoggSothothCult
-  - type: Insulated
-  - type: MovementSpeedModifier
-    baseWalkSpeed : 6
-    baseSprintSpeed : 6
+  - type: RandomMetadata
+    nameSegments: [ cult_yogg_migo ]
+  - type: UserInterface
+    interfaces:
+      enum.MiGoErectUiKey.Key:
+        type: MiGoErectBoundUserInterface
+  - type: ShowCultYoggIcons
+  - type: NpcFactionMember
+    factions:
+    - CultYogg
+  - type: AntagObjectives
+    objectives:
+    - CultYoggAcsendObjective
+    - CultYoggSacraficeObjective
+  #situational for logic
   - type: NoSlip
+  - type: Insulated
+  #visual
   - type: Sprite
     drawdepth: Mobs
     sprite: SS220/Mobs/CultYogg/Mi'Go.rsi
     layers:
       - map: [ "enum.MiGoVisual.Base" ]
         state: alive
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+      Critical:
+        Base: dead
+      Dead:
+        Base: dead
   - type: GenericVisualizer
     visuals:
       enum.MiGoVisual.Base:
         base:
           True: { state: alive }
           False: { state: alive }
+  - type: Visibility
+    layer: 1
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 6
+    baseSprintSpeed : 6
+
   - type: Physics
-  - type: NpcFactionMember
-    factions:
-    - CultYogg
-  - type: RandomMetadata
-    nameSegments: [ cult_yogg_migo ]
   - type: Fixtures
     fixtures:
       fix1:
@@ -44,33 +67,24 @@
           - FlyingMobMask
         layer:
           - FlyingMobLayer
+
   - type: MobState
-  - type: Visibility
-    layer: 1
   - type: MobThresholds
     thresholds:
       0: Alive
       200: Critical
       250: Dead
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 800
+      behaviors:
+      - !type:GibBehavior { }
   - type: Stamina
-    critThreshold: 100
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: alive
-      Dead:
-        Base: dead
+    critThreshold: 200
   - type: Tag
     tags:
     - CannotSuicide
     - DoorBumpOpener
-  - type: UserInterface
-    interfaces:
-      enum.MiGoErectUiKey.Key:
-        type: MiGoErectBoundUserInterface
-  - type: ShowCultYoggIcons
-  - type: AntagObjectives
-    objectives:
-    - CultYoggAcsendObjective
-    - CultYoggSacraficeObjective
-

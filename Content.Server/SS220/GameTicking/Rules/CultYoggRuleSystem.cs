@@ -311,7 +311,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         //Add telepathy
         var telepathy = EnsureComp<TelepathyComponent>(uid);
-        telepathy.CanSend = false;
+        telepathy.CanSend = true;//we are allowing it cause testing
         telepathy.TelepathyChannelPrototype = component.TelepathyChannel;
 
         AddComp<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials

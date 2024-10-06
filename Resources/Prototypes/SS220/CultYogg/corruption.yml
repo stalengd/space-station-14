@@ -117,7 +117,7 @@
   id: SyringeSedativestingCultYogg
   from:
     prototypeId: Syringe
-  result: CultYoggSedativestingCultYogg
+  result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted

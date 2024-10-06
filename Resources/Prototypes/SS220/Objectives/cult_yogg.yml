@@ -35,6 +35,6 @@
   components:
   - type: Objective
     icon:
-      sprite: SS220/Mobs/CultYogg/Mi'Go.rsi
+      sprite: SS220/Mobs/CultYogg/MiGo.rsi
       state: alive
   - type: MiGoAliveCondition

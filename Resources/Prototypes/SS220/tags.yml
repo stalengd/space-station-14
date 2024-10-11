@@ -115,6 +115,22 @@
 - type: Tag
   id: Lighter
 
+# Spider queen antag
+- type: Tag
+  id: SpiderQueen
+
+- type: Tag
+  id: SpiderServant
+
+- type: Tag
+  id: SpiderCocoon
+
+- type: Tag
+  id: SpiderQueenSpawnMarker
+
+- type: Tag
+  id: SpiderLittle
+
 # SS220 Cult
 - type: Tag
   id: Omnivorous

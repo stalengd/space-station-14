@@ -5,7 +5,7 @@
   parent: BaseGameRule
   components:
   - type: GameRule
-    minPlayers: 1 #ToDo calculate around min players
+    minPlayers: 2 #ToDo calculate around min players
     delay: #ToDo tweak numbers
       min: 60
       max: 100

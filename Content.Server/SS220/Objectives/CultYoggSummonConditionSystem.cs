@@ -35,7 +35,7 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
         if (ruleComp is null)
             return;
 
-        ent.Comp.reqSacrAmount = ruleComp.ReqAmountOfMiGo;
+        ent.Comp.reqSacrAmount = ruleComp.ReqAmountOfSacrifices;
     }
 
     private void OnAfterAssign(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveAfterAssignEvent args) //ToDo error with progress

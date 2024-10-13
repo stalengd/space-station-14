@@ -27,6 +27,7 @@ using Content.Shared.Movement.Systems;
 using Robust.Shared.Timing;
 using Content.Shared.Tag;
 using Content.Shared.Alert;
+using JetBrains.FormatRipper.Elf;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -127,7 +128,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         if (!args.Cancelled)
         {
             ChangeForm(uid, uid.Comp, false);
-            uid.Comp.DeMaterializedStart = _timing.CurTime;
+            uid.Comp.MaterializationTime = _timing.CurTime + uid.Comp.AstralDuration;
 
             var cooldownStart = _timing.CurTime;
             var cooldownEnd = cooldownStart + uid.Comp.CooldownAfterDematerialize;
@@ -162,7 +163,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         {
             //no opening door during astral
             _tag.AddTag(uid, "DoorBumpOpener");
-            comp.DeMaterializedStart = null;
+            comp.MaterializationTime = null;
 
             _alerts.ClearAlert(uid, comp.AstralAlert);
 
@@ -232,10 +233,18 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             if (IsPaused(uid))
                 continue;
 
-            if (comp.DeMaterializedStart == null)
+            if (comp.MaterializationTime == null)
                 continue;
 
-            if (_timing.CurTime <= comp.DeMaterializedStart.Value + comp.MaterializeDuration)
+            var secondsLeft = Convert.ToInt32((_timing.CurTime - comp.MaterializationTime.Value).TotalSeconds);//calculate time left in seconds
+
+            if (comp.AlertTime == null || comp.AlertTime > secondsLeft)//update alert if buffer has a different value
+            {
+                comp.AlertTime = secondsLeft;
+                _alerts.ShowAlert(uid, comp.AstralAlert);
+            }
+
+            if (_timing.CurTime <= comp.MaterializationTime.Value)
                 continue;
 
             ChangeForm(uid, comp, true);
@@ -245,7 +254,6 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
                 comp.AudioPlayed = true;
             }
             _actions.StartUseDelay(comp.MiGoAstralActionEntity);
-            //_alerts.ShowAlert(uid, component.EssenceAlert);
         }
     }
     #endregion

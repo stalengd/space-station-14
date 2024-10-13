@@ -77,7 +77,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         }
         */
         /*
-        //check if effect is already applyed 
+        //check if effect is already applyed
         if (_statusEffectsSystem.HasStatusEffect(args.Target, uid.Comp.RequiedEffect))
         {
             _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-should-eat-shroom"), args.Target, uid);
@@ -202,8 +202,7 @@ public record struct CultYoggEnslavedEvent(EntityUid? Target);
 public enum MiGoTimerVisualLayers : byte
 {
     Digit1,
-    Digit2,
-    Digit3
+    Digit2
 }
 [Serializable, NetSerializable]
 public enum MiGoVisual

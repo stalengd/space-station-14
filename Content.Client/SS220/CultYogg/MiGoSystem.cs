@@ -1,17 +1,17 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Shared.Ghost;
-using Content.Shared.Revenant.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
-using Content.Shared.Revenant;
 using Content.Client.Alerts;
 using Robust.Shared.Timing;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Robust.Shared.Map;
 
 namespace Content.Client.SS220.CultYogg;
 
-public sealed class MiHoSystem : SharedMiGoSystem
+public sealed class MiGoSystem : SharedMiGoSystem
 {
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly AppearanceSystem _appearance = default!;
@@ -39,19 +39,16 @@ public sealed class MiHoSystem : SharedMiGoSystem
     //trying to make alert revenant-like
     private void OnUpdateAlert(Entity<MiGoComponent> ent, ref UpdateAlertSpriteEvent args)
     {
-        if (ent.Comp.DeMaterializedStart is null)
+        if (args.Alert.ID != ent.Comp.AstralAlert)
             return;
 
-        var curtime = _timing.CurTime - ent.Comp.DeMaterializedStart.Value;
-        /*
-        if (args.Alert.ID != ent.Comp.EssenceAlert)
+        if (ent.Comp.AlertTime == null)
             return;
 
+
+        var timeLeft = ent.Comp.AlertTime.Value;
         var sprite = args.SpriteViewEnt.Comp;
-        var essence = Math.Clamp(ent.Comp.Essence.Int(), 0, 999);
-        sprite.LayerSetState(RevenantVisualLayers.Digit1, $"{(essence / 100) % 10}");
-        sprite.LayerSetState(RevenantVisualLayers.Digit2, $"{(essence / 10) % 10}");
-        sprite.LayerSetState(RevenantVisualLayers.Digit3, $"{essence % 10}");
-        */
+        sprite.LayerSetState(MiGoTimerVisualLayers.Digit1, $"{(timeLeft / 10) % 10}");
+        sprite.LayerSetState(MiGoTimerVisualLayers.Digit2, $"{(timeLeft % 10)}");
     }
 }

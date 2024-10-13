@@ -81,12 +81,15 @@ public sealed partial class MiGoComponent : Component
 
     public TimeSpan CooldownAfterDematerialize = TimeSpan.FromSeconds(3);
 
-    /// How long reaper can stay dematerialized, depending on stage
+    /// How long MiGo can be in astral
     [ViewVariables, DataField, AutoNetworkedField]
-    public TimeSpan MaterializeDuration = TimeSpan.FromSeconds(10);
+    public TimeSpan AstralDuration = TimeSpan.FromSeconds(10);
 
-    [ViewVariables]
-    public TimeSpan? DeMaterializedStart;//does dematerialization was started
+    public TimeSpan? MaterializationTime;
+
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [AutoNetworkedField]
+    public int? AlertTime;
 
     [ViewVariables, DataField, AutoNetworkedField]
     public float MaterialMovementSpeed = 6f; //ToDo check this thing
@@ -95,7 +98,7 @@ public sealed partial class MiGoComponent : Component
     public float UnMaterialMovementSpeed = 18f;//ToDo check this thing
 
     [DataField]
-    public ProtoId<AlertPrototype> AstralAlert = "MiGoAstral";
+    public ProtoId<AlertPrototype> AstralAlert = "MiGoAstralAlert";
     #endregion
 
     #region Replacement

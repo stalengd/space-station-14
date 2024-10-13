@@ -9,3 +9,15 @@
   rules:
     - DarkReaperSpawnMajor
     - BasicStationEventScheduler
+
+- type: gamePreset
+  id: CultYogg
+  alias:
+    - cultyogg
+  name: roles-antag-cult-yogg-name
+  description: roles-antag-cult-yogg-objective
+  showInVote: false
+  minPlayers: 30
+  rules:
+    - CultYoggSpawn
+    - BasicStationEventScheduler

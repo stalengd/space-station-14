@@ -1,2 +1,2 @@
-roles-antag-cult-yogg-name = Культист Йог-Сатот
-roles-antag-cult-yogg-objective = Совершите обряд жертвоприношения и призовите своего хозяина.
+roles-antag-cult-yogg-name = Культист Йог-Сотот
+roles-antag-cult-yogg-objective = Вы преданный член культа. Завербуйте как можно больше последователей. Совершите обряд призовыва своего хозяина.

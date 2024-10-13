@@ -1,4 +1,4 @@
-cult-yogg-title = Культ Йог-Сатот
+cult-yogg-title = Культ Йог-Сотот
 cult-yogg-description = На станции была замечена активность вражеского культа.
 cult-yogg-not-enough-ready-players = Недостаточно игроков готовы к игре! { $readyPlayersCount } игроков из необходимых { $minimumPlayers } готовы. Нельзя запустить пресет Культ.
 cult-yogg-no-one-ready = Нет готовых игроков! Нельзя запустить пресет Культ.
@@ -15,7 +15,7 @@ cult-yogg-round-end-amount-medium = [color=yellow]Культ провалил п
 cult-yogg-round-end-amount-high = [color=crimson]культ был близок к призыву.[/color]
 cult-yogg-round-end-win = [color=darkred]Повелитель явился в наш мир![/color]
 
-objective-issuer-cult-yogg = [color=crimson]По Заветам Посланника Бога Нашего Йог Сатотха[/color]
+objective-issuer-cult-yogg = [color=crimson]По Заветам Посланника Бога Нашего Йог-Сотота[/color]
 
 objective-cult-yogg-sacrafice-start = Призовите темного бога, принеся в жертву следующие цели:
 objective-cult-yogg-sacrafice-task-job =  в должности

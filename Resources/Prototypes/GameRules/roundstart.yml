@@ -273,6 +273,11 @@
       - type: ZombifyOnDeath
       - type: IncurableZombie
       - type: InitialInfected
+      # Corvax-MRP
+      - type: NpcFactionMember
+        addFriendlyFactions:
+        - Zombie
+      # Corvax
       mindRoles:
       - MindRoleInitialInfected
 

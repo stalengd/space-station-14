@@ -23,10 +23,9 @@ public sealed class IonStormRule : StationEventSystem<IonStormRuleComponent>
     [Dependency] private readonly SiliconLawSystem _siliconLaw = default!;
 
     // SS220 IonStormLaws rework start
-    private const string BrickedLaw = "IonStormBrickedLaws";
     [ValidatePrototypeId<DatasetPrototype>]
+    private const string BrickedLaw = "IonStormBrickedLaws";
     // SS220 IonStormLaws rework end
-    private const string Foods = "IonStormFoods";
     protected override void Started(EntityUid uid, IonStormRuleComponent comp, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, comp, gameRule, args);

@@ -1,8 +1,7 @@
-// EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Shared.CCVar;
 using Content.Shared.SS220.Calculator;
 using Robust.Client.Audio;
-using Robust.Client.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 

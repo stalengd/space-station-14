@@ -29,8 +29,7 @@ using Robust.Shared.Player;
 using Content.Server.Forensics;
 using Robust.Shared.Utility;
 using System.Globalization;
-using Content.Server.Roles; // SS220 Cryostorage ghost role fix
-using Content.Shared.Roles.Jobs; // SS220 Cryostorage ghost role fix
+using Content.Shared.Roles; // SS220 Cryostorage ghost role fix
 using Robust.Shared.Prototypes; // SS220 Cryostorage ghost role fix
 
 namespace Content.Server.Bed.Cryostorage;
@@ -54,7 +53,6 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
     [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly RoleSystem _role = default!; // SS220 Cryostorage ghost role fix
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // SS220 Cryostorage ghost role fix
 
     /// <inheritdoc/>
@@ -241,6 +239,15 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
             if (_stationRecords.TryGetRecord<GeneralStationRecord>(key, out var entry, stationRecords))
                 jobName = entry.JobTitle;
 
+            // SS220 Cryostorage ghost role fix begin
+            if (!_stationRecords.TryGetRecord<GeneralStationRecord>(key, out var record, stationRecords)
+                || !_prototypeManager.TryIndex<JobPrototype>(record.JobPrototype, out var jobProto)
+                || !jobProto.JoinNotifyCrew)
+            {
+                return;
+            }
+            // SS220 Cryostorage ghost role fix end
+
             // _stationRecords.RemoveRecord(key, stationRecords);
 
             // start 220 cryo department record
@@ -252,16 +259,6 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
             }
             // end 220 cryo department record
         }
-
-        // SS220 Cryostorage ghost role fix begin
-        if (!_role.MindHasRole<JobRoleComponent>(ent.Owner, out var role)
-            || role.Value.Comp1.JobPrototype is not { } jobPrototype
-            || !_prototypeManager.TryIndex(jobPrototype, out var jobProto)
-            || !jobProto.JoinNotifyCrew)
-        {
-            return;
-        }
-        // SS220 Cryostorage ghost role fix end
 
         _chatSystem.DispatchStationAnnouncement(station.Value,
             Loc.GetString(

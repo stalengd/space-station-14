@@ -2,7 +2,7 @@
   name: fungus hydroponic
   parent: BaseStructure
   #parent: SmallConstructibleMachine#ToDo maybe create our own parrent
-  id: fungusHydroponic
+  id: CultYoggFungusHydroponic
   description: desc
   placement:
     mode: SnapgridCenter

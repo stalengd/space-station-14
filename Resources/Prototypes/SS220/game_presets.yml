@@ -19,5 +19,5 @@
   showInVote: false
   minPlayers: 2 #ToDo tweak numbers
   rules:
-    - CultYoggSpawn
+    - CultYogg
     - BasicStationEventScheduler

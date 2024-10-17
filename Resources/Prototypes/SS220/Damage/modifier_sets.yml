@@ -25,7 +25,6 @@
     Cellular: 1
     Radiation: 0.5
 
-
 # Spider queen antag
 - type: damageModifierSet
   id: SpiderQueen

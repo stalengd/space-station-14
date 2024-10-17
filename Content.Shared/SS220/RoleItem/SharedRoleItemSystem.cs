@@ -82,7 +82,7 @@ public abstract class SharedRoleItemSystem : EntitySystem
         if (!_prototype.HasIndex<AntagPrototype>(roleId))
             return false;
 
-        var mindRoles = _role.MindGetAllRoles(mindId);
+        var mindRoles = _role.MindGetAllRoleInfo(mindId);
 
         foreach (var role in mindRoles)
         {

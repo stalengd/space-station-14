@@ -6,7 +6,7 @@ namespace Content.Server.SS220.Roles;
 ///     Added to mind entities to tag that they are a Revolutionary.
 /// </summary>
 
-[RegisterComponent, ExclusiveAntagonist]
-public sealed partial class CultYoggRoleComponent : AntagonistRoleComponent
+[RegisterComponent]
+public sealed partial class CultYoggRoleComponent : BaseMindRoleComponent
 {
 }

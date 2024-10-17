@@ -149,7 +149,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         foreach (var mind in allHumans)
         {
             // RequireAdminNotify used as a cheap way to check for command department
-            if (!_job.MindTryGetJob(mind, out _, out var prototype))
+            if (!_job.MindTryGetJob(mind, out var prototype))
                 continue;
 
             if (HasComp<CultYoggSacrificialMindComponent>(mind))//shouldn't be already a target

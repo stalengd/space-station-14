@@ -20,9 +20,8 @@
         - CultYoggSacrificial
         - CultYoggSacrificialMind
       lateJoinAdditional: true
-      mindComponents:
-      - type: CultYoggRole
-        prototype: CultYogg
+      mindRoles:
+        - MindRoleCultYogg
   - type: AntagObjectives
     objectives:
     - CultYoggAcsendObjective

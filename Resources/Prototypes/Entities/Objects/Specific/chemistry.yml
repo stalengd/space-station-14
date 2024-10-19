@@ -92,6 +92,7 @@
         Blunt: 5
   - type: StaticPrice
     price: 30
+  - type: DnaSubstanceTrace
 
 - type: entity
   parent: BaseItem
@@ -136,6 +137,8 @@
     solution: beaker
   - type: SolutionTransfer
     canChangeTransferAmount: true
+  - type: SolutionItemStatus
+    solution: beaker
   - type: UserInterface
     interfaces:
       enum.TransferAmountUiKey.Key:
@@ -151,6 +154,7 @@
     damageModifierSet: Glass
   - type: StaticPrice
     price: 30
+  - type: DnaSubstanceTrace
 
 - type: entity
   name: beaker
@@ -162,6 +166,9 @@
     solution: beaker
   - type: StaticPrice
     price: 10
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 50
   - type: SolutionContainerVisuals
     maxFillLevels: 6
     fillBaseName: beaker
@@ -169,11 +176,12 @@
     inHandsFillBaseName: -fill-
 
 - type: entity
-  name: cryoxadone beaker
-  description: Filled with a reagent used in cryogenic tubes.
+  suffix: cryoxadone
   parent: Beaker
   id: CryoxadoneBeakerSmall
   components:
+  - type: Label
+    currentLabel: reagent-name-cryoxadone
   - type: SolutionContainerManager
     solutions:
       beaker:
@@ -210,6 +218,9 @@
     fillBaseName: beakerlarge
     inHandsMaxFillLevels: 4
     inHandsFillBaseName: -fill-
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 100
   - type: StaticPrice
     price: 20
 
@@ -225,6 +236,8 @@
     sprite: Objects/Specific/Chemistry/beaker_cryostasis.rsi
     layers:
       - state: beakernoreact
+  - type: SolutionContainerVisuals
+    maxFillLevels: 0
   - type: SolutionContainerManager
     solutions:
       beaker:
@@ -243,6 +256,8 @@
     sprite: Objects/Specific/Chemistry/beaker_bluespace.rsi
     layers:
       - state: beakerbluespace
+  - type: SolutionContainerVisuals
+    maxFillLevels: 0
   - type: SolutionContainerManager
     solutions:
       beaker:
@@ -282,6 +297,7 @@
     solution: injector
   - type: Item
     sprite: Objects/Specific/Chemistry/dropper.rsi
+    size: Tiny
   - type: Appearance
   - type: SolutionContainerVisuals
     maxFillLevels: 1
@@ -290,6 +306,10 @@
     inHandsFillBaseName: -fill-
   - type: StaticPrice
     price: 40
+  - type: DnaSubstanceTrace
+  - type: Tag
+    tags:
+    - Dropper
 
 - type: entity
   name: borgdropper
@@ -499,6 +519,9 @@
     tags:
       - PillCanister
   - type: Storage
+    whitelist: # SS220 PillCanister fix beginning
+      components:
+        - Pill # SS220 PillCanister fix end
     grid:
     - 0,0,4,1
     quickInsert: true

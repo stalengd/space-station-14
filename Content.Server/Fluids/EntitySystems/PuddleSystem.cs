@@ -1,5 +1,4 @@
 using Content.Server.Administration.Logs;
-using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.DoAfter;
 using Content.Server.Fluids.Components;
 using Content.Server.Spreader;
@@ -23,6 +22,7 @@ using Content.Shared.Popups;
 using Content.Shared.Slippery;
 using Content.Shared.StepTrigger.Components;
 using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Whitelist; //SS220 Flying mobs slowdown fix
 using Robust.Server.Audio;
 using Robust.Shared.Collections;
 using Robust.Shared.Map;
@@ -51,7 +51,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
     [Dependency] private readonly SharedPopupSystem _popups = default!;
-    [Dependency] private readonly SolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private readonly StepTriggerSystem _stepTrigger = default!;
     [Dependency] private readonly SpeedModifierContactsSystem _speedModContacts = default!;
     [Dependency] private readonly TileFrictionController _tile = default!;
@@ -74,6 +74,16 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     private HashSet<EntityUid> _deletionQueue = [];
 
     private EntityQuery<PuddleComponent> _puddleQuery;
+
+    //SS220 Flying mobs slowdown fix begin
+    private readonly EntityWhitelist _ignoreWhitelist = new()
+    {
+        Components = new[]
+        {
+            "IgnoreOnfloorSlowers"
+        }
+    };
+    //SS220 Flying mobs slowdown fix end
 
     /*
      * TODO: Need some sort of way to do blood slash / vomit solution spill on its own
@@ -325,8 +335,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
     private void OnPuddleInit(Entity<PuddleComponent> entity, ref ComponentInit args)
     {
-        _solutionContainerSystem.EnsureSolution(entity.Owner, entity.Comp.SolutionName, FixedPoint2.New(PuddleVolume),
-            out _);
+        _solutionContainerSystem.EnsureSolution(entity.Owner, entity.Comp.SolutionName, out _, FixedPoint2.New(PuddleVolume));
     }
 
     private void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionContainerChangedEvent args)
@@ -437,6 +446,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             var comp = EnsureComp<SpeedModifierContactsComponent>(uid);
             var speed = 1 - maxViscosity;
             _speedModContacts.ChangeModifiers(uid, speed, comp);
+            _speedModContacts.SetWhitelist(uid, _ignoreWhitelist, comp); //SS220 Flying mobs slowdown fix
         }
         else
         {
@@ -580,7 +590,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             if (user != null)
             {
                 _adminLogger.Add(LogType.Landed,
-                    $"{ToPrettyString(user.Value):user} threw {ToPrettyString(uid):entity} which splashed a solution {SolutionContainerSystem.ToPrettyString(solution):solution} onto {ToPrettyString(owner):target}");
+                    $"{ToPrettyString(user.Value):user} threw {ToPrettyString(uid):entity} which splashed a solution {SharedSolutionContainerSystem.ToPrettyString(solution):solution} onto {ToPrettyString(owner):target}");
             }
 
             targets.Add(owner);
@@ -712,7 +722,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         {
             var (reagent, quantity) = solution.Contents[i];
             var proto = _prototypeManager.Index<ReagentPrototype>(reagent.Prototype);
-            var removed = proto.ReactionTile(tileRef, quantity);
+            var removed = proto.ReactionTile(tileRef, quantity, EntityManager, reagent.Data);
             if (removed <= FixedPoint2.Zero)
                 continue;
 

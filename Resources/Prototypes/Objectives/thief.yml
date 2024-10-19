@@ -4,10 +4,10 @@
   id: BaseThiefObjective
   components:
   - type: Objective
-    issuer: thief
+    issuer: objective-issuer-thief
   - type: RoleRequirement
     roles:
-      components:
+      mindRoles:
       - ThiefRole
 
 - type: entity
@@ -18,30 +18,29 @@
   - type: StealCondition
     verifyMapExistence: false
     descriptionText: objective-condition-thief-description
+    checkStealAreas: true
 
 - type: entity
   abstract: true
-  parent: [BaseThiefObjective, BaseStealObjective]
+  parent: [BaseThiefObjective, BaseThiefStealObjective]
   id: BaseThiefStealCollectionObjective
   components:
   - type: StealCondition
     verifyMapExistence: true
-    descriptionText: objective-condition-thief-description
 
 - type: entity
   abstract: true
-  parent: [BaseThiefObjective, BaseStealObjective]
+  parent: [BaseThiefObjective, BaseThiefStealObjective]
   id: BaseThiefStealStructureObjective
   components:
   - type: StealCondition
     verifyMapExistence: true
-    descriptionText: objective-condition-thief-description
   - type: Objective
     difficulty: 2 # it's hard to hide
 
 - type: entity
   abstract: true
-  parent: [BaseThiefObjective, BaseStealObjective]
+  parent: [BaseThiefObjective, BaseThiefStealObjective]
   id: BaseThiefStealAnimalObjective
   components:
   - type: StealCondition
@@ -55,19 +54,17 @@
 # Collections
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealCollectionObjective
   id: FigurineStealCollectionObjective
   components:
   - type: StealCondition
     stealGroup: Figurines
     minCollectionSize: 10
-    maxCollectionSize: 50 #will be limited to the number of figures on the station anyway.
+    maxCollectionSize: 15 #will be limited to the number of figures on the station anyway. # ss220 50 -> 15 max
   - type: Objective
     difficulty: 0.25
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealCollectionObjective
   id: HeadCloakStealCollectionObjective
   components:
@@ -79,7 +76,6 @@
     difficulty: 1.5
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealCollectionObjective
   id: HeadBedsheetStealCollectionObjective
   components:
@@ -91,19 +87,17 @@
     difficulty: 1.0
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealCollectionObjective
   id: StampStealCollectionObjective
   components:
   - type: StealCondition
     stealGroup: Stamp
-    minCollectionSize: 5
-    maxCollectionSize: 15
+    minCollectionSize: 4 # ss220 5 -> 4 max
+    maxCollectionSize: 7 # ss220 15 -> 7 max
   - type: Objective
     difficulty: 1.0
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealCollectionObjective
   id: DoorRemoteStealCollectionObjective
   components:
@@ -115,7 +109,6 @@
     difficulty: 1.5
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealCollectionObjective
   id: TechnologyDiskStealCollectionObjective
   components:
@@ -130,14 +123,13 @@
     difficulty: 0.8
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealCollectionObjective
   id: IDCardsStealCollectionObjective
   components:
   - type: StealCondition
     stealGroup: IDCard
     minCollectionSize: 5
-    maxCollectionSize: 15
+    maxCollectionSize: 10
     verifyMapExistence: false
   - type: Objective
     difficulty: 0.7
@@ -145,7 +137,6 @@
 
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealCollectionObjective
   id: LAMPStealCollectionObjective
   components:
@@ -163,7 +154,6 @@
 # steal item
 
 - type: entity #SS220-Zippo-Steal-Begin
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ExpensiveLighterNanotrasenStealObjective
   components:
@@ -175,7 +165,6 @@
     difficulty: 0.8
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ExpensiveLighterShieldStealObjective
   components:
@@ -187,7 +176,6 @@
     difficulty: 0.8
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ExpensiveLighterSyndicateStealObjective
   components:
@@ -196,8 +184,20 @@
   - type: Objective
     difficulty: 0.8 #SS220-Zippo-Steal-End
 
+# SS220 Wrist Watch Begin
+- type: entity
+  parent: BaseThiefStealObjective
+  id: WristWatchGoldStealObjective
+  components:
+  - type: StealCondition
+    stealGroup: WristWatchGold
+    minCollectionSize: 2
+    maxCollectionSize: 3
+  - type: Objective
+    difficulty: 1.0
+# SS220 Wrist Watch End
+
 - type: entity                                      #Security subgroup
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ForensicScannerStealObjective
   components:
@@ -209,7 +209,6 @@
     difficulty: 1
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ExpensiveLighterDetectiveStealObjective #SS220-Zippo-Steal-Detective
   components:
@@ -221,7 +220,6 @@
     difficulty: 0.8
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ClothingHeadHatWardenStealObjective
   components:
@@ -230,8 +228,16 @@
   - type: Objective
     difficulty: 1.2
 
+- type: entity
+  parent: BaseThiefStealObjective
+  id: WantedListCartridgeStealObjective
+  components:
+  - type: StealCondition
+    stealGroup: WantedListCartridge
+  - type: Objective
+    difficulty: 1
+
 - type: entity                                      #Medical subgroup
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ClothingOuterHardsuitVoidParamedStealObjective
   components:
@@ -243,7 +249,6 @@
     difficulty: 1
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: MedicalTechFabCircuitboardStealObjective
   components:
@@ -255,7 +260,6 @@
     difficulty: 1
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ClothingHeadsetAltMedicalStealObjective
   components:
@@ -267,7 +271,6 @@
     difficulty: 1
 
 - type: entity                                      #Engineering subgroup
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: FireAxeStealObjective
   components:
@@ -279,7 +282,6 @@
     difficulty: 0.8
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: AmePartFlatpackStealObjective
   components:
@@ -291,7 +293,6 @@
     difficulty: 1
 
 - type: entity                                      #Cargo subgroup
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ExpeditionsCircuitboardStealObjective
   components:
@@ -303,7 +304,6 @@
     difficulty: 0.7
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: CargoShuttleCircuitboardStealObjective
   components:
@@ -314,20 +314,7 @@
   - type: Objective
     difficulty: 0.7
 
-- type: entity
-  noSpawn: true
-  parent: BaseThiefStealObjective
-  id: SalvageShuttleCircuitboardStealObjective
-  components:
-  - type: NotJobRequirement
-    job: SalvageSpecialist
-  - type: StealCondition
-    stealGroup: SalvageShuttleConsoleCircuitboard
-  - type: Objective
-    difficulty: 0.7
-
 - type: entity                                      #Service subgroup
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ClothingEyesHudBeerStealObjective
   components:
@@ -339,7 +326,6 @@
     difficulty: 0.3
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: BibleStealObjective
   components:
@@ -351,7 +337,6 @@
     difficulty: 0.4
 
 - type: entity                                      #Other subgroup
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ClothingNeckGoldmedalStealObjective
   components:
@@ -363,7 +348,6 @@
     difficulty: 1
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealObjective
   id: ClothingNeckClownmedalStealObjective
   components:
@@ -377,7 +361,6 @@
 # Structures
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: NuclearBombStealObjective
   components:
@@ -389,7 +372,6 @@
     difficulty: 2.5 #Good luck
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: FaxMachineCaptainStealObjective
   components:
@@ -401,7 +383,6 @@
     difficulty: 2
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: ChemDispenserStealObjective
   components:
@@ -413,7 +394,6 @@
     difficulty: 1
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: XenoArtifactStealObjective
   components:
@@ -425,7 +405,6 @@
     difficulty: 0.5
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: FreezerHeaterStealObjective
   components:
@@ -437,7 +416,6 @@
     difficulty: 0.5
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: TegStealObjective
   components:
@@ -449,7 +427,6 @@
     difficulty: 1
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: BoozeDispenserStealObjective
   components:
@@ -461,7 +438,6 @@
     difficulty: 0.5
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: AltarNanotrasenStealObjective
   components:
@@ -473,7 +449,6 @@
     difficulty: 0.5
 
 - type: entity
-  noSpawn: true
   parent: BaseThiefStealStructureObjective
   id: PlantRDStealObjective
   components:
@@ -484,11 +459,21 @@
   - type: Objective
     difficulty: 0.8
 
+- type: entity
+  parent: BaseThiefStealStructureObjective
+  id: ToiletGoldenStealObjective
+  components:
+  - type: NotJobRequirement
+    job: Captain
+  - type: StealCondition
+    stealGroup: ToiletGoldenDirtyWater
+  - type: Objective
+    difficulty: 2
+
 # Animal
 
 # SS220 Delete thief objective animals begin
 # - type: entity
-#   noSpawn: true
 #   parent: BaseThiefStealAnimalObjective
 #   id: IanStealObjective
 #   components:
@@ -500,17 +485,15 @@
 #     difficulty: 2.5
 
 # - type: entity
-#   noSpawn: true
 #   parent: BaseThiefStealAnimalObjective
 #   id: BingusStealObjective
 #   components:
 #   - type: StealCondition
-#     stealGroup: AnimalBingus
+#     stealGroup: AnimalNamedCat
 #   - type: Objective
 #     difficulty: 1
 
 # - type: entity
-#   noSpawn: true
 #   parent: BaseThiefStealAnimalObjective
 #   id: McGriffStealObjective
 #   components:
@@ -522,7 +505,6 @@
 #     difficulty: 1
 
 # - type: entity
-#   noSpawn: true
 #   parent: BaseThiefStealAnimalObjective
 #   id: WalterStealObjective
 #   components:
@@ -530,11 +512,10 @@
 #     job: Chemist
 #   - type: StealCondition
 #     stealGroup: AnimalWalter
-#   - type: Objective
+#   - type: ObjectiveNu
 #     difficulty: 1
 
 # - type: entity
-#   noSpawn: true
 #   parent: BaseThiefStealAnimalObjective
 #   id: MortyStealObjective
 #   components:
@@ -544,7 +525,6 @@
 #     difficulty: 0.5
 
 # - type: entity
-#   noSpawn: true
 #   parent: BaseThiefStealAnimalObjective
 #   id: RenaultStealObjective
 #   components:
@@ -556,7 +536,6 @@
 #     difficulty: 2
 
 # - type: entity
-#   noSpawn: true
 #   parent: BaseThiefStealAnimalObjective
 #   id: ShivaStealObjective
 #   components:
@@ -568,7 +547,6 @@
 #     difficulty: 2
 
 # - type: entity
-#   noSpawn: true
 #   parent: BaseThiefStealAnimalObjective
 #   id: TropicoStealObjective
 #   components:
@@ -583,10 +561,9 @@
 # Escape
 
 - type: entity
-  noSpawn: true
   parent: [BaseThiefObjective, BaseLivingObjective]
   id: EscapeThiefShuttleObjective
-  name: Escape to centcom alive and unrestrained.
+  name: Escape to centcomm alive and unrestrained.
   description: You don't want your illegal activities to be discovered by anyone, do you?
   components:
   - type: Objective

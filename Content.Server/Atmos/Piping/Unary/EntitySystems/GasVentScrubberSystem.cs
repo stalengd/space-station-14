@@ -16,6 +16,7 @@ using Content.Shared.Atmos.Monitor;
 using Content.Shared.Atmos.Piping.Unary.Components;
 using Content.Shared.Audio;
 using Content.Shared.DeviceNetwork;
+using Content.Shared.Power;
 using Content.Shared.Tools.Systems;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
@@ -51,7 +52,11 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
         private void OnInit(Entity<GasVentScrubberComponent> entity, ref MapInitEvent args)
         {
             var scrubberMode = GasVentScrubberData.ScrubberFilters[entity.Comp.InitialFilter];
-            entity.Comp.FilterGases = scrubberMode;
+
+            var filterGases = entity.Comp.FilterGases;
+            filterGases.Clear();
+            foreach (var gas in scrubberMode)
+                filterGases.Add(gas);
         }
         //SS220-scrubber-mode end
 

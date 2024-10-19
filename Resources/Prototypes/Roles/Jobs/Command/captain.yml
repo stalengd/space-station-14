@@ -6,7 +6,13 @@
   requirements:
     - !type:DepartmentTimeRequirement
       department: Command
-      time: 180000 # SS220-RoleTime
+      time: 288000 # SS220-RoleTime 2
+    - !type:AgeRequirement
+      requiredAge: 20
+    - !type:SpeciesRequirement #SS220-jobbans begin
+      inverted: true
+      species:
+      - Felinid #SS220-jobbans end
   weight: 20
   startingGear: CaptainGear
   icon: "JobIconCaptain"
@@ -14,7 +20,6 @@
   joinNotifyCrew: true
   supervisors: job-supervisors-centcom
   canBeAntag: false
-  canBeZombie: false
   radioBold: true
   accessGroups:
   - AllAccess
@@ -30,6 +35,9 @@
   equipment:
     shoes: ClothingShoesBootsLaceup
     eyes: ClothingEyesGlassesSunglasses
-    gloves: ClothingHandsGlovesCaptain
     id: CaptainPDA
-    ears: ClothingHeadsetAltCommand
+#    ears: ClothingHeadsetAltCommand #SS220-Law Department
+  storage:
+    back:
+    - Flash
+    # - StationCharter

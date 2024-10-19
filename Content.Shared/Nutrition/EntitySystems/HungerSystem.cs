@@ -24,26 +24,33 @@ public sealed class HungerSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
     [Dependency] private readonly SharedJetpackSystem _jetpack = default!;
 
-    [ValidatePrototypeId<StatusIconPrototype>]
+    [ValidatePrototypeId<SatiationIconPrototype>]
     private const string HungerIconOverfedId = "HungerIconOverfed";
 
-    [ValidatePrototypeId<StatusIconPrototype>]
+    [ValidatePrototypeId<SatiationIconPrototype>]
     private const string HungerIconPeckishId = "HungerIconPeckish";
 
-    [ValidatePrototypeId<StatusIconPrototype>]
+    [ValidatePrototypeId<SatiationIconPrototype>]
     private const string HungerIconStarvingId = "HungerIconStarving";
 
-    private StatusIconPrototype? _hungerIconOverfed;
-    private StatusIconPrototype? _hungerIconPeckish;
-    private StatusIconPrototype? _hungerIconStarving;
+    private SatiationIconPrototype? _hungerIconOverfed;
+    private SatiationIconPrototype? _hungerIconPeckish;
+    private SatiationIconPrototype? _hungerIconStarving;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        DebugTools.Assert(_prototype.TryIndex(HungerIconOverfedId, out _hungerIconOverfed) &&
+        // SS220 Thirst hud and hunger hud fix begin
+        //DebugTools.Assert(_prototype.TryIndex(HungerIconOverfedId, out _hungerIconOverfed) &&
+        //                  _prototype.TryIndex(HungerIconPeckishId, out _hungerIconPeckish) &&
+        //                  _prototype.TryIndex(HungerIconStarvingId, out _hungerIconStarving));
+
+        var trySetPrototypes = _prototype.TryIndex(HungerIconOverfedId, out _hungerIconOverfed) &&
                           _prototype.TryIndex(HungerIconPeckishId, out _hungerIconPeckish) &&
-                          _prototype.TryIndex(HungerIconStarvingId, out _hungerIconStarving));
+                          _prototype.TryIndex(HungerIconStarvingId, out _hungerIconStarving);
+        DebugTools.Assert(trySetPrototypes);
+        // SS220 Thirst hud and hunger hud fix end
 
         SubscribeLocalEvent<HungerComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<HungerComponent, ComponentShutdown>(OnShutdown);
@@ -61,7 +68,7 @@ public sealed class HungerSystem : EntitySystem
 
     private void OnShutdown(EntityUid uid, HungerComponent component, ComponentShutdown args)
     {
-        _alerts.ClearAlertCategory(uid, AlertCategory.Hunger);
+        _alerts.ClearAlertCategory(uid, component.HungerAlertCategory);
     }
 
     private void OnRefreshMovespeed(EntityUid uid, HungerComponent component, RefreshMovementSpeedModifiersEvent args)
@@ -142,7 +149,7 @@ public sealed class HungerSystem : EntitySystem
         }
         else
         {
-            _alerts.ClearAlertCategory(uid, AlertCategory.Hunger);
+            _alerts.ClearAlertCategory(uid, component.HungerAlertCategory);
         }
 
         if (component.HungerThresholdDecayModifiers.TryGetValue(component.CurrentThreshold, out var modifier))
@@ -216,7 +223,7 @@ public sealed class HungerSystem : EntitySystem
         }
     }
 
-    public bool TryGetStatusIconPrototype(HungerComponent component, [NotNullWhen(true)] out StatusIconPrototype? prototype)
+    public bool TryGetStatusIconPrototype(HungerComponent component, [NotNullWhen(true)] out SatiationIconPrototype? prototype)
     {
         switch (component.CurrentThreshold)
         {

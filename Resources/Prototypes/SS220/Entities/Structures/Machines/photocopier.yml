@@ -48,6 +48,8 @@
           - Paper
           - ButtScan
           - Photo
+        tags: 
+          - Folder
     tonerSlot:
       insertSound: /Audio/Machines/screwdriveropen.ogg
       ejectSound: /Audio/Machines/screwdriverclose.ogg

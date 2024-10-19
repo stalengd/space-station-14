@@ -9,31 +9,33 @@ namespace Content.Server.Atmos.Piping.Unary.Components
     [Access(typeof(GasVentScrubberSystem))]
     public sealed partial class GasVentScrubberComponent : Component
     {
-        [ViewVariables(VVAccess.ReadWrite)]
-        public bool Enabled { get; set; } = true;
+        [DataField]
+        public bool Enabled { get; set; } = false;
 
-        [ViewVariables]
+        [DataField]
         public bool IsDirty { get; set; } = false;
 
-        [ViewVariables(VVAccess.ReadWrite)]
         [DataField("outlet")]
         public string OutletName { get; set; } = "pipe";
 
-        //SS220-scrubber-mode begin
-        [ViewVariables(VVAccess.ReadOnly)]
+        [DataField]
         public HashSet<Gas> FilterGases = new(GasVentScrubberData.DefaultFilterGases);
 
+        //SS220-scrubber-mode begin
+        /// <summary>
+        /// Filter mode, which will be set on a scrubber on a map initialization (or spawn).
+        /// </summary>
         [DataField("initialFilter"), ViewVariables]
         public GasVentScrubberData.ScrubberFilter InitialFilter { get; set; } = GasVentScrubberData.ScrubberFilter.Default;
         //SS220-scrubber-mode end
 
-        [ViewVariables(VVAccess.ReadWrite)]
+        [DataField]
         public ScrubberPumpDirection PumpDirection { get; set; } = ScrubberPumpDirection.Scrubbing;
 
         /// <summary>
         ///     Target volume to transfer. If <see cref="WideNet"/> is enabled, actual transfer rate will be much higher.
         /// </summary>
-        [ViewVariables(VVAccess.ReadWrite)]
+        [DataField]
         public float TransferRate
         {
             get => _transferRate;
@@ -42,18 +44,17 @@ namespace Content.Server.Atmos.Piping.Unary.Components
 
         private float _transferRate = Atmospherics.MaxTransferRate;
 
-        [ViewVariables(VVAccess.ReadWrite)]
-        [DataField("maxTransferRate")]
+        [DataField]
         public float MaxTransferRate = Atmospherics.MaxTransferRate;
 
         /// <summary>
         ///     As pressure difference approaches this number, the effective volume rate may be smaller than <see
         ///     cref="TransferRate"/>
         /// </summary>
-        [DataField("maxPressure")]
+        [DataField]
         public float MaxPressure = Atmospherics.MaxOutputPressure;
 
-        [ViewVariables(VVAccess.ReadWrite)]
+        [DataField]
         public bool WideNet { get; set; } = false;
 
         public GasVentScrubberData ToAirAlarmData()

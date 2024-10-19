@@ -16,3 +16,17 @@
   - Brig
   - Maintenance
   - External
+
+#SS220-brigmedic-loadout-begin
+- type: startingGear
+  id: BrigmedicGear
+  equipment:
+#    eyes: ClothingEyesHudMedical #SS220-TwoOne-Floppa-Iteration
+    id: BrigmedicPDA
+    ears: ClothingHeadsetBrigmedic
+    belt: ClothingBeltSecurityMedicalFilled #SS220-Brigmedic-Fashion
+  storage:
+    back:
+#    - BoxSurvivalBrigmedic #SS220-Brigmedic SurvivalBox Fix
+    - Flash
+#SS220-brigmedic-loadout-end

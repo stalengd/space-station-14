@@ -16,6 +16,8 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
+using Content.Shared.Station.Components;
+using FastAccessors;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
 
@@ -30,18 +32,22 @@ namespace Content.IntegrationTests.Tests
         private static readonly string[] NoSpawnMaps =
         {
             "CentComm",
+            "SS220_CentComm",
             "Dart",
             "NukieOutpost",
-            "SS220_syndicate"
+            "SS220_syndicate",
+            "Dart"
         };
 
         private static readonly string[] Grids =
         {
             "/Maps/centcomm.yml",
+            "/Maps/SS220/ss220-centcomm.yml",
             "/Maps/Shuttles/cargo.yml",
             "/Maps/Shuttles/emergency.yml",
             "/Maps/Shuttles/infiltrator.yml",
-            "/Maps/NukeOps/ss220_Nuke_shuttle_grid.yml",
+            "/Maps/SS220/Shuttles/ss220-nukeshuttle.yml",
+            "/Maps/SS220/Shuttles/cargo.yml"
         };
 
         private static readonly string[] GameMaps =
@@ -51,39 +57,36 @@ namespace Content.IntegrationTests.Tests
             "Fland",
             "Meta",
             "Packed",
-            "Cluster",
             "Omega",
             "Bagel",
-            "Origin",
             "CentComm",
-            "NukieOutpost",
             "Box",
-            "Europa",
-            "Saltern",
             "Core",
             "Marathon",
             "MeteorArena",
-            "Atlas",
+            "Saltern",
             "Reach",
             "Train",
             "Oasis",
+            "Cog",
 
             // SS220 Maps
-            "220Delta",
             "Frankenstein",
-            "220Bagel",
-            "220Fland",
-            "220Ishimura",
-            "220Gate",
-            "Nox",
+            //"Nox",
+            "Astro",
+            "Axioma",
+			"Donuts",
+            "Eclipse",
+            "SS220_syndicate",
+            "SS220_CentComm",
+
+            // SS220 Event Maps
             "Snout",
-            "220Avrite",
-            "220Marathon",
-            "220Hive",
             "VoidZone",
             "NTvsSSSP",
-            "Axioma",
-            "SS220_syndicate",
+
+            // SS220 Test Maps
+            "TestSM"
         };
 
         /// <summary>
@@ -97,13 +100,14 @@ namespace Content.IntegrationTests.Tests
 
             var entManager = server.ResolveDependency<IEntityManager>();
             var mapLoader = entManager.System<MapLoaderSystem>();
+            var mapSystem = entManager.System<SharedMapSystem>();
             var mapManager = server.ResolveDependency<IMapManager>();
             var cfg = server.ResolveDependency<IConfigurationManager>();
             Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
 
             await server.WaitPost(() =>
             {
-                var mapId = mapManager.CreateMap();
+                mapSystem.CreateMap(out var mapId);
                 try
                 {
 #pragma warning disable NUnit2045
@@ -184,6 +188,7 @@ namespace Content.IntegrationTests.Tests
             var mapManager = server.ResolveDependency<IMapManager>();
             var entManager = server.ResolveDependency<IEntityManager>();
             var mapLoader = entManager.System<MapLoaderSystem>();
+            var mapSystem = entManager.System<SharedMapSystem>();
             var protoManager = server.ResolveDependency<IPrototypeManager>();
             var ticker = entManager.EntitySysManager.GetEntitySystem<GameTicker>();
             var shuttleSystem = entManager.EntitySysManager.GetEntitySystem<ShuttleSystem>();
@@ -193,7 +198,7 @@ namespace Content.IntegrationTests.Tests
 
             await server.WaitPost(() =>
             {
-                var mapId = mapManager.CreateMap();
+                mapSystem.CreateMap(out var mapId);
                 try
                 {
                     ticker.LoadGameMap(protoManager.Index<GameMapPrototype>(mapProto), mapId, null);
@@ -203,7 +208,7 @@ namespace Content.IntegrationTests.Tests
                     throw new Exception($"Failed to load map {mapProto}", ex);
                 }
 
-                var shuttleMap = mapManager.CreateMap();
+                mapSystem.CreateMap(out var shuttleMap);
                 var largest = 0f;
                 EntityUid? targetGrid = null;
                 var memberQuery = entManager.GetEntityQuery<StationMemberComponent>();
@@ -264,22 +269,22 @@ namespace Content.IntegrationTests.Tests
 
                     // Test all availableJobs have spawnPoints
                     // This is done inside gamemap test because loading the map takes ages and we already have it.
-                    var jobList = entManager.GetComponent<StationJobsComponent>(station).RoundStartJobList
-                        .Where(x => x.Value != 0)
-                        .Select(x => x.Key);
-                    var spawnPoints = entManager.EntityQuery<SpawnPointComponent>()
-                        .Where(spawnpoint => spawnpoint.SpawnType == SpawnPointType.Job)
-                        .Select(spawnpoint => spawnpoint.Job.ID)
-                        .Distinct();
-                    List<string> missingSpawnPoints = new();
-                    foreach (var spawnpoint in jobList.Except(spawnPoints))
-                    {
-                        if (protoManager.Index<JobPrototype>(spawnpoint).SetPreference)
-                            missingSpawnPoints.Add(spawnpoint);
-                    }
+                    var comp = entManager.GetComponent<StationJobsComponent>(station);
+                    var jobs = new HashSet<ProtoId<JobPrototype>>(comp.SetupAvailableJobs.Keys);
 
-                    Assert.That(missingSpawnPoints, Has.Count.EqualTo(0),
-                        $"There is no spawnpoint for {string.Join(", ", missingSpawnPoints)} on {mapProto}.");
+                    var spawnPoints = entManager.EntityQuery<SpawnPointComponent>()
+                        .Where(x => x.SpawnType == SpawnPointType.Job && x.Job != null)
+                        .Select(x => x.Job.Value);
+
+                    jobs.ExceptWith(spawnPoints);
+
+                    spawnPoints = entManager.EntityQuery<ContainerSpawnPointComponent>()
+                        .Where(x => x.SpawnType is SpawnPointType.Job or SpawnPointType.Unset && x.Job != null)
+                        .Select(x => x.Job.Value);
+
+                    jobs.ExceptWith(spawnPoints);
+
+                    Assert.That(jobs, Is.Empty, $"There is no spawnpoints for {string.Join(", ", jobs)} on {mapProto}.");
                 }
 
                 try
@@ -352,6 +357,7 @@ namespace Content.IntegrationTests.Tests
             var resourceManager = server.ResolveDependency<IResourceManager>();
             var protoManager = server.ResolveDependency<IPrototypeManager>();
             var cfg = server.ResolveDependency<IConfigurationManager>();
+            var mapSystem = server.System<SharedMapSystem>();
             Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
 
             var gameMaps = protoManager.EnumeratePrototypes<GameMapPrototype>().Select(o => o.MapPath).ToHashSet();
@@ -382,7 +388,7 @@ namespace Content.IntegrationTests.Tests
                 {
                     foreach (var mapName in mapNames)
                     {
-                        var mapId = mapManager.CreateMap();
+                        mapSystem.CreateMap(out var mapId);
                         try
                         {
                             Assert.That(mapLoader.TryLoad(mapId, mapName, out _));

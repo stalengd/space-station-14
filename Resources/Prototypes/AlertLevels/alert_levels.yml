@@ -39,7 +39,7 @@
       announcement: alert-level-gamma-announcement
       selectable: false
       sound:
-        path: /Audio/Misc/siren.ogg
+        path: /Audio/Misc/gamma.ogg
         params:
           volume: -2
       disableSelection: true
@@ -57,7 +57,7 @@
       color: DarkRed
       emergencyLightColor: Orange
       forceEnableEmergencyLights: true
-      shuttleTime: 1200
+      shuttleTime: 300 #ss220 
     epsilon:
       announcement: alert-level-epsilon-announcement
       selectable: false

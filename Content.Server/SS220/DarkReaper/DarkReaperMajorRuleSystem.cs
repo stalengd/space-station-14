@@ -3,7 +3,7 @@ using Content.Server.Administration.Managers;
 using Content.Server.Antag;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
-using Content.Server.GameTicking.Components;
+using Content.Shared.GameTicking.Components;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Mind;
 using Content.Server.Respawn;
@@ -28,12 +28,11 @@ public sealed class DarkReaperMajorRuleSystem : GameRuleSystem<DarkReaperMajorRu
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
         SubscribeLocalEvent<DarkReaperMajorRuleComponent, AntagSelectEntityEvent>(OnAntagSelectEntity);
         SubscribeLocalEvent<DarkReaperMajorRuleComponent, AntagSelectLocationEvent>(OnAntagSelectLocation);
     }
 
-    private void OnRoundEndText(RoundEndTextAppendEvent ev)
+    protected override void AppendRoundEndText(EntityUid uid, DarkReaperMajorRuleComponent component, GameRuleComponent gameRule, ref RoundEndTextAppendEvent ev)
     {
         var mindQuery = GetEntityQuery<MindComponent>();
         foreach (var reaperRule in EntityQuery<DarkReaperMajorRuleComponent>())

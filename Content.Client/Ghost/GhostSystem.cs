@@ -6,8 +6,11 @@ using Robust.Client.Console;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 using System.Linq;
+using System.Threading.Tasks;
+using Content.Shared.Sprite;
 
 namespace Content.Client.Ghost
 {
@@ -18,6 +21,7 @@ namespace Content.Client.Ghost
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly SharedActionsSystem _actions = default!;
         [Dependency] private readonly ContentEyeSystem _contentEye = default!;
+        [Dependency] private readonly IEntityManager _entityManager = default!;
 
         public int AvailableGhostRoleCount { get; private set; }
 
@@ -93,6 +97,34 @@ namespace Content.Client.Ghost
 
         private void OnToggleFoV(EntityUid uid, EyeComponent component, ToggleFoVActionEvent args)
         {
+            //SS220-colorful-ghosts begin
+            if (TryComp<SpriteComponent>(uid, out var sprite))
+            {
+                var _random = new Random();
+                var color = new Color(_random.Next(1, 255), _random.Next(1, 255), _random.Next(1, 255));
+
+                // sprite.Color = color;
+
+                //sprite.Rotation += Angle.FromDegrees(180.0f);  //SS220 Ghost rotation fix
+
+                sprite.Color = sprite.Color.WithBlue(10);
+                //var t = sprite.GetType();
+
+                //var pr = t.GetProperties();
+
+                //var col =  pr.FirstOrDefault(x => x.Name == "Color");
+
+                //if (col is not null)
+                //{
+
+                //    col.GetSetMethod(true)!.Invoke(sprite, new object[] { color });
+                //}
+
+                // sprite.
+                // PlayerUpdated?.Invoke(Player);
+            }
+            //SS220-colorful-ghosts end
+
             if (args.Handled)
                 return;
 
@@ -106,8 +138,8 @@ namespace Content.Client.Ghost
             if (args.Handled)
                 return;
 
-            Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-ghost-visibility-popup"), args.Performer);
-
+            var locId = GhostVisibility ? "ghost-gui-toggle-ghost-visibility-popup-off" : "ghost-gui-toggle-ghost-visibility-popup-on";
+            Popup.PopupEntity(Loc.GetString(locId), args.Performer);
             if (uid == _playerManager.LocalEntity)
                 ToggleGhostVisibility();
 
@@ -125,7 +157,7 @@ namespace Content.Client.Ghost
 
             var typingIndicatorStates = new string[0];
             if (TryComp<TypingIndicatorComponent>(uid, out var typingIndicator) &&
-                _prototypeManager.TryIndex<TypingIndicatorPrototype>(typingIndicator.Prototype, out var typingProto))
+                _prototypeManager.TryIndex<TypingIndicatorPrototype>(typingIndicator.TypingIndicatorPrototype, out var typingProto))
                 typingIndicatorStates = new string[] { typingProto.TypingState, typingProto.IdleState };
 
             var spriteLayers = sprite.AllLayers;
@@ -146,6 +178,8 @@ namespace Content.Client.Ghost
             _actions.RemoveAction(uid, component.ToggleFoVActionEntity);
             _actions.RemoveAction(uid, component.ToggleGhostsActionEntity);
             _actions.RemoveAction(uid, component.ToggleGhostHearingActionEntity);
+            // SS220 ADD GHOST HUD'S
+            _actions.RemoveAction(uid, component.ToggleHudOnOtherActionEntity);
             //SS220-ghost-hats
             _actions.RemoveAction(uid, component.ToggleAGhostBodyVisualsActionEntity);
 
@@ -158,6 +192,21 @@ namespace Content.Client.Ghost
 
         private void OnGhostPlayerAttach(EntityUid uid, GhostComponent component, LocalPlayerAttachedEvent localPlayerAttachedEvent)
         {
+            // SS220 colorful ghost begin
+            if (TryComp<SpriteComponent>(uid, out var sprite))
+            {
+                var random = new Random();
+
+                var color = new Color(
+                    (float) random.Next(1, 255) / byte.MaxValue,
+                    (float) random.Next(1, 255) / byte.MaxValue,
+                    (float) random.Next(1, 255) / byte.MaxValue,
+                    sprite.Color.A);
+
+                sprite.Color = color;
+            }
+            // SS220 colorful ghost end
+
             GhostVisibility = true;
             PlayerAttached?.Invoke(component);
         }
@@ -166,7 +215,8 @@ namespace Content.Client.Ghost
         {
             if (TryComp<SpriteComponent>(uid, out var sprite))
             {
-                sprite.LayerSetColor(0, component.color);
+                //SS220-colorful-ghosts
+                //sprite.LayerSetColor(0, component.color);
 
                 //SS220-ghost-hats
                 SetBodyVisuals(uid, sprite, component.BodyVisible);

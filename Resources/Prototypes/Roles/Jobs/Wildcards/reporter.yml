@@ -21,3 +21,6 @@
   innerClothingSkirt: ClothingUniformJumpsuitJournalist
   satchel: ClothingBackpackSatchelFilled
   duffelbag: ClothingBackpackDuffelFilled
+  #storage:
+    #back:
+    #- Stuff

@@ -127,6 +127,13 @@
     Plastic: 500
 
 - type: latheRecipe
+  id: ClothingShoesBootsMoon
+  result: ClothingShoesBootsMoon
+  completetime: 2
+  materials:
+    Steel: 600
+
+- type: latheRecipe
   id: ClothingShoesBootsSpeed
   result: ClothingShoesBootsSpeed
   completetime: 2
@@ -198,6 +205,13 @@
     Gold: 25
     Silver: 25 #SS220-sheetifier-rework-end
 
+# - type: latheRecipe
+#   id: FloorRedCircuit
+#   result: FloorTileItemRCircuit4
+#   completetime: 2
+#   materials:
+#     Steel: 100
+
 - type: latheRecipe
   id: HandheldStationMap
   result: HandheldStationMapEmpty
@@ -213,3 +227,10 @@
   materials:
     Steel: 400
     Glass: 200
+
+- type: latheRecipe
+  id: ClothingHeadHatCone
+  result: ClothingHeadHatCone
+  completetime: 3
+  materials:
+    Plastic: 200

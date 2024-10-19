@@ -2,18 +2,18 @@
   id: BulletRifle
   name: bullet (0.20 rifle)
   parent: BaseBullet
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: Projectile
     damage:
       types:
-        Piercing: 17
+        Piercing: 29 #ss220lowTTKUpdate
 
 - type: entity
   id: BulletRiflePractice
   name: bullet (0.20 rifle practice)
   parent: BaseBulletPractice
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: Projectile
     damage:
@@ -24,23 +24,23 @@
   id: BulletRifleIncendiary
   parent: BaseBulletIncendiary
   name: bullet (0.20 rifle incendiary)
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: Projectile
     damage:
       types:
         Blunt: 15 #weaponBalance
-        Heat: 2 #weaponBalance
+        Heat: 5 #weaponBalance #ss220lowTTKUpdate
 
 - type: entity
   id: BulletRifleUranium
   parent: BaseBulletUranium
   name: bullet (0.20 rifle uranium)
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: Projectile
     damage:
       types:
         Radiation: 7
-        Piercing: 8
+        Piercing: 12 #ss220lowTTKUpdate
 

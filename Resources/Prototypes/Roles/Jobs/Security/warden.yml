@@ -7,11 +7,15 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 108000 # SS220-RoleTime
+    - !type:SpeciesRequirement #SS220-jobbans begin
+      inverted: true
+      species:
+      - Felinid #SS220-jobbans end
   startingGear: WardenGear
   icon: "JobIconWarden"
+  requireAdminNotify: true
   supervisors: job-supervisors-hos
   canBeAntag: false
-  canBeZombie: false
   access:
   - Security
   - Brig
@@ -28,9 +32,15 @@
 - type: startingGear
   id: WardenGear
   equipment:
-    eyes: ClothingEyesGlassesSecurity
+#    eyes: ClothingEyesGlassesSecurity #SS220-TwoOne-Floppa-Iteration
     id: WardenPDA
     ears: ClothingHeadsetSecurity
-    belt: ClothingBeltSecurityFilled
-    pocket1: WeaponPistolMk58
-    pocket2: MagazinePistol
+#    belt: ClothingBeltSecurityFilled #SS220-FreedomHoSCap
+    pocket1: WeaponPistolMk58Nonlethal #SS220-DeleteSecurityLetal
+  storage:
+    back:
+    - Flash
+    - MagazinePistolRubber #SS220-DeleteSecurityLetal-Begin
+    - MagazinePistolRubber
+    - FlashlightSeclite
+    - DrinkRelaxingPeachCan #SS220-DeleteSecurityLetal-End

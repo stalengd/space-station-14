@@ -20,6 +20,9 @@
 - type: startingGear
   id: StationEngineerGear
   equipment:
-    eyes: ClothingEyesGlassesMeson
+#    eyes: ClothingEyesGlassesMeson #SS220-Two Floppa Iteration
     belt: ClothingBeltUtilityEngineering
     ears: ClothingHeadsetEngineering
+  #storage:
+    #back:
+    #- Stuff

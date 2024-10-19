@@ -128,28 +128,29 @@ public sealed class AmeNodeGroup : BaseNodeGroup
         var safeFuelLimit = CoreCount * 2;
 
         var powerOutput = CalculatePower(fuel, CoreCount);
-        if (fuel <= safeFuelLimit)
-            return powerOutput;
+
+        // if (fuel <= safeFuelLimit) // SS220 safe regress (AME powerup)
+        //    return powerOutput; // SS220 safe regress (AME powerup)
 
         // The AME is being overloaded.
         // Note about these maths: I would assume the general idea here is to make larger engines less safe to overload.
         // In other words, yes, those are supposed to be CoreCount, not safeFuelLimit.
-        var instability = 0;
         var overloadVsSizeResult = fuel - CoreCount;
 
-        // fuel > safeFuelLimit: Slow damage. Can safely run at this level for burst periods if the engine is small and someone is keeping an eye on it.
-        if (_random.Prob(0.5f))
-            instability = 1;
-        // overloadVsSizeResult > 5:
-        if (overloadVsSizeResult > 5)
-            instability = 3;
-        // overloadVsSizeResult > 10: This will explode in at most 20 injections.
-        if (overloadVsSizeResult > 10)
-            instability = 5;
+        var instability = overloadVsSizeResult / CoreCount;
+        var fuzz = _random.Next(-1, 2); // -1 to 1
+        instability += fuzz; // fuzz the values a tiny bit.
 
-        // Apply calculated instability
-        if (instability == 0)
-            return powerOutput;
+        // SS220 safeoverload edited (AME powerup) - begin | PR #1744
+        if (fuel == safeFuelLimit + 2) // checkout 1 more grade higher than safe for safeoverload
+            if (_random.Prob(0.75f))
+                instability = 1;
+            else
+                instability = 0; // chance for safe tick without stability damage
+
+        if (fuel <= safeFuelLimit) // safe regress overload
+            instability = -1;
+        // SS220 safeoverload edited (AME powerup)- end | PR #1744
 
         overloading = true;
         var integrityCheck = 100;
@@ -160,6 +161,9 @@ public sealed class AmeNodeGroup : BaseNodeGroup
 
             var oldIntegrity = core.CoreIntegrity;
             core.CoreIntegrity -= instability;
+
+            if (core.CoreIntegrity > 100) // SS220 safe regress begin (AME powerup)
+                core.CoreIntegrity = 100; // SS220 safe regress end (AME powerup)
 
             if (oldIntegrity > 95
                 && core.CoreIntegrity <= 95
@@ -179,10 +183,13 @@ public sealed class AmeNodeGroup : BaseNodeGroup
     /// </summary>
     public float CalculatePower(int fuel, int cores)
     {
-        // Fuel is squared so more fuel vastly increases power and efficiency
-        // We divide by the number of cores so a larger AME is less efficient at the same fuel settings
-        // this results in all AMEs having the same efficiency at the same fuel-per-core setting
-        return 20000f * fuel * fuel / cores;
+        // Balanced around a single core AME with injection level 2 producing 120KW.
+        // Overclocking yields diminishing returns until it evens out at around 360KW.
+
+        // The adjustment for cores make it so that a 1 core AME at 2 injections is better than a 2 core AME at 2 injections.
+        // However, for the relative amounts for each (1 core at 2 and 2 core at 4), more cores has more output.
+        var ss220AMEmod = 1.4f; // SS220 special modifier for AME to powerup AME
+        return 200000f * MathF.Log10(fuel * fuel) * ss220AMEmod * MathF.Pow(0.8f, cores - 1); // SS220 AME powerup
     }
 
     public int GetTotalStability()

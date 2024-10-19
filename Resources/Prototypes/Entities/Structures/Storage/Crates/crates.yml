@@ -33,13 +33,19 @@
       visible: false
       map: ["enum.WeldableLayers.BaseWelded"]
 #SS220 Crate-tg-resprite end
+#SS220 crates-labels-fix begin
+    - state: paper
+      sprite: Structures/Storage/Crates/labels.rsi
+      map: ["enum.PaperLabelVisuals.Layer"]
+      offset: "0.0,0.375"
+#SS220 crates-labels-fix end
   - type: Construction
     graph: CratePlastic
     node: crateplastic
     containers:
     - entity_storage
   - type: StaticPrice
-    price: 80
+    price: 100
 
 - type: entity
   parent: CratePlastic
@@ -59,9 +65,19 @@
       visible: false
       map: ["enum.WeldableLayers.BaseWelded"]
 #SS220 Crate-tg-resprite end
+#SS220 crates-labels-fix begin
+    - state: paper
+      sprite: Structures/Storage/Crates/labels.rsi
+      map: ["enum.PaperLabelVisuals.Layer"]
+#SS220 crates-labels-fix end
   - type: AntiRottingContainer
   - type: ExplosionResistance
     damageCoefficient: 0.50
+  - type: Construction
+    graph: CrateFreezer
+    node: done
+    containers:
+    - entity_storage
 
 - type: entity
   parent: CratePlastic
@@ -81,6 +97,11 @@
       visible: false
       map: ["enum.WeldableLayers.BaseWelded"]
 #SS220 Crate-tg-resprite end
+#SS220 crates-labels-fix begin
+    - state: paper
+      sprite: Structures/Storage/Crates/labels.rsi
+      map: ["enum.PaperLabelVisuals.Layer"]
+#SS220 crates-labels-fix end
 
 - type: entity
   parent: CratePlastic
@@ -100,6 +121,11 @@
       visible: false
       map: ["enum.WeldableLayers.BaseWelded"]
 #SS220 Crate-tg-resprite end
+#SS220 crates-labels-fix begin
+    - state: paper
+      sprite: Structures/Storage/Crates/labels.rsi
+      map: ["enum.PaperLabelVisuals.Layer"]
+#SS220 crates-labels-fix end
 
 - type: entity
   parent: CrateGenericSteel
@@ -130,6 +156,11 @@
       visible: false
       map: ["enum.WeldableLayers.BaseWelded"]
 #SS220 Crate-tg-resprite end
+#SS220 crates-labels-fix begin
+    - state: paper
+      sprite: Structures/Storage/Crates/labels.rsi
+      map: ["enum.PaperLabelVisuals.Layer"]
+#SS220 crates-labels-fix end
 
 - type: entity
   parent: CrateGenericSteel
@@ -149,6 +180,11 @@
       visible: false
       map: ["enum.WeldableLayers.BaseWelded"]
 #SS220 Crate-tg-resprite end
+#SS220 crates-labels-fix begin
+    - state: paper
+      sprite: Structures/Storage/Crates/labels.rsi
+      map: ["enum.PaperLabelVisuals.Layer"]
+#SS220 crates-labels-fix end
 
 - type: entity
   parent: CrateGenericSteel
@@ -228,7 +264,7 @@
 # Secure Crates
 
 - type: entity
-  parent: CrateBaseSecure
+  parent: [ CrateBaseSecure]
   id: CrateSecgear
   name: secgear crate
   components:
@@ -344,7 +380,7 @@
     access: [["Armory"]]
 
 - type: entity
-  parent: CrateBaseSecure
+  parent: [ CrateBaseSecure]
   suffix: Armory, Secure
   id: CrateContrabandStorageSecure
   name: contraband storage crate
@@ -476,7 +512,7 @@
         layer:
         - LargeMobLayer
   - type: StaticPrice
-    price: 60
+    price: 75
 
 - type: entity
   parent: CrateGeneric

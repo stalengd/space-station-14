@@ -1,15 +1,13 @@
 using Content.Shared.Audio.Jukebox;
 using Robust.Client.Audio;
-using Robust.Client.Player;
+using Robust.Client.UserInterface;
 using Robust.Shared.Audio.Components;
-using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Audio.Jukebox;
 
 public sealed class JukeboxBoundUserInterface : BoundUserInterface
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
 
     [ViewVariables]
@@ -24,9 +22,7 @@ public sealed class JukeboxBoundUserInterface : BoundUserInterface
     {
         base.Open();
 
-        _menu = new JukeboxMenu();
-        _menu.OnClose += Close;
-        _menu.OpenCentered();
+        _menu = this.CreateWindow<JukeboxMenu>();
 
         _menu.OnPlayPressed += args =>
         {
@@ -48,6 +44,8 @@ public sealed class JukeboxBoundUserInterface : BoundUserInterface
         _menu.OnSongSelected += SelectSong;
 
         _menu.SetTime += SetTime;
+
+        _menu.SetGain += SetGain; //ss220-jukebox-tweak-end
         PopulateMusic();
         Reload();
     }
@@ -102,18 +100,11 @@ public sealed class JukeboxBoundUserInterface : BoundUserInterface
         SendMessage(new JukeboxSetTimeMessage(sentTime));
     }
 
-    protected override void Dispose(bool disposing)
+    //ss220-jukebox-tweak-begin
+    public void SetGain(float gain)
     {
-        base.Dispose(disposing);
-        if (!disposing)
-            return;
-
-        if (_menu == null)
-            return;
-
-        _menu.OnClose -= Close;
-        _menu.Dispose();
-        _menu = null;
+        SendMessage(new JukeboxSetGainMessage(gain));
     }
+    //ss220-jukebox-tweak-end
 }
 

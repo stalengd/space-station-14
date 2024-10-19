@@ -145,7 +145,7 @@ public sealed class TeleportAFKtoCryoSystem : EntitySystem
         if (station != _station.GetOwningStation(cryopodUid))
             return false;
 
-        // SS220 Cryostorage ghost role fix begin
+        // Kicks the mind out of the entity if it cannot enter the cryostorage
         if (!HasComp<CanEnterCryostorageComponent>(target))
         {
             if (_mindSystem.GetMind(target) is { } mind)
@@ -154,7 +154,6 @@ public sealed class TeleportAFKtoCryoSystem : EntitySystem
             }
             return true;
         }
-        // SS220 Cryostorage ghost role fix end
 
         var portal = Spawn(teleportPortralID, Transform(target).Coordinates);
 

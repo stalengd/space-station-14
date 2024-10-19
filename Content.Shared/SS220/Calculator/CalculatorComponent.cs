@@ -8,33 +8,59 @@ namespace Content.Shared.SS220.Calculator;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CalculatorComponent : Component
 {
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    /// <summary>
+    /// How many digits in the number can our calculator handle.
+    /// </summary>
+    [DataField]
     public int DigitsLimit = 8;
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    /// <summary>
+    /// Sound to play on button press.
+    /// </summary>
+    [DataField]
     public SoundSpecifier? ButtonSound;
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    /// <summary>
+    /// Timeout between popups from calculator.
+    /// </summary>
+    [DataField]
     public TimeSpan MinIntervalToPopup = TimeSpan.FromSeconds(10f);
 
+    /// <summary>
+    /// State of the calculator: numbers and operation.
+    /// </summary>
     [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
     public CalculatorState State;
 
     /// <summary>
-    /// Server only
+    /// Last player entity who opened this calculator.
     /// </summary>
+    /// <remarks> Server only </remarks>
     public EntityUid? LastUser;
     /// <summary>
-    /// Server only
+    /// Last time when this calculator showed popup.
     /// </summary>
+    /// <remarks> Server only </remarks>
     public TimeSpan? LastPopupTimestamp;
 }
 
+/// <summary>
+/// Entered numbers and operation of the <see cref="CalculatorComponent"/>.
+/// </summary>
 [Serializable, NetSerializable]
 public partial struct CalculatorState
 {
+    /// <summary>
+    /// Left operand of the entered expression. In expression "1 + 2" this will be "1".
+    /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     public CalculatorOperand OperandLeft;
+    /// <summary>
+    /// Right operand of the entered expression. In expression "1 + 2" this will be "2".
+    /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     public CalculatorOperand? OperandRight;
+    /// <summary>
+    /// Operation of the entered expression. In expression "1 + 2" this will be "+".
+    /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     public CalculatorOperation? Operation;
 
@@ -47,7 +73,14 @@ public partial struct CalculatorState
 [Serializable, NetSerializable]
 public partial struct CalculatorOperand
 {
+    /// <summary>
+    /// The number itself. This handles integer part, sign, and most of the fraction part.
+    /// </summary>
     public decimal Number;
+    /// <summary>
+    /// If the number is not integer (user entered dot) this will be not null, and the value
+    /// mean number of digits after dot. For "12.000" <see cref="FractionLength"/> will have value of 3.
+    /// </summary>
     public byte? FractionLength;
 
     public readonly override string ToString()

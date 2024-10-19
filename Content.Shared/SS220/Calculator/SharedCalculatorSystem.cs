@@ -5,6 +5,10 @@ namespace Content.Shared.SS220.Calculator;
 
 public abstract class SharedCalculatorSystem : EntitySystem
 {
+    /// <summary>
+    /// Appends decimal <paramref name="digit"/> to the current <paramref name="calculator"/> state. 
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public bool TryAppendDigit(Entity<CalculatorComponent> calculator, byte digit)
     {
         if (digit > 9)
@@ -30,6 +34,9 @@ public abstract class SharedCalculatorSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// Appends decimal point to the current <paramref name="calculator"/> state.
+    /// </summary>
     public bool TryAppendDecimalPoint(Entity<CalculatorComponent> calculator)
     {
         var currentOperand = GetInputOperand(calculator);
@@ -43,18 +50,28 @@ public abstract class SharedCalculatorSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// Completely clears the current <paramref name="calculator"/> state (both operands and operation).
+    /// </summary>
     public void ClearState(Entity<CalculatorComponent> calculator)
     {
         calculator.Comp.State = default;
         OnChanged(calculator);
     }
 
+    /// <summary>
+    /// Clears currently active operand (left if no operation is entered, otherwise right) of the <paramref name="calculator"/>.
+    /// </summary>
     public void ClearInputOperand(Entity<CalculatorComponent> calculator)
     {
         SetInputOperand(calculator, default);
         OnChanged(calculator);
     }
 
+    /// <summary>
+    /// Sets specified operation for the <paramref name="calculator"/> state.
+    /// This also have a side effect of changing input operand to the right one.
+    /// </summary>
     public void SetOperation(Entity<CalculatorComponent> calculator, CalculatorOperation operation)
     {
         if (calculator.Comp.State.OperandRight.HasValue)
@@ -63,6 +80,9 @@ public abstract class SharedCalculatorSystem : EntitySystem
         OnChanged(calculator);
     }
 
+    /// <summary>
+    /// Negates current input operate (see <see cref="GetInputOperand(Entity{CalculatorComponent})"/>) of the <paramref name="calculator"/>.
+    /// </summary>
     public void NegateCurrentOperand(Entity<CalculatorComponent> calculator)
     {
         var currentOperand = GetInputOperand(calculator);
@@ -73,6 +93,10 @@ public abstract class SharedCalculatorSystem : EntitySystem
         OnChanged(calculator);
     }
 
+    /// <summary>
+    /// Evaluates the entered expression in the current <paramref name="calculator"/> state,
+    /// writes result to the left operand, and clears right operand and operation.
+    /// </summary>
     public void Calculate(Entity<CalculatorComponent> calculator)
     {
         var state = calculator.Comp.State;
@@ -117,6 +141,11 @@ public abstract class SharedCalculatorSystem : EntitySystem
         OnChanged(calculator);
     }
 
+    /// <summary>
+    /// Will negate current input operand (see <see cref="NegateCurrentOperand(Entity{CalculatorComponent})"/>)
+    /// if current input operand is zero, otherwise will set substraction operation
+    /// (see <see cref="SetOperation(Entity{CalculatorComponent}, CalculatorOperation)"/>).
+    /// </summary>
     public void SetSubtractionOrNegate(Entity<CalculatorComponent> calculator)
     {
         var currentOperand = GetInputOperand(calculator);
@@ -130,12 +159,19 @@ public abstract class SharedCalculatorSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Returns <see langword="true"/> if right operand should be currently displayed,
+    /// or <see langword="false"/> if the left one.
+    /// </summary>
     [Pure]
     public bool IsRightOperandDisplayed(Entity<CalculatorComponent> calculator)
     {
         return calculator.Comp.State.OperandRight.HasValue;
     }
 
+    /// <summary>
+    /// Returns operand that is currently displayed (see <see cref="IsRightOperandDisplayed(Entity{CalculatorComponent})"/>).
+    /// </summary>
     [Pure]
     public CalculatorOperand GetDisplayedOperand(Entity<CalculatorComponent> calculator)
     {
@@ -144,12 +180,19 @@ public abstract class SharedCalculatorSystem : EntitySystem
             : calculator.Comp.State.OperandLeft;
     }
 
+    /// <summary>
+    /// Returns <see langword="true"/> if right operand is currently editable,
+    /// or <see langword="false"/> if the left one.
+    /// </summary>
     [Pure]
     public bool IsRightOperandInput(Entity<CalculatorComponent> calculator)
     {
         return calculator.Comp.State.Operation.HasValue;
     }
 
+    /// <summary>
+    /// Returns operand that is currently editable (see <see cref="IsRightOperandInput(Entity{CalculatorComponent})"/>).
+    /// </summary>
     [Pure]
     public CalculatorOperand GetInputOperand(Entity<CalculatorComponent> calculator)
     {
@@ -157,12 +200,18 @@ public abstract class SharedCalculatorSystem : EntitySystem
         return IsRightOperandInput(calculator) ? state.OperandRight.GetValueOrDefault() : state.OperandLeft;
     }
 
+    /// <summary>
+    /// Returns <see langword="true"/> if the <paramref name="operand"/> can not longer accept digits.
+    /// </summary>
     [Pure]
     public bool IsOperandOutOfCapacity(Entity<CalculatorComponent> calculator, CalculatorOperand operand)
     {
         return CountOperandLength(calculator, operand) >= calculator.Comp.DigitsLimit;
     }
 
+    /// <summary>
+    /// Returns lenght in characters of the specified <paramref name="operand"/>.
+    /// </summary>
     [Pure]
     public int CountOperandLength(Entity<CalculatorComponent> calculator, CalculatorOperand operand)
     {

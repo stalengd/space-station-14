@@ -116,8 +116,8 @@ public sealed class PhotoManager : EntitySystem
 
             if (TryComp<DecalGridComponent>(gridUid, out var decalGrid))
             {
-                var (_, _, matrix) = gridXform.GetWorldPositionRotationInvMatrix();
-                var localPos = matrix.Transform(focusWorldPos);
+                var (_, _, matrix) = _transform.GetWorldPositionRotationInvMatrix(gridXform);
+                var localPos = Vector2.Transform(focusWorldPos, matrix);
                 var localAABB = new Box2(localPos - range, localPos + range);
                 var chunkDict = new Dictionary<Vector2i, DecalGridComponent.DecalChunk>();
                 var chunks = new ChunkIndicesEnumerator(localAABB, DecalSystem.ChunkSize);

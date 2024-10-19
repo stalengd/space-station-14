@@ -104,7 +104,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var decalGrid = EnsureComp<DecalGridComponent>(gridEnt);
                 var ev = new ComponentHandleState(gridDesc.DecalGridState, null);
-                EntityManager.EventBus.RaiseComponentEvent(decalGrid, ref ev);
+                RaiseLocalEvent(gridEnt, ref ev);
             }
         }
 
@@ -157,7 +157,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var appearanceComp = EnsureComp<AppearanceComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Appearance, null);
-                EntityManager.EventBus.RaiseComponentEvent(appearanceComp, ref ev);
+                RaiseLocalEvent(entity, ref ev);
             }
 
             // TODO: deduplicate
@@ -166,7 +166,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var humanoidAppearanceComp = EnsureComp<HumanoidAppearanceComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.HumanoidAppearance, null);
-                EntityManager.EventBus.RaiseComponentEvent(humanoidAppearanceComp, ref ev);
+                RaiseLocalEvent(entity, ref ev);
             }
 
             // Handle point light state
@@ -174,7 +174,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var pointLightComp = EnsureComp<PointLightComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.PointLight, null);
-                EntityManager.EventBus.RaiseComponentEvent(pointLightComp, ref ev);
+                RaiseLocalEvent(entity, ref ev);
             }
 
             // Handle occluder state
@@ -182,7 +182,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var occluderComp = EnsureComp<OccluderComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Occluder, null);
-                EntityManager.EventBus.RaiseComponentEvent(occluderComp, ref ev);
+                RaiseLocalEvent(entity, ref ev);
             }
 
             // Handle damageable state
@@ -190,7 +190,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var damageableComp = EnsureComp<DamageableComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Damageable, null);
-                EntityManager.EventBus.RaiseComponentEvent(damageableComp, ref ev);
+                RaiseLocalEvent(entity, ref ev);
             }
 
             // Handle hands state
@@ -198,7 +198,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var handsComp = EnsureComp<HandsComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Hands, null);
-                EntityManager.EventBus.RaiseComponentEvent(handsComp, ref ev);
+                RaiseLocalEvent(entity, ref ev);
             }
 
             // Status Effects
@@ -206,7 +206,7 @@ public sealed partial class PhotoVisualizer : EntitySystem
             {
                 var statusEffectsComp = EnsureComp<StatusEffectsComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.StatusEffects, null);
-                EntityManager.EventBus.RaiseComponentEvent(statusEffectsComp, ref ev);
+                RaiseLocalEvent(entity, ref ev);
             }
 
             // Handle inventory

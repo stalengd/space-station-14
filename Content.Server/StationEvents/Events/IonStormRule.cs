@@ -130,7 +130,7 @@ public sealed class IonStormRule : StationEventSystem<IonStormRuleComponent>
             // generate a new law...
             // SS220 IonStrom Laws rework start
             // var newLaw = GenerateLaw();
-            var newLaw = PickLaw();
+            var newLaw = Pick(BrickedLaw);
             // SS220 IonStrom Laws rework end
 
             // see if the law we add will replace a random existing law or be a new glitched order one
@@ -289,14 +289,6 @@ public sealed class IonStormRule : StationEventSystem<IonStormRuleComponent>
             _ => Loc.GetString("ion-storm-law-concept-verb", ("concept", concept), ("verb", verb), ("subjects", triple))
         };
     }
-    // SS220 IonStorm Rework start
-    private string PickLaw()
-    {
-        var brickedLaw = Pick(BrickedLaw);
-        return brickedLaw;
-    }
-    // SS220 IonStorm Rework end
-
     /// <summary>
     /// Picks a random value from an ion storm dataset.
     /// All ion storm datasets start with IonStorm.

@@ -37,7 +37,7 @@ public sealed partial class PhotoCameraComponent : Component
     public TimeSpan PrintingTime = TimeSpan.FromSeconds(3);
 
     [DataField]
-    public ProtoId<EntityPrototype> PhotoPrototypeId = "Photo";
+    public EntProtoId PhotoPrototypeId = "Photo";
 
     [DataField]
     public SoundSpecifier ShotSound = new SoundPathSpecifier("/Audio/SS220/Items/polaroid.ogg");

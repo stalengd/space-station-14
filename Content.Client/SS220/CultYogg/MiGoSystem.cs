@@ -42,11 +42,7 @@ public sealed class MiGoSystem : SharedMiGoSystem
         if (args.Alert.ID != ent.Comp.AstralAlert)
             return;
 
-        if (ent.Comp.AlertTime == null)
-            return;
-
-
-        var timeLeft = ent.Comp.AlertTime.Value;
+        var timeLeft = ent.Comp.AlertTime.Int();
         var sprite = args.SpriteViewEnt.Comp;
         sprite.LayerSetState(MiGoTimerVisualLayers.Digit1, $"{(timeLeft / 10) % 10}");
         sprite.LayerSetState(MiGoTimerVisualLayers.Digit2, $"{(timeLeft % 10)}");

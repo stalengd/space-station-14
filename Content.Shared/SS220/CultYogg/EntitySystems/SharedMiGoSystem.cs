@@ -17,6 +17,8 @@ using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.Buckle.Components;
 using System.Linq;
 using Robust.Shared.Audio.Systems;
+using Content.Shared.FixedPoint;
+using Content.Shared.Alert;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -38,6 +40,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly AlertsSystem _alerts = default!;
 
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
@@ -62,6 +65,9 @@ public abstract class SharedMiGoSystem : EntitySystem
         _actions.AddAction(uid, ref uid.Comp.MiGoErectActionEntity, uid.Comp.MiGoErectAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoSacrificeActionEntity, uid.Comp.MiGoSacrificeAction);
     }
+
+    public virtual void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial) { }
+
     #region Heal
     private void MiGoHeal(Entity<MiGoComponent> uid, ref MiGoHealEvent args)
     {
@@ -175,6 +181,40 @@ public abstract class SharedMiGoSystem : EntitySystem
     }
 
     #endregion
+
+    public override void Update(float delta)
+    {
+        base.Update(delta);
+        var query = EntityQueryEnumerator<MiGoComponent>();
+
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (IsPaused(uid))
+                continue;
+
+            if (comp.MaterializationTime == null)
+                continue;
+
+            var secondsLeft = (FixedPoint2)Math.Round((comp.MaterializationTime.Value - _timing.CurTime).TotalSeconds);//calculate time left in seconds
+
+            if (comp.AlertTime == 0 || comp.AlertTime > secondsLeft)//update alert if buffer has a different value
+            {
+                comp.AlertTime = secondsLeft;
+                _alerts.ShowAlert(uid, comp.AstralAlert);
+            }
+
+            if (_timing.CurTime <= comp.MaterializationTime.Value)
+                continue;
+
+            ChangeForm(uid, comp, true);
+            if (!comp.AudioPlayed)
+            {
+                _audio.PlayEntity(comp.SoundMaterialize, uid, uid);
+                comp.AudioPlayed = true;
+            }
+            _actions.StartUseDelay(comp.MiGoAstralActionEntity);
+        }
+    }
 }
 
 [Serializable, NetSerializable]

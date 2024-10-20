@@ -28,6 +28,8 @@ using Robust.Shared.Timing;
 using Content.Shared.Tag;
 using Content.Shared.Alert;
 using JetBrains.FormatRipper.Elf;
+using Content.Shared.FixedPoint;
+using Content.Shared.CombatMode.Pacification;
 
 namespace Content.Server.SS220.CultYogg;
 
@@ -137,7 +139,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         }
     }
 
-    public void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial)
+    public override void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial)
     {
         comp.IsPhysicalForm = isMaterial;
 
@@ -164,11 +166,14 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             //no opening door during astral
             _tag.AddTag(uid, "DoorBumpOpener");
             comp.MaterializationTime = null;
+            comp.AlertTime = 0;
 
             _alerts.ClearAlert(uid, comp.AstralAlert);
 
             //no phisyc during astral
             EnsureComp<MovementIgnoreGravityComponent>(uid);
+
+            //EnsureComp<PacifiedComponent>(uid);
 
             //some copypaste invisibility shit
             _visibility.AddLayer((uid, vis), (int)VisibilityFlags.Normal, false);
@@ -193,6 +198,8 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             _alerts.ShowAlert(uid, comp.AstralAlert);
 
             RemComp<MovementIgnoreGravityComponent>(uid);
+
+            //RemComp<PacifiedComponent>(uid);
 
             if (HasComp<NpcFactionMemberComponent>(uid))
             {
@@ -223,39 +230,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         _speedModifier.ChangeBaseSpeed(uid, speed, speed, modifComp.Acceleration, modifComp);
     }
     // Update loop
-    public override void Update(float delta)
-    {
-        base.Update(delta);
-        var query = EntityQueryEnumerator<MiGoComponent>();
 
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (IsPaused(uid))
-                continue;
-
-            if (comp.MaterializationTime == null)
-                continue;
-
-            var secondsLeft = Convert.ToInt32((_timing.CurTime - comp.MaterializationTime.Value).TotalSeconds);//calculate time left in seconds
-
-            if (comp.AlertTime == null || comp.AlertTime > secondsLeft)//update alert if buffer has a different value
-            {
-                comp.AlertTime = secondsLeft;
-                _alerts.ShowAlert(uid, comp.AstralAlert);
-            }
-
-            if (_timing.CurTime <= comp.MaterializationTime.Value)
-                continue;
-
-            ChangeForm(uid, comp, true);
-            if (!comp.AudioPlayed)
-            {
-                _audio.PlayEntity(comp.SoundMaterialize, uid, uid);
-                comp.AudioPlayed = true;
-            }
-            _actions.StartUseDelay(comp.MiGoAstralActionEntity);
-        }
-    }
     #endregion
 
     #region Enslave

@@ -5,6 +5,7 @@ using Robust.Shared.Serialization;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Robust.Shared.Audio;
 using Content.Shared.Alert;
+using Content.Shared.FixedPoint;
 
 namespace Content.Shared.SS220.CultYogg.Components;
 
@@ -85,11 +86,11 @@ public sealed partial class MiGoComponent : Component
     [ViewVariables, DataField, AutoNetworkedField]
     public TimeSpan AstralDuration = TimeSpan.FromSeconds(10);
 
+    [AutoNetworkedField]
     public TimeSpan? MaterializationTime;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
     [AutoNetworkedField]
-    public int? AlertTime;
+    public FixedPoint2 AlertTime;
 
     [ViewVariables, DataField, AutoNetworkedField]
     public float MaterialMovementSpeed = 6f; //ToDo check this thing

@@ -289,6 +289,7 @@ public sealed class IonStormRule : StationEventSystem<IonStormRuleComponent>
             _ => Loc.GetString("ion-storm-law-concept-verb", ("concept", concept), ("verb", verb), ("subjects", triple))
         };
     }
+    
     /// <summary>
     /// Picks a random value from an ion storm dataset.
     /// All ion storm datasets start with IonStorm.

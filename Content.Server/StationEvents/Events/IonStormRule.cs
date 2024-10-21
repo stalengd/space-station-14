@@ -64,7 +64,7 @@ public sealed class IonStormRule : StationEventSystem<IonStormRuleComponent>
     // SS220 IonStrom Laws rework start
     [ValidatePrototypeId<DatasetPrototype>]
     private const string BrickedLaw = "IonStormBrickedLaws";
-    // SS220 IonStrom Laws rework start
+    // SS220 IonStrom Laws rework end
 
     protected override void Started(EntityUid uid, IonStormRuleComponent comp, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {

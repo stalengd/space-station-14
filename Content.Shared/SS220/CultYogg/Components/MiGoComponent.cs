@@ -83,8 +83,8 @@ public sealed partial class MiGoComponent : Component
     public TimeSpan CooldownAfterDematerialize = TimeSpan.FromSeconds(3);
 
     /// How long MiGo can be in astral
-    [ViewVariables, DataField, AutoNetworkedField]
-    public TimeSpan AstralDuration = TimeSpan.FromSeconds(10);
+    [DataField, AutoNetworkedField]
+    public TimeSpan AstralDuration = TimeSpan.FromSeconds(15);
 
     [AutoNetworkedField]
     public TimeSpan? MaterializationTime;
@@ -116,7 +116,6 @@ public sealed partial class MiGoComponent : Component
     /// <summary>
     /// How long it takes to unlock another destination once one is taken.
     /// </summary>
-    [DataField]
     public TimeSpan BeforeReplacementCooldown = TimeSpan.FromSeconds(300);
 
     /// <summary>

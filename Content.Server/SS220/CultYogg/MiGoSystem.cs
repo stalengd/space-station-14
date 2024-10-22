@@ -52,111 +52,22 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
     public override void Initialize()
     {
         base.Initialize();
 
         //actions
         SubscribeLocalEvent<MiGoComponent, MiGoEnslavementEvent>(MiGoEnslave);
-        SubscribeLocalEvent<MiGoComponent, MiGoAstralEvent>(MiGoAstral);
 
         SubscribeLocalEvent<MiGoComponent, MiGoEnslaveDoAfterEvent>(MiGoEnslaveOnDoAfter);
-
-        //astral DoAfterEvents
-        SubscribeLocalEvent<MiGoComponent, AfterMaterialize>(OnAfterMaterialize);
-        SubscribeLocalEvent<MiGoComponent, AfterDeMaterialize>(OnAfterDeMaterialize);
     }
 
     #region Astral
-    private void MiGoAstral(Entity<MiGoComponent> uid, ref MiGoAstralEvent args)
-    {
-        if (!uid.Comp.IsPhysicalForm)
-        {
-            var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(1.25), new AfterMaterialize(), uid)
-            {
-                Broadcast = false,
-                BreakOnDamage = false,
-                NeedHand = false,
-                BlockDuplicate = true,
-                CancelDuplicate = false
-            };
-
-            var started = _doAfter.TryStartDoAfter(doafterArgs);
-            if (started)
-            {
-                _physics.SetBodyType(uid, BodyType.Static);
-                _audio.PlayEntity(uid.Comp.SoundMaterialize, uid, uid);
-                //_audio.PlayPredicted(uid.Comp.SoundMaterialize, uid, uid);
-            }
-        }
-        else
-        {
-            var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(1.25), new AfterDeMaterialize(), uid)
-            {
-                Broadcast = false,
-                BreakOnDamage = false,
-                NeedHand = false,
-                BlockDuplicate = true,
-                CancelDuplicate = false
-            };
-
-            var started = _doAfter.TryStartDoAfter(doafterArgs);
-            if (started)
-            {
-                _audio.PlayEntity(uid.Comp.SoundDeMaterialize, uid, uid);
-                //_audio.PlayPredicted(uid.Comp.SoundDeMaterialize, uid, uid);
-            }
-        }
-    }
-    private void OnAfterMaterialize(Entity<MiGoComponent> uid, ref AfterMaterialize args)
-    {
-        args.Handled = true;
-
-        _physics.SetBodyType(uid, BodyType.KinematicController);
-
-        if (!args.Cancelled)
-        {
-            ChangeForm(uid, uid.Comp, true);
-
-            _actions.StartUseDelay(uid.Comp.MiGoAstralActionEntity);
-        }
-    }
-
-    private void OnAfterDeMaterialize(Entity<MiGoComponent> uid, ref AfterDeMaterialize args)
-    {
-        args.Handled = true;
-
-        if (!args.Cancelled)
-        {
-            ChangeForm(uid, uid.Comp, false);
-            uid.Comp.MaterializationTime = _timing.CurTime + uid.Comp.AstralDuration;
-
-            var cooldownStart = _timing.CurTime;
-            var cooldownEnd = cooldownStart + uid.Comp.CooldownAfterDematerialize;
-
-            _actions.SetCooldown(uid.Comp.MiGoAstralActionEntity, cooldownStart, cooldownEnd);
-        }
-    }
-
     public override void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial)
     {
         comp.IsPhysicalForm = isMaterial;
 
-        if (TryComp<FixturesComponent>(uid, out var fixturesComp))
-        {
-            if (fixturesComp.Fixtures.TryGetValue("fix1", out var fixture))
-            {
-                var mask = (int)(isMaterial ? CollisionGroup.MobMask : CollisionGroup.GhostImpassable);
-                var layer = (int)(isMaterial ? CollisionGroup.MobLayer : CollisionGroup.None);
-                _physics.SetCollisionMask(uid, "fix1", fixture, mask);
-                _physics.SetCollisionLayer(uid, "fix1", fixture, layer);
-            }
-        }
-
-        //full vision during astral
-        if (TryComp<EyeComponent>(uid, out var eye))
-            _eye.SetDrawFov(uid, isMaterial, eye);
+        base.ChangeForm(uid, comp, isMaterial);
 
         if (!TryComp<VisibilityComponent>(uid, out var vis))
             return;
@@ -170,10 +81,7 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
 
             _alerts.ClearAlert(uid, comp.AstralAlert);
 
-            //no phisyc during astral
-            EnsureComp<MovementIgnoreGravityComponent>(uid);
-
-            //EnsureComp<PacifiedComponent>(uid);
+            RemComp<MovementIgnoreGravityComponent>(uid);
 
             //some copypaste invisibility shit
             _visibility.AddLayer((uid, vis), (int)VisibilityFlags.Normal, false);
@@ -197,9 +105,8 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
 
             _alerts.ShowAlert(uid, comp.AstralAlert);
 
-            RemComp<MovementIgnoreGravityComponent>(uid);
-
-            //RemComp<PacifiedComponent>(uid);
+            //no phisyc during astral
+            EnsureComp<MovementIgnoreGravityComponent>(uid);
 
             if (HasComp<NpcFactionMemberComponent>(uid))
             {

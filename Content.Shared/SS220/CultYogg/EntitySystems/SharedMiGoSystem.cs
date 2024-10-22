@@ -19,6 +19,13 @@ using System.Linq;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Alert;
+using Robust.Shared.Physics;
+using Content.Shared.Physics;
+using Content.Shared.SS220.DarkReaper;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -41,6 +48,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private readonly SharedEyeSystem _eye = default!;
 
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
@@ -55,6 +63,13 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, MiGoHealEvent>(MiGoHeal);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
+        SubscribeLocalEvent<MiGoComponent, MiGoAstralEvent>(MiGoAstral);
+
+        //astral DoAfterEvents
+        SubscribeLocalEvent<MiGoComponent, AfterMaterialize>(OnAfterMaterialize);
+        SubscribeLocalEvent<MiGoComponent, AfterDeMaterialize>(OnAfterDeMaterialize);
+
+        SubscribeLocalEvent<MiGoComponent, AttackAttemptEvent>(CheckAct);
     }
 
     protected virtual void OnCompInit(Entity<MiGoComponent> uid, ref ComponentStartup args)
@@ -66,7 +81,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         _actions.AddAction(uid, ref uid.Comp.MiGoSacrificeActionEntity, uid.Comp.MiGoSacrificeAction);
     }
 
-    public virtual void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial) { }
+
 
     #region Heal
     private void MiGoHeal(Entity<MiGoComponent> uid, ref MiGoHealEvent args)
@@ -182,6 +197,7 @@ public abstract class SharedMiGoSystem : EntitySystem
 
     #endregion
 
+    #region Astral
     public override void Update(float delta)
     {
         base.Update(delta);
@@ -209,12 +225,105 @@ public abstract class SharedMiGoSystem : EntitySystem
             ChangeForm(uid, comp, true);
             if (!comp.AudioPlayed)
             {
-                _audio.PlayEntity(comp.SoundMaterialize, uid, uid);
+                _audio.PlayPredicted(comp.SoundMaterialize, uid, uid);
                 comp.AudioPlayed = true;
             }
             _actions.StartUseDelay(comp.MiGoAstralActionEntity);
         }
     }
+    private void MiGoAstral(Entity<MiGoComponent> uid, ref MiGoAstralEvent args)
+    {
+        if (!uid.Comp.IsPhysicalForm)
+        {
+            var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(1.25), new AfterMaterialize(), uid)
+            {
+                Broadcast = false,
+                BreakOnDamage = false,
+                NeedHand = false,
+                BlockDuplicate = true,
+                CancelDuplicate = false
+            };
+
+            var started = _doAfter.TryStartDoAfter(doafterArgs);
+            if (started)
+            {
+                _physics.SetBodyType(uid, BodyType.Static);
+                _audio.PlayPredicted(uid.Comp.SoundMaterialize, uid, uid);
+            }
+        }
+        else
+        {
+            var doafterArgs = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(1.25), new AfterDeMaterialize(), uid)
+            {
+                Broadcast = false,
+                BreakOnDamage = false,
+                NeedHand = false,
+                BlockDuplicate = true,
+                CancelDuplicate = false
+            };
+
+            var started = _doAfter.TryStartDoAfter(doafterArgs);
+            if (started)
+            {
+                _audio.PlayPredicted(uid.Comp.SoundDeMaterialize, uid, uid);
+            }
+        }
+    }
+    private void OnAfterMaterialize(Entity<MiGoComponent> uid, ref AfterMaterialize args)
+    {
+        args.Handled = true;
+
+        _physics.SetBodyType(uid, BodyType.KinematicController);
+
+        if (!args.Cancelled)
+        {
+            ChangeForm(uid, uid.Comp, true);
+
+            _actions.StartUseDelay(uid.Comp.MiGoAstralActionEntity);
+        }
+    }
+
+    private void OnAfterDeMaterialize(Entity<MiGoComponent> uid, ref AfterDeMaterialize args)
+    {
+        args.Handled = true;
+
+        if (!args.Cancelled)
+        {
+            ChangeForm(uid, uid.Comp, false);
+            uid.Comp.MaterializationTime = _timing.CurTime + uid.Comp.AstralDuration;
+
+            var cooldownStart = _timing.CurTime;
+            var cooldownEnd = cooldownStart + uid.Comp.CooldownAfterDematerialize;
+
+            _actions.SetCooldown(uid.Comp.MiGoAstralActionEntity, cooldownStart, cooldownEnd);
+        }
+    }
+
+    public virtual void ChangeForm(EntityUid uid, MiGoComponent comp, bool isMaterial)
+    {
+        if (TryComp<FixturesComponent>(uid, out var fixturesComp))
+        {
+            if (fixturesComp.Fixtures.TryGetValue("fix1", out var fixture))
+            {
+                var mask = (int)(isMaterial ? CollisionGroup.MobMask : CollisionGroup.GhostImpassable);
+                var layer = (int)(isMaterial ? CollisionGroup.MobLayer : CollisionGroup.None);
+                _physics.SetCollisionMask(uid, "fix1", fixture, mask);
+                _physics.SetCollisionLayer(uid, "fix1", fixture, layer);
+            }
+        }
+
+        //full vision during astral
+        if (TryComp<EyeComponent>(uid, out var eye))
+            _eye.SetDrawFov(uid, isMaterial, eye);
+    }
+
+
+    private void CheckAct(Entity<MiGoComponent> uid, ref AttackAttemptEvent args)
+    {
+        if (!uid.Comp.IsPhysicalForm)
+            args.Cancel();
+    }
+    #endregion
 }
 
 [Serializable, NetSerializable]

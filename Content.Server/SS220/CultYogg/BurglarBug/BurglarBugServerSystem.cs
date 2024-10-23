@@ -1,9 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Popups;
-using Content.Shared.Sticky.Components;
-using Content.Shared.Sticky;
-using Content.Shared.Sticky.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
@@ -11,6 +8,8 @@ using Content.Shared.Emag.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Sticky;
+using Content.Shared.Sticky.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Timing;
 

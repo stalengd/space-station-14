@@ -1,36 +1,24 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Network;
-using Robust.Shared.Timing;
-using Content.Shared.Popups;
-using Content.Shared.Mind;
-using Content.Shared.Body.Systems;
-using Content.Shared.Body.Components;
+
 using Content.Shared.Actions;
-using Content.Shared.Hands.Components;
-using Content.Shared.Nutrition.EntitySystems;
-using Content.Shared.Nutrition.Components;
-using Content.Shared.DoAfter;
 using Content.Shared.Examine;
-using Content.Shared.Humanoid;
+using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Inventory;
+using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.Components;
+using Robust.Shared.Timing;
 
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
 public abstract class SharedCultYoggSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedCultYoggCorruptedSystem _cultYoggCorruptedSystem = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
 
     public override void Initialize()
@@ -53,7 +41,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         _actions.AddAction(uid, ref uid.Comp.CorruptItemInHandActionEntity, uid.Comp.CorruptItemInHandAction);
         if (_actions.AddAction(uid, ref uid.Comp.PukeShroomActionEntity, out var act, uid.Comp.PukeShroomAction) && act.UseDelay != null) //useDelay when added
         {
-            var start = _gameTiming.CurTime;
+            var start = _timing.CurTime;
             var end = start + act.UseDelay.Value;
             _actions.SetCooldown(uid.Comp.PukeShroomActionEntity.Value, start, end);
         }

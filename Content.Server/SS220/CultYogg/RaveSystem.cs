@@ -1,13 +1,12 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Server.Chat.Systems;
+using Content.Shared.Dataset;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Content.Shared.StatusEffect;
 using Content.Shared.SS220.CultYogg.EntitySystems;
-using Content.Shared.Dataset;
-using Robust.Shared.Random;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg;
 

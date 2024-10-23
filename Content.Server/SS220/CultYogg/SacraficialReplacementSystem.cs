@@ -1,27 +1,14 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Server.EUI;
-using Content.Server.Popups;
-using Content.Shared.Damage;
-using Content.Shared.Mind;
-using Content.Shared.Mobs.Systems;
-using Robust.Server.Player;
+using Content.Server.SS220.GameTicking.Rules;
 using Content.Shared.SS220.CultYogg.Components;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
-using Robust.Shared.Network;
-using Content.Server.SS220.GameTicking.Rules;
 
 namespace Content.Server.SS220.CultYogg;
 
 public sealed partial class SacraficialReplacementSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EuiManager _euiManager = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     private Dictionary<(EntityUid, NetUserId), TimeSpan> _sacraficialsLeftBody = new();

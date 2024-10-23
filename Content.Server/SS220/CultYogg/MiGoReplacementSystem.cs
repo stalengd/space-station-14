@@ -1,32 +1,23 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Server.EUI;
-using Content.Server.Popups;
-using Content.Shared.Damage;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Mind.Components;
-using Robust.Server.Player;
 using Content.Shared.SS220.CultYogg.Components;
-using Robust.Shared.Player;
 using Content.Shared.SS220.CultYogg.EntitySystems;
-using Robust.Shared.Timing;
 using Content.Server.SS220.GameTicking.Rules;
+using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg;
 
 public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EuiManager _euiManager = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    public override void Initialize()
+    public override void Initialize() //ToDo check for stupidity
     {
         SubscribeLocalEvent<MiGoComponent, MobStateChangedEvent>(OnMobState);
         SubscribeLocalEvent<MiGoComponent, PlayerAttachedEvent>(OnPlayerAttached);

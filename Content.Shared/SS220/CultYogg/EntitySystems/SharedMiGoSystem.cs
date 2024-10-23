@@ -1,26 +1,24 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Shared.Actions;
-using Content.Shared.Mind;
-using Content.Shared.Mobs.Systems;
-using Content.Shared.Popups;
+using Content.Shared.Alert;
+using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.FixedPoint;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Physics;
+using Content.Shared.Popups;
+//using Content.Shared.StatusEffect;
+using Content.Shared.SS220.CultYogg.Components;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Robust.Shared.Physics.Systems;
-using Content.Shared.Tag;
-using Robust.Shared.Serialization;
-using Content.Shared.StatusEffect;
-using Robust.Shared.Timing;
-using Content.Shared.NPC.Systems;
-using Content.Shared.SS220.CultYogg.Components;
-using Content.Shared.Buckle.Components;
-using System.Linq;
-using Robust.Shared.Audio.Systems;
-using Content.Shared.FixedPoint;
-using Content.Shared.Alert;
 using Robust.Shared.Physics;
-using Content.Shared.Physics;
-using Content.Shared.Interaction.Events;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Serialization;
+using Robust.Shared.Timing;
+using System.Linq;
+
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -30,16 +28,12 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    //[Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly SharedMiGoErectSystem _miGoErectSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCultYoggHealSystem _heal = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;

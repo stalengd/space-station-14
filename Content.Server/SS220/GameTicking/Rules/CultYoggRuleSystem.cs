@@ -1,45 +1,41 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+
+using Content.Server.Antag;
+using Content.Server.Chat.Systems;
+using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.SS220.GameTicking.Rules.Components;
+using Content.Server.Station.Systems;
+using Content.Server.SS220.CultYogg;
+using Content.Server.SS220.CultYogg.Nyarlathotep;
+using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
+using Content.Server.SS220.Roles;
+using Content.Server.RoundEnd;
 using Content.Server.Zombies;
-using Content.Server.Mind;
-using Content.Server.Antag;
-using Content.Shared.SS220.CultYogg.Components;
-using Content.Shared.SS220.CultYogg.EntitySystems;
-using Content.Shared.NPC.Systems;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Mobs.Components;
-using Content.Server.GameTicking;
-using Content.Shared.GameTicking.Components;
-using Content.Shared.Mind;
-using Content.Shared.Mind.Components;
-using Content.Shared.Roles.Jobs;
-using Robust.Shared.Random;
-using Robust.Shared.Prototypes;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Roles;
-using Content.Shared.SS220.Telepathy;
-using Content.Server.SS220.CultYogg.Nyarlathotep;
-using Content.Server.Station.Systems;
-using Content.Server.Chat.Systems;
-using Content.Server.RoundEnd;
-using Content.Server.SS220.CultYogg;
-using Content.Server.SS220.CultYogg.Nyarlathotep.Components;
+using Content.Shared.Roles.Jobs;
 using Content.Shared.StatusEffect;
+using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Shared.SS220.Irremovable;
-using Content.Server.SS220.Roles;
+using Content.Shared.SS220.Telepathy;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
 public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 {
-    [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedJobSystem _job = default!;
@@ -234,7 +230,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         RemComp<CultYoggSacrificialComponent>(args.Entity);
 
-        if (!_mindSystem.TryGetMind(args.Player, out var mindUid, out var mind))
+        if (!_mind.TryGetMind(args.Player, out var mindUid, out var mind))
             return;
 
         if (mindUid == null)
@@ -287,14 +283,14 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     public void MakeCultist(EntityUid uid, CultYoggRuleComponent component, bool initial = true)
     {
         //Grab the mind if it wasnt provided
-        if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
+        if (!_mind.TryGetMind(uid, out var mindId, out var mind))
             return;
 
         //ToDo remove this when you make a JobRequirement
         if (HasComp<CultYoggSacrificialComponent>(uid))//targets can't be cultists
             return;
 
-        _antagSelection.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);
+        _antag.SendBriefing(uid, Loc.GetString("cult-yogg-role-greeting"), null, component.GreetSoundNotification);
 
         if (initial)
             component.InitialCultistMinds.Add(mindId);
@@ -333,7 +329,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     public void DeMakeCultist(EntityUid uid, CultYoggRuleComponent component)
     {
 
-        if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
+        if (!_mind.TryGetMind(uid, out var mindId, out var mind))
             return;
 
         _role.MindRemoveRole<CultYoggRoleComponent>(mindId);

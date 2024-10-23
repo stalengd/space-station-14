@@ -1,35 +1,31 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Shared.Actions;
-using Content.Shared.SS220.CultYogg.Components;
-using Content.Shared.SS220.CultYogg.EntitySystems;
-using Content.Server.SS220.GameTicking.Rules;
-using Content.Shared.DoAfter;
-using Content.Shared.Humanoid;
-using Content.Shared.Mindshield.Components;
-using Content.Shared.Revolutionary.Components;
-using Content.Shared.SS220.CultYogg;
-using Content.Shared.StatusEffect;
-using Content.Shared.Zombies;
-using Content.Shared.Mind;
 using Content.Server.Bible.Components;
-using Content.Shared.Popups;
-using Content.Shared.Mobs.Systems;
-using Robust.Shared.Audio.Systems;
+using Content.Server.SS220.GameTicking.Rules;
+using Content.Shared.Actions;
+using Content.Shared.Alert;
+using Content.Shared.DoAfter;
 using Content.Shared.Eye;
+using Content.Shared.Humanoid;
+using Content.Shared.Mind;
+using Content.Shared.Mindshield.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
-using Content.Shared.Physics;
-using Robust.Server.GameObjects;
-using Robust.Shared.Physics;
-using Robust.Shared.Physics.Systems;
+using Content.Shared.Movement.Systems;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
-using Content.Shared.Movement.Systems;
-using Robust.Shared.Timing;
+using Content.Shared.Popups;
+using Content.Shared.Revolutionary.Components;
+using Content.Shared.SS220.CultYogg;
+using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.EntitySystems;
+using Content.Shared.StatusEffect;
 using Content.Shared.Tag;
-using Content.Shared.Alert;
-using JetBrains.FormatRipper.Elf;
-using Content.Shared.FixedPoint;
-using Content.Shared.CombatMode.Pacification;
+using Content.Shared.Zombies;
+using Robust.Shared.Physics.Systems;
+using Robust.Server.GameObjects;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Timing;
+
 
 namespace Content.Server.SS220.CultYogg;
 

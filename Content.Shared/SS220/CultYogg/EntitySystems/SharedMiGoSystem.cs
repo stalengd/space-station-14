@@ -305,8 +305,8 @@ public abstract class SharedMiGoSystem : EntitySystem
         {
             if (fixturesComp.Fixtures.TryGetValue("fix1", out var fixture))
             {
-                var mask = (int)(isMaterial ? CollisionGroup.MobMask : CollisionGroup.GhostImpassable);
-                var layer = (int)(isMaterial ? CollisionGroup.MobLayer : CollisionGroup.None);
+                var mask = (int)(isMaterial ? CollisionGroup.FlyingMobMask : CollisionGroup.GhostImpassable);
+                var layer = (int)(isMaterial ? CollisionGroup.FlyingMobLayer : CollisionGroup.None);
                 _physics.SetCollisionMask(uid, "fix1", fixture, mask);
                 _physics.SetCollisionLayer(uid, "fix1", fixture, layer);
             }

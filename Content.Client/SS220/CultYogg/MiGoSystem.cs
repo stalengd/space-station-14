@@ -6,7 +6,6 @@ using Content.Shared.SS220.CultYogg.Components;
 using Content.Shared.SS220.CultYogg.EntitySystems;
 using Content.Client.Alerts;
 using Robust.Shared.Timing;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Robust.Shared.Map;
 
 namespace Content.Client.SS220.CultYogg;

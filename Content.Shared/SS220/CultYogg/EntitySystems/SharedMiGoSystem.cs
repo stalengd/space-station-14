@@ -1,6 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Shared.Actions;
-using Content.Shared.Zombies;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -21,11 +20,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Alert;
 using Robust.Shared.Physics;
 using Content.Shared.Physics;
-using Content.Shared.SS220.DarkReaper;
-using Content.Shared.Weapons.Melee;
 using Content.Shared.Interaction.Events;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs;
 
 namespace Content.Shared.SS220.CultYogg.EntitySystems;
 
@@ -188,8 +183,6 @@ public abstract class SharedMiGoSystem : EntitySystem
             if (_net.IsServer)
                 _popup.PopupEntity(Loc.GetString("cult-yogg-sacrifice-started", ("user", user), ("target", targetUid)),
                  altarUid, PopupType.MediumCaution);
-
-            //_audio.PlayPredicted(altarComp.RitualSound, user, user); // TODO: ritual sound(mythic)
         }
 
         return started;

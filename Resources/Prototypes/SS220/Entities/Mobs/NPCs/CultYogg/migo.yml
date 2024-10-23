@@ -8,7 +8,12 @@
   components:
   #cultists comps
   - type: MiGo
-  #- type: Hands #For UI opening only
+    showInHands: false
+    disableExplosionRecursion: true
+    canBeStripped: false
+  - type: Hands #For UI opening only
+  - type: Body
+    prototype: MiGoBody
   - type: ComplexInteraction #For UI opening only
   - type: Telepathy
     canSend: true

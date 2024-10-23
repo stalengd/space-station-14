@@ -1,6 +1,6 @@
 using Content.Server.Botany.Components;
 using Content.Server.Botany.Systems;
-using Content.Server.SS220.CultYogg.Fungus.Systems;
+using Content.Server.SS220.CultYogg.Fungus;
 using Content.Shared.Atmos;
 using Content.Shared.EntityEffects;
 using Content.Shared.Random;

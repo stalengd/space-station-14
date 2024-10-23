@@ -1,7 +1,7 @@
-﻿using Content.Client.Chemistry.UI;
+using Content.Client.Chemistry.UI;
 using Content.Client.Items;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.SS220.CultYogg.SedativeSting.Components;
+using Content.Shared.SS220.CultYogg.SedativeSting;
 
 namespace Content.Client.SS220.CultYogg.SedativeSting.Systems;
 

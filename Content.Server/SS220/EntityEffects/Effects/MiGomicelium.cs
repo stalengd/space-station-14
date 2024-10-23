@@ -3,11 +3,11 @@
 using Content.Shared.EntityEffects;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
-using Content.Shared.SS220.CultYogg.Components;
-using Content.Shared.SS220.CultYogg.EntitySystems;
+using Content.Server.SS220.CultYogg.Rave;
+using Content.Server.SS220.CultYogg.Cultists;
+using Content.Shared.SS220.CultYogg.Cultists;
 using Content.Server.SS220.CultYogg;
 using Content.Shared.Humanoid;
-using Content.Server.EntityEffects.Effects;
 
 namespace Content.Server.SS220.EntityEffects.Effects
 {

@@ -8,14 +8,12 @@ using Content.Shared.Actions;
 using Content.Shared.Database;
 using Content.Shared.Popups;
 using Content.Shared.SS220.Bible;
-using Content.Shared.SS220.CultYogg.Components;
-using Content.Shared.SS220.CultYogg.EntitySystems;
+using Content.Shared.SS220.CultYogg.Corruption;
 using Robust.Server.GameObjects;
 using Robust.Shared.Timing;
 using Robust.Shared.Spawners;
 using Robust.Shared.Player;
 using Robust.Shared.Containers;
-using Content.Shared.Hands.Components;
 
 namespace Content.Server.SS220.Bible;
 

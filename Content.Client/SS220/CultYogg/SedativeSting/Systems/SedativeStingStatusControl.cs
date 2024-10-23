@@ -1,8 +1,8 @@
-﻿using Content.Client.Message;
+using Content.Client.Message;
 using Content.Client.Stylesheets;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
-using Content.Shared.SS220.CultYogg.SedativeSting.Components;
+using Content.Shared.SS220.CultYogg.SedativeSting;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;

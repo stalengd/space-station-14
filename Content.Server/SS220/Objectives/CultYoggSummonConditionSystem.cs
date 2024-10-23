@@ -4,7 +4,7 @@ using Content.Shared.Mind;
 using Content.Shared.Roles.Jobs;
 using Content.Shared.Objectives.Components;
 using Content.Server.SS220.GameTicking.Rules;
-using Content.Shared.SS220.CultYogg.Components;
+using Content.Shared.SS220.CultYogg.Sacraficials;
 
 namespace Content.Server.SS220.Objectives;
 

@@ -1,29 +1,27 @@
-// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Content.Server.Decals;
-using Content.Server.Hands.Systems;
-using Content.Server.IdentityManagement;
 using Content.Shared.Damage;
 using Content.Shared.Decals;
-using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.SS220.Photography;
-using Robust.Server.GameObjects;
-using Robust.Shared;
-using Robust.Shared.Configuration;
-using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Map.Enumerators;
+using Robust.Shared.Map;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Robust.Shared.Configuration;
+using Robust.Shared.Map.Components;
+using Robust.Client.GameObjects;
+using Content.Client.Hands.Systems;
+using Content.Client.IdentityManagement;
+using Robust.Shared.Reflection;
 
-namespace Content.Server.SS220.Photography;
+namespace Content.Client.SS220.Photography;
 
-public sealed class PhotoManager : EntitySystem
+public sealed class PhotoCameraSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
@@ -33,13 +31,11 @@ public sealed class PhotoManager : EntitySystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly IdentitySystem _identity = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly IReflectionManager _reflectionManager = default!;
 
-    private EntityQuery<MapGridComponent> _gridQuery = default!;
-    private Dictionary<string, PhotoData> _photos = new();
     private ISawmill _sawmill = Logger.GetSawmill("photo-manager");
-
-    private float _photoRange = 10; //10 is the radius of average powered light
-    public const float MAX_PHOTO_RADIUS = 20;
+    private EntityQuery<MapGridComponent> _gridQuery = default!;
 
     public override void Initialize()
     {
@@ -47,44 +43,28 @@ public sealed class PhotoManager : EntitySystem
 
         _gridQuery = EntityManager.GetEntityQuery<MapGridComponent>();
 
-        SubscribeNetworkEvent<PhotoDataRequest>(OnPhotoDataRequest);
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        SubscribeLocalEvent<PhotoCameraComponent, UseInHandEvent>(OnUse);
     }
 
-    public override void Shutdown()
+    private void OnUse(Entity<PhotoCameraComponent> camera, ref UseInHandEvent args)
     {
-        base.Shutdown();
-        _photos.Clear();
+        if (!_gameTiming.IsFirstTimePredicted)
+            return;
+
+        var xform = Transform(args.User);
+
+        Angle cameraRotation;
+
+        if (xform.GridUid is { } gridToAllignWith)
+            cameraRotation = _transform.GetWorldRotation(gridToAllignWith);
+        else
+            cameraRotation = _transform.GetWorldRotation(xform);
+
+        var photo = TryCapture(_transform.GetMapCoordinates(camera.Owner), cameraRotation, 10, out var id, out var seenObjects);
+        RaiseNetworkEvent(new PhotoTakeRequest(GetNetEntity(camera.Owner), photo));
     }
 
-    public void OnRoundRestart(RoundRestartCleanupEvent args)
-    {
-        _photos.Clear();
-    }
-
-    private void OnPhotoDataRequest(PhotoDataRequest message, EntitySessionEventArgs eventArgs)
-    {
-        var sender = eventArgs.SenderSession;
-
-        if (!_photos.TryGetValue(message.Id, out var photoData))
-        {
-            _sawmill.Warning("Player " + sender.Name + " requested data of a photo with ID " + message.Id + " but it doesn't exist!");
-            photoData = new PhotoData(message.Id, 3, Vector2.Zero, 0, false);
-        }
-
-        var ev = new PhotoDataRequestResponse(photoData, message.Id);
-        RaiseNetworkEvent(ev, sender);
-    }
-
-    public string AddPhoto(PhotoData photoData)
-    {
-        var id = Guid.NewGuid().ToString();
-        photoData.Id = id;
-        _photos.Add(id, photoData);
-        return id;
-    }
-
-    public bool TryCapture(
+    public PhotoData? TryCapture(
         MapCoordinates focusCoords,
         Angle cameraRotation,
         float captureSize,
@@ -96,7 +76,7 @@ public sealed class PhotoManager : EntitySystem
         var focusWorldPos = focusCoords.Position;
         var captureSizeSquareHalf = (captureSize * captureSize) / 2; //for optimization purposes
 
-        var radius = MathF.Min(_photoRange, MAX_PHOTO_RADIUS); //cap because scary
+        var radius = MathF.Min(10, 10); //cap because scary
         var range = new Vector2(radius, radius);
         var worldArea = new Box2(focusWorldPos - range, focusWorldPos + range);
 
@@ -128,7 +108,7 @@ public sealed class PhotoManager : EntitySystem
                 var localPos = Vector2.Transform(focusWorldPos, matrix);
                 var localAABB = new Box2(localPos - range, localPos + range);
                 var chunkDict = new Dictionary<Vector2i, DecalGridComponent.DecalChunk>();
-                var chunks = new ChunkIndicesEnumerator(localAABB, DecalSystem.ChunkSize);
+                var chunks = new ChunkIndicesEnumerator(localAABB, SharedDecalSystem.ChunkSize);
                 var chunkCollection = decalGrid.ChunkCollection.ChunkCollection;
 
                 while (chunks.MoveNext(out var chunkOrigin))
@@ -160,6 +140,11 @@ public sealed class PhotoManager : EntitySystem
             if (!TryComp<TransformComponent>(entity, out var entXform))
                 continue;
 
+            if (!TryComp<SpriteComponent>(entity, out var sprite))
+            {
+                continue;
+            }
+
             Vector2 position;
             Angle rotation;
             int? gridKey = null;
@@ -173,36 +158,63 @@ public sealed class PhotoManager : EntitySystem
             else
                 (position, rotation) = _transform.GetWorldPositionRotation(entXform);
 
-            // TODO: deduplicate
-            // Appearance state
-            AppearanceComponentState? appearanceState = null;
-            if (TryComp<AppearanceComponent>(entity, out var appearance))
+            SpriteState spriteState = new();
+            spriteState.GranularLayersRendering = sprite.GranularLayersRendering;
+            spriteState.Visible = sprite.Visible;
+            spriteState.DrawDepth = sprite.DrawDepth;
+            spriteState.Scale = sprite.Scale;
+            spriteState.Rotation = sprite.Rotation;
+            spriteState.Offset = sprite.Offset;
+            spriteState.Color = sprite.Color;
+            spriteState.BaseRSI = sprite.BaseRSI?.Path ?? ResPath.Empty;
+            spriteState.GetScreenTexture = sprite.GetScreenTexture;
+            spriteState.RaiseShaderEvent = sprite.RaiseShaderEvent;
+            spriteState.RenderOrder = sprite.RenderOrder;
+
+            foreach (var layerBase in sprite.AllLayers)
             {
-                var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, appearance, null, GameTick.Zero);
-                if (maybe_state is AppearanceComponentState state)
+                if (layerBase is not SpriteComponent.Layer layer)
+                    continue;
+                var layerState = new SpriteState.Layer()
                 {
-                    appearanceState = new AppearanceComponentState(state.Data.ShallowClone());
+                    DirOffset = (SpriteState.DirectionOffset)(int)layer.DirOffset,
+                    Shader = layer.ShaderPrototype,
+                    RsiPath = layer.RSI?.Path.CanonPath,
+                    RsiState = layer.State.Name,
+                    Rotation = layer.Rotation,
+                    Scale = layer.Scale,
+                    Offset = layer.Offset,
+                    Visible = layer.Visible,
+                    Color = layer.Color,
+                    AnimationTime = layer.AnimationTime,
+                    RenderingStrategy = layer.RenderingStrategy,
+                    Cycle = layer.Cycle,
+                };
+                if (layer.CopyToShaderParameters is { } copyParams && copyParams.LayerKey is { } layerKey)
+                {
+                    var layerIndex = sprite.LayerMapGet(layerKey);
+                    var layerKeySerialized = layerKey switch
+                    {
+                        Enum e => _reflectionManager.GetEnumReference(e),
+                        _ => layerKey.ToString(),
+                    };
+                    if (layerKeySerialized is { })
+                    {
+                        spriteState.LayerMap[layerKeySerialized] = layerIndex;
+                        layerState.CopyToShaderParameters = new()
+                        {
+                            LayerKey = layerKeySerialized,
+                            ParameterTexture = copyParams.ParameterTexture,
+                            ParameterUV = copyParams.ParameterUV,
+                        };
+                    }
                 }
+                spriteState.Layers.Add(layerState);
             }
 
-            // Humanoid appearance state
-            IComponentState? humanoidAppearanceState = null;
-            if (TryComp<HumanoidAppearanceComponent>(entity, out var humanoidAppearance))
-            {
-                humanoidAppearanceState = EntityManager.GetComponentState(EntityManager.EventBus, humanoidAppearance, null, GameTick.Zero);
-
-                if ((_transform.GetWorldPosition(entity) - focusWorldPos).LengthSquared() < captureSizeSquareHalf)
-                {
-                    var identityEnt = Identity.Entity(entity, EntityManager);
-                    seenObjects.Add(Name(identityEnt));
-                }
-            }
-
-            // Point light state
             PointLightComponentState? pointLightState = null;
             if (TryComp<PointLightComponent>(entity, out var pointLight))
             {
-                // not networked, have to do it like this otherwise crashes in debug
                 pointLightState = new PointLightComponentState()
                 {
                     Color = pointLight.Color,
@@ -215,7 +227,6 @@ public sealed class PhotoManager : EntitySystem
                 };
             }
 
-            // Occluder state
             OccluderComponent.OccluderComponentState? occluderState = null;
             if (TryComp<OccluderComponent>(entity, out var occluder))
             {
@@ -226,80 +237,17 @@ public sealed class PhotoManager : EntitySystem
                 }
             }
 
-            // Damageable state
-            DamageableComponentState? damageableState = null;
-            if (TryComp<DamageableComponent>(entity, out var damageable))
-            {
-                var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, damageable, null, GameTick.Zero);
-                if (maybe_state is DamageableComponentState state)
-                {
-                    damageableState = state;
-                }
-            }
-
-            // Hands state
-            HandsComponentState? handsState = null;
-            if (TryComp<HandsComponent>(entity, out var handsComp))
-            {
-                var maybe_state = EntityManager.GetComponentState(EntityManager.EventBus, handsComp, null, GameTick.Zero);
-                if (maybe_state is HandsComponentState state)
-                {
-                    handsState = state;
-                }
-            }
-
-            // Inventory & Hands
-            Dictionary<string, string>? inventory = null;
-            Dictionary<string, string>? hands = null;
-
-            var haveHands = handsComp != null;
-            if (haveHands)
-                hands = new();
-
-            var haveInventory = TryComp(entity, out InventoryComponent? inventoryComp);
-            if (haveInventory)
-                inventory = new();
-
-            if (haveHands || haveInventory)
-            {
-                foreach (var item in _inventory.GetHandOrInventoryEntities(entity))
-                {
-                    var proto = MetaData(item).EntityPrototype?.ID;
-                    if (proto is null)
-                        continue;
-
-                    if (haveInventory && _inventory.TryGetContainingSlot(item, out var slot))
-                    {
-                        inventory!.Add(slot.Name, proto);
-                    }
-                    else if (haveHands && _hands.IsHolding(entity, item, out var hand, handsComp))
-                    {
-                        foreach (var handEntry in handsComp!.Hands)
-                        {
-                            if (handEntry.Value != hand)
-                                continue;
-
-                            hands!.Add(handEntry.Key, proto);
-                            break;
-                        }
-                    }
-                }
-            }
-
             var ent_data = new PhotoEntityData(protoId, position, rotation)
             {
                 GridIndex = gridKey,
-                Sprite = new SpriteState()
-                {
-
-                },
+                Sprite = spriteState,
+                PointLight = pointLightState,
+                Occluder = occluderState,
             };
             data.Entities.Add(ent_data);
         }
-
-        _photos.Add(id, data);
         _sawmill.Debug("Photo taken! Entity count: " + data.Entities.Count + ", Grid count: " + data.Grids.Count + ", ID: " + id);
 
-        return true;
+        return data;
     }
 }

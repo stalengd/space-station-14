@@ -10,9 +10,13 @@ using Content.Shared.Inventory;
 using Content.Shared.Rotation;
 using Content.Shared.SS220.Photography;
 using Content.Shared.StatusEffect;
+using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
+using Robust.Client.ResourceManagement;
+using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
+using Robust.Shared.Reflection;
 using Robust.Shared.Utility;
 
 namespace Content.Client.SS220.Photography;
@@ -25,6 +29,9 @@ public sealed partial class PhotoVisualizer : EntitySystem
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly EyeSystem _eye = default!;
     [Dependency] private readonly MapSystem _map = default!;
+    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private readonly LightTreeSystem _lightTree = default!;
+    [Dependency] private readonly IReflectionManager _reflectionManager = default!;
 
     private ISawmill _sawmill = Logger.GetSawmill("photo-visualizer");
     private Dictionary<string, PhotoVisualisation> _currentlyVisualized = new();
@@ -143,98 +150,82 @@ public sealed partial class PhotoVisualizer : EntitySystem
 
             EntityCoordinates coords = new(parent, entityDesc.Position);
 
-            var entity = Spawn(entityDesc.PrototypeId, coords);
+            var entity = Spawn(null, coords);
             entities.Add(entity);
 
             var xform = EnsureComp<TransformComponent>(entity);
             _transform.SetLocalRotationNoLerp(entity, entityDesc.Rotation, xform);
 
-            if (TryComp<RotationVisualsComponent>(entity, out var rotationVisualsComp))
-                rotationVisualsComp.AnimationTime = 0;
+            var spriteComp = EnsureComp<SpriteComponent>(entity);
 
-            // Handle appearance state
-            if (entityDesc.Appearance is not null)
+            //if (!TryComp(entity, out SpriteComponent? spriteComp))
+            //{
+            //    continue;
+            //}
+
+            spriteComp.GranularLayersRendering = entityDesc.Sprite.GranularLayersRendering;
+            spriteComp.Visible = entityDesc.Sprite.Visible;
+            spriteComp.DrawDepth = entityDesc.Sprite.DrawDepth;
+            spriteComp.Scale = entityDesc.Sprite.Scale;
+            spriteComp.Rotation = entityDesc.Sprite.Rotation;
+            spriteComp.Offset = entityDesc.Sprite.Offset;
+            spriteComp.Color = entityDesc.Sprite.Color;
+            spriteComp.BaseRSI = _resourceCache.GetResource<RSIResource>(entityDesc.Sprite.BaseRSI).RSI;
+            spriteComp.GetScreenTexture = entityDesc.Sprite.GetScreenTexture;
+            spriteComp.RaiseShaderEvent = entityDesc.Sprite.RaiseShaderEvent;
+
+            while (spriteComp.LayerExists(0, logError: false))
             {
-                var appearanceComp = EnsureComp<AppearanceComponent>(entity);
-                var ev = new ComponentHandleState(entityDesc.Appearance, null);
-                RaiseLocalEvent(entity, ref ev);
+                spriteComp.RemoveLayer(0);
+            }
+            foreach (var layerData in entityDesc.Sprite.Layers)
+            {
+                var layerProto = new PrototypeLayerData()
+                {
+                    Shader = layerData.Shader,
+                    RsiPath = layerData.RsiPath,
+                    State = layerData.RsiState,
+                    Rotation = layerData.Rotation,
+                    Scale = layerData.Scale,
+                    Offset = layerData.Offset,
+                    Visible = layerData.Visible,
+                    Color = layerData.Color,
+                    RenderingStrategy = layerData.RenderingStrategy,
+                    Cycle = layerData.Cycle,
+                    CopyToShaderParameters = layerData.CopyToShaderParameters,
+                };
+                var layerIndex = spriteComp.AddLayer(layerProto);
+                if (!spriteComp.TryGetLayer(layerIndex, out var layer))
+                    continue;
+                layer.SetAnimationTime(layerData.AnimationTime);
+                layer.DirOffset = (SpriteComponent.DirectionOffset)(byte)layerData.DirOffset;
+            }
+            foreach (var (layerKeySerialized, layerIndex) in entityDesc.Sprite.LayerMap)
+            {
+                object key;
+                if (_reflectionManager.TryParseEnumReference(layerKeySerialized, out var enumKey, false))
+                {
+                    key = enumKey;
+                }
+                else
+                {
+                    key = layerKeySerialized;
+                }
+                spriteComp.LayerMapSet(key, layerIndex);
             }
 
-            // TODO: deduplicate
-            // Handle humanoid appearance state
-            if (entityDesc.HumanoidAppearance is not null)
-            {
-                var humanoidAppearanceComp = EnsureComp<HumanoidAppearanceComponent>(entity);
-                var ev = new ComponentHandleState(entityDesc.HumanoidAppearance, null);
-                RaiseLocalEvent(entity, ref ev);
-            }
-
-            // Handle point light state
             if (entityDesc.PointLight is not null)
             {
                 var pointLightComp = EnsureComp<PointLightComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.PointLight, null);
-                RaiseLocalEvent(entity, ref ev);
+                EntityManager.EventBus.RaiseComponentEvent(entity, pointLightComp, ev);
             }
 
-            // Handle occluder state
             if (entityDesc.Occluder is not null)
             {
                 var occluderComp = EnsureComp<OccluderComponent>(entity);
                 var ev = new ComponentHandleState(entityDesc.Occluder, null);
-                RaiseLocalEvent(entity, ref ev);
-            }
-
-            // Handle damageable state
-            if (entityDesc.Damageable is not null)
-            {
-                var damageableComp = EnsureComp<DamageableComponent>(entity);
-                var ev = new ComponentHandleState(entityDesc.Damageable, null);
-                RaiseLocalEvent(entity, ref ev);
-            }
-
-            // Handle hands state
-            if (entityDesc.Hands is not null)
-            {
-                var handsComp = EnsureComp<HandsComponent>(entity);
-                var ev = new ComponentHandleState(entityDesc.Hands, null);
-                RaiseLocalEvent(entity, ref ev);
-            }
-
-            // Status Effects
-            if (entityDesc.StatusEffects is not null)
-            {
-                var statusEffectsComp = EnsureComp<StatusEffectsComponent>(entity);
-                var ev = new ComponentHandleState(entityDesc.StatusEffects, null);
-                RaiseLocalEvent(entity, ref ev);
-            }
-
-            // Handle inventory
-            if (entityDesc.Inventory is not null)
-            {
-                var inventoryComp = EnsureComp<InventoryComponent>(entity);
-                foreach (var slotEntry in entityDesc.Inventory)
-                {
-                    if (_inventory.TryUnequip(entity, slotEntry.Key, out var item, true, true, false, inventoryComp))
-                        QueueDel(item);
-                    _inventory.SpawnItemInSlot(entity, slotEntry.Key, slotEntry.Value, true, true, inventoryComp);
-                }
-            }
-
-            // Handle hands
-            if (entityDesc.HandsContents is not null)
-            {
-                var handsComp = EnsureComp<HandsComponent>(entity);
-
-                foreach (var handEntry in entityDesc.HandsContents)
-                {
-                    if (!_hands.TryGetHand(entity, handEntry.Key, out var hand, handsComp))
-                        continue;
-
-                    var inhandEntity = EntityManager.SpawnEntity(handEntry.Value, coords);
-                    if (!_hands.TryPickup(entity, inhandEntity, hand, false, false, handsComp))
-                        QueueDel(inhandEntity);
-                }
+                EntityManager.EventBus.RaiseComponentEvent(entity, occluderComp, ev);
             }
         }
 

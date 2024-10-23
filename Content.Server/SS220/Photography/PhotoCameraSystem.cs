@@ -27,12 +27,14 @@ public sealed class PhotoCameraSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<PhotoCameraComponent, UseInHandEvent>(OnCameraActivate);
+        //SubscribeLocalEvent<PhotoCameraComponent, UseInHandEvent>(OnCameraActivate);
         SubscribeLocalEvent<PhotoCameraComponent, GetVerbsEvent<Verb>>(OnVerb);
         SubscribeLocalEvent<PhotoCameraComponent, ExaminedEvent>(OnCameraExamine);
         SubscribeLocalEvent<PhotoComponent, ExaminedEvent>(OnPhotoExamine);
         SubscribeLocalEvent<PhotoFilmComponent, AfterInteractEvent>(OnFilmUse);
         SubscribeLocalEvent<PhotoFilmComponent, ExaminedEvent>(OnFilmExamine);
+
+        SubscribeNetworkEvent<PhotoTakeRequest>(OnPhotoTakeRequest);
     }
 
     private void OnPhotoExamine(Entity<PhotoComponent> entity, ref ExaminedEvent args)
@@ -96,32 +98,77 @@ public sealed class PhotoCameraSystem : EntitySystem
         EntityManager.DeleteEntity(entity);
     }
 
-    private void OnCameraActivate(Entity<PhotoCameraComponent> entity, ref UseInHandEvent args)
+    private void OnPhotoTakeRequest(PhotoTakeRequest msg, EntitySessionEventArgs args)
     {
-        if (args.Handled)
-            return;
+        var owner = GetEntity(msg.Camera);
+        var comp = Comp<PhotoCameraComponent>(owner);
+        Entity<PhotoCameraComponent> entity = (owner, comp);
+        var user = args.SenderSession.AttachedEntity!.Value;
 
         TryComp<LimitedChargesComponent>(entity, out var charges);
         if (_charges.IsEmpty(entity, charges))
         {
-            _popup.PopupEntity(Loc.GetString("photo-camera-component-no-charges-message"), entity, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("photo-camera-component-no-charges-message"), entity, user, PopupType.Medium);
             return;
         }
 
-        if (!TryPhoto(entity, out var photo))
+        if (entity.Comp.FilmLeft <= 0)
             return;
 
-        if (TryComp<HandsComponent>(args.User, out var hands))
+        if (!TryComp<TransformComponent>(entity, out var xform))
+            return;
+
+        Angle cameraRotation;
+
+        if (xform.GridUid is { } gridToAllignWith)
+            cameraRotation = _transform.GetWorldRotation(gridToAllignWith);
+        else
+            cameraRotation = _transform.GetWorldRotation(xform);
+
+        var id = _photo.AddPhoto(msg.Data!);
+
+        var photoEntity = Spawn(entity.Comp.PhotoPrototypeId, xform.MapPosition);
+        var photoComp = EnsureComp<PhotoComponent>(photoEntity);
+        photoComp.PhotoID = id;
+        Dirty(photoEntity, photoComp);
+
+        if (TryComp<HandsComponent>(user, out var hands))
         {
-            if (_hands.TryGetEmptyHand(args.User, out var emptyHand, hands))
-                _hands.TryPickup(args.User, photo.Value, emptyHand, checkActionBlocker: false, handsComp: hands);
+            if (_hands.TryGetEmptyHand(user, out var emptyHand, hands))
+                _hands.TryPickup(user, photoEntity, emptyHand, checkActionBlocker: false, handsComp: hands);
         }
 
         _charges.UseCharge(entity, charges);
         _audio.PlayPvs(entity.Comp.ShotSound, entity);
         Dirty(entity);
-        args.Handled = true;
     }
+
+    //private void OnCameraActivate(Entity<PhotoCameraComponent> entity, ref UseInHandEvent args)
+    //{
+    //    if (args.Handled)
+    //        return;
+
+    //    TryComp<LimitedChargesComponent>(entity, out var charges);
+    //    if (_charges.IsEmpty(entity, charges))
+    //    {
+    //        _popup.PopupEntity(Loc.GetString("photo-camera-component-no-charges-message"), entity, args.User, PopupType.Medium);
+    //        return;
+    //    }
+
+    //    if (!TryPhoto(entity, out var photo))
+    //        return;
+
+    //    if (TryComp<HandsComponent>(args.User, out var hands))
+    //    {
+    //        if (_hands.TryGetEmptyHand(args.User, out var emptyHand, hands))
+    //            _hands.TryPickup(args.User, photo.Value, emptyHand, checkActionBlocker: false, handsComp: hands);
+    //    }
+
+    //    _charges.UseCharge(entity, charges);
+    //    _audio.PlayPvs(entity.Comp.ShotSound, entity);
+    //    Dirty(entity);
+    //    args.Handled = true;
+    //}
 
     private string GetPhotoSizeLoc(float size)
     {

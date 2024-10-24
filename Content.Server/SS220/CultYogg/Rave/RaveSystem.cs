@@ -89,7 +89,7 @@ public sealed class RaveSystem : SharedRaveSystem
 
     private void SetNextSoundTimer(RaveComponent comp)
     {
-        comp.NextSoundTime = _timing.CurTime + ((comp.MinIntervalSound < comp.MaxIntervalSound )
+        comp.NextSoundTime = _timing.CurTime + ((comp.MinIntervalSound < comp.MaxIntervalSound)
         ? _random.Next(comp.MinIntervalSound, comp.MaxIntervalSound)
         : comp.MaxIntervalSound);
     }

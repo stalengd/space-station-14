@@ -1,6 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using System.Text.RegularExpressions;
-using Content.Shared.Chat.V2.Repository;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.SS220.Bible

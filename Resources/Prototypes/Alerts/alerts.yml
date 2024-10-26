@@ -25,6 +25,7 @@
     - category: Thirst
     - alertType: Magboots
     - alertType: Pacified
+    - alertType: CountDown #SS220 CultYogg
 
 - type: entity
   id: AlertSpriteView

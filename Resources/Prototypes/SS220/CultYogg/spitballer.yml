@@ -3,8 +3,6 @@
   parent: BaseItem
   id: SpitballerCultYogg
   components:
-    - type: Irremovable
-      inHandItem: true
     - type: Gun
       fireRate: 11
       soundEmpty: null
@@ -36,6 +34,10 @@
         right:
         - state: fullammo-inhand-right
           shader: unshaded
+    - type: Irremovable
+      inHandItem: true
+    - type: RoleItem
+      roleId: CultYogg
 
 - type: entity
   id: CartridgeAcid

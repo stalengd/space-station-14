@@ -5,8 +5,9 @@ using Content.Shared.Roles.Jobs;
 using Content.Shared.Objectives.Components;
 using Content.Server.SS220.GameTicking.Rules;
 using Content.Shared.SS220.CultYogg.Sacraficials;
+using Content.Server.SS220.Objectives.Components;
 
-namespace Content.Server.SS220.Objectives;
+namespace Content.Server.SS220.Objectives.Systems;
 
 /// <summary>
 /// Handle amount of sacrafices
@@ -40,7 +41,7 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
 
     private void OnAfterAssign(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveAfterAssignEvent args) //ToDo error with progress
     {
-        string title = Loc.GetString("objective-cult-yogg-sacrafice-start");
+        var title = Loc.GetString("objective-cult-yogg-sacrafice-start");
 
         var query = EntityQueryEnumerator<CultYoggSacrificialMindComponent>();
         while (query.MoveNext(out var uid, out var _))

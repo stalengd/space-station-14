@@ -9,7 +9,7 @@ cult-yogg-heal-only-cultists = Оболочка не принадлежит ку
 cult-yogg-digest-no-nutritions = Недостаточно питательных веществ
 cult-yogg-digest-no-water = Недостаточно воды в организме
 
-
+cult-yogg-cant-sacrafice-in-astral = Невозможно выполнять призыв находясь в астрале
 cult-yogg-altar-not-enough-migo = Недостаточно Ми-Го рядом с алтарём
 cult-yogg-sacrifice-started = {$user} начинает жертвоприношение, тело {$target} медленно поднимается в воздух
 cult-yogg-buckle-attempt = {$user} не является целью жертвоприношения

@@ -10,6 +10,10 @@
     {
       "name": "halo",
       "directions": 4
+    },
+    {
+      "name": "moth",
+      "directions": 4
     }
   ]
 }

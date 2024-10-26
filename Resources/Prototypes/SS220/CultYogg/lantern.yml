@@ -1,7 +1,7 @@
 - type: entity
   name: cult lantern
   parent: BaseItem
-  id: LanternFlashCult
+  id: LanternFlashCultYogg
   description: description
   components:
   - type: Sprite

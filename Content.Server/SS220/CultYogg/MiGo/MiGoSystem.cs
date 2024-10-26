@@ -133,12 +133,6 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         if (args.Handled)
             return;
 
-        if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
-        {
-            //_popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid); // commenting cause its spamming sevral times
-            return;
-        }
-
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
             _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-must-be-human"), args.Target, uid);
@@ -172,6 +166,12 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         if (HasComp<CultYoggSacrificialComponent>(uid))
         {
             _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-is-sacraficial"), args.Target, uid);
+            return;
+        }
+
+        if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))//Its here bea
+        {
+            //_popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid); // commenting cause its spamming sevral times
             return;
         }
 

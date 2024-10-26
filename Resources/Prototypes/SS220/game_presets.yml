@@ -11,7 +11,7 @@
     - BasicStationEventScheduler
 
 - type: gamePreset
-  id: CultYogg
+  id: CultYoggPreset
   alias:
     - cultyogg
   name: roles-antag-cult-yogg-name
@@ -19,5 +19,5 @@
   showInVote: false
   minPlayers: 2 #ToDo tweak numbers
   rules:
-    - CultYogg
+    - CultYoggRule
     - BasicStationEventScheduler

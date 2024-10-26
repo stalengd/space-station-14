@@ -1,6 +1,6 @@
 - type: alert
   id: MiGoAstralAlert
-  category: BloodPoints
+  category: CountDown
   icons:
   - sprite: /Textures/SS220/Interface/Alerts/migo_astral.rsi
     state: astral

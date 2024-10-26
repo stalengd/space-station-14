@@ -1,6 +1,6 @@
-using Content.Server.Objectives.Systems;
+using Content.Server.SS220.Objectives.Systems;
 
-namespace Content.Server.Objectives.Components;
+namespace Content.Server.SS220.Objectives.Components;
 
 /// <summary>
 /// Component for a Acsension task for cultists

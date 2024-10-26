@@ -1,12 +1,12 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Robust.Server.GameObjects;
 using Content.Shared.SS220.CultYogg.MiGo;
 using Content.Shared.Audio;
 using Content.Server.Audio;
+using Content.Shared.Humanoid;
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.SS220.CultYogg.Nyarlathotep;
@@ -45,9 +45,9 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
     /// Performs a duplicate component check, on the MiGi component to not harass cult members
     /// and cuts off entities that are not alive
     /// </summary>
-    public void SearchNearNyarlathotep(EntityUid user, float range)
+    private void SearchNearNyarlathotep(EntityUid user, float range)
     {
-        foreach (var target in _entityLookupSystem.GetEntitiesInRange<MobStateComponent>(_transform.GetMapCoordinates(user), range))
+        foreach (var target in _entityLookupSystem.GetEntitiesInRange<HumanoidAppearanceComponent>(_transform.GetMapCoordinates(user), range))
         {
             if (HasComp<MiGoComponent>(target.Owner))
                 continue;
@@ -78,15 +78,10 @@ public sealed class NyarlathotepTargetSearcherSystem : EntitySystem
             if (targetSearcher.NextSearchTime > _gameTiming.CurTime)
                 continue;
 
-            TargetSearch(uid, targetSearcher);
+            SearchNearNyarlathotep(uid, targetSearcher.SearchRange);
             var delay = TimeSpan.FromSeconds(_random.NextFloat(targetSearcher.SearchMinInterval, targetSearcher.SearchMaxInterval));
             targetSearcher.NextSearchTime += delay;
         }
-    }
-
-    private void TargetSearch(EntityUid uid, NyarlathotepSearchTargetsComponent component)
-    {
-        SearchNearNyarlathotep(uid, component.SearchRange);
     }
 }
 

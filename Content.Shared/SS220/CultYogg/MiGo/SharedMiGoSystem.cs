@@ -60,6 +60,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, AfterDeMaterialize>(OnAfterDeMaterialize);
 
         SubscribeLocalEvent<MiGoComponent, AttackAttemptEvent>(CheckAct);
+        SubscribeLocalEvent<MiGoComponent, InteractionAttemptEvent>(OnInteractAttempt);
     }
 
     protected virtual void OnCompInit(Entity<MiGoComponent> uid, ref ComponentStartup args)
@@ -117,6 +118,12 @@ public abstract class SharedMiGoSystem : EntitySystem
     #region MiGoSacrifice
     private void MiGoSacrifice(Entity<MiGoComponent> uid, ref MiGoSacrificeEvent args)
     {
+        if (!uid.Comp.IsPhysicalForm)
+        {
+            if (_net.IsServer)
+                _popup.PopupEntity(Loc.GetString("cult-yogg-altar-not-enough-migo"), uid, uid);
+            return;
+        }
         var altarQuery = EntityQueryEnumerator<CultYoggAltarComponent, TransformComponent>();
 
         while (altarQuery.MoveNext(out var altarUid, out var altarComp, out _))
@@ -160,7 +167,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (currentMiGoAmount < altarComp.RequiredAmountMiGo)
         {
             if (_net.IsServer)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-altar-not-enough-migo"), user, user);
+                _popup.PopupEntity(Loc.GetString("cult-yogg-cant-sacrafice-in-astral"), user, user);
 
             return false;
         }
@@ -310,6 +317,12 @@ public abstract class SharedMiGoSystem : EntitySystem
     {
         if (!uid.Comp.IsPhysicalForm)
             args.Cancel();
+    }
+
+    private void OnInteractAttempt(Entity<MiGoComponent> uid, ref InteractionAttemptEvent args)
+    {
+        if (!uid.Comp.IsPhysicalForm)
+            args.Cancelled = true;
     }
     #endregion
 }

@@ -5,3 +5,11 @@
   sprites:
   - sprite: SS220/Objects/CultYogg/cultstages.rsi
     state: halo
+
+- type: marking
+  id: CultStage-Moth
+  bodyPart: Special
+  markingCategory: Special
+  sprites:
+  - sprite: SS220/Objects/CultYogg/cultstages.rsi
+    state: moth

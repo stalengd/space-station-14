@@ -77,7 +77,6 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
                 if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Special))
                 {
                     huAp.MarkingSet.Markings.Add(MarkingCategories.Special, new List<Marking>([new Marking("CultStage-Halo", colorCount: 1)]));
-                    Dirty(entity.Owner, huAp);
                 }
                 else
                 {
@@ -88,6 +87,8 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
                         huAp);
                 }
 
+                Dirty(entity.Owner, huAp);
+
                 var newMarkingId = $"CultStage-{huAp.Species}";
 
                 if (!_prototype.HasIndex<MarkingPrototype>(newMarkingId))
@@ -96,16 +97,12 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
                     return;
                 }
 
-                if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Tail) &&
-                    newMarkingId != "CultStage-Halo")
+                if (huAp.MarkingSet.Markings.TryGetValue(MarkingCategories.Tail, out var value))
                 {
-                    if (huAp.MarkingSet.Markings[MarkingCategories.Tail].FirstOrDefault() != null)
-                        entity.Comp.PreviousTail = huAp.MarkingSet.Markings[MarkingCategories.Tail].FirstOrDefault();
-                    _humanoidAppearance.SetMarkingId(entity.Owner,
-                        MarkingCategories.Tail,
-                        0,
-                        newMarkingId,
-                        huAp);
+                    entity.Comp.PreviousTail = value.FirstOrDefault();
+                    value.Clear();
+                    huAp.MarkingSet.Markings[MarkingCategories.Special].Add(new Marking(newMarkingId, colorCount: 1));
+                    Dirty(entity.Owner, huAp);
                 }
                 break;
             case 3:
@@ -133,14 +130,10 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
             huAp.MarkingSet.Markings.Remove(MarkingCategories.Special);
         }
 
-        if (!huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Tail) &&
+        if (huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Tail) &&
             entity.Comp.PreviousTail != null)
         {
-            _humanoidAppearance.SetMarkingId(entity.Owner,
-                MarkingCategories.Tail,
-                0,
-                entity.Comp.PreviousTail.MarkingId,
-                huAp);
+            huAp.MarkingSet.Markings[MarkingCategories.Tail].Add(entity.Comp.PreviousTail);
         }
         Dirty(entity.Owner, huAp);
     }

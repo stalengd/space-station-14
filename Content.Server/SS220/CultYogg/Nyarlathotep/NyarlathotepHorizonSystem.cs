@@ -8,6 +8,7 @@ using Content.Shared.Database;
 using Content.Shared.Ghost;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Singularity.Components;
 using Content.Shared.SS220.CultYogg.MiGo;
 using Content.Shared.SS220.CultYogg.Nyarlathotep;
 using Content.Shared.Tag;
@@ -37,6 +38,7 @@ public sealed class NyarlathotepHorizonSystem : SharedNyarlathotepHorizonSystem
         SubscribeLocalEvent<NyarlathotepHorizonComponent, StartCollideEvent>(OnStartCollide);
 
         SubscribeLocalEvent<MapGridComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsume);
+        SubscribeLocalEvent<EventHorizonComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsume);
         SubscribeLocalEvent<GhostComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsume);
         SubscribeLocalEvent<StationDataComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsume);
         SubscribeLocalEvent<MindContainerComponent, NyarlathotepHorizonAttemptConsumeEntityEvent>(PreventConsumeMobs);

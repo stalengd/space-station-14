@@ -17,7 +17,7 @@
   id: FungusHydroponic
   order: 1
   frame: CultYoggBuildingFrame
-  result: fungusHydroponic #ToDo wierd bug  with "green" sprite before placement
+  result: CultYoggFungusHydroponic #ToDo wierd bug  with "green" sprite before placement
   materials:
   - stack: Steel
     count: 10

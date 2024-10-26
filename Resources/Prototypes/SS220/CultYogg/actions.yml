@@ -116,7 +116,7 @@
 - type: entity
   id: ActionMiGoSacrifice
   name: Призыв
-  description: Принестите жертву и призовите своего хозяина.
+  description: Соберитесь с другими Ми-Го у алтаря, чтобы принести жертву.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction

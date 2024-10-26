@@ -37,9 +37,18 @@
     - type: Sprite
       sprite: SS220/Objects/CultYogg/strangefruit.rsi
       state: kudzu_11
+      drawdepth: Overdoors
     - type: Kudzu
       growthTickChance: 0.2
       spreadChance: 0.2
+    - type: SpeedModifierContacts
+      walkSpeedModifier: 0.2
+      sprintSpeedModifier: 0.2
+      ignoreWhitelist:
+        components:
+        - IgnoreKudzu
+        - CultYogg
+        - MiGo
 
 - type: entity
   parent: SeedBase

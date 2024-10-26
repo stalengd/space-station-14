@@ -64,10 +64,10 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: LanternFlashCult
+  id: LanternFlashCultYogg
   from:
     prototypeId: Lantern
-  result: LanternFlashCult
+  result: LanternFlashCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted

@@ -57,6 +57,9 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
             return;
 
+        if (entity.Comp.CurrentStage == args.Stage)
+            return;
+
         entity.Comp.CurrentStage = args.Stage;//Upgating stage in component
 
         switch (args.Stage)

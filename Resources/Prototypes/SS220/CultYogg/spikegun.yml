@@ -41,6 +41,9 @@
           shader: unshaded
     - type: Irremovable
       inHandItem: true
+    - type: RoleItem
+      roleId: CultYogg
+
 
 - type: entity
   id: Spike

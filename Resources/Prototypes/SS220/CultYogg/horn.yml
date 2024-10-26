@@ -3,8 +3,6 @@
   parent: BaseItem
   id: HornCultYogg
   components:
-    - type: Irremovable
-      inHandItem: true
     - type: Gun
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
       soundEmpty: null
@@ -41,6 +39,10 @@
         right:
         - state: fullammo-inhand-right
           shader: unshaded
+    - type: Irremovable
+      inHandItem: true
+    - type: RoleItem
+      roleId: CultYogg
 
 - type: entity
   name: tesla gun lightning

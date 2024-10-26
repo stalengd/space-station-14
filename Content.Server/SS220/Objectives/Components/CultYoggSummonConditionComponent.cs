@@ -8,7 +8,7 @@ namespace Content.Server.SS220.Objectives.Components;
 /// <summary>
 /// Handle progress of summoning
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, Access(typeof(CultYoggSummonConditionSystem))]
 public sealed partial class CultYoggSummonConditionComponent : Component
 {
     /// <summary>

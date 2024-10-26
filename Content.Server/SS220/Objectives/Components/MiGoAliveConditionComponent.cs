@@ -5,7 +5,7 @@ namespace Content.Server.SS220.Objectives.Components;
 /// <summary>
 /// Component for a Acsension task for cultists
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, Access(typeof(MiGoAliveConditionSystem))]
 public sealed partial class MiGoAliveConditionComponent : Component
 {
     /// <summary>

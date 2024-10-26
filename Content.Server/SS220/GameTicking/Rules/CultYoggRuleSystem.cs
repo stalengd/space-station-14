@@ -22,7 +22,6 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
-using Content.Shared.StatusEffect;
 using Content.Shared.SS220.CultYogg.Cultists;
 using Content.Shared.SS220.CultYogg.CultYoggIcons;
 using Content.Shared.SS220.CultYogg.MiGo;
@@ -48,9 +47,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
     [Dependency] private readonly SharedRoleSystem _role = default!;
 
-    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
-
-    private List<List<String>> SacraficialTiers = new();
+    private List<List<String>> _sacraficialTiers = new();
     public TimeSpan DefaultShuttleArriving { get; set; } = TimeSpan.FromSeconds(85);
 
     public override void Initialize()
@@ -119,9 +116,9 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
             }
         }
 
-        SacraficialTiers.Add(firstTier);
-        SacraficialTiers.Add(secondTier);
-        SacraficialTiers.Add(thirdTier);
+        _sacraficialTiers.Add(firstTier);
+        _sacraficialTiers.Add(secondTier);
+        _sacraficialTiers.Add(thirdTier);
     }
 
     private void SetSacraficials(CultYoggRuleComponent component)
@@ -131,7 +128,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (allHumans is null)
             return;
 
-        for (int i = 0; i < SacraficialTiers.Count; i++)
+        for (int i = 0; i < _sacraficialTiers.Count; i++)
         {
             SetSacraficeTarget(component, PickFromTierPerson(allHumans, i), i);
         }
@@ -139,7 +136,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     public EntityUid? PickFromTierPerson(List<EntityUid> allHumans, int tier)//ToDo wierd naming
     {
-        if (tier >= SacraficialTiers.Count)
+        if (tier >= _sacraficialTiers.Count)
             return null;
 
         var allSuitable = new List<EntityUid>();
@@ -153,7 +150,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
             if (HasComp<CultYoggSacrificialMindComponent>(mind))//shouldn't be already a target
                 continue;
 
-            if (SacraficialTiers[tier].Contains(prototype.ID))
+            if (_sacraficialTiers[tier].Contains(prototype.ID))
                 allSuitable.Add(mind);
         }
 
@@ -401,10 +398,11 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     {
         base.AppendRoundEndText(uid, component, gameRule, ref args);
 
-
-        bool summoned = false;
+        //ToDo check for summoning
 
         var query = EntityQueryEnumerator<NyarlathotepSearchTargetsComponent>();//ToDo maybe some altrenative
+        //if (query. != null)
+        //    component.Summoned = true;
 
         if (component.Summoned)
         {
@@ -449,7 +447,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         }
 
         var queryMiGo = EntityQueryEnumerator<MiGoComponent, MobStateComponent>();
-        while (queryMiGo.MoveNext(out _, out _,  out var mob))
+        while (queryMiGo.MoveNext(out _, out _, out var mob))
         {
             if (mob.CurrentState == MobState.Dead)
                 continue;

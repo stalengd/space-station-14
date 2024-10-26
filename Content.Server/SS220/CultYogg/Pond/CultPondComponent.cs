@@ -1,4 +1,4 @@
-﻿// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
@@ -8,7 +8,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Server.SS220.CultYogg.Pond;
 
 [RegisterComponent, Access(typeof(CultPondSystem))]
-public sealed partial class CultPondComponent  : Component
+public sealed partial class CultPondComponent : Component
 {
     [DataField("solutionName", required: true), ViewVariables(VVAccess.ReadWrite)]
     public string Solution;
@@ -30,7 +30,7 @@ public sealed partial class CultPondComponent  : Component
     public SoundSpecifier? RechargeSound;
 
     [ViewVariables(VVAccess.ReadWrite),
-     DataField("nextCharge" , customTypeSerializer:typeof(TimeOffsetSerializer))]
+    DataField("nextCharge", customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan? NextCharge;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("reagent")]

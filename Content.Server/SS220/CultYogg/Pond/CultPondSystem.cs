@@ -1,4 +1,5 @@
-﻿// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using System;
 using System.Linq;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
@@ -21,11 +22,9 @@ public sealed class CultPondSystem : EntitySystem
         SubscribeLocalEvent<CultPondComponent, MapInitEvent>(OnInit);
     }
 
-    private void OnInit(EntityUid uid, CultPondComponent component, MapInitEvent args)
+    private void OnInit(Entity<CultPondComponent> uid, ref MapInitEvent args)
     {
-        component.NextCharge = _timing.CurTime;
-
-
+        uid.Comp.NextCharge = _timing.CurTime;
     }
 
     public override void Update(float frameTime)
@@ -50,12 +49,12 @@ public sealed class CultPondSystem : EntitySystem
 
             if (pondComponent.Reagent == null)
             {
-                if(solution.Contents.Count == 0)
+                if (solution.Contents.Count == 0)
                     continue;
                 pondComponent.Reagent = solution.Contents.FirstOrDefault();
             }
 
-            pondComponent.NextCharge += TimeSpan.FromSeconds(pondComponent.RefillCooldown);
+            pondComponent.NextCharge = _timing.CurTime + TimeSpan.FromSeconds(pondComponent.RefillCooldown);
 
             if (solution.MaxVolume == solution.Volume)
                 continue;

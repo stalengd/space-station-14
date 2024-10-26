@@ -81,12 +81,6 @@ public sealed partial class CultYoggComponent : Component
     [ViewVariables, DataField, AutoNetworkedField]
     public float ThirstCost = 100f;
 
-    /// <summary>
-    /// The role prototype of the culsist antag role
-    /// </summary>
-    [DataField("cultYoggRoleId", customTypeSerializer: typeof(PrototypeIdSerializer<AntagPrototype>))]
-    public string CultYoggRoleId = "CultYogg";
-
     [DataField]
     public Color? PreviousEyeColor;
 

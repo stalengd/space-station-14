@@ -1,4 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using System.Text.RegularExpressions;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.SS220.Bible
@@ -12,7 +13,7 @@ namespace Content.Shared.SS220.Bible
 
         public static string SanitazeMessage(string message)
         {
-            return message.Trim();
+            return Regex.Replace(message, @"\t|\n|\r", string.Empty).Trim();
         }
     }
 }

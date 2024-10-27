@@ -134,7 +134,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (!uid.Comp.IsPhysicalForm)
         {
             if (_net.IsServer)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-altar-not-enough-migo"), uid, uid);
+                _popup.PopupClient(Loc.GetString("cult-yogg-altar-not-enough-migo"), uid);
             return;
         }
         var altarQuery = EntityQueryEnumerator<CultYoggAltarComponent, TransformComponent>();

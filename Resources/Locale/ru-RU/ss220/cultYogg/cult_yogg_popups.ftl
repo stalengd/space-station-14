@@ -14,10 +14,10 @@ cult-yogg-altar-not-enough-migo = Недостаточно Ми-Го рядом 
 cult-yogg-sacrifice-started = {$user} начинает жертвоприношение, тело {$target} медленно поднимается в воздух
 cult-yogg-buckle-attempt = {$user} не является целью жертвоприношения
 
-cult-yogg-resurrected-by-heal = Мистические силы возвращают к жизнь {$target}
+cult-yogg-resurrected-by-heal = Мистические силы возвращают к жизни {$target}
 
 cult-yogg-acsending-have-acsending = Один из членов культа в данный момент возносится
-cult-yogg-acsending-migo-full = Достигнуто количество Ми-Го и все они живы
+cult-yogg-acsending-migo-full = Достигнуто необходимое количество Ми-Го и все они живы
 
 cult-yogg-burglar-bug-stick-success = Вы прикрепили жука-взломщика
 cult-yogg-burglar-bug-unstick-started = Вы пытаетесь отцепить жука-взломщика...

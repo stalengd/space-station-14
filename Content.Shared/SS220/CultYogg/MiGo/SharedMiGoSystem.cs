@@ -11,6 +11,7 @@ using Content.Shared.Popups;
 //using Content.Shared.StatusEffect;
 using Content.Shared.SS220.CultYogg.Altar;
 using Content.Shared.SS220.CultYogg.Sacraficials;
+using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -19,6 +20,8 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using System.Linq;
+using Content.Shared.Item;
+using Content.Shared.Hands;
 
 
 namespace Content.Shared.SS220.CultYogg.MiGo;
@@ -60,7 +63,10 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, AfterDeMaterialize>(OnAfterDeMaterialize);
 
         SubscribeLocalEvent<MiGoComponent, AttackAttemptEvent>(CheckAct);
-        SubscribeLocalEvent<MiGoComponent, InteractionAttemptEvent>(OnInteractAttempt);
+        SubscribeLocalEvent<MiGoComponent, DropAttemptEvent>(OnDropAttempt);
+        SubscribeLocalEvent<MiGoComponent, ThrowAttemptEvent>(OnThrowAttempt);
+        SubscribeLocalEvent<MiGoComponent, BeingUsedAttemptEvent>(OnBeingUsedAttempt);
+        SubscribeLocalEvent<MiGoComponent, GettingPickedUpAttemptEvent>(OnGettingPickedUpAttempt);
     }
 
     protected virtual void OnCompInit(Entity<MiGoComponent> uid, ref ComponentStartup args)
@@ -78,6 +84,9 @@ public abstract class SharedMiGoSystem : EntitySystem
     private void MiGoHeal(Entity<MiGoComponent> uid, ref MiGoHealEvent args)
     {
         if (args.Handled)
+            return;
+
+        if (!uid.Comp.IsPhysicalForm)
             return;
 
         /*
@@ -109,6 +118,10 @@ public abstract class SharedMiGoSystem : EntitySystem
         //will wait when sw will update ui parts to copy paste, cause rn it has an errors
         if (args.Handled || !TryComp<ActorComponent>(entity, out var actor))
             return;
+
+        if (!entity.Comp.IsPhysicalForm)
+            return;
+
         //args.Handled = true; // No cooldown for UI
 
         _miGoErectSystem.OpenUI(entity, actor);
@@ -319,10 +332,28 @@ public abstract class SharedMiGoSystem : EntitySystem
             args.Cancel();
     }
 
-    private void OnInteractAttempt(Entity<MiGoComponent> uid, ref InteractionAttemptEvent args)
+    //ToDo check if its required
+
+    private void OnGettingPickedUpAttempt(Entity<MiGoComponent> uid, ref GettingPickedUpAttemptEvent args)
     {
         if (!uid.Comp.IsPhysicalForm)
-            args.Cancelled = true;
+            args.Cancel();
+    }
+
+    private void OnDropAttempt(Entity<MiGoComponent> uid, ref DropAttemptEvent args)
+    {
+        if (!uid.Comp.IsPhysicalForm)
+            args.Cancel();
+    }
+    private void OnBeingUsedAttempt(Entity<MiGoComponent> uid, ref BeingUsedAttemptEvent args)
+    {
+        if (!uid.Comp.IsPhysicalForm)
+            args.Cancel();
+    }
+    private void OnThrowAttempt(Entity<MiGoComponent> uid, ref ThrowAttemptEvent args)
+    {
+        if (!uid.Comp.IsPhysicalForm)
+            args.Cancel();
     }
     #endregion
 }

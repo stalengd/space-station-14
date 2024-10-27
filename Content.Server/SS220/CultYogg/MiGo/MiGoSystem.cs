@@ -133,6 +133,9 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
         if (args.Handled)
             return;
 
+        if (!uid.Comp.IsPhysicalForm)
+            return;
+
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
             _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-must-be-human"), args.Target, uid);

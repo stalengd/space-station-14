@@ -10,16 +10,16 @@
   "states":
   [
     {
-      "name": "steel"
+      "name": "coillv"
+    },
+    {
+      "name": "coilmv"
+    },
+    {
+      "name": "coilhv"
     },
     {
       "name": "tokl"
-    },
-    {
-      "name": "glass"
-    },
-    {
-      "name": "metal_rod"
     }
   ]
 }

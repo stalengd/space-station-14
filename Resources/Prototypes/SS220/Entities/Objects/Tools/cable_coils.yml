@@ -13,7 +13,7 @@
     tags:
     - CableCoil
   - type: Stack
-    stackType: Cable
+    stackType: Cablelive
   - type: Sprite
     sprite: SS220/Objects/Tools/CultYogg/cablecoils.rsi
   - type: Item
@@ -37,7 +37,7 @@
   description: Искажённый моток высоковольтных проводов покрытый слизью и странными корнями, пульсирует.
   components:
   - type: Stack
-    stackType: CableHV
+    stackType: CableHVlive
     baseLayer: base
     layerStates:
     - coilhv-10
@@ -101,7 +101,7 @@
   description: Искажённый моток средневольтынх проводов покрытый слизью и странными корнями, пульсирует.
   components:
   - type: Stack
-    stackType: CableMV
+    stackType: CableMVlive
     baseLayer: base
     layerStates:
     - coilmv-10
@@ -170,6 +170,7 @@
   - type: Item
     heldPrefix: coillv
   - type: Stack
+    stackType: Cablelive
     baseLayer: base
     layerStates:
     - coillv-10

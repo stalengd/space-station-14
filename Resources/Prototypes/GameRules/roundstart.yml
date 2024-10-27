@@ -215,6 +215,10 @@
     giveUplink: false
     giveCodewords: false # It would actually give them a different set of codewords than the regular traitors, anyway
     giveBriefing: false
+  #ss220 reinforcement objective fix begin
+  - type: AntagRandomObjectives
+    enabled: false
+  #ss220 reinforcement objective fix end
 
 - type: entity
   id: Revolutionary

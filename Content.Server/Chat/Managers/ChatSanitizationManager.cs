@@ -134,7 +134,6 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
         out string sanitized,
         [NotNullWhen(true)] out string? emote)
     {
-        //message = message.TrimEnd(); // SS220
         emote = null;
         sanitized = message;
 
@@ -175,7 +174,7 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
             message = r.Replace(message, string.Empty);
         }
 
-        // SS220 begin
+        // SS220 no English begin
         var ntAllowed = sanitized.Replace("NanoTrasen", string.Empty, StringComparison.OrdinalIgnoreCase);
         ntAllowed = ntAllowed.Replace("nt", string.Empty, StringComparison.OrdinalIgnoreCase);
 
@@ -186,7 +185,7 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
             emote = "кашляет";
             return true;
         }
-        // SS220 end
+        // SS220 no English end
 
         sanitized = message.Trim();
         return emote is not null;

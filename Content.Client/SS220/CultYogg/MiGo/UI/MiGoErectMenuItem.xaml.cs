@@ -55,7 +55,7 @@ public sealed partial class MiGoErectMenuItem : ContainerButton
     public void SetItem(CultYoggBuildingPrototype building)
     {
         Building = building;
-        ItemView.SetPrototype(building.ResultEntityId.Id);
+        ItemView.SetPrototype(building.ResultProtoId.Id);
         MaterialsContainer.DisposeAllChildren();
         if (ItemView.Entity == null)
             return;

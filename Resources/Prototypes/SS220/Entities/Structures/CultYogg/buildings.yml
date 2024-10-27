@@ -44,3 +44,61 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: Appearance
+
+- type: entity
+  parent: BaseWall
+  id: WallCultYogg
+  name: проклятая стена
+  components:
+  - type: Tag
+    tags:
+      - Wall
+  - type: Sprite
+    sprite: SS220/Structures/Walls/cult_yogg_walls.rsi
+    state: full
+  - type: Icon
+    sprite: SS220/Structures/Walls/cult_yogg_walls.rsi
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: IconSmooth
+    key: cultYoggWall
+    base: cult
+
+- type: entity
+  parent: BaseMaterialDoorNavMap
+  id: CultYoggDoor
+  name: проклятая дверь
+  components:
+  - type: Sprite
+    sprite: SS220/Structures/Doors/cult_yogg_doors.rsi
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+  - type: Door
+    bumpOpen: false
+    clickOpen: true
+    closeTimeOne: 0.2
+    closeTimeTwo: 0.6
+    openTimeOne: 0.6
+    openTimeTwo: 0.2
+    openSound:
+      path: /Audio/Effects/door_open.ogg
+    closeSound:
+      path: /Audio/Effects/door_close.ogg
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]

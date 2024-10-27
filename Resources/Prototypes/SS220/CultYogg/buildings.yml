@@ -1,8 +1,18 @@
 # © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 - type: cultYoggBuilding
-  id: CultYoggPod
+  id: CultYoggWall
   order: 0
+  result: WallCultYogg
+
+- type: cultYoggBuilding
+  id: CultYoggDoor
+  order: 1
+  result: CultYoggDoor
+
+- type: cultYoggBuilding
+  id: CultYoggPod
+  order: 2
   frame: CultYoggBuildingFrame
   result: CultYoggPod
   materials:
@@ -15,9 +25,9 @@
 
 - type: cultYoggBuilding
   id: FungusHydroponic
-  order: 1
+  order: 3
   frame: CultYoggBuildingFrame
-  result: CultYoggFungusHydroponic #ToDo wierd bug  with "green" sprite before placement
+  result: CultYoggFungusHydroponic
   materials:
   - stack: CableMVlive
     count: 5
@@ -31,7 +41,7 @@
 
 - type: cultYoggBuilding
   id: CultYoggAltarBuilding
-  order: 2
+  order: 4
   frame: CultYoggBuildingFrame
   result: CultYoggAltar
   materials:
@@ -47,7 +57,7 @@
 
 - type: cultYoggBuilding
   id: CultYoggPondBuilding
-  order: 3
+  order: 5
   frame: CultYoggBuildingFrame
   result: CultYoggPond
   materials:

@@ -127,13 +127,21 @@ public sealed class SharedMiGoErectSystem : EntitySystem
             return;
 
         var location = GetCoordinates(args.Location);
-        PlaceBuildingFrame(buildingPrototype, location, args.Direction);
+        if (buildingPrototype.FrameProtoId.HasValue)
+        {
+            PlaceBuildingFrame(buildingPrototype, location, args.Direction);
+        }
+        else
+        {
+            PlaceCompleteBuilding(buildingPrototype, location, args.Direction);
+        }
 
         var erectAction = entity.Comp.MiGoErectActionEntity;
         if (erectAction == null || !TryComp<InstantActionComponent>(erectAction, out var actionComponent))
             return;
 
-        _actionsSystem.SetCooldown(erectAction, actionComponent.UseDelay ?? TimeSpan.FromSeconds(1));
+        var cooldown = buildingPrototype.CooldownOverride ?? actionComponent.UseDelay ?? TimeSpan.FromSeconds(1);
+        _actionsSystem.SetCooldown(erectAction, cooldown);
         args.Handled = true;
     }
 
@@ -210,9 +218,9 @@ public sealed class SharedMiGoErectSystem : EntitySystem
 
     private Entity<CultYoggBuildingFrameComponent> PlaceBuildingFrame(CultYoggBuildingPrototype buildingPrototype, EntityCoordinates location, Direction direction)
     {
-        var frameEntity = SpawnAtPosition(buildingPrototype.FrameEntityId, location);
+        var frameEntity = SpawnAtPosition(buildingPrototype.FrameProtoId, location);
         Transform(frameEntity).LocalRotation = direction.ToAngle();
-        var resultEntityProto = _prototypeManager.Index(buildingPrototype.ResultEntityId);
+        var resultEntityProto = _prototypeManager.Index(buildingPrototype.ResultProtoId);
         _metaDataSystem.SetEntityName(frameEntity, Loc.GetString("cult-yogg-building-frame-name-template", ("name", resultEntityProto.Name)));
         var frame = EnsureComp<CultYoggBuildingFrameComponent>(frameEntity);
         frame.BuildingPrototypeId = buildingPrototype.ID;
@@ -222,6 +230,13 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         }
         Dirty(new Entity<CultYoggBuildingFrameComponent>(frameEntity, frame));
         return (frameEntity, frame);
+    }
+
+    private EntityUid PlaceCompleteBuilding(CultYoggBuildingPrototype buildingPrototype, EntityCoordinates location, Direction direction)
+    {
+        var building = SpawnAtPosition(buildingPrototype.ResultProtoId, location);
+        Transform(building).LocalRotation = direction.ToAngle();
+        return building;
     }
 
     private bool CanInsert(Entity<CultYoggBuildingFrameComponent> entity, EntityUid item)
@@ -320,8 +335,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         if (!_prototypeManager.TryIndex(entity.Comp.BuildingPrototypeId, out var prototype, logError: true))
             return default;
         var transform = Transform(entity);
-        var resultEntity = SpawnAtPosition(prototype.ResultEntityId, transform.Coordinates);
-        Transform(resultEntity).LocalRotation = transform.LocalRotation;
+        var resultEntity = PlaceCompleteBuilding(prototype, transform.Coordinates, transform.LocalRotation.GetDir());
         Del(entity);
         return resultEntity;
     }

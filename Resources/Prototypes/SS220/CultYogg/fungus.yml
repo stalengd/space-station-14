@@ -22,6 +22,7 @@
   - type: Anchorable
   - type: Pullable
   - type: Sprite
+    sprite: SS220/Structures/fungusHydroponic.rsi
     layers:
       - sprite: SS220/Structures/fungusHydroponic.rsi
         state: base

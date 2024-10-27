@@ -57,7 +57,7 @@ namespace Content.Client.SS220.CultYogg.MiGo
             base.StartHijack(manager);
             if (_prototype is null)
                 return;
-            var entityProto = _prototypeManager.Index(_prototype.ResultEntityId);
+            var entityProto = _prototypeManager.Index(_prototype.ResultProtoId);
             if (!entityProto.TryGetComponent<SpriteComponent>(out var sprite, _componentFactory))
                 return;
             if (sprite?.BaseRSI is null)

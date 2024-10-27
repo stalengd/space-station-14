@@ -3,8 +3,6 @@
   parent: BaseItem
   id: HornCultYogg
   components:
-    - type: Irremovable
-      inHandItem: true
     - type: Gun
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
       soundEmpty: null
@@ -20,7 +18,9 @@
     - type: Appearance
     - type: RechargeBasicEntityAmmo
       rechargeCooldown: 10
-    - type: Wieldable
+      rechargeSound: /Audio/Weapons/Guns/MagIn/shotgun_insert.ogg
+    - type: Item
+      size: Ginormous
     - type: IncreaseDamageOnWield
       damage:
        types:
@@ -41,6 +41,10 @@
         right:
         - state: fullammo-inhand-right
           shader: unshaded
+    - type: Irremovable
+      inHandItem: true
+    - type: RoleItem
+      roleId: CultYogg
 
 - type: entity
   name: tesla gun lightning

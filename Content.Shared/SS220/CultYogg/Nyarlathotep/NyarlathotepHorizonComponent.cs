@@ -21,18 +21,4 @@ public sealed partial class NyarlathotepHorizonComponent : Component
     [DataField("colliderFixtureId")]
     [ViewVariables(VVAccess.ReadWrite)]
     public string? ColliderFixtureId;
-
-    /// <summary>
-    /// The amount of time that has to pass between this event consuming everything it intersects with.
-    /// </summary>
-    [DataField("consumePeriod")]
-    [ViewVariables(VVAccess.ReadWrite)]
-    public TimeSpan TargetConsumePeriod = TimeSpan.FromSeconds(0.5);
-
-    /// <summary>
-    /// The next time at which this consumed everything it overlapped with.
-    /// </summary>
-    [ViewVariables(VVAccess.ReadOnly), DataField("nextConsumeWaveTime", customTypeSerializer:typeof(TimeOffsetSerializer))]
-    [AutoPausedField]
-    public TimeSpan NextConsumeWaveTime;
 }

@@ -20,10 +20,11 @@
         - state: icon_noammo
           map: ["sprite"]
     - type: Item
-      size: Normal
+      size: Ginormous
     - type: Appearance
     - type: RechargeBasicEntityAmmo
       rechargeCooldown: 1.5
+      rechargeSound: /Audio/Weapons/Guns/MagIn/shotgun_insert.ogg
     - type: GenericVisualizer
       visuals:
         enum.AmmoVisuals.HasAmmo:
@@ -41,6 +42,9 @@
           shader: unshaded
     - type: Irremovable
       inHandItem: true
+    - type: RoleItem
+      roleId: CultYogg
+
 
 - type: entity
   id: Spike

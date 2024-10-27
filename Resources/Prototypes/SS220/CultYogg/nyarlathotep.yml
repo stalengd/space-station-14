@@ -21,7 +21,7 @@
     radius: 25
     color: "#FF0000"
   - type: Sprite
-    drawdepth: Mobs
+    drawdepth: Overdoors
     sprite: SS220/Mobs/CultYogg/nyarlathotep.rsi
     shader: unshaded
     layers:

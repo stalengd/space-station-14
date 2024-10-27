@@ -16,12 +16,12 @@
   frame: CultYoggBuildingFrame
   result: CultYoggPod
   materials:
+  - stack: CableHVlive
+    count: 10
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: coilhv}
   - stack: Tokl
-    count: 10
-    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl }
-  - stack: MetalRod
-    count: 10
-    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: metal_rod }
+    count: 30
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl}
 
 - type: cultYoggBuilding
   id: FungusHydroponic
@@ -29,12 +29,15 @@
   frame: CultYoggBuildingFrame
   result: CultYoggFungusHydroponic
   materials:
-  - stack: Steel
-    count: 10
-    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: steel }
-  - stack: Tokl
+  - stack: CableMVlive
     count: 5
-    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl }
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: coilmv}
+  - stack: CableHVlive
+    count: 5
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: coilhv}
+  - stack: Tokl
+    count: 15
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl}
 
 - type: cultYoggBuilding
   id: CultYoggAltarBuilding
@@ -42,12 +45,15 @@
   frame: CultYoggBuildingFrame
   result: CultYoggAltar
   materials:
-  - stack: Steel
+  - stack: CableMVlive
     count: 15
-    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: steel }
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: coilmv}
+  - stack: Cablelive
+    count: 5
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: coillv}
   - stack: Tokl
-    count: 8
-    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl }
+    count: 16
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl}
 
 - type: cultYoggBuilding
   id: CultYoggPondBuilding
@@ -55,9 +61,9 @@
   frame: CultYoggBuildingFrame
   result: CultYoggPond
   materials:
-  - stack: Steel
+  - stack: Cablelive
     count: 15
-    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: steel }
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: coillv}
   - stack: Tokl
-    count: 8
-    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl }
+    count: 25
+    icon: { sprite: SS220/Interface/Materials/material_icons_16.rsi, state: tokl}

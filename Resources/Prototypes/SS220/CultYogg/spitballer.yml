@@ -3,8 +3,6 @@
   parent: BaseItem
   id: SpitballerCultYogg
   components:
-    - type: Irremovable
-      inHandItem: true
     - type: Gun
       fireRate: 11
       soundEmpty: null
@@ -17,10 +15,11 @@
         - state: icon
           map: ["sprite"]
     - type: Item
-      size: Normal
+      size: Ginormous
     - type: Appearance
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 2
+      rechargeCooldown: 3
+      rechargeSound: /Audio/Weapons/Guns/MagIn/shotgun_insert.ogg
     - type: GenericVisualizer
       visuals:
         enum.AmmoVisuals.HasAmmo:
@@ -36,6 +35,10 @@
         right:
         - state: fullammo-inhand-right
           shader: unshaded
+    - type: Irremovable
+      inHandItem: true
+    - type: RoleItem
+      roleId: CultYogg
 
 - type: entity
   id: CartridgeAcid

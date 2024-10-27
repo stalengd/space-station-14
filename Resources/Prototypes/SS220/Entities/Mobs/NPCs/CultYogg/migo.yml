@@ -20,6 +20,8 @@
     telepathyChannelPrototype: TelepathyChannelYoggSothothCult
   - type: RandomMetadata
     nameSegments: [ cult_yogg_migo ]
+  - type: TTS
+    voice: forester
   - type: UserInterface
     interfaces:
       enum.MiGoErectUiKey.Key:

@@ -10,6 +10,7 @@
     sprite: SS220/Objects/Weapons/Melee/cult_yogg_beach.rsi
     state: icon
   - type: Item
+    size: Ginormous
     inhandVisuals:
       left:
       - state: inhand-left
@@ -19,6 +20,8 @@
 #      - state: inhand-right-vox
   - type: Irremovable
     inHandItem: true
+  - type: RoleItem
+    roleId: CultYogg
   - type: MeleeWeapon
     wideAnimationRotation: -135
     attackRate: 1.5

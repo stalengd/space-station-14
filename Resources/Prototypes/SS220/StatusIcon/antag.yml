@@ -1,7 +1,7 @@
 # © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 - type: factionIcon
-  id: CultYoggFaction
+  id: CultYoggFactionIcon
   priority: 11
   showTo:
     components:
@@ -13,7 +13,7 @@
     state: cult_yogg
 
 - type: factionIcon
-  id: CultYoggSacraficialTarget
+  id: CultYoggSacraficialTargetIcon
   priority: 3
   showTo:
     components:

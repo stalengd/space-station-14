@@ -19,7 +19,7 @@ public sealed partial class CultYoggSacrificialComponent : Component
     public bool IconVisibleToGhost { get; set; } = true;
 
     [DataField]
-    public ProtoId<FactionIconPrototype> StatusIcon { get; set; } = "CultYoggSacraficialTarget";
+    public ProtoId<FactionIconPrototype> StatusIcon { get; set; } = "CultYoggSacraficialTargetIcon";
 
     public int Tier = 0;//initilize as max possible tier
 

@@ -18,7 +18,9 @@
     - type: Appearance
     - type: RechargeBasicEntityAmmo
       rechargeCooldown: 10
-    - type: Wieldable
+      rechargeSound: /Audio/Weapons/Guns/MagIn/shotgun_insert.ogg
+    - type: Item
+      size: Ginormous
     - type: IncreaseDamageOnWield
       damage:
        types:

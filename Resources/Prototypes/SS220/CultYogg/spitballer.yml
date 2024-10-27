@@ -15,10 +15,11 @@
         - state: icon
           map: ["sprite"]
     - type: Item
-      size: Normal
+      size: Ginormous
     - type: Appearance
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 2
+      rechargeCooldown: 3
+      rechargeSound: /Audio/Weapons/Guns/MagIn/shotgun_insert.ogg
     - type: GenericVisualizer
       visuals:
         enum.AmmoVisuals.HasAmmo:

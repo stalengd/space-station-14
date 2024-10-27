@@ -32,13 +32,6 @@ public sealed class AntagRandomObjectivesSystem : EntitySystem
             return;
         }
 
-        //ss220 reinforcement objective fix start
-        if (TryComp<AutoTraitorComponent>(mind.OwnedEntity, out var autoTraitorComponent) && !autoTraitorComponent.GiveObjectives)
-        {
-            return;
-        }
-        //ss220 reinforcement objective fix end
-
         var difficulty = 0f;
         foreach (var set in ent.Comp.Sets)
         {

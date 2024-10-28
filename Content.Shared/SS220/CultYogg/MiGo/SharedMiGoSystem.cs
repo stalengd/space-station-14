@@ -188,7 +188,10 @@ public abstract class SharedMiGoSystem : EntitySystem
         var sacrificeDoAfter = new DoAfterArgs(EntityManager, user, altarComp.RutualTime, new MiGoSacrificeDoAfterEvent(), altarUid, target: targetUid)
         {
             BreakOnDamage = true,
-            BreakOnMove = true
+            BreakOnMove = true,
+            BlockDuplicate = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent
         };
 
         var started = _doAfter.TryStartDoAfter(sacrificeDoAfter);

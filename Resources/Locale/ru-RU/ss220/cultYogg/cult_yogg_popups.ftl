@@ -1,4 +1,5 @@
 cult-yogg-corrupt-no-proto = Предмет не имеет истинной формы
+cult-yogg-corrupt-already-corrupted = Предмет уже обрел истинную форму
 cult-yogg-no-mind = Оболочка не имеет разума
 cult-yogg-enslave-must-be-human = Только гуманоиды могут превознестись
 cult-yogg-enslave-must-be-alive = Оболочка кандидата нарушена

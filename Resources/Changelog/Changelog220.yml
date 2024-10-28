@@ -1,12 +1,4 @@
 ﻿Entries:
-- author: Vnoeg
-  changes:
-  - message: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0430 \u043A\u0430\u0440\
-      \u0442\u0430 NSS Axioma."
-    type: Tweak
-  id: 123
-  time: '2024-04-21T22:48:02.0000000+00:00'
-  url: https://api.github.com/repos/SerbiaStrong-220/space-station-14/pulls/926
 - author: MIXnikita
   changes:
   - message: "\u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B \u043D\u043E\u0432\
@@ -5896,3 +5888,11 @@
   id: 628
   time: '2024-10-27T20:15:30.0000000+00:00'
   url: https://github.com/SerbiaStrong-220/space-station-14/pull/2114
+- author: NORKA
+  changes:
+  - message: "\u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D \u043D\u043E\u0432\u044B\
+      \u0439 \u043B\u043E\u0431\u0431\u0438-\u0430\u0440\u0442!"
+    type: Add
+  id: 629
+  time: '2024-10-28T05:57:48.0000000+00:00'
+  url: https://github.com/SerbiaStrong-220/space-station-14/pull/2171

@@ -31,7 +31,7 @@
     tags:
     - Handcuffs
   - type: RoleItem
-    roleId: CultYogg
+    roleId: CultYoggRole
   - type: Appearance
   - type: MeleeWeapon
     wideAnimationRotation: 90

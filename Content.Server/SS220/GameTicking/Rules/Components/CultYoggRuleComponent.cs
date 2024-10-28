@@ -48,9 +48,6 @@ public sealed partial class CultYoggRuleComponent : Component
     /// Groups and factions
     /// </summary>
     [DataField]
-    public ProtoId<AntagPrototype> CultYoggPrototypeId = "CultYogg";
-
-    [DataField]
     public ProtoId<NpcFactionPrototype> NanoTrasenFaction = "NanoTrasen";
 
     [DataField]

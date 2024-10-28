@@ -9,7 +9,7 @@
     layers:
       - state: icon
   - type: RoleItem
-    roleId: CultYogg
+    roleId: CultYoggRole
 
 - type: entity
   id: CultYoggCocoonSpikegun

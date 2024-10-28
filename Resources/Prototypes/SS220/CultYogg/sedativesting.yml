@@ -17,4 +17,4 @@
   - type: SedativeSting
     transferAmount: 10
   - type: RoleItem
-    roleId: CultYogg
+    roleId: CultYoggRole

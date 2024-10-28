@@ -40,7 +40,7 @@
   - type: Irremovable
     inHandItem: true
   - type: RoleItem
-    roleId: CultYogg
+    roleId: CultYoggRole
   - type: Insulated # заглушка на будущее, защищает только от перерезания решеток под напряжением
   - type: Tag
     tags:

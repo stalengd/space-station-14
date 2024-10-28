@@ -17,7 +17,7 @@
     sprintModifier: 0.9
   - type: HeldSpeedModifier
   - type: RoleStorage
-    roleId: CultYogg
+    roleId: CultYoggRole
   - type: Irremovable
   - type: RoleItem
-    roleId: CultYogg
+    roleId: CultYoggRole

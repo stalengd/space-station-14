@@ -33,7 +33,7 @@
     clothingPrototype: ClothingHeadHelmetHardsuitCultYogg
   - type: Irremovable
   - type: RoleItem
-    roleId: CultYogg
+    roleId: CultYoggRole
 
 - type: entity
   parent: ClothingHeadHardsuitWithLightBase

@@ -21,7 +21,7 @@
   - type: Irremovable
     inHandItem: true
   - type: RoleItem
-    roleId: CultYogg
+    roleId: CultYoggRole
   - type: MeleeWeapon
     wideAnimationRotation: -135
     attackRate: 1.5

@@ -13,7 +13,7 @@
     grid:
     - 0,0,9,5
   - type: RoleStorage
-    roleId: CultYogg
+    roleId: CultYoggRole
   - type: Irremovable
   - type: RoleItem
-    roleId: CultYogg
+    roleId: CultYoggRole

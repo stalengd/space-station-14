@@ -30,4 +30,4 @@
       types:
         Blunt: 0 # melee weapon to allow flashing individual targets
   - type: RoleItem # ломает анимацию подбора предмета
-    roleId: CultYogg
+    roleId: CultYoggRole

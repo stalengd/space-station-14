@@ -69,7 +69,9 @@ public sealed class TelepathySystem : EntitySystem
         {
             return Loc.GetString(
                 "chat-manager-send-telepathy-announce",
-                ("announce", FormattedMessage.EscapeText(messageString))
+                ("channel", $"\\[{telepathyChannel.LocalizedName}\\]"),
+                ("announce", FormattedMessage.EscapeText(messageString)),
+                ("color", telepathyChannel.Color)
             );
         }
 

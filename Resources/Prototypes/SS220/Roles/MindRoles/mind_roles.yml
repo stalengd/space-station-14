@@ -29,7 +29,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleCultYogg
-  name: Cult Yogg Role
+  name: CultYoggRole
   components:
   - type: MindRole
     antagPrototype: CultYoggProto

@@ -34,3 +34,4 @@ ent-LanternFlashCult = Лампа
     .desc = Свет, ведущий к Ньярлататепу.
 ent-ClothingOuterHardsuitCultYogg = Живая броня
     .desc = Искореженная куча непонятных субстанций, почему-то обеспечивающая серьезную защиту.
+ent-BurglarBugCultYogg = жук-взломщик

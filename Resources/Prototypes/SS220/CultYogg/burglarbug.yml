@@ -27,8 +27,8 @@
     - type: StickyVisualizer
     - type: BurglarBug
       timeToOpen: 10
-      notActivatedStickPopupCancellation: "Жук должен быть активирован до прикрепления"
-      openedDoorStickPopupCancellation: "Жук не может прикрепиться к открытой двери"
+      notActivatedStickPopupCancellation: cult-yogg-burglar-bug-notactivated-cancellation
+      openedDoorStickPopupCancellation: cult-yogg-burglar-bug-openeddoor-cancellation
       ignoreResistances: true
       damage:
         types:

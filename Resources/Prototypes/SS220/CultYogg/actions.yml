@@ -41,7 +41,7 @@
 - type: entity
   id: ActionCultYoggDigest
   name: Микоз
-  description: Отдать часть калорий, чтобы переварить новый гриб
+  description: Отдать часть калорий, чтобы переварить новый гриб.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction

@@ -169,6 +169,17 @@
   categories:
   - UplinkWearables
 
+- type: listing
+  id: ClothingSilentShoes
+  name: uplink-silent-shoes-name
+  description: uplink-silent-shoes-desc
+  icon: {sprite: Clothing/Shoes/Specific/mboots.rsi, state: icon} #todo change
+  productEntity: ClothingSilentShoes
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkWearables
+
 # READD-VEHICLES
 - type: listing
   id: UplinkSyndicateSegwayCrate

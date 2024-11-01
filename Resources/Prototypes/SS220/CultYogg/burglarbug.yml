@@ -1,5 +1,6 @@
 - type: entity
   name: burglar bug cult yogg
+  description: An insect-like device that breaks open the selected door after activation.
   parent: BaseItem
   id: BurglarBugCultYogg
   components:

@@ -1,5 +1,6 @@
 - type: entity
   name: burglar bug cult yogg
+  description: An insect-like device that breaks open the selected door after activation.
   parent: BaseItem
   id: BurglarBugCultYogg
   components:
@@ -27,8 +28,8 @@
     - type: StickyVisualizer
     - type: BurglarBug
       timeToOpen: 10
-      notActivatedStickPopupCancellation: "Жук должен быть активирован до прикрепления"
-      openedDoorStickPopupCancellation: "Жук не может прикрепиться к открытой двери"
+      notActivatedStickPopupCancellation: cult-yogg-burglar-bug-notactivated-cancellation
+      openedDoorStickPopupCancellation: cult-yogg-burglar-bug-openeddoor-cancellation
       ignoreResistances: true
       damage:
         types:

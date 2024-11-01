@@ -23,5 +23,7 @@ cult-yogg-acsending-migo-full = Достигнуто необходимое ко
 cult-yogg-burglar-bug-stick-success = Вы прикрепили жука-взломщика
 cult-yogg-burglar-bug-unstick-started = Вы пытаетесь отцепить жука-взломщика...
 cult-yogg-burglar-bug-unstick-success = Вы открепили жука-взломщика
+cult-yogg-burglar-bug-notactivated-cancellation = Жук должен быть активирован до прикрепления
+cult-yogg-burglar-bug-openeddoor-cancellation = Жук не может прикрепиться к открытой двери
 cult-yogg-fungus-denied-to-use = Вы не можете коснуться этого
 injector-component-draw-better-success-message = Вы набираете { $amount }ед. { $reagent } из { $target }.

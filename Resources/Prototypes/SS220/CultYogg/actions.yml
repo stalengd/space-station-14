@@ -3,8 +3,8 @@
 #Cultists actions
 - type: entity
   id: ActionCultYoggCorruptItem
-  name: Преобразовать предмет через прикосновение
-  description: Исказить предмет даровав ему форму заложенную создателем.
+  name: Corrupt an item by touching
+  description: Alter the form of an item to match the creator's vision.
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
@@ -15,8 +15,8 @@
 
 - type: entity
   id: ActionCultYoggCorruptItemInHand
-  name: Преобразовать предмет в руках
-  description: Исказить предмет даровав ему форму заложенную создателем.
+  name: Corrupt an item in hand
+  description: Alter the form of an item to match the creator's vision.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
@@ -27,8 +27,8 @@
 
 - type: entity
   id: ActionCultYoggPukeShroom
-  name: Извергнуть
-  description: Извергнуть выращенный в желудке гриб.
+  name: Erupt
+  description: Take out a mushroom that has grown in your stomach.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
@@ -40,8 +40,8 @@
 
 - type: entity
   id: ActionCultYoggDigest
-  name: Микоз
-  description: Отдать часть калорий, чтобы переварить новый гриб
+  name: Mycosis
+  description: Burn some of the calories to digest new mushroom.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
@@ -53,8 +53,8 @@
 
 - type: entity
   id: ActionCultYoggAscending
-  name: Возвышение
-  description: Проявить свою истинную сущность.
+  name: Exaltation
+  description: Reveal your true nature.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
@@ -66,8 +66,8 @@
 #Mi'Go actions
 - type: entity
   id: ActionMiGoEnslavement
-  name: Порабощение
-  description: Ввергни плоть в реки ваших мыслей и чувств.
+  name: Enslavement
+  description: Plunge the flesh into the flow of your thoughts and feelings.
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
@@ -78,8 +78,8 @@
 
 - type: entity
   id: ActionMiGoHeal
-  name: Исцеление
-  description: Ускорьте процессы восстановления прислужника.
+  name: Healing
+  description: Accelerate the recovery process of the proponent.
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
@@ -90,8 +90,8 @@
 
 - type: entity
   id: ActionMiGoAstral
-  name: Выход в астрал
-  description: Войдите в междумирье.
+  name: Access to the astral
+  description: Step into the interdimensional realm.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
@@ -103,8 +103,8 @@
 
 - type: entity
   id: ActionMiGoErect
-  name: Воздвигнуть
-  description: Воплотите основание великих алтарей.
+  name: Erect
+  description: Erect the foundation of the great altars.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
@@ -115,8 +115,8 @@
 
 - type: entity
   id: ActionMiGoSacrifice
-  name: Призыв
-  description: Соберитесь с другими Ми-Го у алтаря, чтобы принести жертву.
+  name: Summon
+  description: Gather with the other Mi'Go at the altar to make a sacrifice.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction

@@ -8,8 +8,14 @@
     sprite: SS220/Objects/CultYogg/cocoon.rsi
     layers:
       - state: icon
-  - type: RoleItem
-    roleId: CultYoggRole
+  - type: RestrictedItem
+    whitelist:
+      requireAll: true
+      components:
+      - CultYogg
+      mindRoles:
+      - CultYoggRole
+
 
 - type: entity
   id: CultYoggCocoonSpikegun

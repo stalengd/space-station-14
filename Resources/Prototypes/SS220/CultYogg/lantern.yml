@@ -29,5 +29,9 @@
     damage:
       types:
         Blunt: 0 # melee weapon to allow flashing individual targets
-  - type: RoleItem # ломает анимацию подбора предмета
-    roleId: CultYoggRole
+  - type: RestrictedItem
+    whitelist:
+      components:
+      - CultYogg
+      mindRoles:
+      - CultYoggRole

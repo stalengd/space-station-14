@@ -16,5 +16,11 @@
     delay: 2
   - type: SedativeSting
     transferAmount: 10
-  - type: RoleItem
-    roleId: CultYoggRole
+  - type: RestrictedItem
+    whitelist:
+      requireAll: true
+      components:
+      - CultYogg
+      mindRoles:
+      - CultYoggRole
+

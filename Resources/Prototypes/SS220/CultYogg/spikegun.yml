@@ -42,8 +42,14 @@
           shader: unshaded
     - type: Irremovable
       inHandItem: true
-    - type: RoleItem
-      roleId: CultYoggRole
+    - type: RestrictedItem
+      whitelist:
+        requireAll: true
+        components:
+        - CultYogg
+        mindRoles:
+        - CultYoggRole
+
 
 
 - type: entity

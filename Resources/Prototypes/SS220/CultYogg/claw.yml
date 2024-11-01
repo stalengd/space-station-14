@@ -39,8 +39,13 @@
     useSound: /Audio/Items/jaws_pry.ogg # звук открытия шлюза, оставить так или заменить
   - type: Irremovable
     inHandItem: true
-  - type: RoleItem
-    roleId: CultYoggRole
+  - type: RestrictedItem
+    whitelist:
+      requireAll: true
+      components:
+      - CultYogg
+      mindRoles:
+      - CultYoggRole
   - type: Insulated # заглушка на будущее, защищает только от перерезания решеток под напряжением
   - type: Tag
     tags:

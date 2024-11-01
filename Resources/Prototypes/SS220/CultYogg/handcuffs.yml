@@ -30,8 +30,13 @@
   - type: Tag
     tags:
     - Handcuffs
-  - type: RoleItem
-    roleId: CultYoggRole
+  - type: RestrictedItem
+    whitelist:
+      requireAll: true
+      components:
+      - CultYogg
+      mindRoles:
+      - CultYoggRole
   - type: Appearance
   - type: MeleeWeapon
     wideAnimationRotation: 90

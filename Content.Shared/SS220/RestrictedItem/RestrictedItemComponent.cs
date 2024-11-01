@@ -1,18 +1,19 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 using Content.Shared.Damage;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 
-namespace Content.Shared.SS220.RoleItem;
+namespace Content.Shared.SS220.RestrictedItem;
 
 [RegisterComponent]
-public sealed partial class RoleItemComponent : Component
+public sealed partial class RestrictedItemComponent : Component
 {
     /// <summary>
-    /// Takes <see cref="AntagPrototype"/> ID.
+    /// A whitelist for selecting which entity can interact with item
     /// </summary>
     [DataField(required: true)]
-    public string RoleId;
+    public EntityWhitelist? Whitelist;
     /// <summary>
     /// Popup occurs when the player does not have a role
     /// </summary>
@@ -22,5 +23,4 @@ public sealed partial class RoleItemComponent : Component
     public SoundSpecifier? SoundOnFail;
     [DataField]
     public DamageSpecifier DamageOnFail = new DamageSpecifier();
-
 }

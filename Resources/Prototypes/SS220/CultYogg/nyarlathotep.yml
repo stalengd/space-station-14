@@ -56,4 +56,12 @@
     colliderFixtureId: NyarlathotepHorizonCollider
   - type: NyarlathotepSearchTargets
     searchRange: 100
+  - type: SpamEmitSound
+    minInterval: 5
+    maxInterval: 20
+    sound:
+      collection: NyarlathotepSounds
+      params:
+        maxDistance: 100
+        variation: 0.05
 

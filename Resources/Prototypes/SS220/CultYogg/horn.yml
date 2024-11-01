@@ -47,8 +47,6 @@
       whitelist:
         components:
         - CultYogg
-        mindRoles:
-        - CultYoggRole
 
 
 - type: entity

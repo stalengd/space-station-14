@@ -44,8 +44,6 @@
       requireAll: true
       components:
       - CultYogg
-      mindRoles:
-      - CultYoggRole
   - type: Insulated # заглушка на будущее, защищает только от перерезания решеток под напряжением
   - type: Tag
     tags:

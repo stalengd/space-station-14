@@ -31,7 +31,6 @@
         Blunt: 0 # melee weapon to allow flashing individual targets
   - type: RestrictedItem
     whitelist:
+      requireAll: true
       components:
       - CultYogg
-      mindRoles:
-      - CultYoggRole

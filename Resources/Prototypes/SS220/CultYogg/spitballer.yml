@@ -42,8 +42,6 @@
         requireAll: true
         components:
         - CultYogg
-        mindRoles:
-        - CultYoggRole
 
 
 - type: entity

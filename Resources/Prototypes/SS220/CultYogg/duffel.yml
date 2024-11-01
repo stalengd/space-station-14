@@ -21,14 +21,9 @@
       requireAll: true
       components:
       - CultYogg
-      mindRoles:
-      - CultYoggRole
   - type: Irremovable
   - type: RestrictedItem
     whitelist:
       requireAll: true
       components:
       - CultYogg
-      mindRoles:
-      - CultYoggRole
-

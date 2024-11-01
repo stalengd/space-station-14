@@ -35,8 +35,6 @@
       requireAll: true
       components:
       - CultYogg
-      mindRoles:
-      - CultYoggRole
   - type: Appearance
   - type: MeleeWeapon
     wideAnimationRotation: 90

@@ -6,10 +6,6 @@ using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
-using Content.Shared.Weapons.Melee;
-using Content.Shared.Weapons.Ranged.Components;
-using Robust.Shared.GameObjects;
-using System;
 
 namespace Content.Shared.SS220.Irremovable;
 
@@ -28,89 +24,12 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
 
     private void OnDeath(MobStateChangedEvent ev)
     {
-        if (ev.NewMobState != MobState.Dead)
-            return;
-
-        if (!_inventory.TryGetSlots(ev.Target, out var slots))
-            return;
-        // trying to unequip all item's with component
-        foreach (var slot in slots)
-        {
-            if (!_inventory.TryGetSlotEntity(ev.Target, slot.Name, out var entity))
-                continue;
-
-            if (!TryComp<IrremovableComponent>(entity, out var irremovableComp))
-                continue;
-
-            if (irremovableComp.ShouldDropOnDeath)
-            {
-                if (irremovableComp.InHandItem)
-                    _hand.TryDrop(ev.Target); // trying to drop inhand item (that's sucks i know)
-
-                _inventory.TryUnequip(ev.Target, slot.Name, true, true);
-            }
-        }
-
-        // trying to unequip all item's with component
-        foreach (var slot in slots)
-        {
-            if (!_inventory.TryGetSlotEntity(ev.Target, slot.Name, out var entity))
-                continue;
-
-            if (!TryComp<IrremovableComponent>(entity, out var irremovableComp))
-                continue;
-
-            if (irremovableComp.ShouldDropOnDeath)
-            {
-                RemComp<UnremoveableComponent>(entity.Value);
-                _inventory.TryUnequip(ev.Target, slot.Name, true, true);
-            }
-        }
-
-        //removing from hands
-        foreach (var handOrInventoryEntity in _inventory.GetHandOrInventoryEntities(ev.Target, SlotFlags.POCKET))
-        {
-            if (!HasComp<IrremovableComponent>(handOrInventoryEntity))
-                continue;
-
-            RemComp<UnremoveableComponent>(handOrInventoryEntity);
-
-            _hand.TryDrop(ev.Target, handOrInventoryEntity);
-        }
+        RemoveItems(ev.Target);
     }
 
     private void OnRemoveAll(ref DropAllIrremovableEvent ev)
     {
-
-        if (!_inventory.TryGetSlots(ev.Target, out var slots))
-            return;
-
-        // trying to unequip all item's with component
-        foreach (var slot in slots)
-        {
-            if (!_inventory.TryGetSlotEntity(ev.Target, slot.Name, out var entity))
-                continue;
-
-            if (!TryComp<IrremovableComponent>(entity, out var irremovableComp))
-                continue;
-
-            if (irremovableComp.ShouldDropOnDeath)
-            {
-                RemComp<UnremoveableComponent>(entity.Value);
-                _inventory.TryUnequip(ev.Target, slot.Name, true, true);
-            }
-        }
-
-        //removing from hands
-        foreach (var handOrInventoryEntity in _inventory.GetHandOrInventoryEntities(ev.Target, SlotFlags.POCKET))
-        {
-            if (!HasComp<IrremovableComponent>(handOrInventoryEntity))
-                continue;
-
-            RemComp<UnremoveableComponent>(handOrInventoryEntity);
-
-            _hand.TryDrop(ev.Target, handOrInventoryEntity);
-        }
+        RemoveItems(ev.Target);
     }
 
     private void GotPickuped(Entity<IrremovableComponent> entity, ref GotEquippedHandEvent args)
@@ -130,6 +49,40 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
         EnsureComp<UnremoveableComponent>(entity, out var comp);
         comp.DeleteOnDrop = false;
     }
+
+    private void RemoveItems(EntityUid target)
+    {
+        if (!_inventory.TryGetSlots(target, out var slots))
+            return;
+
+        // trying to unequip all item's with component
+        foreach (var slot in slots)
+        {
+            if (!_inventory.TryGetSlotEntity(target, slot.Name, out var entity))
+                continue;
+
+            if (!TryComp<IrremovableComponent>(entity, out var irremovableComp))
+                continue;
+
+            if (irremovableComp.ShouldDropOnDeath)
+            {
+                RemComp<UnremoveableComponent>(entity.Value);
+                _inventory.TryUnequip(target, slot.Name, true, true);
+            }
+        }
+
+        //removing from hands
+        foreach (var handOrInventoryEntity in _inventory.GetHandOrInventoryEntities(target, SlotFlags.POCKET))
+        {
+            if (!HasComp<IrremovableComponent>(handOrInventoryEntity))
+                continue;
+
+            RemComp<UnremoveableComponent>(handOrInventoryEntity);
+
+            _hand.TryDrop(target, handOrInventoryEntity);
+        }
+    }
+
 }
 
 /// <summary>

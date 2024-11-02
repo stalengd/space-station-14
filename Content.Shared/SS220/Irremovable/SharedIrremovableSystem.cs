@@ -1,7 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 using Content.Shared.Hands;
-using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -12,7 +11,7 @@ namespace Content.Shared.SS220.Irremovable;
 public sealed partial class SharedIrremovableSystem : EntitySystem
 {
     [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedHandsSystem _hand = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -24,7 +23,8 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
 
     private void OnDeath(MobStateChangedEvent ev)
     {
-        RemoveItems(ev.Target);
+        if (ev.NewMobState == MobState.Dead)
+            RemoveItems(ev.Target);
     }
 
     private void OnRemoveAll(ref DropAllIrremovableEvent ev)
@@ -56,33 +56,18 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
             return;
 
         // trying to unequip all item's with component
-        foreach (var slot in slots)
+        foreach (var slot in _inventory.GetHandOrInventoryEntities(target))
         {
-            if (!_inventory.TryGetSlotEntity(target, slot.Name, out var entity))
+            if (!TryComp<IrremovableComponent>(slot, out var irremovableComp))
                 continue;
 
-            if (!TryComp<IrremovableComponent>(entity, out var irremovableComp))
+            if (!irremovableComp.ShouldDropOnDeath)
                 continue;
 
-            if (irremovableComp.ShouldDropOnDeath)
-            {
-                RemComp<UnremoveableComponent>(entity.Value);
-                _inventory.TryUnequip(target, slot.Name, true, true);
-            }
-        }
-
-        //removing from hands
-        foreach (var handOrInventoryEntity in _inventory.GetHandOrInventoryEntities(target, SlotFlags.POCKET))
-        {
-            if (!HasComp<IrremovableComponent>(handOrInventoryEntity))
-                continue;
-
-            RemComp<UnremoveableComponent>(handOrInventoryEntity);
-
-            _hand.TryDrop(target, handOrInventoryEntity);
+            RemComp<UnremoveableComponent>(slot);
+            _transform.DropNextTo(slot, target);
         }
     }
-
 }
 
 /// <summary>

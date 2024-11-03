@@ -22,10 +22,5 @@ public sealed partial class CultYoggSacrificialComponent : Component
     public ProtoId<FactionIconPrototype> StatusIcon { get; set; } = "CultYoggSacraficialTargetIcon";
 
     public int Tier = 0;//initilize as max possible tier
-
-    [DataField]
     public bool WasSacraficed = false;
-
-    [DataField]
-    public bool ReplacementAnnounceWereSend = false;
 }

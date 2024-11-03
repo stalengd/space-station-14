@@ -11,7 +11,9 @@ public sealed partial class SacraficialReplacementSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    private Dictionary<(EntityUid, NetUserId), TimeSpan> _sacraficialsLeftBody = new();
+    //dictionary of sacraficials uids and time when they left body by gibbing/ghosting/leaving anything
+    private Dictionary<(EntityUid, NetUserId), TimeSpan> _replaceSacrSchedule = new();
+    private Dictionary<(EntityUid, NetUserId), TimeSpan> _announceSchedule = new();
 
     //Count down the moment when sacraficial will be raplaced
     private TimeSpan _beforeReplacementCooldown = TimeSpan.FromSeconds(300);//ToDo set timer
@@ -28,9 +30,8 @@ public sealed partial class SacraficialReplacementSystem : EntitySystem
     }
     private void OnPlayerAttached(Entity<CultYoggSacrificialComponent> ent, ref PlayerAttachedEvent args)
     {
-        _sacraficialsLeftBody.Remove((ent, args.Player.UserId));
-
-        ent.Comp.ReplacementAnnounceWereSend = false;
+        _replaceSacrSchedule.Remove((ent, args.Player.UserId));
+        _announceSchedule.Remove((ent, args.Player.UserId));
 
         var meta = MetaData(ent);
 
@@ -40,15 +41,14 @@ public sealed partial class SacraficialReplacementSystem : EntitySystem
 
     private void OnPlayerDetached(Entity<CultYoggSacrificialComponent> ent, ref PlayerDetachedEvent args)
     {
-        _sacraficialsLeftBody.Add((ent, args.Player.UserId), _timing.CurTime);
+        _replaceSacrSchedule.Add((ent, args.Player.UserId), _timing.CurTime);
+        _announceSchedule.Add((ent, args.Player.UserId), _timing.CurTime);
     }
 
     private void ReplacamantStatusAnnounce(EntityUid uid)
     {
         if (!TryComp<CultYoggSacrificialComponent>(uid, out var comp))
             return;
-
-        comp.ReplacementAnnounceWereSend = true;
 
         var meta = MetaData(uid);
 
@@ -59,18 +59,25 @@ public sealed partial class SacraficialReplacementSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        foreach (var pair in _sacraficialsLeftBody)
+        foreach (var pair in _replaceSacrSchedule)
         {
-            if (_timing.CurTime < pair.Value + _announceReplacementCooldown)
-                ReplacamantStatusAnnounce(pair.Key.Item1);
-
             if (_timing.CurTime < pair.Value + _beforeReplacementCooldown)
                 continue;
 
             var ev = new SacraficialReplacementEvent(pair.Key.Item1, pair.Key.Item2);
             RaiseLocalEvent(pair.Key.Item1, ref ev, true);
 
-            _sacraficialsLeftBody.Remove(pair.Key);
+            _replaceSacrSchedule.Remove(pair.Key);
+        }
+
+        foreach (var pair in _announceSchedule)//it is stupid, but idk how to make it 1 time event without second System :(
+        {
+            if (_timing.CurTime < pair.Value + _announceReplacementCooldown)
+                continue;
+
+            ReplacamantStatusAnnounce(pair.Key.Item1);
+
+            _announceSchedule.Remove(pair.Key);
         }
     }
 }

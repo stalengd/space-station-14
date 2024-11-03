@@ -134,7 +134,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (!uid.Comp.IsPhysicalForm)
         {
             if (_net.IsServer)
-                _popup.PopupClient(Loc.GetString("cult-yogg-altar-not-enough-migo"), uid);
+                _popup.PopupClient(Loc.GetString("cult-yogg-cant-sacrafice-in-astral"), uid);
             return;
         }
         var altarQuery = EntityQueryEnumerator<CultYoggAltarComponent, TransformComponent>();
@@ -180,7 +180,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (currentMiGoAmount < altarComp.RequiredAmountMiGo)
         {
             if (_net.IsServer)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-cant-sacrafice-in-astral"), user, user);
+                _popup.PopupEntity(Loc.GetString("cult-yogg-altar-not-enough-migo"), user, user);
 
             return false;
         }

@@ -163,12 +163,12 @@ namespace Content.Client.Inventory
         }
 
         public void UpdateSlot(EntityUid owner, InventorySlotsComponent component, string slotName,
-            bool? blocked = null, bool? highlight = null, bool? irremovable = null)
+            bool? blocked = null, bool? highlight = null, bool? stuckOnEquip = null)
         {
             var oldData = component.SlotData[slotName];
             var newHighlight = oldData.Highlighted;
             var newBlocked = oldData.Blocked;
-            var newIrremovable = oldData.StuckOnEquip; // //ss220 irremovable
+            var newStuckOnEquip = oldData.StuckOnEquip; // //ss220 StuckOnEquip
 
             if (blocked != null)
                 newBlocked = blocked.Value;
@@ -177,8 +177,8 @@ namespace Content.Client.Inventory
                 newHighlight = highlight.Value;
 
             //ss220 StuckOnEquip
-            if (irremovable != null)
-                newIrremovable = irremovable.Value;
+            if (stuckOnEquip != null)
+                newStuckOnEquip = stuckOnEquip.Value;
             //ss220 StuckOnEquip
 
             var newData = component.SlotData[slotName] =

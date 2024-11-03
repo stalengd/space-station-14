@@ -192,7 +192,7 @@ public sealed class HandsUIController : UIController, IOnStateEntered<GameplaySt
         }
 
         //ss220 StuckOnEquip begin
-        if (_entities.TryGetComponent(entity, out StuckOnEquipComponent? irremovableComp) && irremovableComp.InHandItem)
+        if (_entities.TryGetComponent(entity, out StuckOnEquipComponent? stuckOnEquipComponent) && stuckOnEquipComponent.InHandItem)
         {
             hand.SetEntity(entity);
             hand.StuckOnEquip = true;

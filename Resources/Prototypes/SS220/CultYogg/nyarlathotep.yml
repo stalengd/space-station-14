@@ -2,8 +2,8 @@
 
 - type: entity
   id: Nyarlathotep
-  name: ньярлатотеп
-  description: Воплощение предстоящего хаоса, посланник Богов. Не имеет четкой формы. Со слов самого Ньярлатхотепа, он имеет тысячи обличий.
+  name: Nyarlathotep
+  description: The embodiment of coming chaos, the messenger of the Gods. He has no clear shape. According to Nyarlathotep, he has thousands of forms.
   components:
   - type: Clickable
   - type: CargoSellBlacklist
@@ -56,4 +56,12 @@
     colliderFixtureId: NyarlathotepHorizonCollider
   - type: NyarlathotepSearchTargets
     searchRange: 100
+  - type: SpamEmitSound
+    minInterval: 5
+    maxInterval: 20
+    sound:
+      collection: NyarlathotepSounds
+      params:
+        maxDistance: 100
+        variation: 0.05
 

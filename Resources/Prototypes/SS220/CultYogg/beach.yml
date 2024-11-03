@@ -20,8 +20,11 @@
 #      - state: inhand-right-vox
   - type: StuckOnEquip
     inHandItem: true
-  - type: RoleItem
-    roleId: CultYoggRole
+  - type: RestrictedItem
+    whitelist:
+      requireAll: true
+      components:
+      - CultYogg
   - type: MeleeWeapon
     wideAnimationRotation: -135
     attackRate: 1.5
@@ -33,4 +36,4 @@
         Blunt: 10
         Structural: 15
   - type: KnockingWeaponOutOfHands
-    chance: 30
+    chance: 60

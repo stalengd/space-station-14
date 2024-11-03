@@ -43,8 +43,11 @@
           shader: unshaded
     - type: StuckOnEquip
       inHandItem: true
-    - type: RoleItem
-      roleId: CultYoggRole
+    - type: RestrictedItem
+      whitelist:
+        components:
+        - CultYogg
+
 
 - type: entity
   name: tesla gun lightning

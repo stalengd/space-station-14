@@ -12,8 +12,14 @@
     maxItemSize: Huge
     grid:
     - 0,0,9,5
-  - type: RoleStorage
-    roleId: CultYoggRole
+  - type: RestrictedStorage
+    whitelist:
+      requireAll: true
+      components:
+      - CultYogg
   - type: StuckOnEquip
-  - type: RoleItem
-    roleId: CultYoggRole
+  - type: RestrictedItem
+    whitelist:
+      requireAll: true
+      components:
+      - CultYogg

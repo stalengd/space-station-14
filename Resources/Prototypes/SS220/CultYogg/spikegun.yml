@@ -42,8 +42,12 @@
           shader: unshaded
     - type: StuckOnEquip
       inHandItem: true
-    - type: RoleItem
-      roleId: CultYoggRole
+    - type: RestrictedItem
+      whitelist:
+        requireAll: true
+        components:
+        - CultYogg
+
 
 
 - type: entity

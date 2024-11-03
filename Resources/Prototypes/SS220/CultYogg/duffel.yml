@@ -21,7 +21,7 @@
       requireAll: true
       components:
       - CultYogg
-  - type: Irremovable
+  - type: StuckOnEquip
   - type: RestrictedItem
     whitelist:
       requireAll: true

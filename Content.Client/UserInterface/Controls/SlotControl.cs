@@ -15,7 +15,7 @@ namespace Content.Client.UserInterface.Controls
         public TextureRect ButtonRect { get; }
         public TextureRect BlockedRect { get; }
         public TextureRect HighlightRect { get; }
-        public TextureRect IrremovableRect { get; } //ss220 irremovable
+        public TextureRect StuckOnEquipRect { get; } //ss220 StuckOnEquip
         public SpriteView HoverSpriteView { get; }
         public TextureButton StorageButton { get; }
         public CooldownGraphic CooldownDisplay { get; }
@@ -52,7 +52,7 @@ namespace Content.Client.UserInterface.Controls
 
         public bool Blocked { get => BlockedRect.Visible; set => BlockedRect.Visible = value;}
 
-        public bool Irremovable { get => IrremovableRect.Visible; set => IrremovableRect.Visible = value;} //ss220 irremovable
+        public bool StuckOnEquip { get => StuckOnEquipRect.Visible; set => StuckOnEquipRect.Visible = value;} //ss220 StuckOnEquip
 
         private string? _blockedTexturePath;
         public string? BlockedTexturePath
@@ -65,18 +65,18 @@ namespace Content.Client.UserInterface.Controls
             }
         }
 
-        //ss220 irremovable begin
-        private string? _irremovableTexturePath;
-        public string? IrremovableTexturePath
+        //ss220 StuckOnEquip begin
+        private string? _stuckOnEquipTexturePath;
+        public string? StuckOnEquipTexturePath
         {
-            get => _irremovableTexturePath;
+            get => _stuckOnEquipTexturePath;
             set
             {
-                _irremovableTexturePath = value;
-                IrremovableRect.Texture = Theme.ResolveTextureOrNull(_irremovableTexturePath)?.Texture;
+                _stuckOnEquipTexturePath = value;
+                StuckOnEquipRect.Texture = Theme.ResolveTextureOrNull(_stuckOnEquipTexturePath)?.Texture;
             }
         }
-        //ss220 irremovable end
+        //ss220 StuckOnEquip end
 
         private string? _buttonTexturePath;
         public string? ButtonTexturePath
@@ -207,14 +207,14 @@ namespace Content.Client.UserInterface.Controls
                 Visible = false
             });
 
-            //ss220 Irremovable begin
-            AddChild(IrremovableRect = new TextureRect
+            //ss220 StuckOnEquip begin
+            AddChild(StuckOnEquipRect = new TextureRect
             {
                 TextureScale = new Vector2(2, 2),
                 Visible = false
             });
-            IrremovableTexturePath = "irremovable";
-            //ss220 irremovable end
+            StuckOnEquipTexturePath = "stuckonequip";
+            //ss220 StuckOnEquip end
 
             HighlightTexturePath = "slot_highlight";
             BlockedTexturePath = "blocked";

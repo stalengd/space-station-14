@@ -31,7 +31,7 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitCultYogg
-  - type: Irremovable
+  - type: StuckOnEquip
   - type: RestrictedItem
     whitelist:
       requireAll: true

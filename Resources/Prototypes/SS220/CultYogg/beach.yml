@@ -18,7 +18,7 @@
       right:
       - state: inhand-right
 #      - state: inhand-right-vox
-  - type: Irremovable
+  - type: StuckOnEquip
     inHandItem: true
   - type: RestrictedItem
     whitelist:

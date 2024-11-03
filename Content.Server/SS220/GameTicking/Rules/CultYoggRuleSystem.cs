@@ -26,7 +26,7 @@ using Content.Shared.SS220.CultYogg.Cultists;
 using Content.Shared.SS220.CultYogg.CultYoggIcons;
 using Content.Shared.SS220.CultYogg.MiGo;
 using Content.Shared.SS220.CultYogg.Sacraficials;
-using Content.Shared.SS220.Irremovable;
+using Content.Shared.SS220.StuckOnEquip;
 using Content.Shared.SS220.Telepathy;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -330,7 +330,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _role.MindRemoveRole<CultYoggRoleComponent>(mindId);
 
         //Remove all corrupted items
-        var ev = new DropAllIrremovableEvent(uid);
+        var ev = new DropAllStuckOnEquipEvent(uid);
         RaiseLocalEvent(uid, ref ev, true);
 
         // Change the faction

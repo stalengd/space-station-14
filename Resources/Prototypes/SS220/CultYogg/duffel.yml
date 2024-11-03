@@ -18,6 +18,6 @@
   - type: HeldSpeedModifier
   - type: RoleStorage
     roleId: CultYoggRole
-  - type: Irremovable
+  - type: StuckOnEquip
   - type: RoleItem
     roleId: CultYoggRole

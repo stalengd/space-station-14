@@ -168,7 +168,7 @@ namespace Content.Client.Inventory
             var oldData = component.SlotData[slotName];
             var newHighlight = oldData.Highlighted;
             var newBlocked = oldData.Blocked;
-            var newIrremovable = oldData.Irremovable; // //ss220 irremovable
+            var newIrremovable = oldData.StuckOnEquip; // //ss220 irremovable
 
             if (blocked != null)
                 newBlocked = blocked.Value;
@@ -176,10 +176,10 @@ namespace Content.Client.Inventory
             if (highlight != null)
                 newHighlight = highlight.Value;
 
-            //ss220 irremovable
+            //ss220 StuckOnEquip
             if (irremovable != null)
                 newIrremovable = irremovable.Value;
-            //ss220 irremovable
+            //ss220 StuckOnEquip
 
             var newData = component.SlotData[slotName] =
                 new SlotData(component.SlotData[slotName], newHighlight, newBlocked);
@@ -247,7 +247,7 @@ namespace Content.Client.Inventory
             public EntityUid? HeldEntity => Container?.ContainedEntity;
             public bool Blocked;
             public bool Highlighted;
-            public bool Irremovable; //ss220 irremovable
+            public bool StuckOnEquip; //ss220 StuckOnEquip
 
             [ViewVariables]
             public ContainerSlot? Container;
@@ -261,22 +261,22 @@ namespace Content.Client.Inventory
             public string FullTextureName => SlotDef.FullTextureName;
 
             public SlotData(SlotDefinition slotDef, ContainerSlot? container = null, bool highlighted = false,
-                bool blocked = false, bool irremovable = false)
+                bool blocked = false, bool stuckOnEquip = false)
             {
                 SlotDef = slotDef;
                 Highlighted = highlighted;
                 Blocked = blocked;
                 Container = container;
-                Irremovable = irremovable; //ss220 irremovable
+                StuckOnEquip = stuckOnEquip; //ss220 StuckOnEquip
             }
 
-            public SlotData(SlotData oldData, bool highlighted = false, bool blocked = false, bool irremovable = false)
+            public SlotData(SlotData oldData, bool highlighted = false, bool blocked = false, bool stuckOnEquip = false)
             {
                 SlotDef = oldData.SlotDef;
                 Highlighted = highlighted;
                 Container = oldData.Container;
                 Blocked = blocked;
-                Irremovable = irremovable; //ss220 irremovable
+                StuckOnEquip = stuckOnEquip; //ss220 StuckOnEquip
             }
 
             public static implicit operator SlotData(SlotDefinition s)

@@ -9,7 +9,7 @@ using Content.Shared.Item;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Popups;
-using Content.Shared.SS220.Irremovable;
+using Content.Shared.SS220.StuckOnEquip;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Melee;
@@ -203,13 +203,13 @@ public sealed class WieldableSystem : EntitySystem
             return false;
         //ss220 weild fix end
 
-        //ss220 cultcultcult begin
+        //ss220 StuckOnEquip begin
         foreach (var handEnt in _handsSystem.EnumerateHeld(user, hands))
         {
-            if (TryComp<IrremovableComponent>(handEnt, out var irremovable) && irremovable.InHandItem)
+            if (TryComp<StuckOnEquipComponent>(handEnt, out var irremovable) && irremovable.InHandItem)
                 return false;
         }
-        //ss220 cultcultcult end
+        //ss220 StuckOnEquip end
 
         // Seems legit.
         return true;

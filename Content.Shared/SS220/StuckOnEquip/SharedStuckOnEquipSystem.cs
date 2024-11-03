@@ -1,38 +1,39 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 using Content.Shared.Hands;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
+using Content.Shared.Wieldable;
 
-namespace Content.Shared.SS220.Irremovable;
+namespace Content.Shared.SS220.StuckOnEquip;
 
-public sealed partial class SharedIrremovableSystem : EntitySystem
+public sealed partial class SharedStuckOnEquipSystem : EntitySystem
 {
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<IrremovableComponent, GotEquippedEvent>(GotEquipped);
-        SubscribeLocalEvent<IrremovableComponent, GotEquippedHandEvent>(GotPickuped);
+        SubscribeLocalEvent<StuckOnEquipComponent, GotEquippedEvent>(GotEquipped);
+        SubscribeLocalEvent<StuckOnEquipComponent, GotEquippedHandEvent>(GotPickuped);
         SubscribeLocalEvent<MobStateChangedEvent>(OnDeath);
-        SubscribeLocalEvent<DropAllIrremovableEvent>(OnRemoveAll);
+        SubscribeLocalEvent<DropAllStuckOnEquipEvent>(OnRemoveAll);
     }
-
     private void OnDeath(MobStateChangedEvent ev)
     {
         if (ev.NewMobState == MobState.Dead)
             RemoveItems(ev.Target);
     }
 
-    private void OnRemoveAll(ref DropAllIrremovableEvent ev)
+    private void OnRemoveAll(ref DropAllStuckOnEquipEvent ev)
     {
         RemoveItems(ev.Target);
     }
 
-    private void GotPickuped(Entity<IrremovableComponent> entity, ref GotEquippedHandEvent args)
+    private void GotPickuped(Entity<StuckOnEquipComponent> entity, ref GotEquippedHandEvent args)
     {
         if (!entity.Comp.InHandItem)
             return;
@@ -41,7 +42,7 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
         comp.DeleteOnDrop = false;
     }
 
-    private void GotEquipped(Entity<IrremovableComponent> entity, ref GotEquippedEvent args)
+    private void GotEquipped(Entity<StuckOnEquipComponent> entity, ref GotEquippedEvent args)
     {
         if (args.SlotFlags == SlotFlags.POCKET)
             return; // we don't want to make unremovable pocket item
@@ -58,10 +59,10 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
         // trying to unequip all item's with component
         foreach (var slot in _inventory.GetHandOrInventoryEntities(target))
         {
-            if (!TryComp<IrremovableComponent>(slot, out var irremovableComp))
+            if (!TryComp<StuckOnEquipComponent>(slot, out var stuckOnEquipComponent))
                 continue;
 
-            if (!irremovableComp.ShouldDropOnDeath)
+            if (!stuckOnEquipComponent.ShouldDropOnDeath)
                 continue;
 
             RemComp<UnremoveableComponent>(slot);
@@ -71,14 +72,14 @@ public sealed partial class SharedIrremovableSystem : EntitySystem
 }
 
 /// <summary>
-///     Raised when we need to remove all irremovable objects
+///     Raised when we need to remove all StuckOnEquip objects
 /// </summary>
 [ByRefEvent, Serializable]
-public sealed class DropAllIrremovableEvent : EntityEventArgs
+public sealed class DropAllStuckOnEquipEvent : EntityEventArgs
 {
     public readonly EntityUid Target;
 
-    public DropAllIrremovableEvent(EntityUid target)
+    public DropAllStuckOnEquipEvent(EntityUid target)
     {
         Target = target;
     }

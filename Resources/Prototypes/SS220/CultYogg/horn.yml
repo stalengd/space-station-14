@@ -41,7 +41,7 @@
         right:
         - state: fullammo-inhand-right
           shader: unshaded
-    - type: Irremovable
+    - type: StuckOnEquip
       inHandItem: true
     - type: RoleItem
       roleId: CultYoggRole

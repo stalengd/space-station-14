@@ -1,9 +1,9 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
-namespace Content.Shared.SS220.Irremovable;
+namespace Content.Shared.SS220.StuckOnEquip;
 
 [RegisterComponent]
-public sealed partial class IrremovableComponent : Component
+public sealed partial class StuckOnEquipComponent : Component
 {
     /// <summary>
     /// If true, the item will be locked in hand, if false, entity will be locked in the slot

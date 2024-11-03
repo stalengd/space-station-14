@@ -213,7 +213,7 @@ namespace Content.Client.UserInterface.Controls
                 TextureScale = new Vector2(2, 2),
                 Visible = false
             });
-            StuckOnEquipTexturePath = "irremovable";
+            StuckOnEquipTexturePath = "stuckonequip";
             //ss220 StuckOnEquip end
 
             HighlightTexturePath = "slot_highlight";

@@ -197,7 +197,7 @@ public sealed class HandsUIController : UIController, IOnStateEntered<GameplaySt
             hand.SetEntity(entity);
             hand.StuckOnEquip = true;
         }
-        //ss220 StuckOnEquip begin end
+        //ss220 StuckOnEquip end
 
         UpdateHandStatus(hand, entity);
     }

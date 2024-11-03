@@ -176,10 +176,10 @@ namespace Content.Client.Inventory
             if (highlight != null)
                 newHighlight = highlight.Value;
 
-            //ss220 StuckOnEquip
+            //ss220 StuckOnEquip begin
             if (stuckOnEquip != null)
                 newStuckOnEquip = stuckOnEquip.Value;
-            //ss220 StuckOnEquip
+            //ss220 StuckOnEquip end
 
             var newData = component.SlotData[slotName] =
                 new SlotData(component.SlotData[slotName], newHighlight, newBlocked);

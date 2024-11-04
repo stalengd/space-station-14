@@ -50,7 +50,7 @@
   parent: BaseWall
   id: WallCultYogg
   name: cursed wall
-  description: It's a wall and it's cursed.
+  description: It is a wall and it is cursed.
   components:
   - type: Tag
     tags:

@@ -51,8 +51,8 @@
 - type: entity
   parent: CableBase
   id: CableHVLive
-  name: живые корни (ВВ)
-  description: An orange high voltage power cable.
+  name: live roots (HV)
+  description: Corrupted high-voltage cable, covered with slime and strange roots, pulsates.
   components:
   - type: Sprite
     sprite: SS220/Structures/Power/Cables/CultYogg/hv_cable.rsi
@@ -101,8 +101,8 @@
 - type: entity
   parent: CableBase
   id: CableMVLive
-  name: живые корни (СВ)
-  description: A medium voltage power cable.
+  name: live roots (MV)
+  description: Corrupted medium-voltage cable, covered with slime and strange roots, pulsates.
   components:
   - type: Sprite
     color: Yellow
@@ -145,8 +145,8 @@
 - type: entity
   parent: CableBase
   id: CableApcExtensionLive
-  name: живые корни (НВ)
-  description: A cable used to connect machines to an APC. #APCs aren't area defined anymore so need this cable to connect things to the APC. This description should be dynamic in future.
+  name: live roots (LV)
+  description: Corrupted low-voltage cable, covered with slime and strange roots, pulsates. #APCs aren't area defined anymore so need this cable to connect things to the APC. This description should be dynamic in future.
   components:
   - type: Sprite
     color: Green

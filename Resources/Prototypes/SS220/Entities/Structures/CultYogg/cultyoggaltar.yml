@@ -1,8 +1,8 @@
 - type: entity
-  name: Алтарь жертвоприношений
+  name: altar of sacrifice
   id: CultYoggAltar
   parent: BaseStructure
-  description: Загадочный алтарь культа
+  description: Mysterious altar of the cult.
   components:
   - type: Sprite
     sprite: SS220/Structures/yoggaltar.rsi

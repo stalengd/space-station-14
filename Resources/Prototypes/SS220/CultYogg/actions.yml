@@ -116,7 +116,7 @@
 - type: entity
   id: ActionMiGoSacrifice
   name: Summon
-  description: Gather with the other Mi'Go at the altar to make a sacrifice.
+  description: Gather with the other MiGo at the altar to make a sacrifice.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction

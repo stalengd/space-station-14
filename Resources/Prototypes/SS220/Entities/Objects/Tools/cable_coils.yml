@@ -6,7 +6,7 @@
   id: CableStackLive
   abstract: true
   parent: BaseItem
-  name: живые корни (Base)
+  name: live roots (Base)
   suffix: Full
   components:
   - type: Tag
@@ -32,9 +32,9 @@
 - type: entity
   id: CableHVStackLive
   parent: CableStackLive
-  name: моток живых корней (ВВ)
+  name: live roots coil (HV)
   suffix: Full
-  description: Искажённый моток высоковольтных проводов покрытый слизью и странными корнями, пульсирует.
+  description: Corrupted coil of high-voltage cables, covered with slime and strange roots, pulsates.
   components:
   - type: Stack
     stackType: CableHVlive
@@ -96,9 +96,9 @@
 - type: entity
   parent: CableStackLive
   id: CableMVStackLive
-  name: моток живых корней (СВ)
+  name: live roots coil (MV)
   suffix: Full
-  description: Искажённый моток средневольтынх проводов покрытый слизью и странными корнями, пульсирует.
+  description: Corrupted coil of medium-voltage cables, covered with slime and strange roots, pulsates.
   components:
   - type: Stack
     stackType: CableMVlive
@@ -158,8 +158,8 @@
 - type: entity
   parent: CableStackLive
   id: CableApcStackLive
-  name: моток живых корней (ЛВ)
-  description: Искажённый моток низковольтных проводов покрытый слизью и странными корнями, пульсирует.
+  name: live roots coil (LV)
+  description: Corrupted coil of low-voltage cables, covered with slime and strange roots, pulsates.
   suffix: Full
   components:
   - type: Sprite

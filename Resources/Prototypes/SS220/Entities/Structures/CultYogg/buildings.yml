@@ -3,7 +3,8 @@
 - type: entity
   id: CultYoggBuildingFrame
   parent: BaseStructure
-  name: заготовка постройки культа
+  name: cult building frame
+  description: A frame for the construction of cult structures.
   components:
   - type: Physics
     bodyType: Static
@@ -48,7 +49,8 @@
 - type: entity
   parent: BaseWall
   id: WallCultYogg
-  name: проклятая стена
+  name: cursed wall
+  description: It's a wall and it's cursed.
   components:
   - type: Tag
     tags:
@@ -73,7 +75,8 @@
 - type: entity
   parent: BaseMaterialDoorNavMap
   id: CultYoggDoor
-  name: проклятая дверь
+  name: cursed door
+  description: Think twice before opening it.
   components:
   - type: Sprite
     sprite: SS220/Structures/Doors/cult_yogg_doors.rsi

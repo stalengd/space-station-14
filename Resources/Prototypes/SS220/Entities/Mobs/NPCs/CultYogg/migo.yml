@@ -1,9 +1,9 @@
 # EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 - type: entity
-  name: Ми-Го
+  name: MiGo
   parent: SimpleSpaceMobBase
-  description: Дитя темного бога
+  description: The child of the Dark God.
   id: MiGoCultYogg
   components:
   #cultists comps

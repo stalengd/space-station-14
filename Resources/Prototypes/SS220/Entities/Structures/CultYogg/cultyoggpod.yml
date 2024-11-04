@@ -1,8 +1,8 @@
 - type: entity
-  name: Хранилище
+  name: storage
   id: CultYoggPod
   parent: BaseStructure
-  description: Капсула, способная излечивать раны или даже воскрешать членов культа. Один её вид вызывает у вас тревогу.
+  description: A pod for healing wounds and resurrecting cult members. The sight of her makes you uneasy.
   components:
   - type: Sprite
     noRot: true

@@ -16,6 +16,7 @@
     - Security
     - Service
     - Supply
+    - Law #SS220-Law Department
   - type: ActiveRadio
     channels:
     - Binary
@@ -27,6 +28,7 @@
     - Security
     - Service
     - Supply
+    - Law #SS220-Law Department
   - type: IgnoreUIRange
   - type: StationAiHeld
   - type: StationAiOverlay
@@ -239,6 +241,7 @@
     state: std_mod
   - type: SiliconLawProvider
     laws: AntimovLawset
+    lawUploadSound: /Audio/Ambience/Antag/silicon_lawboard_antimov.ogg
 
 - type: entity
   id: NutimovCircuitBoard

@@ -9,11 +9,13 @@ using Content.Shared.GameTicking.Components;
 using Content.Shared.SS220.CultYogg.Altar;
 using Content.Shared.SS220.CultYogg.Cultists;
 using Content.Shared.SS220.CultYogg.MiGo;
+using Content.Shared.Actions;
 
 namespace Content.Server.SS220.CultYogg.Altar;
 
 public sealed partial class CultYoggAltarSystem : SharedCultYoggAltarSystem
 {
+    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly BodySystem _body = default!;
     public override void Initialize()
     {
@@ -55,6 +57,24 @@ public sealed partial class CultYoggAltarSystem : SharedCultYoggAltarSystem
         {
             var ev = new ChangeCultYoggStageEvent(stage);
             RaiseLocalEvent(uid, ev, true);
+        }
+
+        //send cooldown to a MiGo sacrifice action
+        var queryMiGo = EntityQueryEnumerator<MiGoComponent>(); //ToDo ask if this code is ok
+        while (queryMiGo.MoveNext(out var uid, out var comp))
+        {
+            var sacrAction = comp.MiGoSacrificeActionEntity;
+
+            if (comp.MiGoErectActionEntity == null)
+                continue;
+
+            if (!TryComp<InstantActionComponent>(sacrAction, out var actionComponent))
+                continue;
+
+            if (actionComponent.UseDelay == null)
+                continue;
+
+            _actionsSystem.SetCooldown(sacrAction, actionComponent.UseDelay.Value);
         }
 
         UpdateAppearance(ent, ent.Comp, appearanceComp);

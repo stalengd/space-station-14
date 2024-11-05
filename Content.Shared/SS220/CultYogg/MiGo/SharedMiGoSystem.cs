@@ -122,8 +122,6 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (!entity.Comp.IsPhysicalForm)
             return;
 
-        //args.Handled = true; // No cooldown for UI
-
         _miGoErectSystem.OpenUI(entity, actor);
     }
     #endregion

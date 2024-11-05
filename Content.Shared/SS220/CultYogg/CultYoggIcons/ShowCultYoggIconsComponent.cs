@@ -8,6 +8,7 @@ namespace Content.Shared.SS220.CultYogg.CultYoggIcons;
 
 /// <summary>
 ///     This component allows you to see any icons related to CultYogg.
+///     Made this component becase icons must be visible to cultists, cult animals and migo
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ShowCultYoggIconsComponent : Component

@@ -73,11 +73,15 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (entity.Owner != args.Actor)
             return;
+
         if (!_prototypeManager.TryIndex(args.BuildingId, out _))
             return;
+
         var erectAction = entity.Comp.MiGoErectActionEntity;
+
         if (erectAction == null || !TryComp<InstantActionComponent>(erectAction, out var actionComponent))
             return;
+
         if (actionComponent.Cooldown.HasValue && actionComponent.Cooldown.Value.End > _gameTiming.CurTime)
         {
             _popupSystem.PopupEntity(Loc.GetString("cult-yogg-building-cooldown-popup"), entity, entity);
@@ -85,11 +89,13 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         }
         var location = GetCoordinates(args.Location);
         var tileRef = location.GetTileRef();
+
         if (tileRef == null || _turfSystem.IsTileBlocked(tileRef.Value, Physics.CollisionGroup.MachineMask))
         {
             _popupSystem.PopupEntity(Loc.GetString("cult-yogg-building-tile-blocked-popup"), entity, entity);
             return;
         }
+
         _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, entity, TimeSpan.FromSeconds(entity.Comp.ErectDoAfterSeconds),
             new MiGoErectDoAfterEvent()
             {
@@ -111,9 +117,12 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (entity.Owner != args.Actor)
             return;
+
         var buildingFrame = EntityManager.GetEntity(args.BuildingFrame);
+
         if (!TryComp<CultYoggBuildingFrameComponent>(buildingFrame, out var frame))
             return;
+
         DestroyFrame((buildingFrame, frame));
     }
 
@@ -121,8 +130,10 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (args.Handled || args.Cancelled)
             return;
+
         if (_netManager.IsClient)
             return;
+
         if (!_prototypeManager.TryIndex(args.BuildingId, out var buildingPrototype))
             return;
 
@@ -163,8 +174,10 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (args.Hands == null || !args.CanAccess || !args.CanInteract)
             return;
+
         if (args.Using == null || !_actionBlockerSystem.CanDrop(args.User))
             return;
+
         if (!CanInsert(entity, args.Using.Value))
             return;
 
@@ -205,11 +218,14 @@ public sealed class SharedMiGoErectSystem : EntitySystem
             {
                 var neededMaterial = neededMaterials[i];
                 var addedCount = entity.Comp.AddedMaterialsAmount[i];
+
                 var locKey = addedCount >= neededMaterial.Count ?
                     "cult-yogg-building-frame-examined-material-full" :
                     "cult-yogg-building-frame-examined-material-needed";
+
                 if (!_prototypeManager.TryIndex(neededMaterial.StackType, out var stackType))
                     continue;
+
                 var materialName = Loc.GetString(stackType.Name);
                 args.PushMarkup(Loc.GetString(locKey, ("material", materialName), ("currentAmount", addedCount), ("totalAmount", neededMaterial.Count)));
             }
@@ -220,15 +236,20 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         var frameEntity = SpawnAtPosition(buildingPrototype.FrameProtoId, location);
         Transform(frameEntity).LocalRotation = direction.ToAngle();
+
         var resultEntityProto = _prototypeManager.Index(buildingPrototype.ResultProtoId);
+
         _metaDataSystem.SetEntityName(frameEntity, Loc.GetString("cult-yogg-building-frame-name-template", ("name", resultEntityProto.Name)));
+
         var frame = EnsureComp<CultYoggBuildingFrameComponent>(frameEntity);
         frame.BuildingPrototypeId = buildingPrototype.ID;
+
         while (frame.AddedMaterialsAmount.Count < buildingPrototype.Materials.Count)
         {
             frame.AddedMaterialsAmount.Add(0);
         }
         Dirty(new Entity<CultYoggBuildingFrameComponent>(frameEntity, frame));
+
         return (frameEntity, frame);
     }
 
@@ -236,6 +257,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         var building = SpawnAtPosition(buildingPrototype.ResultProtoId, location);
         Transform(building).LocalRotation = direction.ToAngle();
+
         return building;
     }
 
@@ -249,8 +271,10 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         materialIndex = 0;
         if (!TryComp<StackComponent>(item, out var stack))
             return false;
+
         if (!TryGetNeededMaterials(entity, out var neededMaterials))
             return false;
+
         for (var i = 0; i < neededMaterials.Count; i++)
         {
             var materialToBuild = neededMaterials[i];
@@ -267,8 +291,10 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (!CanInsert(entity, item, out var materialIndex))
             return false;
+
         if (!TryComp<StackComponent>(item, out var stack))
             return false;
+
         if (!TryGetNeededMaterials(entity, out var neededMaterials))
             return false;
 
@@ -277,6 +303,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         var containedCount = entity.Comp.AddedMaterialsAmount[materialIndex];
         var canAdd = Math.Min(countToAdd, materialToBuild.Count - containedCount);
         var leftCount = countToAdd - canAdd;
+
         if (canAdd <= 0)
             return false;
 
@@ -293,12 +320,15 @@ public sealed class SharedMiGoErectSystem : EntitySystem
             var stackTypeProto = _prototypeManager.Index(materialToBuild.StackType);
             materialEntityToInsert = Spawn(stackTypeProto.Spawn);
             _stackSystem.SetCount(materialEntityToInsert, canAdd);
+
             var materialEntityToLeft = item;
             _stackSystem.SetCount(materialEntityToLeft, leftCount);
         }
         _containerSystem.Insert(materialEntityToInsert, entity.Comp.Container);
         entity.Comp.AddedMaterialsAmount[materialIndex] = containedCount + canAdd;
+
         Dirty(entity);
+
         if (IsBuildingFrameCompleted(entity))
             CompleteBuilding(entity);
 
@@ -308,8 +338,10 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     private bool TryGetNeededMaterials(Entity<CultYoggBuildingFrameComponent> entity, [NotNullWhen(true)] out List<CultYoggBuildingMaterial>? materials)
     {
         materials = null;
+
         if (!_prototypeManager.TryIndex(entity.Comp.BuildingPrototypeId, out var prototype))
             return false;
+
         materials = prototype.Materials;
         return true;
     }
@@ -318,10 +350,12 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (!TryGetNeededMaterials(entity, out var neededMaterials))
             return false;
+
         for (var i = 0; i < neededMaterials.Count; i++)
         {
             var materialToBuild = neededMaterials[i];
             var addedAmount = entity.Comp.AddedMaterialsAmount[i];
+
             if (addedAmount < materialToBuild.Count)
                 return false;
         }
@@ -332,11 +366,16 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (_gameTiming.InPrediction) // this should never run in client
             return default;
+
         if (!_prototypeManager.TryIndex(entity.Comp.BuildingPrototypeId, out var prototype, logError: true))
             return default;
+
         var transform = Transform(entity);
+
         var resultEntity = PlaceCompleteBuilding(prototype, transform.Coordinates, transform.LocalRotation.GetDir());
+
         Del(entity);
+
         return resultEntity;
     }
 
@@ -344,17 +383,20 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     {
         if (_gameTiming.InPrediction) // this should never run in client
             return;
+
         _dropEntitiesBuffer.Clear();
         var coords = Transform(entity).Coordinates;
         foreach (var item in entity.Comp.Container.ContainedEntities)
         {
             _dropEntitiesBuffer.Add(item);
         }
+
         foreach (var item in _dropEntitiesBuffer)
         {
             _transformSystem.AttachToGridOrMap(item);
             _transformSystem.SetCoordinates(item, coords);
         }
+
         _dropEntitiesBuffer.Clear();
         Del(entity);
     }

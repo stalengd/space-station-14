@@ -18,6 +18,10 @@ public sealed partial class MiGoErectEvent : InstantActionEvent
 {
 }
 
+public sealed partial class MiGoDismantleEvent : EntityTargetActionEvent
+{
+}
+
 public sealed partial class MiGoSacrificeEvent : InstantActionEvent
 {
 }

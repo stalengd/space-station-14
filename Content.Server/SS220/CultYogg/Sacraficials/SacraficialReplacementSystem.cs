@@ -19,7 +19,7 @@ public sealed partial class SacraficialReplacementSystem : EntitySystem
     private TimeSpan _beforeReplacementCooldown = TimeSpan.FromSeconds(300);//ToDo set timer
 
     //Count down the moment when cultists will get an anounce about replacement
-    private TimeSpan _announceReplacementCooldown = TimeSpan.FromSeconds(100);//ToDo set timer
+    private TimeSpan _announceReplacementCooldown = TimeSpan.FromSeconds(30);//ToDo set timer
 
     public override void Initialize()
     {

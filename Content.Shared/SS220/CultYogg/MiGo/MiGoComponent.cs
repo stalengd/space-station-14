@@ -121,7 +121,7 @@ public sealed partial class MiGoComponent : Component
     /// <summary>
     /// How long it takes to unlock another destination once one is taken.
     /// </summary>
-    public TimeSpan BeforeReplacementCooldown = TimeSpan.FromSeconds(300);
+    public TimeSpan BeforeReplacementCooldown = TimeSpan.FromSeconds(30);
 
     /// <summary>
     /// Buffer to markup when time has come

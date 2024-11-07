@@ -353,7 +353,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (comp == null)
             return;
 
-        RaiseLocalEvent(args.Entity, new TelepathyAnnouncementSendEvent() { Message = args.Message, TelepathyChannel = comp.TelepathyChannel });
+        var ev = new TelepathyAnnouncementSendEvent(args.Message, comp.TelepathyChannel);
+        RaiseLocalEvent(args.Entity, ref ev, true);
     }
     #endregion
 
@@ -466,7 +467,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 }
 
 /// <summary>
-///     Raised when god summoned to markup winning
+///     Raised when we need announce smth to all cultists and we dont have their channel
 /// </summary>
 [ByRefEvent, Serializable]
 public sealed class CultYoggAnouncementEvent : EntityEventArgs

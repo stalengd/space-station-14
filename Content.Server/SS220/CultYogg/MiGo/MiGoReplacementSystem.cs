@@ -60,6 +60,7 @@ public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
 
             var ev = new CultYoggAnouncementEvent(uid, Loc.GetString("cult-yogg-migo-can-replace", ("name", meta.EntityName)));
             RaiseLocalEvent(uid, ref ev, true);
+            migoComp.ShouldBeCounted = false;
         }
     }
 
@@ -70,6 +71,7 @@ public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
             return;
 
         comp.ReplacementEventTime = _timing.CurTime + comp.BeforeReplacementCooldown;
+        comp.ShouldBeCounted = true;
     }
 
     //Delete replacement marker from a MiGo
@@ -86,19 +88,32 @@ public sealed partial class MiGoReplacementSystem : SharedMiGoSystem
     private void CheckTimerConditions(EntityUid uid, MiGoComponent comp)
     {
         if (_mobState.IsDead(uid)) //if you are dead = timer
+        {
             StartTimer(comp);
-
-        if (!TryComp<MindContainerComponent>(uid, out var mindComp) || (mindComp == null))
+            return;
+        }
+        /*
+        if (!TryComp<MindContainerComponent>(uid, out var mindComp) || mindComp == null)
             return;
 
         if (mindComp.Mind == null) // if you ghosted = timer
+        {
             StartTimer(comp);
-
-        if (!_mind.TryGetMind(uid, out var _, out var userMidComp) || (userMidComp == null))
             return;
+        }
+        */
+
+        if (!_mind.TryGetMind(uid, out var mind, out var userMidComp) || (userMidComp == null))
+        {
+            StartTimer(comp);
+            return;
+        }
 
         if (userMidComp.Session == null) // if you left = timer
+        {
             StartTimer(comp);
+            return;
+        }
 
         RemoveReplacement(uid, comp);
     }

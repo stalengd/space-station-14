@@ -55,6 +55,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         // actions
         SubscribeLocalEvent<MiGoComponent, MiGoHealEvent>(MiGoHeal);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
+        SubscribeLocalEvent<MiGoComponent, MiGoDismantleEvent>(MiGoDismantle);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
         SubscribeLocalEvent<MiGoComponent, MiGoAstralEvent>(MiGoAstral);
 
@@ -75,6 +76,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         _actions.AddAction(uid, ref uid.Comp.MiGoEnslavementActionEntity, uid.Comp.MiGoEnslavementAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoAstralActionEntity, uid.Comp.MiGoAstralAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoErectActionEntity, uid.Comp.MiGoErectAction);
+        _actions.AddAction(uid, ref uid.Comp.MiGoDismantleActionEntity, uid.Comp.MiGoDismantleAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoSacrificeActionEntity, uid.Comp.MiGoSacrificeAction);
     }
 
@@ -123,6 +125,20 @@ public abstract class SharedMiGoSystem : EntitySystem
             return;
 
         _miGoErectSystem.OpenUI(entity, actor);
+    }
+    #endregion
+
+    #region Erect
+    private void MiGoDismantle(Entity<MiGoComponent> entity, ref MiGoDismantleEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!entity.Comp.IsPhysicalForm)
+            return;
+
+        //if (args.Target == null)
+        //    return;
     }
     #endregion
 

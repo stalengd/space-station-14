@@ -354,7 +354,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
             return;
 
         var ev = new TelepathyAnnouncementSendEvent(args.Message, comp.TelepathyChannel);
-        RaiseLocalEvent(args.Entity, ref ev, true);
+        RaiseLocalEvent(ref ev);
     }
     #endregion
 

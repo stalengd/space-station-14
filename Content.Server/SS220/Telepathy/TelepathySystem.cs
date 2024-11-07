@@ -24,10 +24,10 @@ public sealed class TelepathySystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<TelepathyComponent, TelepathySendEvent>(OnTelepathySend);
-        SubscribeLocalEvent<TelepathyComponent, TelepathyAnnouncementSendEvent>(OnTelepathyAnnouncementSend);
+        SubscribeLocalEvent<TelepathyAnnouncementSendEvent>(OnTelepathyAnnouncementSend);
     }
 
-    private void OnTelepathyAnnouncementSend(Entity<TelepathyComponent> ent, ref TelepathyAnnouncementSendEvent args)
+    private void OnTelepathyAnnouncementSend(ref TelepathyAnnouncementSendEvent args)
     {
         SendMessageToEveryoneWithRightChannel(args.TelepathyChannel, args.Message, null);
     }

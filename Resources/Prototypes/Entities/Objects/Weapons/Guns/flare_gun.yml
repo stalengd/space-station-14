@@ -54,12 +54,6 @@
     capacity: 1
     soundInsert:
       path: /Audio/Weapons/Guns/MagIn/shotgun_insert.ogg
-  - type: Clothing
-    sprite: Objects/Weapons/Guns/Shotguns/flaregun.rsi
-    quickEquip: false
-    slots:
-    - Belt
-    - suitStorage
 #ss220 handmade gun buff begin
   - type: Tag
     tags:

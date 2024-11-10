@@ -7,6 +7,7 @@ cult-yogg-enslave-another-fraction = Разум кандидата затума�
 cult-yogg-enslave-should-eat-shroom = Кандидат не имеет спор внутри
 cult-yogg-enslave-is-sacraficial = Существо ценно, как жертва
 cult-yogg-heal-only-cultists = Оболочка не принадлежит культу
+cult-yogg-heal-already-have-effect = Высшие силы уже исцеляют объект
 cult-yogg-digest-no-nutritions = Недостаточно питательных веществ
 cult-yogg-digest-no-water = Недостаточно воды в организме
 

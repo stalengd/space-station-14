@@ -8,7 +8,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
-//using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffect;
 using Content.Shared.SS220.CultYogg.Altar;
 using Content.Shared.SS220.CultYogg.Sacraficials;
 using Content.Shared.Throwing;
@@ -32,7 +32,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    //[Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedMiGoErectSystem _miGoErectSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -91,22 +91,12 @@ public abstract class SharedMiGoSystem : EntitySystem
         if (!uid.Comp.IsPhysicalForm)
             return;
 
-        /*
-        if (!HasComp<CultYoggComponent>(args.Target))//ToDo should discuss
-        {
-            if (_net.IsServer)
-                _popup.PopupEntity(Loc.GetString("cult-yogg-heal-only-cultists"), uid);
-            return;
-        }
-        */
-        /*
         //check if effect is already applyed
         if (_statusEffectsSystem.HasStatusEffect(args.Target, uid.Comp.RequiedEffect))
         {
-            _popup.PopupEntity(Loc.GetString("cult-yogg-enslave-should-eat-shroom"), args.Target, uid);
+            _popup.PopupEntity(Loc.GetString("cult-yogg-heal-already-have-effect"), args.Target, uid);
             return;
         }
-        */
 
         _heal.TryApplyMiGoHeal(args.Target, uid.Comp.HealingEffectTime);
 
@@ -128,7 +118,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     }
     #endregion
 
-    #region Erect
+    #region Dismantle
     private void MiGoDismantle(Entity<MiGoComponent> entity, ref MiGoDismantleEvent args)
     {
         if (args.Handled)
@@ -161,7 +151,7 @@ public abstract class SharedMiGoSystem : EntitySystem
             if (!TryComp<StrapComponent>(altarUid, out var strapComp))
                 continue;
 
-            if (!strapComp.BuckledEntities.Any())
+            if (strapComp.BuckledEntities.Count == 0)
                 continue;
 
             if (!HasComp<CultYoggSacrificialComponent>(strapComp.BuckledEntities.First()))

@@ -313,5 +313,3 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         cleansedComp.CleansingDecayEventTime = _timing.CurTime + cleansedComp.BeforeDeclinesTime; //setting timer, when cleansing will be removed
     }
 }
-[ByRefEvent, Serializable]
-public record struct CultYoggForceAscendingEvent;

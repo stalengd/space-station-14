@@ -143,15 +143,3 @@ public abstract class SharedCultYoggSystem : EntitySystem
         //ToDo CultYoggComponent remove stages visualization
     }
 }
-
-[ByRefEvent, Serializable]
-public sealed class CultYoggDeCultingEvent : EntityEventArgs
-{
-    public readonly EntityUid Entity;
-
-    public CultYoggDeCultingEvent(EntityUid entity)
-    {
-        Entity = entity;
-    }
-}
-

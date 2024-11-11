@@ -169,6 +169,27 @@
     prototypeId: Stunbaton
   result: CultYoggCocoonBeach
   corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: Truncheon
+  from:
+    prototypeId: Truncheon
+  result: CultYoggCocoonBeach
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: Telescopichka
+  from:
+    prototypeId: Telescopichka
+  result: CultYoggCocoonBeach
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: Stunprod
+  from:
+    prototypeId: Stunprod
+  result: CultYoggCocoonBeach
+  corruptionReverseEffect: ExorcismUncorruptEffect
 #MeleWeapons end
 
 #SedativeSting beginning

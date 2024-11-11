@@ -49,6 +49,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         SubscribeLocalEvent<CultYoggComponent, OnSaintWaterDrinkEvent>(OnSaintWaterDrinked);
         SubscribeLocalEvent<CultYoggComponent, CultYoggForceAscendingEvent>(ForcedAcsending);
         SubscribeLocalEvent<CultYoggComponent, ChangeCultYoggStageEvent>(UpdateStage);
+        SubscribeLocalEvent<CultYoggComponent, CultYoggDeleteVisualsEvent>(DeleteVisuals);
     }
 
     #region StageUpdating
@@ -120,7 +121,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         Dirty(entity.Owner, huAp);
     }
 
-    private void DeleteVisual(Entity<CultYoggComponent> entity)
+    private void DeleteVisuals(Entity<CultYoggComponent> entity, ref CultYoggDeleteVisualsEvent args)
     {
         if (!TryComp<HumanoidAppearanceComponent>(entity, out var huAp))
             return;

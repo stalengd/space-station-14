@@ -73,7 +73,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
             }
         }
 
-        args.PushMarkup($"[color=green]{Loc.GetString("Глаза горят неестественно зелёным пламенем", ("ent", uid))}[/color]"); // no locale for right now
+        args.PushMarkup($"[color=green]{Loc.GetString("cult-yogg-stage-eyes-markups", ("ent", uid))}[/color]"); // no locale for right now
     }
     #endregion
 
@@ -127,11 +127,12 @@ public abstract class SharedCultYoggSystem : EntitySystem
     }
     #endregion
 
-    public void OnRemove(Entity<CultYoggComponent> uid, ref ComponentRemove args)
+    protected void OnRemove(Entity<CultYoggComponent> uid, ref ComponentRemove args)
     {
         RemComp<CultYoggCleansedComponent>(uid);
 
-        var ev = new CultYoggDeCultingEvent(uid);
+        //removing stage visuals
+        var ev = new CultYoggDeleteVisualsEvent();
         RaiseLocalEvent(uid, ref ev, true);
 
         //remove all actions cause they won't disappear with component
@@ -140,6 +141,8 @@ public abstract class SharedCultYoggSystem : EntitySystem
         _actions.RemoveAction(uid.Comp.DigestActionEntity);
         _actions.RemoveAction(uid.Comp.PukeShroomActionEntity);
 
-        //ToDo CultYoggComponent remove stages visualization
+        //sending to a gamerule so it would be deleted and added in one place
+        var ev2 = new CultYoggDeCultingEvent(uid);
+        RaiseLocalEvent(uid, ref ev2, true);
     }
 }

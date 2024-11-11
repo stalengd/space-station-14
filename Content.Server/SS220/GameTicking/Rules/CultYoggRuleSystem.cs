@@ -276,7 +276,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     #region Cultists making
     private void AfterEntitySelected(Entity<CultYoggRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
-        MakeCultist(args.EntityUid, ent);//ToDo not quite shure if entiry is a body or a mind
+        MakeCultist(args.EntityUid, ent);
     }
 
     public void MakeCultist(EntityUid uid, CultYoggRuleComponent component, bool initial = true)
@@ -298,15 +298,15 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         //update stage cause it might be midstage
         var ev = new ChangeCultYoggStageEvent(component.AmountOfSacrifices);
-        RaiseLocalEvent(uid, ev, true);
+        RaiseLocalEvent(uid, ref ev);
 
         //Add telepathy
         var telepathy = EnsureComp<TelepathyComponent>(uid);
         telepathy.CanSend = true;//we are allowing it cause testing
         telepathy.TelepathyChannelPrototype = component.TelepathyChannel;
 
-        AddComp<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
-        AddComp<ZombieImmuneComponent>(uid);//they are practically mushrooms
+        EnsureComp<ShowCultYoggIconsComponent>(uid);//icons of cultists and sacraficials
+        EnsureComp<ZombieImmuneComponent>(uid);//they are practically mushrooms
     }
     #endregion
 

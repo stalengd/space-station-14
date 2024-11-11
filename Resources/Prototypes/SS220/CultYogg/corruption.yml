@@ -1,6 +1,22 @@
 # © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
 #list of corrupted recepies
+
+#Range Weaponds start
+- type: corrupted
+  id: BaseWeaponPistol
+  from:
+    parentPrototypeId: BaseWeaponPistol
+  result: CultYoggCocoonSpikegun
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BaseWeaponSubMachineGun
+  from:
+    parentPrototypeId: BaseWeaponSubMachineGun
+  result: CultYoggCocoonSpikegun
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
 - type: corrupted
   id: WeaponRifleAk
   from:
@@ -9,10 +25,10 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: WeaponLaserCarbine
+  id: BaseWeaponShotgun
   from:
-    prototypeId: WeaponLaserCarbine
-  result: CultYoggCocoonHorn
+    parentPrototypeId: BaseWeaponShotgun
+  result: CultYoggCocoonSpikegun
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
@@ -22,6 +38,37 @@
   result: CultYoggCocoonSpitballer
   corruptionReverseEffect: ExorcismUncorruptEffect
 
+- type: corrupted
+  id: WeaponImprovisedPneumaticCannon
+  from:
+    parentPrototypeId: WeaponImprovisedPneumaticCannon
+  result: CultYoggCocoonHorn
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BaseWeaponBattery
+  from:
+    parentPrototypeId: BaseWeaponBattery
+  result: CultYoggCocoonHorn
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BaseWeaponBatterySmall
+  from:
+    parentPrototypeId: BaseWeaponBatterySmall
+  result: CultYoggCocoonHorn
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: WeaponLaserCarbine
+  from:
+    prototypeId: WeaponLaserCarbine
+  result: CultYoggCocoonHorn
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+#Range Weaponds end
+
+#Resources start
 - type: corrupted
   id: SheetTokl
   from:
@@ -48,6 +95,7 @@
   from:
     stackType: Cable
   result: CableApcStack1Live
+#Resources end
 
 - type: corrupted
   id: CultHandcuffs
@@ -63,6 +111,7 @@
   result: CultHandcuffs
   corruptionReverseEffect: ExorcismUncorruptEffect
 
+#Flash start
 - type: corrupted
   id: LanternFlashCultYogg
   from:
@@ -71,6 +120,29 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
+  id: FlashFlashCultYogg
+  from:
+    prototypeId: Flash
+  result: LanternFlashCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: BaseLampFlashCultYogg
+  from:
+    parentPrototypeId: BaseLamp
+  result: LanternFlashCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: FlashlightLanternFlashCultYogg
+  from:
+    parentPrototypeId: FlashlightLantern
+  result: LanternFlashCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+#Flash end
+
+#MeleWeapons start
+- type: corrupted
   id: ClawCultYoggWirecutter
   from:
     prototypeId: Wirecutter
@@ -78,9 +150,9 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: CrowbarCultYoggCocoonBeach
+  id: BaseCrowbarCultYoggCocoonBeach
   from:
-    prototypeId: Crowbar
+    parentPrototypeId: BaseCrowbar
   result: CultYoggCocoonBeach
   corruptionReverseEffect: ExorcismUncorruptEffect
 
@@ -97,26 +169,20 @@
     prototypeId: Stunbaton
   result: CultYoggCocoonBeach
   corruptionReverseEffect: ExorcismUncorruptEffect
+#MeleWeapons end
 
 #SedativeSting beginning
 - type: corrupted
   id: PenSedativestingCultYogg
   from:
-    prototypeId: Pen
-  result: SedativestingCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-
-- type: corrupted
-  id: HypopenSedativestingCultYogg
-  from:
-    prototypeId: Hypopen
+    tag: Pen
   result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: SyringeSedativestingCultYogg
   from:
-    prototypeId: Syringe
+    parentPrototypeId: BaseSyringe
   result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 
@@ -135,13 +201,6 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: KnifePlasticSedativestingCultYogg
-  from:
-    prototypeId: KnifePlastic
-  result: SedativestingCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-
-- type: corrupted
   id: ForkSedativestingCultYogg
   from:
     prototypeId: Fork
@@ -149,39 +208,32 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: KitchenKnifeSedativestingCultYogg
+  id: KnifePlasticSedativestingCultYogg
   from:
-    prototypeId: KitchenKnife
+    prototypeId: KnifePlastic
+  result: SedativestingCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: KnifeSedativestingCultYogg
+  from:
+    parentPrototypeId: BaseKnife
   result: SedativestingCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 #SedativeSting end
 
 # Hardsuit beginning
 - type: corrupted
-  id: HardsuitCultYoggEngineering
+  id: ClothingOuterHardsuitBase
   from:
-    prototypeId: ClothingOuterHardsuitEngineering
-  result: ClothingOuterHardsuitCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-
-- type: corrupted
-  id: HardsuitCultYoggSpatio
-  from:
-    prototypeId: ClothingOuterHardsuitSpatio
-  result: ClothingOuterHardsuitCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-
-- type: corrupted
-  id: HardsuitCultYoggSecurity
-  from:
-    prototypeId: ClothingOuterHardsuitSecurity
+     parentPrototypeId: ClothingOuterHardsuitBase
   result: ClothingOuterHardsuitCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
 # Hardsuit end
 
 # Backpack beginning
 - type: corrupted
-  id: BackpackCultYoggBlack
+  id: BackpackCultYogg
   from:
     prototypeId: ClothingBackpack
   result: ClothingBackpackCultYogg
@@ -189,145 +241,9 @@
   emptyStorage: true
 
 - type: corrupted
-  id: BackpackCultYoggEngineering
+  id: BackpackCultYoggParent
   from:
-    prototypeId: ClothingBackpackEngineering
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggChemistry
-  from:
-    prototypeId: ClothingBackpackChemistry
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggMedical
-  from:
-    prototypeId: ClothingBackpackMedical
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggVirology
-  from:
-    prototypeId: ClothingBackpackVirology
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggGenetics
-  from:
-    prototypeId: ClothingBackpackGenetics
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggScience
-  from:
-    prototypeId: ClothingBackpackScience
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggBrigmedic
-  from:
-    prototypeId: ClothingBackpackBrigmedic
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggWhiteCaptain
-  from:
-    prototypeId: ClothingBackpackWhiteCaptain
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggCaptain
-  from:
-    prototypeId: ClothingBackpackCaptain
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggCargo
-  from:
-    prototypeId: ClothingBackpackCargo
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggSalvage
-  from:
-    prototypeId: ClothingBackpackSalvage
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggAtmospherics
-  from:
-    prototypeId: ClothingBackpackAtmospherics
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggCE
-  from:
-    prototypeId: ClothingBackpackCE
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggSecurity
-  from:
-    prototypeId: ClothingBackpackSecurity
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggIan
-  from:
-    prototypeId: ClothingBackpackIan
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggMime
-  from:
-    prototypeId: ClothingBackpackMime
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggClown
-  from:
-    prototypeId: ClothingBackpackClown
-  result: ClothingBackpackCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackCultYoggHydroponics
-  from:
-    prototypeId: ClothingBackpackHydroponics
+    parentPrototypeId: ClothingBackpack
   result: ClothingBackpackCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
   emptyStorage: true
@@ -335,161 +251,17 @@
 
 # Satchel beginning
 - type: corrupted
-  id: BackpackSatchelCultYoggChemistry
-  from:
-    prototypeId: ClothingBackpackSatchelChemistry
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggMedical
-  from:
-    prototypeId: ClothingBackpackSatchelMedical
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggGenetics
-  from:
-    prototypeId: ClothingBackpackSatchelGenetics
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggScience
-  from:
-    prototypeId: ClothingBackpackSatchelScience
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggVirology
-  from:
-    prototypeId: ClothingBackpackSatchelVirology
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggHydroponics
-  from:
-    prototypeId: ClothingBackpackSatchelHydroponics
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggSalvage
-  from:
-    prototypeId: ClothingBackpackSatchelSalvage
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggCargo
-  from:
-    prototypeId: ClothingBackpackSatchelCargo
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggEngineering
-  from:
-    prototypeId: ClothingBackpackSatchelEngineering
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggAtmospherics
-  from:
-    prototypeId: ClothingBackpackSatchelAtmospherics
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggCE
-  from:
-    prototypeId: ClothingBackpackSatchelCE
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggSecurity
-  from:
-    prototypeId: ClothingBackpackSatchelSecurity
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggBrigmedic
-  from:
-    prototypeId: ClothingBackpackSatchelBrigmedic
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggClown
-  from:
-    prototypeId: ClothingBackpackSatchelClown
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggMime
-  from:
-    prototypeId: ClothingBackpackSatchelMime
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggCaptain
-  from:
-    prototypeId: ClothingBackpackSatchelCaptain
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggWhiteCaptain
-  from:
-    prototypeId: ClothingBackpackWhiteSatchelCaptain
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggLeather
-  from:
-    prototypeId: ClothingBackpackSatchelLeather
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggNoir
-  from:
-    prototypeId: ClothingBackpackNoirSatchel
-  result: ClothingBackpackSatchelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackSatchelCultYoggBlack
+  id: CultYoggSatchel
   from:
     prototypeId: ClothingBackpackSatchel
+  result: ClothingBackpackSatchelCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+  emptyStorage: true
+
+- type: corrupted
+  id: ultYoggSatchelParent
+  from:
+    parentPrototypeId: ClothingBackpackSatchel
   result: ClothingBackpackSatchelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
   emptyStorage: true
@@ -497,7 +269,7 @@
 
 # Duffel beginning
 - type: corrupted
-  id: BackpackDuffelCultYoggBlack
+  id: BackpackDuffelCultYogg
   from:
     prototypeId: ClothingBackpackDuffel
   result: ClothingBackpackDuffelCultYogg
@@ -505,137 +277,9 @@
   emptyStorage: true
 
 - type: corrupted
-  id: BackpackDuffelCultYoggMedical
+  id: BackpackDuffelCultYoggParent
   from:
-    prototypeId: ClothingBackpackDuffelMedical
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggGenetics
-  from:
-    prototypeId: ClothingBackpackDuffelGenetics
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggVirology
-  from:
-    prototypeId: ClothingBackpackDuffelVirology
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggScience
-  from:
-    prototypeId: ClothingBackpackDuffelScience
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggBrigmedic
-  from:
-    prototypeId: ClothingBackpackDuffelBrigmedic
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggSecurity
-  from:
-    prototypeId: ClothingBackpackDuffelSecurity
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggChemistry
-  from:
-    prototypeId: ClothingBackpackDuffelChemistry
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggEngineering
-  from:
-    prototypeId: ClothingBackpackDuffelEngineering
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggAtmospherics
-  from:
-    prototypeId: ClothingBackpackDuffelAtmospherics
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggCE
-  from:
-    prototypeId: ClothingBackpackDuffelCE
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggHydroponics
-  from:
-    prototypeId: ClothingBackpackDuffelHydroponics
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggClown
-  from:
-    prototypeId: ClothingBackpackDuffelClown
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggMime
-  from:
-    prototypeId: ClothingBackpackDuffelMime
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggCargo
-  from:
-    prototypeId: ClothingBackpackDuffelCargo
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggSalvage
-  from:
-    prototypeId: ClothingBackpackDuffelSalvage
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggCaptain
-  from:
-    prototypeId: ClothingBackpackDuffelCaptain
-  result: ClothingBackpackDuffelCultYogg
-  corruptionReverseEffect: ExorcismUncorruptEffect
-  emptyStorage: true
-
-- type: corrupted
-  id: BackpackDuffelCultYoggWhiteCaptain
-  from:
-    prototypeId: ClothingBackpackWhiteDuffelCaptain
+    parentPrototypeId: ClothingBackpackDuffel
   result: ClothingBackpackDuffelCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
   emptyStorage: true

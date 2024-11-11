@@ -17,8 +17,8 @@
       playerRatio: 2
       blacklist:
         components:
+        - BibleUser
         - CultYoggSacrificial
-        - CultYoggSacrificialMind
       lateJoinAdditional: true
       mindRoles:
         - MindRoleCultYogg

@@ -305,3 +305,26 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
   emptyStorage: true
 # Duffel end
+
+# BulglarBug beginning
+- type: corrupted
+  id: Multitool
+  from:
+    prototypeId: Multitool
+  result: BurglarBugCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: NetworkConfigurator
+  from:
+    prototypeId: NetworkConfigurator
+  result: BurglarBugCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: RemoteSignaller
+  from:
+    prototypeId: RemoteSignaller
+  result: BurglarBugCultYogg
+  corruptionReverseEffect: ExorcismUncorruptEffect
+# BulglarBug end

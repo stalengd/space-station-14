@@ -9,15 +9,19 @@ using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.Buildings;
 using Content.Shared.Stacks;
+using Content.Shared.Storage;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -38,6 +42,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     private readonly List<EntityUid> _dropEntitiesBuffer = [];
 
@@ -54,6 +59,8 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         SubscribeLocalEvent<CultYoggBuildingFrameComponent, GetVerbsEvent<InteractionVerb>>(AddInteractionVerbs);
         SubscribeLocalEvent<CultYoggBuildingFrameComponent, GetVerbsEvent<Verb>>(AddVerbs);
         SubscribeLocalEvent<CultYoggBuildingFrameComponent, ExaminedEvent>(OnBuildingFrameExamined);
+
+        SubscribeLocalEvent<MiGoEraseDoAfterEvent>(OnEraseDoAfter);
     }
 
     public void OpenUI(Entity<MiGoComponent> entity, ActorComponent actor)
@@ -118,12 +125,37 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         if (entity.Owner != args.Actor)
             return;
 
-        var buildingFrame = EntityManager.GetEntity(args.BuildingFrame);
+        var buildingUid = EntityManager.GetEntity(args.BuildingFrame);
 
-        if (!TryComp<CultYoggBuildingFrameComponent>(buildingFrame, out var frame))
-            return;
+        var doAfterTime = TimeSpan.Zero;
+        if (TryComp<CultYoggBuildingFrameComponent>(buildingUid, out var frameComponent) &&
+            frameComponent.EraseTime != null)
+            doAfterTime = frameComponent.EraseTime.Value;
+        else if (TryComp<CultYoggBuildingComponent>(buildingUid, out var buildingComponent) &&
+            buildingComponent.EraseTime != null)
+            doAfterTime = buildingComponent.EraseTime.Value;
+        else
+            doAfterTime = entity.Comp.BaseEraseTime;
 
-        DestroyFrame((buildingFrame, frame));
+        var doAfterArgs = new DoAfterArgs(
+            EntityManager,
+            entity.Owner,
+            doAfterTime,
+            new MiGoEraseDoAfterEvent(),
+            null,
+            buildingUid
+        )
+        {
+            Broadcast = true,
+            BreakOnDamage = false,
+            BreakOnMove = true,
+            NeedHand = false,
+            BlockDuplicate = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent
+        };
+
+        _doAfterSystem.TryStartDoAfter(doAfterArgs);
     }
 
     private void OnDoAfterErect(Entity<MiGoComponent> entity, ref MiGoErectDoAfterEvent args)
@@ -203,7 +235,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         Verb destroyVerb = new()
         {
             Text = Loc.GetString("cult-yogg-building-frame-verb-destroy"),
-            Act = () => DestroyFrame(entity),
+            Act = () => DeconstructBuilding(entity),
         };
         args.Verbs.Add(destroyVerb);
     }
@@ -230,6 +262,12 @@ public sealed class SharedMiGoErectSystem : EntitySystem
                 args.PushMarkup(Loc.GetString(locKey, ("material", materialName), ("currentAmount", addedCount), ("totalAmount", neededMaterial.Count)));
             }
         }
+    }
+
+    private void OnEraseDoAfter(MiGoEraseDoAfterEvent args)
+    {
+        if (args.Target is { } target)
+            DeconstructBuilding(target);
     }
 
     private Entity<CultYoggBuildingFrameComponent> PlaceBuildingFrame(CultYoggBuildingPrototype buildingPrototype, EntityCoordinates location, Direction direction)
@@ -379,26 +417,52 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         return resultEntity;
     }
 
-    private void DestroyFrame(Entity<CultYoggBuildingFrameComponent> entity)
+    private void DeconstructBuilding(EntityUid uid)
     {
-        if (_gameTiming.InPrediction) // this should never run in client
-            return;
+        if (_gameTiming.InPrediction)
+            return; // this should never run in client
 
-        _dropEntitiesBuffer.Clear();
-        var coords = Transform(entity).Coordinates;
-        foreach (var item in entity.Comp.Container.ContainedEntities)
+        var coords = Transform(uid).Coordinates;
+
+        if (TryComp<CultYoggBuildingFrameComponent>(uid, out var frameComp))
         {
-            _dropEntitiesBuffer.Add(item);
+            //_dropEntitiesBuffer.Clear();
+            //foreach (var item in frameComp.Container.ContainedEntities)
+            //{
+            //    _dropEntitiesBuffer.Add(item);
+            //}
+
+            //foreach (var item in _dropEntitiesBuffer)
+            //{
+            //    _transformSystem.AttachToGridOrMap(item);
+            //    _transformSystem.SetCoordinates(item, coords);
+            //}
+
+            //_dropEntitiesBuffer.Clear();
+
+            var dropItems = frameComp.Container.ContainedEntities;
+            foreach (var item in dropItems)
+            {
+                _transformSystem.AttachToGridOrMap(item);
+                _transformSystem.SetCoordinates(item, coords);
+            }
+        }
+        else if (TryComp<CultYoggBuildingComponent>(uid, out var buildingComp) &&
+            buildingComp.SpawnOnErase != null)
+        {
+            foreach (var proto in buildingComp.SpawnOnErase)
+            {
+                for (int i = 1; i <= proto.Amount; i++)
+                {
+                    var ent = Spawn(proto.Id, coords);
+
+                    if (proto.StackAmount is { } stackAmount)
+                        _stackSystem.SetCount(ent, stackAmount);
+                }
+            }
         }
 
-        foreach (var item in _dropEntitiesBuffer)
-        {
-            _transformSystem.AttachToGridOrMap(item);
-            _transformSystem.SetCoordinates(item, coords);
-        }
-
-        _dropEntitiesBuffer.Clear();
-        Del(entity);
+        Del(uid);
     }
 }
 
@@ -408,4 +472,9 @@ public sealed partial class MiGoErectDoAfterEvent : SimpleDoAfterEvent
     public ProtoId<CultYoggBuildingPrototype> BuildingId;
     public NetCoordinates Location;
     public Direction Direction;
+}
+
+[Serializable, NetSerializable]
+public sealed partial class MiGoEraseDoAfterEvent : SimpleDoAfterEvent
+{
 }

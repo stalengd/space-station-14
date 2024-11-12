@@ -28,6 +28,13 @@
           acts: [ "Destruction" ]
       - !type:EmptyAllContainersBehaviour
   - type: CultYoggPod
+  - type: CultYoggBuilding
+    eraseTime: 5
+    spawnOnErase:
+      - id: CableHVStack1Live
+        stackAmount: 10
+      - id: SheetTokl1
+        stackAmount: 30
   - type: Physics
   - type: GenericVisualizer
     visuals:

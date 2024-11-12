@@ -70,6 +70,12 @@ public sealed partial class MiGoComponent : Component
     [ViewVariables, DataField]
     public float ErectDoAfterSeconds = 3f;
 
+    /// <summary>
+    /// Base time to erase buildings.
+    /// It is used if the entity doesn't <see cref="CultYogg.Buildings.CultYoggBuildingComponent"/> or <see cref="CultYogg.Buildings.CultYoggBuildingFrameComponent"/>
+    /// </summary>
+    [DataField]
+    public TimeSpan BaseEraseTime = TimeSpan.FromSeconds(5);
     #region Astral
     /// <summary>
     ///Astral variables

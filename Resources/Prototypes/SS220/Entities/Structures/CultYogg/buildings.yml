@@ -45,6 +45,8 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: Appearance
+  - type: CultYoggBuildingFrame
+    eraseTime: 5
 
 - type: entity
   parent: BaseWall
@@ -71,6 +73,8 @@
   - type: IconSmooth
     key: cultYoggWall
     base: cult
+  - type: CultYoggBuilding
+    eraseTime: 3
 
 - type: entity
   parent: BaseMaterialDoorNavMap
@@ -105,3 +109,5 @@
       behaviors:
       - !type:DoActsBehavior
         acts: ["Destruction"]
+  - type: CultYoggBuilding
+    eraseTime: 3

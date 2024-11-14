@@ -9,20 +9,16 @@ using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.Buildings;
 using Content.Shared.Stacks;
-using Content.Shared.Storage;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -43,7 +39,6 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
     private readonly List<EntityUid> _dropEntitiesBuffer = [];
@@ -433,20 +428,6 @@ public sealed class SharedMiGoErectSystem : EntitySystem
 
         if (TryComp<CultYoggBuildingFrameComponent>(uid, out var frameComp))
         {
-            //_dropEntitiesBuffer.Clear();
-            //foreach (var item in frameComp.Container.ContainedEntities)
-            //{
-            //    _dropEntitiesBuffer.Add(item);
-            //}
-
-            //foreach (var item in _dropEntitiesBuffer)
-            //{
-            //    _transformSystem.AttachToGridOrMap(item);
-            //    _transformSystem.SetCoordinates(item, coords);
-            //}
-
-            //_dropEntitiesBuffer.Clear();
-
             var dropItems = frameComp.Container.ContainedEntities;
             foreach (var item in dropItems)
             {
@@ -459,7 +440,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
         {
             foreach (var proto in buildingComp.SpawnOnErase)
             {
-                for (int i = 1; i <= proto.Amount; i++)
+                for (var i = 1; i <= proto.Amount; i++)
                 {
                     var ent = Spawn(proto.Id, coords);
 

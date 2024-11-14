@@ -42,6 +42,6 @@
     eraseTime: 5
     spawnOnErase:
       - id: CableApcStack1Live
-        stackAmount: 15
+        stackAmount: 7
       - id: SheetTokl1
-        stackAmount: 25
+        stackAmount: 12

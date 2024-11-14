@@ -2,6 +2,7 @@
 
 using Content.Shared.Alert;
 using Content.Shared.FixedPoint;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -76,6 +77,19 @@ public sealed partial class MiGoComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan BaseEraseTime = TimeSpan.FromSeconds(5);
+
+    /// <summary>
+    /// Which entities can be erased by MiGo
+    /// </summary>
+    [DataField]
+    public EntityWhitelist? EraseWhitelist = new()
+    {
+        Components = new[]
+        {
+            "CultYoggBuilding",
+            "CultYoggBuildingFrame"
+        }
+    };
     #region Astral
     /// <summary>
     ///Astral variables

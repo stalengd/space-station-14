@@ -11,6 +11,7 @@ using Content.Shared.SS220.CultYogg.Buildings;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Content.Shared.Verbs;
+using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -43,6 +44,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
     private readonly List<EntityUid> _dropEntitiesBuffer = [];
 
@@ -126,6 +128,8 @@ public sealed class SharedMiGoErectSystem : EntitySystem
             return;
 
         var buildingUid = EntityManager.GetEntity(args.BuildingFrame);
+        if (_whitelistSystem.IsWhitelistFail(entity.Comp.EraseWhitelist, buildingUid))
+            return;
 
         var doAfterTime = TimeSpan.Zero;
         if (TryComp<CultYoggBuildingFrameComponent>(buildingUid, out var frameComponent) &&
@@ -266,6 +270,9 @@ public sealed class SharedMiGoErectSystem : EntitySystem
 
     private void OnEraseDoAfter(MiGoEraseDoAfterEvent args)
     {
+        if (args.Cancelled)
+            return;
+
         if (args.Target is { } target)
             DeconstructBuilding(target);
     }

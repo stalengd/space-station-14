@@ -7,7 +7,7 @@ on:
 jobs:
   remove_label:
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
       statuses: write
     if: github.event.review.state == 'approved'

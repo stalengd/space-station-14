@@ -1,13 +1,4 @@
 ﻿Entries:
-- author: MIXnikita
-  changes:
-  - message: "\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u044B \u0442\u0435\u043A\u0441\
-      \u0442\u0443\u0440\u044B \u0441\u0442\u0435\u043D \u0448\u0430\u0442\u0442\u043B\
-      \u043E\u0432."
-    type: Tweak
-  id: 164
-  time: '2024-06-08T13:37:54.0000000+00:00'
-  url: https://github.com/SerbiaStrong-220/space-station-14/pull/1054
 - author: Tyler Gnomeev
   changes:
   - message: "\u0426\u0435\u043D\u0430 \u043D\u0430 \u043A\u0440\u0430\u0444\u0442\
@@ -5934,3 +5925,11 @@
   id: 667
   time: '2024-11-17T14:46:45.0000000+00:00'
   url: https://github.com/SerbiaStrong-220/space-station-14/pull/2239
+- author: spo9k
+  changes:
+  - message: "\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u0430 \u043A\u0430\u0440\u0442\
+      \u0430 Donuts"
+    type: Tweak
+  id: 668
+  time: '2024-11-17T14:52:52.0000000+00:00'
+  url: https://github.com/SerbiaStrong-220/space-station-14/pull/2227

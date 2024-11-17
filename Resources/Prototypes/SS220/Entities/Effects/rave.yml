@@ -8,8 +8,8 @@
       minProgress: 0.05
       maxProgress: 1
       pulseMagnitude: 0.05
-      pulseRate: 2
-      progressSpeed: -0.05
+      pulseRate: 0.5
+      progressSpeed: -0.025
     - sprite: { sprite: /Textures/SS220/Effects/TextureFade/dithered-radial.rsi, state: overlay }
       modulate: "#091816dd"
       zIndex: -1

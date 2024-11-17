@@ -49,7 +49,7 @@ public sealed class CultYoggAnimalCorruptionSystem : EntitySystem
             }
         }
 
-        var parents = MetaData(uid).EntityPrototype?.Parents;
+        var parents = MetaData(uid).EntityPrototype?.Parents;//idk if it isn't shitcode
         if (parents == null)
         {
             corruption = null;
@@ -57,7 +57,7 @@ public sealed class CultYoggAnimalCorruptionSystem : EntitySystem
         }
         foreach (var parentId in parents)
         {
-            foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultYoggCorruptedAnimalsPrototype>())//idk if it isn't shitcode
+            foreach (var entProto in _prototypeManager.EnumeratePrototypes<CultYoggCorruptedAnimalsPrototype>())
             {
                 if (parentId == entProto.ID)
                 {

@@ -7,6 +7,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Server.Corvax.HiddenDescription;
 
 namespace Content.Server.SS220.CultYogg.Rave;
 
@@ -19,8 +20,6 @@ public sealed class RaveSystem : SharedRaveSystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
 
-    [ValidatePrototypeId<DatasetPrototype>]
-    private const string PhrasesPlaceholders = "CultRlehPhrases";
     public override void Initialize()
     {
         base.Initialize();
@@ -37,7 +36,11 @@ public sealed class RaveSystem : SharedRaveSystem
         {
             if (raving.NextPhraseTime <= _timing.CurTime)
             {
-                _chat.TrySendInGameICMessage(uid, PickPhrase(PhrasesPlaceholders), InGameICChatType.Speak, ChatTransmitRange.Normal);
+                if (_random.Next(0, 6) > 4)//ToDo move it into component
+                    _chat.TrySendInGameICMessage(uid, PickPhrase(raving.PhrasesPlaceholders), InGameICChatType.Whisper, ChatTransmitRange.Normal);
+                else
+                    _chat.TrySendInGameICMessage(uid, PickPhrase(raving.PhrasesPlaceholders), InGameICChatType.Speak, ChatTransmitRange.Normal);
+
                 SetNextPhraseTimer(raving);
             }
 
@@ -78,6 +81,15 @@ public sealed class RaveSystem : SharedRaveSystem
     {
         SetNextPhraseTimer(uid.Comp);
         SetNextSoundTimer(uid.Comp);
+
+        //ToDo maybe add desc for a cultists
+        /*
+        EnsureComp<HiddenDescriptionComponent>(uid, out var hiddenDecsComp);
+
+        var entry = new HiddenDescriptionEntry();
+
+        hiddenDecsComp.Entries.Add(entry);
+        */
     }
 
     private void SetNextPhraseTimer(RaveComponent comp)

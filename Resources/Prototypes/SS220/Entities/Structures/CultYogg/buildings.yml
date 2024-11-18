@@ -23,10 +23,10 @@
   - type: Rotatable
     rotateWhileAnchored: true
   - type: Sprite
-    sprite: Structures/Machines/parts.rsi
+    sprite: SS220/Structures/CultYogg/building_frame.rsi
     drawdepth: Objects
     layers:
-    - state: 0
+    - state: frame
       map: [ "enum.ConstructionVisuals.Layer" ]
   - type: Damageable
     damageContainer: Inorganic

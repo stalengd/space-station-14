@@ -28,15 +28,24 @@ public sealed partial class RaveComponent : SharedRaveComponent
     /// </summary>
     [DataField]
     public TimeSpan MinIntervalSound = TimeSpan.FromSeconds(15);
+
     /// <summary>
     /// The maximum time in seconds between playing the sound.
     /// </summary>
     [DataField]
     public TimeSpan MaxIntervalSound = TimeSpan.FromSeconds(35);
+
     /// <summary>
     /// Buffer that contains next event
     /// </summary>
+    [DataField]
     public TimeSpan NextSoundTime;
+
+    /// <summary>
+    /// Contains phrases that player will pronounce
+    /// </summary>
+    [DataField]
+    public string PhrasesPlaceholders = "CultRlehPhrases";
 
     /// <summary>
     /// Contains special sounds which be played during Rave

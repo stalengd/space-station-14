@@ -22,9 +22,9 @@
   - type: Anchorable
   - type: Pullable
   - type: Sprite
-    sprite: SS220/Structures/fungusHydroponic.rsi
+    sprite: SS220/Structures/CultYogg/fungus_hydroponic.rsi
     layers:
-      - sprite: SS220/Structures/fungusHydroponic.rsi
+      - sprite: SS220/Structures/CultYogg/fungus_hydroponic.rsi
         state: base
   - type: Appearance
   - type: Destructible

@@ -19,21 +19,20 @@ public sealed class RaveSystem : SharedRaveSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RaveComponent, StatusEffectAddedEvent>(OnStatusEffectAdded);
+        SubscribeLocalEvent<RaveComponent, ComponentAdd>(OnAdded);
         SubscribeLocalEvent<RaveComponent, ComponentRemove>(OnRemoved);
     }
-
-    private void OnStatusEffectAdded(Entity<RaveComponent> entity, ref StatusEffectAddedEvent args)
+    private void OnAdded(Entity<RaveComponent> entity, ref ComponentAdd args)
     {
-        if (args.Key != EffectKey)
-            return;
         if (entity.Owner != _playerManager.LocalEntity)
             return;
 
         var effectEntity = Spawn(_effectPrototype);
         entity.Comp.EffectEntity = effectEntity;
+
         if (!TryComp<TextureFadeOverlayComponent>(effectEntity, out var overlay))
             return;
+
         overlay.IsEnabled = true;
     }
 
@@ -41,6 +40,7 @@ public sealed class RaveSystem : SharedRaveSystem
     {
         if (entity.Comp.EffectEntity is not { } effectEntity)
             return;
+
         Del(effectEntity);
     }
 }

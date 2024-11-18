@@ -38,3 +38,10 @@
     anchored: true
   - type: CultPond
     solutionName: drink
+  - type: CultYoggBuilding
+    eraseTime: 5
+    spawnOnErase:
+      - id: CableApcStack1Live
+        stackAmount: 7
+      - id: SheetTokl1
+        stackAmount: 12

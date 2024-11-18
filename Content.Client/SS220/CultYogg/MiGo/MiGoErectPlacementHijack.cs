@@ -45,8 +45,6 @@ namespace Content.Client.SS220.CultYogg.MiGo
         /// <inheritdoc />
         public override bool HijackDeletion(EntityUid entity)
         {
-            if (!_entityManager.HasComponent<CultYoggBuildingFrameComponent>(entity))
-                return true;
             _presenter.SendEraseMessage(entity);
             return true;
         }

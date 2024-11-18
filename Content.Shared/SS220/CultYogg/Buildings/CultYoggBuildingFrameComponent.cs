@@ -21,4 +21,10 @@ public sealed partial class CultYoggBuildingFrameComponent : Component
     /// </summary>
     [ViewVariables, AutoNetworkedField]
     public List<int> AddedMaterialsAmount = [];
+
+    /// <summary>
+    /// Time to erase the building
+    /// </summary>
+    [DataField]
+    public TimeSpan? EraseTime = TimeSpan.Zero;
 }

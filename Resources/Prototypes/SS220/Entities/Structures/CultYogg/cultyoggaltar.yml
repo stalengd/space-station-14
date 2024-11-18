@@ -14,6 +14,15 @@
   - type: Pullable
   - type: Appearance
   - type: CultYoggAltar
+  - type: CultYoggBuilding
+    eraseTime: 5
+    spawnOnErase:
+      - id: CableMVStack1Live
+        stackAmount: 15
+      - id: CableApcStack1Live
+        stackAmount: 5
+      - id: SheetTokl1
+        stackAmount: 16
   - type: Strap
     position: Down
     rotation: -90

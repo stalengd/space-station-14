@@ -54,6 +54,15 @@
   - type: Fungus
   - type: FungusMachine
     pack: CondimenttInventory
+  - type: CultYoggBuilding
+    eraseTime: 5
+    spawnOnErase:
+      - id: CableMVStack1Live
+        stackAmount: 5
+      - id: CableHVStack1Live
+        stackAmount: 5
+      - id: SheetTokl1
+        stackAmount: 15
   - type: ActivatableUI
     verbOnly: true
     key: enum.FungusMachineUiKey.Key

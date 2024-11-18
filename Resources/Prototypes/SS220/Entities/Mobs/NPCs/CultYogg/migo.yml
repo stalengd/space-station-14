@@ -11,6 +11,13 @@
     showInHands: false
     disableExplosionRecursion: true
     canBeStripped: false
+    eraseWhitelist:
+      components:
+      - CultYoggBuilding
+      - CultYoggBuildingFrame
+      - Door
+      tags:
+      - Wall
   - type: Hands #For UI opening only
   - type: Body
     prototype: MiGoBody

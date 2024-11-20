@@ -172,6 +172,11 @@ public sealed class StickySystem : EntitySystem
         // send information to appearance that entity is stuck
         _appearance.SetData(uid, StickyVisuals.IsStuck, true);
 
+        // SS220
+        var xform = Transform(uid);
+        var userXform = Transform(user);
+        xform.LocalRotation = userXform.LocalRotation - Angle.FromDegrees(180);
+
         comp.StuckTo = target;
         Dirty(uid, comp);
 

@@ -6,7 +6,9 @@
   components:
     - type: Sprite
       sprite: SS220/Objects/CultYogg/burglarbug.rsi
-      state: icon
+      layers:
+        - map: ["base"]
+          state: icon
     - type: Icon
       sprite: SS220/Objects/CultYogg/burglarbug.rsi
       state: icon
@@ -26,6 +28,12 @@
       delay: 10
       examinable: false
     - type: StickyVisualizer
+    - type: GenericVisualizer
+      visuals:
+        enum.StickyVisuals.IsStuck:
+          base:
+            True: { state: fox }
+            False: { state: icon }
     - type: BurglarBug
       timeToOpen: 10
       notActivatedStickPopupCancellation: cult-yogg-burglar-bug-notactivated-cancellation

@@ -20,7 +20,6 @@ using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace Content.Shared.SS220.CultYogg.MiGo;
 
@@ -46,7 +45,6 @@ public sealed class SharedMiGoErectSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<MiGoComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
         SubscribeLocalEvent<MiGoComponent, MiGoErectBuildMessage>(OnBuildMessage);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEraseMessage>(OnEraseMessage);
         SubscribeLocalEvent<MiGoComponent, MiGoErectDoAfterEvent>(OnDoAfterErect);
@@ -62,15 +60,7 @@ public sealed class SharedMiGoErectSystem : EntitySystem
 
     public void OpenUI(Entity<MiGoComponent> entity, ActorComponent actor)
     {
-        _userInterfaceSystem.TryToggleUi(entity.Owner, MiGoErectUiKey.Key, actor.PlayerSession);
-    }
-
-    private void OnBoundUIOpened(Entity<MiGoComponent> entity, ref BoundUIOpenedEvent args)
-    {
-        _userInterfaceSystem.SetUiState(args.Entity, MiGoErectUiKey.Key, new MiGoErectBuiState()
-        {
-            Buildings = _prototypeManager.GetInstances<CultYoggBuildingPrototype>().Values.ToList(),
-        });
+        _userInterfaceSystem.TryToggleUi(entity.Owner, MiGoUiKey.Erect, actor.PlayerSession);
     }
 
     private void OnBuildMessage(Entity<MiGoComponent> entity, ref MiGoErectBuildMessage args)

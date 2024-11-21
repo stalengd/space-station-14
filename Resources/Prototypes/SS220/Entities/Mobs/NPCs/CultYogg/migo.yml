@@ -31,8 +31,10 @@
     voice: forester
   - type: UserInterface
     interfaces:
-      enum.MiGoErectUiKey.Key:
+      enum.MiGoUiKey.Erect:
         type: MiGoErectBoundUserInterface
+      enum.MiGoUiKey.Plant:
+        type: FungusMachineBoundUserInterface
   - type: ShowCultYoggIcons
   - type: NpcFactionMember
     factions:

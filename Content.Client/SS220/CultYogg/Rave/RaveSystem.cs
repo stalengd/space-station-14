@@ -1,7 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Client.SS220.TextureFade;
 using Content.Shared.SS220.CultYogg.Rave;
-using Content.Shared.StatusEffect;
 using Robust.Client.Player;
 using Robust.Shared.Prototypes;
 
@@ -9,7 +8,6 @@ namespace Content.Client.SS220.CultYogg.Rave;
 
 public sealed class RaveSystem : SharedRaveSystem
 {
-    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     [ValidatePrototypeId<EntityPrototype>]

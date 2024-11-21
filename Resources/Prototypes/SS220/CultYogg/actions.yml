@@ -114,6 +114,18 @@
     icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: build}
 
 - type: entity
+  id: ActionMiGoPlant
+  name: Plant
+  description: ----
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    useDelay: 15
+    event: !type:MiGoPlantEvent
+    itemIconStyle: NoItem
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: sowing}
+
+- type: entity
   id: ActionMiGoSacrifice
   name: Summon
   description: Gather with the other MiGo at the altar to make a sacrifice.

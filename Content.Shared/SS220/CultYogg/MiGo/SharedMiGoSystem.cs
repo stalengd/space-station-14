@@ -55,6 +55,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         // actions
         SubscribeLocalEvent<MiGoComponent, MiGoHealEvent>(MiGoHeal);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
+        SubscribeLocalEvent<MiGoComponent, MiGoPlantEvent>(MiGoPlant);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
         SubscribeLocalEvent<MiGoComponent, MiGoAstralEvent>(MiGoAstral);
 
@@ -75,6 +76,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         _actions.AddAction(uid, ref uid.Comp.MiGoEnslavementActionEntity, uid.Comp.MiGoEnslavementAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoAstralActionEntity, uid.Comp.MiGoAstralAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoErectActionEntity, uid.Comp.MiGoErectAction);
+        _actions.AddAction(uid, ref uid.Comp.MiGoPlantActionEntity, uid.Comp.MiGoPlantAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoSacrificeActionEntity, uid.Comp.MiGoSacrificeAction);
     }
 
@@ -104,6 +106,20 @@ public abstract class SharedMiGoSystem : EntitySystem
 
     #region Erect
     private void MiGoErect(Entity<MiGoComponent> entity, ref MiGoErectEvent args)
+    {
+        //will wait when sw will update ui parts to copy paste, cause rn it has an errors
+        if (args.Handled || !TryComp<ActorComponent>(entity, out var actor))
+            return;
+
+        if (!entity.Comp.IsPhysicalForm)
+            return;
+
+        _miGoErectSystem.OpenUI(entity, actor);
+    }
+    #endregion
+
+    #region Plant
+    private void MiGoPlant(Entity<MiGoComponent> entity, ref MiGoPlantEvent args)
     {
         //will wait when sw will update ui parts to copy paste, cause rn it has an errors
         if (args.Handled || !TryComp<ActorComponent>(entity, out var actor))

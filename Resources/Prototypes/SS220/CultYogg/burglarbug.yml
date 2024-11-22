@@ -28,6 +28,7 @@
       delay: 10
       examinable: false
     - type: StickyVisualizer
+      stuckNoRotation: true
     - type: GenericVisualizer
       visuals:
         enum.StickyVisuals.IsStuck:

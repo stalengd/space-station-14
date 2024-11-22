@@ -16,6 +16,7 @@
       size: Small
     - type: Appearance
     - type: Sticky
+      rotateFaceToUser: true
       stickDelay: 3
       unstickDelay: 3
       stickPopupSuccess: cult-yogg-burglar-bug-stick-success

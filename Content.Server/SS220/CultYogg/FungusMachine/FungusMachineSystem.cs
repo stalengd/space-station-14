@@ -27,11 +27,13 @@ namespace Content.Server.SS220.CultYogg.FungusMachine
 
         private void OnAttemptOpenUI(Entity<FungusMachineComponent> ent, ref ActivatableUIOpenAttemptEvent args)
         {
+            /*
             if (HasComp<MiGoComponent>(args.User))
                 return;
 
             _popupSystem.PopupEntity(Loc.GetString("cult-yogg-fungus-denied-to-use"), ent, args.User);
             args.Cancel();
+            */
         }
 
         protected override void OnComponentInit(EntityUid uid, FungusMachineComponent component, ComponentInit args)

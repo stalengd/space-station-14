@@ -28,7 +28,7 @@ public sealed partial class MiGoComponent : Component
     public EntProtoId MiGoErectAction = "ActionMiGoErect";
 
     [DataField]
-    public EntProtoId MiGoDismantleAction = "ActionMiGoErect";
+    public EntProtoId MiGoPlantAction = "ActionMiGoPlant";
 
     [DataField]
     public EntProtoId MiGoSacrificeAction = "ActionMiGoSacrifice";
@@ -46,7 +46,7 @@ public sealed partial class MiGoComponent : Component
     public EntityUid? MiGoErectActionEntity;
 
     [DataField, AutoNetworkedField]
-    public EntityUid? MiGoDismantleActionEntity;
+    public EntityUid? MiGoPlantActionEntity;
 
     [DataField, AutoNetworkedField]
     public EntityUid? MiGoSacrificeActionEntity;

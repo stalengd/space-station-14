@@ -114,16 +114,16 @@
     icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: build}
 
 - type: entity
-  id: ActionMiGoDismant
-  name: Dismant
-  description: Dismant unused buildings
+  id: ActionMiGoPlant
+  name: Plant
+  description: ----
   categories: [ HideSpawnMenu ]
   components:
-  - type: EntityTargetAction
+  - type: InstantAction
     useDelay: 15
-    event: !type:MiGoDismantleEvent
+    event: !type:MiGoPlantEvent
     itemIconStyle: NoItem
-    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: build}
+    icon: { sprite: SS220/Interface/Actions/cult_yogg.rsi, state: sowing}
 
 - type: entity
   id: ActionMiGoSacrifice

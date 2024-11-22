@@ -27,6 +27,9 @@
             "name": "sacrificial"
         },
         {
+            "name": "cult_make_yogg"
+        },
+        {
             "name": "cult"
         }
     ]

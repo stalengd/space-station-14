@@ -22,6 +22,8 @@ using Robust.Shared.Timing;
 using System.Linq;
 using Content.Shared.Item;
 using Content.Shared.Hands;
+using Content.Shared.SS220.CultYogg.Buildings;
+using Robust.Shared.Prototypes;
 
 
 namespace Content.Shared.SS220.CultYogg.MiGo;
@@ -35,6 +37,7 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedMiGoErectSystem _miGoErectSystem = default!;
+    [Dependency] private readonly SharedMiGoPlantSystem _miGoPlantSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCultYoggHealSystem _heal = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -42,6 +45,8 @@ public abstract class SharedMiGoSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly SharedEyeSystem _eye = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _userInterfaceSystem = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
 
 
     //[Dependency] private readonly CultYoggRuleSystem _cultYoggRule = default!; //maybe use this for enslavement
@@ -55,7 +60,7 @@ public abstract class SharedMiGoSystem : EntitySystem
         // actions
         SubscribeLocalEvent<MiGoComponent, MiGoHealEvent>(MiGoHeal);
         SubscribeLocalEvent<MiGoComponent, MiGoErectEvent>(MiGoErect);
-        SubscribeLocalEvent<MiGoComponent, MiGoDismantleEvent>(MiGoDismantle);
+        SubscribeLocalEvent<MiGoComponent, MiGoPlantEvent>(MiGoPlant);
         SubscribeLocalEvent<MiGoComponent, MiGoSacrificeEvent>(MiGoSacrifice);
         SubscribeLocalEvent<MiGoComponent, MiGoAstralEvent>(MiGoAstral);
 
@@ -68,6 +73,8 @@ public abstract class SharedMiGoSystem : EntitySystem
         SubscribeLocalEvent<MiGoComponent, ThrowAttemptEvent>(OnThrowAttempt);
         SubscribeLocalEvent<MiGoComponent, BeingUsedAttemptEvent>(OnBeingUsedAttempt);
         SubscribeLocalEvent<MiGoComponent, GettingPickedUpAttemptEvent>(OnGettingPickedUpAttempt);
+
+        SubscribeLocalEvent<MiGoComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
     }
 
     protected virtual void OnCompInit(Entity<MiGoComponent> uid, ref ComponentStartup args)
@@ -76,11 +83,30 @@ public abstract class SharedMiGoSystem : EntitySystem
         _actions.AddAction(uid, ref uid.Comp.MiGoEnslavementActionEntity, uid.Comp.MiGoEnslavementAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoAstralActionEntity, uid.Comp.MiGoAstralAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoErectActionEntity, uid.Comp.MiGoErectAction);
-        _actions.AddAction(uid, ref uid.Comp.MiGoDismantleActionEntity, uid.Comp.MiGoDismantleAction);
+        _actions.AddAction(uid, ref uid.Comp.MiGoPlantActionEntity, uid.Comp.MiGoPlantAction);
         _actions.AddAction(uid, ref uid.Comp.MiGoSacrificeActionEntity, uid.Comp.MiGoSacrificeAction);
     }
 
+    private void OnBoundUIOpened(Entity<MiGoComponent> entity, ref BoundUIOpenedEvent args)
+    {
+        if (args.UiKey.ToString() == "Erect")
+        {
+            _userInterfaceSystem.SetUiState(args.Entity, args.UiKey, new MiGoErectBuiState()
+            {
+                Buildings = _proto.GetInstances<CultYoggBuildingPrototype>().Values.ToList(),
+            });
+            return;
+        }
 
+        if (args.UiKey.ToString() == "Plant")
+        {
+            _userInterfaceSystem.SetUiState(args.Entity, args.UiKey, new MiGoPlantBuiState()
+            {
+                Seeds = _proto.GetInstances<CultYoggSeedsPrototype>().Values.ToList(),
+            });
+            return;
+        }
+    }
 
     #region Heal
     private void MiGoHeal(Entity<MiGoComponent> uid, ref MiGoHealEvent args)
@@ -118,17 +144,17 @@ public abstract class SharedMiGoSystem : EntitySystem
     }
     #endregion
 
-    #region Dismantle
-    private void MiGoDismantle(Entity<MiGoComponent> entity, ref MiGoDismantleEvent args)
+    #region Plant
+    private void MiGoPlant(Entity<MiGoComponent> entity, ref MiGoPlantEvent args)
     {
-        if (args.Handled)
+        //will wait when sw will update ui parts to copy paste, cause rn it has an errors
+        if (args.Handled || !TryComp<ActorComponent>(entity, out var actor))
             return;
 
         if (!entity.Comp.IsPhysicalForm)
             return;
 
-        //if (args.Target == null)
-        //    return;
+        _miGoPlantSystem.OpenUI(entity, actor);
     }
     #endregion
 

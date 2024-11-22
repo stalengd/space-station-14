@@ -163,7 +163,7 @@ public sealed partial class AdminVerbSystem
         {
             Text = Loc.GetString("admin-verb-text-make-cult-yogg"),
             Category = VerbCategory.Antag,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/SS220/Interface/Actions/cult_yogg.rsi"), "turn"),
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/SS220/Interface/Misc/cult_yogg_icons.rsi"), "cult_make_yogg"),
             Act = () =>
             {
                 _antag.ForceMakeAntag<CultYoggRuleComponent>(targetPlayer, DefaultCultYoggRule);

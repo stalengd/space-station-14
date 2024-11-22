@@ -22,7 +22,7 @@ public sealed partial class StickyVisualizerComponent : Component
     [DataField]
     public int OriginalDrawDepth;
 
-    // SS220 rotate ent to face the user begin
+    // SS220 rotate ent face to the user begin
     /// <summary>
     /// Is sprite not performing rotation when stuck
     /// </summary>
@@ -31,7 +31,7 @@ public sealed partial class StickyVisualizerComponent : Component
 
     [DataField]
     public bool OriginalNoRotation;
-    // SS220 rotate ent to face the user end
+    // SS220 rotate ent face to the user end
 }
 
 [Serializable, NetSerializable]

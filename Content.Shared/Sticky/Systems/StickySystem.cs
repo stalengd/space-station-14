@@ -18,8 +18,8 @@ public sealed class StickySystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!; // SS220 rotate ent to face the user
-    [Dependency] private readonly RotateToFaceSystem _rotateToFace = default!; // SS220 rotate ent to face the user
+    [Dependency] private readonly SharedTransformSystem _transform = default!; // SS220 rotate ent face to the user
+    [Dependency] private readonly RotateToFaceSystem _rotateToFace = default!; // SS220 rotate ent face to the user
 
     private const string StickerSlotId = "stickers_container";
 
@@ -174,10 +174,13 @@ public sealed class StickySystem : EntitySystem
         // send information to appearance that entity is stuck
         _appearance.SetData(uid, StickyVisuals.IsStuck, true);
 
-        // SS220 rotate ent to face the user begin
-        var userPosition = _transform.GetWorldPosition(user);
-        _rotateToFace.TryFaceCoordinates(uid, userPosition);
-        // SS220 rotate ent to face the user end
+        // SS220 rotate ent face to the user begin
+        if (comp.RotateFaceToUser)
+        {
+            var userPosition = _transform.GetWorldPosition(user);
+            _rotateToFace.TryFaceCoordinates(uid, userPosition);
+        }
+        // SS220 rotate ent face to the user end
 
         comp.StuckTo = target;
         Dirty(uid, comp);

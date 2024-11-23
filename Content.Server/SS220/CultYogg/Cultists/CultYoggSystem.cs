@@ -310,6 +310,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
 
         if (cleansedComp.AmountOfHolyWater >= cleansedComp.AmountToCleance)
         {
+            //Removing stage visuals, cause later component will be removed
             var ev = new CultYoggDeleteVisualsEvent();
             RaiseLocalEvent(uid, ref ev);
 

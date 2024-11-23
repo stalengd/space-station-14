@@ -328,7 +328,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     private void DeCult(ref CultYoggDeCultingEvent args)
     {
-        GetCultGameRule(out var cultRuleComp);
+        GetCultGameRule(out var cultRuleComp);//ToDo bug potentialy if somebody will make cultist without gamerule, ask head dev
 
         if (cultRuleComp == null)
             return;
@@ -337,7 +337,6 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     public void DeMakeCultist(EntityUid uid, CultYoggRuleComponent component)
     {
-
         if (!_mind.TryGetMind(uid, out var mindId, out var mind))
             return;
 

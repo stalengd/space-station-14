@@ -130,10 +130,6 @@ public abstract class SharedCultYoggSystem : EntitySystem
     {
         RemComp<CultYoggCleansedComponent>(uid);
 
-        //removing stage visuals
-        var ev = new CultYoggDeleteVisualsEvent();
-        RaiseLocalEvent(uid, ref ev, true);
-
         //remove all actions cause they won't disappear with component
         _actions.RemoveAction(uid.Comp.CorruptItemActionEntity);
         _actions.RemoveAction(uid.Comp.CorruptItemInHandActionEntity);
@@ -141,7 +137,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
         _actions.RemoveAction(uid.Comp.PukeShroomActionEntity);
 
         //sending to a gamerule so it would be deleted and added in one place
-        var ev2 = new CultYoggDeCultingEvent(uid);
-        RaiseLocalEvent(uid, ref ev2, true);
+        var ev = new CultYoggDeCultingEvent(uid);
+        RaiseLocalEvent(uid, ref ev, true);
     }
 }

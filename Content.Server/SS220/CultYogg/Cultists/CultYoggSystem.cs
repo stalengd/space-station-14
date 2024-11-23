@@ -309,7 +309,12 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         cleansedComp.AmountOfHolyWater += args.SaintWaterAmount;
 
         if (cleansedComp.AmountOfHolyWater >= cleansedComp.AmountToCleance)
+        {
+            var ev = new CultYoggDeleteVisualsEvent();
+            RaiseLocalEvent(uid, ref ev);
+
             RemComp<CultYoggComponent>(uid);
+        }
 
         cleansedComp.CleansingDecayEventTime = _timing.CurTime + cleansedComp.BeforeDeclinesTime; //setting timer, when cleansing will be removed
     }

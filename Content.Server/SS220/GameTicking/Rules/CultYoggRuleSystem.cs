@@ -30,11 +30,16 @@ using Content.Shared.SS220.Roles;
 using Content.Shared.SS220.Telepathy;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Content.Shared.Database;
+using Content.Server.Administration.Logs;
+using Content.Shared.CCVar;
+using static Content.Shared.Administration.Notes.AdminMessageEuiState;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
 public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 {
+    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
@@ -72,7 +77,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         GenerateJobsList(component);
-
+        _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg game rule has started picking up sacraficials");
         SetSacraficials(component);
     }
 
@@ -130,6 +135,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         for (int i = 0; i < _sacraficialTiers.Count; i++)
         {
+            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg trying to pick {i} tier");
             SetSacraficeTarget(component, PickFromTierPerson(allHumans, i), i);
         }
     }
@@ -137,7 +143,10 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     public EntityUid? PickFromTierPerson(List<EntityUid> allHumans, int tier)//ToDo wierd naming
     {
         if (tier >= _sacraficialTiers.Count)
+        {
+            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier} is over amount of tiers. Exiting the loop");
             return null;
+        }
 
         var allSuitable = new List<EntityUid>();
 
@@ -156,6 +165,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (allSuitable.Count == 0)
         {
+            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier}, has no suitable people trying to pick next tier");
             return PickFromTierPerson(allHumans, ++tier);
         }
 
@@ -175,6 +185,10 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (mind.Session.AttachedEntity is null)
             return;
+
+        var meta = MetaData(uid.Value);
+
+        _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg person {meta.EntityName} where picked for a tier: {tier}");
 
         EnsureComp<CultYoggSacrificialMindComponent>(uid.Value); //ToDo figure out do i need this?
 

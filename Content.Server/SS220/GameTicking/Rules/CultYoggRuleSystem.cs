@@ -130,6 +130,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (allHumans is null)
             return;
 
+        _adminLogger.Add(LogType.EventRan, LogImpact.High, $"Amount of tiers is {_sacraficialTiers.Count}");
         for (int i = 0; i < _sacraficialTiers.Count; i++)
         {
             _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg trying to pick {i} tier");

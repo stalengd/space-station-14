@@ -4,6 +4,7 @@
   id: SpitballerCultYogg
   components:
     - type: Gun
+      cameraRecoilScalar: 1
       fireRate: 11
       soundEmpty: null
       projectileSpeed: 15

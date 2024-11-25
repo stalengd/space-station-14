@@ -73,6 +73,11 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     /// </summary>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
+        if (component.SacraficialsWerePicked)
+            return;
+
+        component.SacraficialsWerePicked = true;//had wierd thing with multiple event calling, so i did this shit
+
         GenerateJobsList(component);
         _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg game rule has started picking up sacraficials");
         SetSacraficials(component);

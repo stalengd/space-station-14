@@ -1,8 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
-using Content.Shared.Dataset;
+
 using Content.Shared.NPC.Prototypes;
-using Content.Shared.Random;
-using Content.Shared.Roles;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
@@ -28,6 +26,8 @@ public sealed partial class CultYoggRuleComponent : Component
     public readonly List<string> FirstTierJobs = new() { "Captain" };
     public readonly string SecondTierDepartament = "Command";
     public readonly List<string> BannedDepartaents = new() { "GhostRoles" };
+
+    public bool SacraficialsWerePicked = false;//buffer to prevent multiple generations
 
     /// <summary>
     /// Storages for an endgame screen title

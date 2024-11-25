@@ -74,7 +74,10 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     protected override void Started(EntityUid uid, CultYoggRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         if (component.SacraficialsWerePicked)
+        {
+            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tried to tun several instanses of a gamurule");
             return;
+        }
 
         component.SacraficialsWerePicked = true;//had wierd thing with multiple event calling, so i did this shit
 
@@ -86,6 +89,12 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     //Filling list of jobs fot better range
     private void GenerateJobsList(CultYoggRuleComponent comp)
     {
+        if (_sacraficialTiers.Count != 0)
+        {
+            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tried to generate another tier list");
+            return;
+        }
+
         List<string> firstTier = comp.FirstTierJobs;//just captain as main target
 
         List<string> secondTier = new();//heads
@@ -138,7 +147,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _adminLogger.Add(LogType.EventRan, LogImpact.High, $"Amount of tiers is {_sacraficialTiers.Count}");
         for (int i = 0; i < _sacraficialTiers.Count; i++)
         {
-            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg trying to pick {i} tier");
+            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg trying to pick {i} tier, max tiers {_sacraficialTiers.Count}");
             SetSacraficeTarget(component, PickFromTierPerson(allHumans, i), i);
         }
     }
@@ -147,7 +156,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     {
         if (tier >= _sacraficialTiers.Count)
         {
-            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier} is over amount of tiers. Exiting the loop");
+            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier} is over amount of tiers {_sacraficialTiers.Count}. Exiting the loop");
             return null;
         }
 
@@ -168,7 +177,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (allSuitable.Count == 0)
         {
-            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier}, has no suitable people trying to pick next tier");
+            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier}, has no suitable people trying to pick next tier, max {_sacraficialTiers.Count}");
             return PickFromTierPerson(allHumans, ++tier);
         }
 

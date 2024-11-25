@@ -306,7 +306,7 @@
   emptyStorage: true
 # Duffel end
 
-# BulglarBug beginning
+# BurglarBug beginning
 - type: corrupted
   id: Multitool
   from:
@@ -327,4 +327,4 @@
     prototypeId: RemoteSignaller
   result: BurglarBugCultYogg
   corruptionReverseEffect: ExorcismUncorruptEffect
-# BulglarBug end
+# BurglarBug end

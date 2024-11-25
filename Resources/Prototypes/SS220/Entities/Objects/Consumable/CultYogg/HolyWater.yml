@@ -13,4 +13,4 @@
           Quantity: 30
   - type: Drink
   - type: Sprite
-    sprite: Objects/Consumable/Drinks/water.rsi
+    sprite: SS220/Objects/Consumable/Drinks/holy_water_jug.rsi

@@ -34,8 +34,8 @@
       visuals:
         enum.StickyVisuals.IsStuck:
           base:
-            True: { state: fox }
-            False: { state: icon }
+            True: { state: bug_ondoor }
+            False: { state: bug }
     - type: BurglarBug
       timeToOpen: 10
       notActivatedStickPopupCancellation: cult-yogg-burglar-bug-notactivated-cancellation

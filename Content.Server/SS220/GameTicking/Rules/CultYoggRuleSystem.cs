@@ -6,7 +6,6 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.SS220.GameTicking.Rules.Components;
 using Content.Server.Station.Systems;
-using Content.Server.SS220.CultYogg.Cultists;
 using Content.Server.SS220.CultYogg.Sacraficials;
 using Content.Server.SS220.CultYogg.Nyarlathotep;
 using Content.Server.RoundEnd;
@@ -32,8 +31,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Shared.Database;
 using Content.Server.Administration.Logs;
-using Content.Shared.CCVar;
-using static Content.Shared.Administration.Notes.AdminMessageEuiState;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 

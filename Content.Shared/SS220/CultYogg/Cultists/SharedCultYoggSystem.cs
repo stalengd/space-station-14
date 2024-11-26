@@ -72,7 +72,7 @@ public abstract class SharedCultYoggSystem : EntitySystem
             }
         }
 
-        args.PushMarkup($"[color=green]{Loc.GetString("cult-yogg-stage-eyes-markups", ("ent", uid))}[/color]"); // no locale for right now
+        args.PushMarkup($"[color=green]{Loc.GetString("cult-yogg-stage-eyes-markups", ("ent", uid))}[/color]");
     }
     #endregion
 

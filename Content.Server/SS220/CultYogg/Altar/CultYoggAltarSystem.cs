@@ -3,7 +3,6 @@
 using Content.Server.Body.Systems;
 using Content.Server.Destructible;
 using Content.Server.SS220.GameTicking.Rules.Components;
-using Content.Server.SS220.CultYogg.Cultists;
 using Content.Shared.Buckle.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.SS220.CultYogg.Altar;

@@ -3,11 +3,12 @@ using Content.Server.Chat.Systems;
 using Content.Shared.Dataset;
 using Content.Shared.StatusEffect;
 using Content.Shared.SS220.CultYogg.Rave;
+using Content.Shared.Examine;
+using Content.Shared.SS220.CultYogg.CultYoggIcons;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Server.Corvax.HiddenDescription;
 
 namespace Content.Server.SS220.CultYogg.Rave;
 
@@ -25,6 +26,8 @@ public sealed class RaveSystem : SharedRaveSystem
         base.Initialize();
 
         SubscribeLocalEvent<RaveComponent, ComponentStartup>(SetupRaving);
+
+        SubscribeLocalEvent<RaveComponent, ExaminedEvent>(OnExamined);
     }
 
     public override void Update(float frameTime)
@@ -50,6 +53,14 @@ public sealed class RaveSystem : SharedRaveSystem
                 SetNextSoundTimer(raving);
             }
         }
+    }
+
+    private void OnExamined(Entity<RaveComponent> uid, ref ExaminedEvent args)
+    {
+        if (!HasComp<ShowCultYoggIconsComponent>(args.Examiner))
+            return;
+
+        args.PushMarkup($"[color=green]{Loc.GetString("cult-yogg-shroom-markup", ("ent", uid))}[/color]");
     }
 
     public void TryApplyRavenness(EntityUid uid, float time, StatusEffectsComponent? status = null)
@@ -81,15 +92,6 @@ public sealed class RaveSystem : SharedRaveSystem
     {
         SetNextPhraseTimer(uid.Comp);
         SetNextSoundTimer(uid.Comp);
-
-        //ToDo maybe add desc for a cultists
-        /*
-        EnsureComp<HiddenDescriptionComponent>(uid, out var hiddenDecsComp);
-
-        var entry = new HiddenDescriptionEntry();
-
-        hiddenDecsComp.Entries.Add(entry);
-        */
     }
 
     private void SetNextPhraseTimer(RaveComponent comp)

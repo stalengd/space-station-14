@@ -19,6 +19,8 @@ public abstract partial class SharedCultYoggAltarSystem : EntitySystem
         SubscribeLocalEvent<CultYoggAltarComponent, StrapAttemptEvent>(OnStrapAttempt);
         SubscribeLocalEvent<CultYoggAltarComponent, UnstrapAttemptEvent>(OnUnstrapAttempt);
         SubscribeLocalEvent<CultYoggAltarComponent, UnanchorAttemptEvent>(OnUnanchorAttempt);
+
+        SubscribeLocalEvent<CultYoggAltarComponent, ExaminedEvent>(OnExamined);
     }
 
     private void OnUnanchorAttempt(Entity<CultYoggAltarComponent> ent, ref UnanchorAttemptEvent args)
@@ -64,5 +66,13 @@ public abstract partial class SharedCultYoggAltarSystem : EntitySystem
             return;
 
         _appearance.SetData(uid, CultYoggAltarComponent.CultYoggAltarVisuals.Sacrificed, altarComp.Used, appearanceComp);
+    }
+
+    private void OnExamined(Entity<CultYoggAltarComponent> uid, ref ExaminedEvent args)
+    {
+        if (uid.Comp.Used)
+            return;
+
+        args.PushMarkup($"[color=green]{Loc.GetString("cult-yogg-altar-used", ("ent", uid))}[/color]");
     }
 }

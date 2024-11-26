@@ -35,3 +35,5 @@ cult-yogg-burglar-bug-notactivated-cancellation = Жук должен быть �
 cult-yogg-burglar-bug-openeddoor-cancellation = Жук не может прикрепиться к открытой двери
 cult-yogg-fungus-denied-to-use = Вы не можете коснуться этого
 injector-component-draw-better-success-message = Вы набираете { $amount }ед. { $reagent } из { $target }.
+
+cult-yogg-altar-used = Нерушимая конструкция теперь лишь напоминанием об очередном шаге к побегу.

@@ -3,6 +3,7 @@ using Content.Server.Chat.Systems;
 using Content.Shared.Dataset;
 using Content.Shared.StatusEffect;
 using Content.Shared.SS220.CultYogg.Rave;
+using Content.Server.SS220.DarkForces.Saint.Reagent.Events;
 using Content.Shared.Examine;
 using Content.Shared.SS220.CultYogg.CultYoggIcons;
 using Robust.Shared.Audio.Systems;
@@ -28,6 +29,8 @@ public sealed class RaveSystem : SharedRaveSystem
         SubscribeLocalEvent<RaveComponent, ComponentStartup>(SetupRaving);
 
         SubscribeLocalEvent<RaveComponent, ExaminedEvent>(OnExamined);
+
+        SubscribeLocalEvent<RaveComponent, OnSaintWaterDrinkEvent>(OnSaintWaterDrinked);
     }
 
     public override void Update(float frameTime)
@@ -53,6 +56,11 @@ public sealed class RaveSystem : SharedRaveSystem
                 SetNextSoundTimer(raving);
             }
         }
+    }
+
+    private void OnSaintWaterDrinked(Entity<RaveComponent> uid, ref OnSaintWaterDrinkEvent args)
+    {
+        TryRemoveRavenness(uid);
     }
 
     private void OnExamined(Entity<RaveComponent> uid, ref ExaminedEvent args)

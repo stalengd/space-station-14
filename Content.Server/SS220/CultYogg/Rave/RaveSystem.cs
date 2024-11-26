@@ -42,7 +42,7 @@ public sealed class RaveSystem : SharedRaveSystem
         {
             if (raving.NextPhraseTime <= _timing.CurTime)
             {
-                if (_random.Next(0, 6) > 4)//ToDo move it into component
+                if (_random.Prob(raving.SilentPhraseChance))
                     _chat.TrySendInGameICMessage(uid, PickPhrase(raving.PhrasesPlaceholders), InGameICChatType.Whisper, ChatTransmitRange.Normal);
                 else
                     _chat.TrySendInGameICMessage(uid, PickPhrase(raving.PhrasesPlaceholders), InGameICChatType.Speak, ChatTransmitRange.Normal);

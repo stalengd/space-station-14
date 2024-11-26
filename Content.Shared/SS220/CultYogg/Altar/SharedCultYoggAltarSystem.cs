@@ -50,7 +50,7 @@ public abstract partial class SharedCultYoggAltarSystem : EntitySystem
 
             if (_net.IsServer)
                 _popup.PopupEntity(Loc.GetString("cult-yogg-buckle-attempt", ("user", args.Buckle)),
-                 args.Buckle, (EntityUid) args.User, PopupType.SmallCaution);
+                 args.Buckle, args.User.Value, PopupType.SmallCaution);
         }
 
         if (TryComp<BuckleComponent>(args.User, out var buckleComp) && buckleComp.Buckled)

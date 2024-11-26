@@ -23,6 +23,8 @@ public sealed partial class RaveComponent : SharedRaveComponent
     /// </summary>
     public TimeSpan NextPhraseTime;
 
+    public float SilentPhraseChance = 0.9f;
+
     /// <summary>
     /// The minimum time in seconds between playing the sound.
     /// </summary>

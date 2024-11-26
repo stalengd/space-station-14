@@ -71,7 +71,7 @@ public abstract partial class SharedCultYoggAltarSystem : EntitySystem
 
     private void OnExamined(Entity<CultYoggAltarComponent> uid, ref ExaminedEvent args)
     {
-        if (uid.Comp.Used)
+        if (!uid.Comp.Used)
             return;
 
         args.PushMarkup($"[color=green]{Loc.GetString("cult-yogg-altar-used", ("ent", uid))}[/color]");

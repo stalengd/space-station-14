@@ -2,6 +2,7 @@
 - type: entity
   name: cult cocoon
   id: CultYoggCocoonBase
+  suffix: CultYogg
   abstract: true
   components:
   - type: Sprite

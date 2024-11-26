@@ -3,6 +3,7 @@
 - type: entity
   name: base corrupted mob
   id: BaseMobCorrupted
+  suffix: CultYogg
   parent: [ MobRespirator, MobAtmosStandard, MobCombat ] #idk if they should breathe
   description: Unspeakable evil
   abstract: true

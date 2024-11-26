@@ -2,6 +2,7 @@
   name: horn cult yogg
   parent: BaseItem
   id: HornCultYogg
+  suffix: CultYogg
   components:
     - type: Gun
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg

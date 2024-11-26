@@ -2,6 +2,7 @@
   name: cult pond
   parent: BaseStructure
   id: CultYoggPond
+  suffix: CultYogg
   placement:
     mode: SnapgridCenter
   components:

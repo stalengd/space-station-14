@@ -1,6 +1,7 @@
 - type: entity
   name: altar of sacrifice
   id: CultYoggAltar
+  suffix: CultYogg
   parent: BaseStructure
   description: Mysterious altar of the cult.
   components:

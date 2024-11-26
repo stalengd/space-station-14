@@ -3,6 +3,7 @@
   parent: BaseStructure
   #parent: SmallConstructibleMachine#ToDo maybe create our own parrent
   id: CultYoggFungusHydroponic
+  suffix: CultYogg
   description: desc
   placement:
     mode: SnapgridCenter

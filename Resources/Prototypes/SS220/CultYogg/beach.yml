@@ -4,6 +4,7 @@
   name: beach
   parent: BaseItem
   id: BeachCultYogg
+  suffix: CultYogg
   description: description
   components:
   - type: Sprite

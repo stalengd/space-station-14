@@ -2,6 +2,7 @@
 
 - type: entity
   id: CultYoggBuildingFrame
+  suffix: CultYogg
   parent: BaseStructure
   name: cult building frame
   description: A frame for the construction of cult structures.
@@ -51,6 +52,7 @@
 - type: entity
   parent: BaseWall
   id: WallCultYogg
+  suffix: CultYogg
   name: cursed wall
   description: It is a wall and it is cursed.
   components:
@@ -79,6 +81,7 @@
 - type: entity
   parent: BaseMaterialDoorNavMap
   id: CultYoggDoor
+  suffix: CultYogg
   name: cursed door
   description: Think twice before opening it.
   components:

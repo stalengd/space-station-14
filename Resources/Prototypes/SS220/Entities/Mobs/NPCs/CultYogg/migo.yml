@@ -5,6 +5,7 @@
   parent: SimpleSpaceMobBase
   description: The child of the Dark God.
   id: MiGoCultYogg
+  suffix: CultYogg
   components:
   #cultists comps
   - type: MiGo

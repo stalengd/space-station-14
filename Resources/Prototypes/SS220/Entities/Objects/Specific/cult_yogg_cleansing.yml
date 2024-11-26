@@ -2,6 +2,7 @@
 
 - type: entity
   id: CultYoggCleansingEffect
+  suffix: CultYogg
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite

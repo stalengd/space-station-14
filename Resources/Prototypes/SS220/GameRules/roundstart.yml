@@ -24,5 +24,4 @@
         - MindRoleCultYogg
   - type: AntagObjectives
     objectives:
-    - CultYoggAcsendObjective
     - CultYoggSacraficeObjective

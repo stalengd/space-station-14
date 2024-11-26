@@ -1,6 +1,7 @@
 - type: entity
   name: spitballer cult yogg
   parent: BaseItem
+  suffix: CultYogg
   id: SpitballerCultYogg
   components:
     - type: Gun
@@ -59,6 +60,7 @@
 
 - type: entity
   id: AcidSpit
+  suffix: CultYogg
   name: acid spit
   categories: [ HideSpawnMenu ]
   components:

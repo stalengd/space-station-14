@@ -2,6 +2,7 @@
   name: sedative sting
   parent: BaseItem
   id: SedativestingCultYogg
+  suffix: CultYogg
   components:
   - type: Sprite
     sprite: SS220/Objects/Weapons/Melee/cult_yogg_sedativesting.rsi

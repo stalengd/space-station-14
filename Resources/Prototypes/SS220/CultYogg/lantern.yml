@@ -2,6 +2,7 @@
   name: cult lantern
   parent: BaseItem
   id: LanternFlashCultYogg
+  suffix: CultYogg
   description: description
   components:
   - type: Sprite

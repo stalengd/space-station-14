@@ -1,6 +1,7 @@
 - type: entity
   name: storage
   id: CultYoggPod
+  suffix: CultYogg
   parent: BaseStructure
   description: A pod for healing wounds and resurrecting cult members. The sight of her makes you uneasy.
   components:

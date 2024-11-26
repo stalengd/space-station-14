@@ -4,6 +4,7 @@
   name: cult claw
   parent: BaseItem
   id: ClawCultYogg
+  suffix: CultYogg
   description: description
   components:
   - type: Sprite

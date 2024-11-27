@@ -29,7 +29,7 @@ public sealed partial class CultYoggHealComponent : Component
     };
 
     [DataField]
-    public float BloodlossModifier = -0.5;
+    public float BloodlossModifier = -1f;
     /// <summary>
     /// Time between each healing incident
     /// </summary>

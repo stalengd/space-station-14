@@ -50,6 +50,15 @@
       - id: SheetTokl1
         stackAmount: 30
   - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MachineMask
   - type: GenericVisualizer
     visuals:
       enum.CultPodVisuals.Inserted:

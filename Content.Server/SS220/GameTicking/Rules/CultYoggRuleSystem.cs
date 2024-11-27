@@ -82,7 +82,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         component.SacraficialsWerePicked = true;//had wierd thing with multiple event calling, so i did this shit
 
         GenerateJobsList(component);
-        _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg game rule has started picking up sacraficials");
+        //_adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg game rule has started picking up sacraficials");
         SetSacraficials(component);
     }
 
@@ -91,18 +91,18 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     {
         if (_sacraficialTiers.Count != 0)
         {
-            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tried to generate another tier list");
+            //_adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tried to generate another tier list");
             return;
         }
 
         List<string> firstTier = comp.FirstTierJobs;//just captain as main target
 
-        List<string> secondTier = new();//heads
+        List<string> secondTier = [];//heads
 
         if (!_proto.TryIndex<DepartmentPrototype>(comp.SecondTierDepartament, out var commandList))
             return;
 
-        foreach (ProtoId<JobPrototype> role in commandList.Roles)
+        foreach (var role in commandList.Roles)
         {
             if (firstTier.Contains(role.Id))
                 continue;
@@ -110,7 +110,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
             secondTier.Add(role.Id);
         }
 
-        List<string> thirdTier = new();//everybody else except heads
+        List<string> thirdTier = [];//everybody else except heads
 
         foreach (var departament in _proto.EnumeratePrototypes<DepartmentPrototype>())
         {
@@ -147,7 +147,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         _adminLogger.Add(LogType.EventRan, LogImpact.High, $"Amount of tiers is {_sacraficialTiers.Count}");
         for (int i = 0; i < _sacraficialTiers.Count; i++)
         {
-            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg trying to pick {i} tier, max tiers {_sacraficialTiers.Count}");
+            //_adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg trying to pick {i} tier, max tiers {_sacraficialTiers.Count}");
             SetSacraficeTarget(component, PickFromTierPerson(allHumans, i), i);
         }
     }
@@ -156,7 +156,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     {
         if (tier >= _sacraficialTiers.Count)
         {
-            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier} is over amount of tiers {_sacraficialTiers.Count}. Exiting the loop");
+            //_adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier} is over amount of tiers {_sacraficialTiers.Count}. Exiting the loop");
             return null;
         }
 
@@ -177,7 +177,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         if (allSuitable.Count == 0)
         {
-            _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier}, has no suitable people trying to pick next tier, max {_sacraficialTiers.Count}");
+            //_adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg tier: {tier}, has no suitable people trying to pick next tier, max {_sacraficialTiers.Count}");
             return PickFromTierPerson(allHumans, ++tier);
         }
 
@@ -200,7 +200,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         var meta = MetaData(uid.Value);
 
-        _adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg person {meta.EntityName} where picked for a tier: {tier}");
+        //_adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg person {meta.EntityName} where picked for a tier: {tier}");
 
         EnsureComp<CultYoggSacrificialMindComponent>(uid.Value); //ToDo figure out do i need this?
 
@@ -487,7 +487,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     {
         comp = null;
         var query = QueryActiveRules();
-        while (query.MoveNext(out var uid, out _, out var cultComp, out _))
+        while (query.MoveNext(out _, out _, out var cultComp, out _))
         {
             comp = cultComp;
         }
@@ -501,7 +501,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 public sealed class CultYoggAnouncementEvent : EntityEventArgs
 {
     public readonly EntityUid Entity;
-    public readonly String Message;
+    public readonly string Message;
 
     public CultYoggAnouncementEvent(EntityUid entity, string message)
     {

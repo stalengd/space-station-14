@@ -3,6 +3,7 @@ using Content.Client.SS220.TextureFade;
 using Content.Shared.SS220.CultYogg.Rave;
 using Robust.Client.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Player;
 
 namespace Content.Client.SS220.CultYogg.Rave;
 
@@ -19,6 +20,8 @@ public sealed class RaveSystem : SharedRaveSystem
 
         SubscribeLocalEvent<RaveComponent, ComponentAdd>(OnAdded);
         SubscribeLocalEvent<RaveComponent, ComponentRemove>(OnRemoved);
+        SubscribeLocalEvent<RaveComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<RaveComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
     }
     private void OnAdded(Entity<RaveComponent> entity, ref ComponentAdd args)
     {
@@ -35,6 +38,26 @@ public sealed class RaveSystem : SharedRaveSystem
     }
 
     private void OnRemoved(Entity<RaveComponent> entity, ref ComponentRemove args)
+    {
+        if (entity.Comp.EffectEntity is not { } effectEntity)
+            return;
+
+        Del(effectEntity);
+    }
+    private void OnPlayerAttached(Entity<RaveComponent> entity, ref LocalPlayerAttachedEvent args)
+    {
+        if (entity.Owner != _playerManager.LocalEntity)
+            return;
+
+        var effectEntity = Spawn(_effectPrototype);
+        entity.Comp.EffectEntity = effectEntity;
+
+        if (!TryComp<TextureFadeOverlayComponent>(effectEntity, out var overlay))
+            return;
+
+        overlay.IsEnabled = true;
+    }
+    private void OnPlayerDetached(Entity<RaveComponent> entity, ref LocalPlayerDetachedEvent args)
     {
         if (entity.Comp.EffectEntity is not { } effectEntity)
             return;

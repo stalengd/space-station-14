@@ -1,5 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 
+using System.Text;
 using Content.Shared.Mind;
 using Content.Shared.Roles.Jobs;
 using Content.Shared.Objectives.Components;
@@ -39,9 +40,10 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
         ent.Comp.reqSacrAmount = ruleComp.ReqAmountOfSacrifices;
     }
 
-    private void OnAfterAssign(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveAfterAssignEvent args) //ToDo error with progress
+    private void OnAfterAssign(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveAfterAssignEvent args)
     {
-        var title = Loc.GetString("objective-cult-yogg-sacrafice-start");
+        var title = new StringBuilder();
+        title.AppendLine(Loc.GetString("objective-cult-yogg-sacrafice-start"));
 
         var query = EntityQueryEnumerator<CultYoggSacrificialMindComponent>();
         while (query.MoveNext(out var uid, out var _))
@@ -54,10 +56,10 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
 
             var jobName = _job.MindTryGetJobName(uid);
 
-            title += "\n" + Loc.GetString("objective-condition-cult-yogg-sacrafice-person", ("targetName", targetName), ("job", jobName));//ToDo собирать строку через string builder
+            title.AppendLine(Loc.GetString("objective-condition-cult-yogg-sacrafice-person", ("targetName", targetName), ("job", jobName)));
         }
 
-        _metaData.SetEntityName(ent, title, args.Meta);
+        _metaData.SetEntityName(ent, title.ToString(), args.Meta);
     }
     private void OnGetProgress(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveGetProgressEvent args)
     {

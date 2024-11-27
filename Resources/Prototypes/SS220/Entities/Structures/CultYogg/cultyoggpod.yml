@@ -29,6 +29,7 @@
           acts: [ "Destruction" ]
       - !type:EmptyAllContainersBehaviour
   - type: CultYoggPod
+    bloodlossModifier: -4
     healingFreq: 0.5
     heal:
       types:

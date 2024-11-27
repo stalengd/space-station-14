@@ -31,6 +31,9 @@ public sealed partial class CultYoggPodComponent : Component
             { "Stamina", -5 }
         }
     };
+
+    [DataField]
+    public float BloodlossModifier = -4;
     public ContainerSlot MobContainer = default!;
 
     [Serializable, NetSerializable]

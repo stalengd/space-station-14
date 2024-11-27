@@ -24,10 +24,12 @@ public sealed partial class CultYoggHealComponent : Component
             {"Shock", -4},
             {"Airloss", -5},
             { "Radiation", -1 },
-            { "Bloodloss", -10 },
             { "Stamina", -5 }
         }
     };
+
+    [DataField]
+    public float BloodlossModifier = -0.5;
     /// <summary>
     /// Time between each healing incident
     /// </summary>

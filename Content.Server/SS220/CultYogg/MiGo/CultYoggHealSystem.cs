@@ -1,4 +1,6 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Content.Server.Body.Systems;
+using Content.Server.Body.Components;
 using Content.Server.EUI;
 using Content.Server.Ghost;
 using Content.Server.Popups;
@@ -14,6 +16,8 @@ namespace Content.Server.SS220.CultYogg.MiGo;
 
 public sealed class CultYoggHealSystem : SharedCultYoggHealSystem
 {
+
+    [Dependency] private readonly BloodstreamSystem _bloodstreamSystem = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly EuiManager _euiManager = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -57,6 +61,8 @@ public sealed class CultYoggHealSystem : SharedCultYoggHealSystem
             return;
 
         _damageable.TryChangeDamage(uid, component.Heal, true, interruptsDoAfters: false, damageableComp);
+
+        _bloodstreamSystem.TryModifyBleedAmount(uid, component.BloodlossModifier);
 
         if (!_mobState.IsDead(uid, mobComp))
             return;

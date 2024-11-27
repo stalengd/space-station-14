@@ -23,6 +23,9 @@ public sealed partial class CultYoggHealComponent : Component
             {"Cold", -4},
             {"Shock", -4},
             {"Airloss", -5},
+            { "Radiation", -1 },
+            { "Bloodloss", -10 },
+            { "Stamina", -5 }
         }
     };
     /// <summary>

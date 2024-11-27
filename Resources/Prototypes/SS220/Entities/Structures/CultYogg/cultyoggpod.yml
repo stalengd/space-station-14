@@ -30,6 +30,17 @@
       - !type:EmptyAllContainersBehaviour
   - type: CultYoggPod
     healingFreq: 0.5
+    heal:
+      types:
+        Slash: -6
+        Blunt: -6
+        Piercing: -6
+        Heat: -4
+        Cold: -4
+        Shock: -4
+        Airloss: -5
+        Caustic: -4
+        Bloodloss: -10
   - type: CultYoggBuilding
     eraseTime: 5
     spawnOnErase:

@@ -29,6 +29,7 @@
           acts: [ "Destruction" ]
       - !type:EmptyAllContainersBehaviour
   - type: CultYoggPod
+    healingFreq: 0.5
   - type: CultYoggBuilding
     eraseTime: 5
     spawnOnErase:

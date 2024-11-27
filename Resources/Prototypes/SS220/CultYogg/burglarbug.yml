@@ -3,6 +3,7 @@
   description: An insect-like device that breaks open the selected door after activation.
   parent: BaseItem
   id: BurglarBugCultYogg
+  suffix: CultYogg
   components:
     - type: Sprite
       sprite: SS220/Objects/CultYogg/burglarbug.rsi

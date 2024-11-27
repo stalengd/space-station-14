@@ -373,6 +373,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     #region Anounce
     private void SendCultAnounce(ref CultYoggAnouncementEvent args)
     {
+        //ToDo refactor without spam
+        /*
         GetCultGameRule(out var comp);
 
         if (comp == null)
@@ -380,6 +382,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         var ev = new TelepathyAnnouncementSendEvent(args.Message, comp.TelepathyChannel);
         RaiseLocalEvent(ref ev);
+        */
     }
     #endregion
 

@@ -2,6 +2,7 @@
   name: spikegun cult yogg
   parent: BaseItem
   id: SpikegunCultYogg
+  suffix: CultYogg
   components:
     - type: AmmoCounter
     - type: Gun

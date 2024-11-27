@@ -8,6 +8,11 @@ namespace Content.Shared.SS220.CultYogg.Pod;
 [RegisterComponent]
 public sealed partial class CultYoggPodComponent : Component
 {
+    /// <summary>
+    /// Time between each healing incident
+    /// </summary>
+    [DataField]
+    public float HealingFreq = 0.5f;
     public ContainerSlot MobContainer = default!;
 
     [Serializable, NetSerializable]

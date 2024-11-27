@@ -1,6 +1,7 @@
 ﻿- type: entity
   abstract: true
   id: CableBaseLive
+  suffix: CultYogg
   placement:
     mode: SnapgridCenter
   components:
@@ -51,6 +52,7 @@
 - type: entity
   parent: CableBase
   id: CableHVLive
+  suffix: CultYogg
   name: live roots (HV)
   description: Corrupted high-voltage cable, covered with slime and strange roots, pulsates.
   components:
@@ -101,6 +103,7 @@
 - type: entity
   parent: CableBase
   id: CableMVLive
+  suffix: CultYogg
   name: live roots (MV)
   description: Corrupted medium-voltage cable, covered with slime and strange roots, pulsates.
   components:
@@ -145,6 +148,7 @@
 - type: entity
   parent: CableBase
   id: CableApcExtensionLive
+  suffix: CultYogg
   name: live roots (LV)
   description: Corrupted low-voltage cable, covered with slime and strange roots, pulsates. #APCs aren't area defined anymore so need this cable to connect things to the APC. This description should be dynamic in future.
   components:

@@ -3,7 +3,6 @@
 - type: entity
   parent: SheetMetalBase
   id: SheetTokl
-  suffix: CultYogg
   name: tokl
   suffix: Full
   description: A sheet of corrupted metal interspersed with mold and mushrooms. It is slimy and pulsating.
@@ -37,7 +36,6 @@
 - type: entity
   parent: SheetTokl
   id: SheetTokl10
-  suffix: CultYogg
   name: tokl
   suffix: 10
   components:
@@ -50,7 +48,6 @@
 - type: entity
   parent: SheetTokl
   id: SheetTokl1
-  suffix: CultYogg
   name: tokl
   suffix: Single
   components:

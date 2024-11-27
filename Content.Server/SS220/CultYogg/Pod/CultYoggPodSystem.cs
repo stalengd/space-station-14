@@ -81,7 +81,8 @@ public sealed partial class CultYoggPodSystem : SharedCultYoggPodSystem
 
     private void GotInserted(Entity<CultYoggPodComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
-        EnsureComp<CultYoggHealComponent>(args.Entity);
+        var healComp = EnsureComp<CultYoggHealComponent>(args.Entity); //applying heal from MiGo
+        healComp.TimeBetweenIncidents = ent.Comp.HealingFreq;
         _appearance.SetData(ent, CultYoggPodComponent.CultPodVisuals.Inserted, true);
     }
 }

@@ -1,2 +1,2 @@
-ent-MiGoCultYogg = Ми-Го
+ent-MiGo = Ми-Го
     .desc = Дитя Тёмного Бога.

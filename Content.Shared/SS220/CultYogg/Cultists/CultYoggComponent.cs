@@ -74,7 +74,7 @@ public sealed partial class CultYoggComponent : Component
     /// Entity the cultist will ascend into
     /// </summary>
     [ViewVariables]
-    public string AscendedEntity = "MiGoCultYogg";
+    public string AscendedEntity = "MiGo";
 
     [ViewVariables]
     public int AmountShroomsToAscend = 12;//3 multiplyied on amount of reagent in a shroom

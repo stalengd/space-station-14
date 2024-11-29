@@ -34,7 +34,7 @@
   components:
   - type: SpawnItemsOnUse
     items:
-      - id: SpitballerCultYogg
+      - id: Spitballer
     sound:
       path: /Audio/Effects/unwrap.ogg
 

@@ -311,20 +311,20 @@
   id: Multitool
   from:
     prototypeId: Multitool
-  result: BurglarBugCultYogg
+  result: BurglarBug
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: NetworkConfigurator
   from:
     prototypeId: NetworkConfigurator
-  result: BurglarBugCultYogg
+  result: BurglarBug
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: RemoteSignaller
   from:
     prototypeId: RemoteSignaller
-  result: BurglarBugCultYogg
+  result: BurglarBug
   corruptionReverseEffect: ExorcismUncorruptEffect
 # BurglarBug end

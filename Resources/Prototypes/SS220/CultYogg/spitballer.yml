@@ -1,8 +1,8 @@
 - type: entity
-  name: spitballer cult yogg
+  name: spitballer
   parent: BaseItem
   suffix: CultYogg
-  id: SpitballerCultYogg
+  id: Spitballer
   components:
     - type: Gun
       cameraRecoilScalar: 1

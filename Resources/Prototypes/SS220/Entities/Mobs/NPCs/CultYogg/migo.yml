@@ -19,7 +19,6 @@
       - Door
       tags:
       - Wall
-  #- type: Hands #For UI opening only
   - type: Body
     prototype: MiGoBody
   - type: ComplexInteraction #For UI opening only

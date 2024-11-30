@@ -17,9 +17,7 @@ public sealed partial class MiGoAstralEvent : InstantActionEvent
 public sealed partial class MiGoErectEvent : InstantActionEvent
 {
 }
-public sealed partial class MiGoPlantEvent : InstantActionEvent
-{
-}
+
 public sealed partial class MiGoSacrificeEvent : InstantActionEvent
 {
 }

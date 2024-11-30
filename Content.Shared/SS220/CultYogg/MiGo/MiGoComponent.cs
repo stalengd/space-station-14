@@ -28,9 +28,6 @@ public sealed partial class MiGoComponent : Component
     public EntProtoId MiGoErectAction = "ActionMiGoErect";
 
     [DataField]
-    public EntProtoId MiGoPlantAction = "ActionMiGoPlant";
-
-    [DataField]
     public EntProtoId MiGoSacrificeAction = "ActionMiGoSacrifice";
 
     [DataField, AutoNetworkedField]

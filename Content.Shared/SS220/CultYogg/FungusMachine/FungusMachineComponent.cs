@@ -1,7 +1,9 @@
-﻿// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+// © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
+using Robust.Shared.Serialization.TypeSerializers.Implementations;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.SS220.CultYogg.FungusMachine
@@ -28,6 +30,18 @@ namespace Content.Shared.SS220.CultYogg.FungusMachine
         ///     Container of unique entities stored inside this Fungus machine.
         /// </summary>
         [ViewVariables] public Container Container = default!;
+
+        /// <summary>
+        /// Whitelist of entities that can use the fungus machine
+        /// </summary>
+        [DataField]
+        public EntityWhitelist UsersWhitelist = new()
+        {
+            Components = new[]
+            {
+                "MiGo"
+            }
+        };
     }
 
     [Serializable, NetSerializable]

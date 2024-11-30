@@ -65,7 +65,8 @@
       - id: SheetTokl1
         stackAmount: 15
   - type: ActivatableUI
-    verbOnly: true
+    requiresComplex: false
+    blockSpectators: true
     key: enum.FungusMachineUiKey.Key
   - type: UserInterface
     interfaces:

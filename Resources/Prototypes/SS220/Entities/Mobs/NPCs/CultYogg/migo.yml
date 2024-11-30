@@ -19,7 +19,6 @@
       - Door
       tags:
       - Wall
-  #- type: Hands #For UI opening only
   - type: Body
     prototype: MiGoBody
   - type: ComplexInteraction #For UI opening only
@@ -34,8 +33,6 @@
     interfaces:
       enum.MiGoUiKey.Erect:
         type: MiGoErectBoundUserInterface
-      enum.MiGoUiKey.Plant:
-        type: FungusMachineBoundUserInterface
   - type: ShowCultYoggIcons
   - type: NpcFactionMember
     factions:

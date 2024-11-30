@@ -9,9 +9,9 @@
   components:
   #cultists comps
   - type: MiGo
-    showInHands: false
-    disableExplosionRecursion: true
-    canBeStripped: false
+    # showInHands: false
+    # disableExplosionRecursion: true
+    # canBeStripped: false
     eraseWhitelist:
       components:
       - CultYoggBuilding

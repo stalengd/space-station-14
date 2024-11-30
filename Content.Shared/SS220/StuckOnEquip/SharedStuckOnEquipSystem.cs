@@ -7,6 +7,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Wieldable;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.SS220.StuckOnEquip;
 
@@ -14,6 +15,8 @@ public sealed partial class SharedStuckOnEquipSystem : EntitySystem
 {
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -22,6 +25,7 @@ public sealed partial class SharedStuckOnEquipSystem : EntitySystem
         SubscribeLocalEvent<MobStateChangedEvent>(OnDeath);
         SubscribeLocalEvent<DropAllStuckOnEquipEvent>(OnRemoveAll);
     }
+
     private void OnDeath(MobStateChangedEvent ev)
     {
         if (ev.NewMobState == MobState.Dead)
@@ -35,6 +39,9 @@ public sealed partial class SharedStuckOnEquipSystem : EntitySystem
 
     private void GotPickuped(Entity<StuckOnEquipComponent> entity, ref GotEquippedHandEvent args)
     {
+        if (_gameTiming.ApplyingState)
+            return;
+
         if (!entity.Comp.InHandItem)
             return;
 
@@ -44,6 +51,9 @@ public sealed partial class SharedStuckOnEquipSystem : EntitySystem
 
     private void GotEquipped(Entity<StuckOnEquipComponent> entity, ref GotEquippedEvent args)
     {
+        if (_gameTiming.ApplyingState)
+            return;
+
         if (args.SlotFlags == SlotFlags.POCKET)
             return; // we don't want to make unremovable pocket item
 

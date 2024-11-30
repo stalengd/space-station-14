@@ -199,6 +199,9 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         if (TerminatingOrDeleted(uid))
             return;
 
+        if (HasComp<AcsendingComponent>(uid))
+            return;
+
         // Get original body position and spawn MiGo here
         var migo = _entityManager.SpawnAtPosition(uid.Comp.AscendedEntity, Transform(uid).Coordinates);
 

@@ -10,6 +10,9 @@
       layers:
         - map: ["base"]
           state: icon
+        - map: ["stuck"]
+          state: bug_ondoor
+          visible: false
     - type: Icon
       sprite: SS220/Objects/CultYogg/burglarbug.rsi
       state: icon
@@ -33,10 +36,17 @@
       stuckNoRotation: true
     - type: GenericVisualizer
       visuals:
+        enum.Trigger.TriggerVisuals.VisualState:
+          base:
+            Primed: { state: bug }
+            Unprimed: { state: icon }
         enum.StickyVisuals.IsStuck:
           base:
-            True: { state: bug_ondoor }
-            False: { state: bug }
+            True: { visible: false }
+            False: { visible: true }
+          stuck:
+            True: { visible: true }
+            False: { visible: false }
     - type: BurglarBug
       timeToOpen: 10
       notActivatedStickPopupCancellation: cult-yogg-burglar-bug-notactivated-cancellation

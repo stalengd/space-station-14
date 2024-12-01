@@ -12,6 +12,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Corvax.CCCVars;
 using Content.Shared.GameTicking;
 using Content.Shared.Players.PlayTimeTracking;
+using Content.Shared.SS220.CCVars;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
@@ -287,7 +288,7 @@ namespace Content.Server.Connection
             }
 
             // SS220 prime list restriction start
-            if (_cfg.GetCVar(CCVars.PrimelistEnabled))
+            if (_cfg.GetCVar(CCVars220.PrimelistEnabled))
             {
                 var primeAccessStatus = await _discordPlayerManager.GetUserPrimeListStatus(userId);
 

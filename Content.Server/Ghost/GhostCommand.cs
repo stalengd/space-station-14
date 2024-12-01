@@ -45,7 +45,6 @@ namespace Content.Server.Ghost
             }
 
             //SS220-lobby-ghost-bug begin
-            var gameTicker = _entities.System<GameTicker>();
             if (!gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status) || status is not PlayerGameStatus.JoinedGame)
             {
                 shell.WriteLine("You can't ghost right now. You are not in the game!");

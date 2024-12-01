@@ -105,7 +105,6 @@
 
 - type: seed
   id: StrangeFruit
-  suffix: CultYogg
   name: seeds-strange-fruit-name
   noun: seeds-noun-spores
   displayName: seeds-flyamanita-display-name

@@ -254,7 +254,7 @@
 
 - type: entity
   id: AntimovCircuitBoard
-  parent: [BaseElectronics, BaseSyndicateContraband]
+  parent: BaseElectronics # SS220 Remove BaseSyndicateContraband
   name: law board (Antimov)
   description: An electronics board containing the Antimov lawset.
   components:

@@ -74,7 +74,7 @@
 
 - type: entity
   id: CrateSecurityRiot
-  parent: [ CrateWeaponSecure, BaseRestrictedContraband ]
+  parent: CrateWeaponSecure # SS220 Remove BaseRestrictedContraband
   name: swat crate
   description: Contains two sets of riot armor, helmets, shields, and enforcers loaded with beanbags. Extra ammo is included. Requires Armory access to open.
   components:

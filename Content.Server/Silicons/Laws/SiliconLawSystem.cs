@@ -200,13 +200,16 @@ public sealed class SiliconLawSystem : SharedSiliconLawSystem
             return;
 
         // SS220 antag ban
-        if (_mind.TryGetSession(mindId, out var session) && _banManager.GetJobBans(session.UserId) is { } roleBans && roleBans.Contains("SubvertedSilicon"))
+        if (_mind.TryGetSession(mindId, out var session)
+            && session.AttachedEntity is { } entity
+            && _banManager.GetJobBans(session.UserId) is { } roleBans
+            && roleBans.Contains("SubvertedSilicon"))
         {
             // If user has role ban - kick him out of emagged borg.
-            _mind.TransferTo(mindId, null, mind: mind);
+            _mind.TransferTo(mindId, null);
 
-            var ghostRole = EnsureComp<GhostRoleComponent>(uid);
-            EnsureComp<GhostTakeoverAvailableComponent>(uid);
+            var ghostRole = EnsureComp<GhostRoleComponent>(entity);
+            EnsureComp<GhostTakeoverAvailableComponent>(entity);
             ghostRole.RoleName = Loc.GetString("roles-antag-subverted-silicon-name");
             ghostRole.RoleDescription = Loc.GetString("roles-antag-subverted-silicon-name");
             ghostRole.RoleRules = Loc.GetString("roles-antag-subverted-silicon-objective");

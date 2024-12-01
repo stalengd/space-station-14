@@ -24,18 +24,6 @@
       map: ["enum.PaperLabelVisuals.Layer"] #SS220-Closet-Resprite-end
       visible: false
   - type: MovedByPressure
-  - type: GenericVisualizer #SS220-Closet-Resprite-start
-    visuals:
-      enum.PaperLabelVisuals.HasLabel:
-        enum.PaperLabelVisuals.Layer:
-          True: { visible: true }
-          False: { visible: false }
-      enum.PaperLabelVisuals.LabelType:
-        enum.PaperLabelVisuals.Layer:
-          Paper: { state: paper }
-          Bounty: { state: bounty }
-          CaptainsPaper: { state: captains_paper }
-          Invoice: { state: invoice } #SS220-Closet-Resprite-end
   - type: PaperLabel
     labelSlot:
       insertVerbText: Attach Label

@@ -4,6 +4,8 @@
   id: HornCultYogg
   suffix: CultYogg
   components:
+    - type: CultYoggWeapon
+      item: CultYoggCocoonHorn
     - type: Gun
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
       soundEmpty: null

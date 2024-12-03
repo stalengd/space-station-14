@@ -4,7 +4,9 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.SS220.CultYogg.Corruption;
-using Content.Shared.Inventory.Events;
+using Robust.Shared.Containers;
+using Robust.Shared.Timing;
+using JetBrains.FormatRipper.Elf;
 
 namespace Content.Server.SS220.CultYogg.Corruption;
 
@@ -12,14 +14,14 @@ public sealed class CultYoggCocoonSystem : EntitySystem
 {
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CultYoggCocoonComponent, UseInHandEvent>(OnUseInHand);
-        SubscribeLocalEvent<CultYoggWeaponComponent, DroppedEvent>(OnUnequip);
+        SubscribeLocalEvent<CultYoggWeaponComponent, EntGotRemovedFromContainerMessage>(OnRemove);
     }
     private void OnUseInHand(Entity<CultYoggCocoonComponent> ent, ref UseInHandEvent args)
     {
@@ -35,6 +37,7 @@ public sealed class CultYoggCocoonSystem : EntitySystem
             comp.SoftDeletedOriginalEntity = corruptComp.SoftDeletedOriginalEntity;
             comp.Recipe = corruptComp.Recipe;
         }
+
         EntityManager.DeleteEntity(ent);
         _hands.PickupOrDrop(args.User, newEnt);
         if (ent.Comp.Sound != null)
@@ -46,8 +49,34 @@ public sealed class CultYoggCocoonSystem : EntitySystem
 
         args.Handled = true;
     }
-    private void OnUnequip(Entity<CultYoggWeaponComponent> ent, ref DroppedEvent args)
+    private void OnRemove(Entity<CultYoggWeaponComponent> ent, ref EntGotRemovedFromContainerMessage args)
     {
-        ;
+        ent.Comp.BeforeCocooningTime = _timing.CurTime + ent.Comp.CocooningCooldown;
+    }
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<CultYoggWeaponComponent>();
+        while (query.MoveNext(out var ent, out var comp))
+        {
+            if (comp.BeforeCocooningTime is null)
+                continue;
+
+            if (_timing.CurTime < comp.BeforeCocooningTime)
+                continue;
+
+            if (!TryComp<CultYoggCorruptedComponent>(ent, out var corruptComp))
+                return;
+
+            var coords = Transform(ent).Coordinates;
+            var newEnt = Spawn(comp.Item, coords);
+
+            var corrComp = EnsureComp<CultYoggCorruptedComponent>(newEnt);
+            corrComp.SoftDeletedOriginalEntity = corruptComp.SoftDeletedOriginalEntity;
+            corrComp.Recipe = corruptComp.Recipe;
+
+            EntityManager.DeleteEntity(ent);
+        }
     }
 }

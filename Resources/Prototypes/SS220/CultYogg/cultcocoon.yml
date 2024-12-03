@@ -42,7 +42,7 @@
   suffix: Horn
   components:
   - type: CultYoggCocoon
-    item: HornCultYogg
+    item:
     sound:
       path: /Audio/Effects/unwrap.ogg
 

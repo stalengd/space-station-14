@@ -21,16 +21,19 @@ namespace Content.Server.SS220.EntityEffects.Effects
         /// Minimum quantity of reagent required to trigger this effect.
         /// </summary>
         [DataField]
-        public float AmountThreshold = 0.5f;
+        public float AmountThreshold = 2.0f;
 
         [DataField]
         public float Time = 2.0f;
+
         public override void Effect(EntityEffectBaseArgs args)
         {
             var time = Time;
 
             if (args is EntityEffectReagentArgs reagentArgs)
+            {
                 time *= reagentArgs.Scale.Float();
+            }
 
             var entityManager = args.EntityManager;
 

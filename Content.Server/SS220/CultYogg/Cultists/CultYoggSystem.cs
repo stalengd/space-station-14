@@ -129,10 +129,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         if (entity.Comp.PreviousEyeColor != null)
             huAp.EyeColor = entity.Comp.PreviousEyeColor.Value;
 
-        if (huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Special))
-        {
-            huAp.MarkingSet.Markings.Remove(MarkingCategories.Special);
-        }
+        huAp.MarkingSet.Markings.Remove(MarkingCategories.Special);
 
         if (huAp.MarkingSet.Markings.ContainsKey(MarkingCategories.Tail) &&
             entity.Comp.PreviousTail != null)
@@ -231,7 +228,14 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     }
     public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent comp)//idk if it is canser or no, will be like that for a time
     {
+        if (HasComp<AcsendingComponent>(uid))
+            return;
+
         comp.ConsumedShrooms++; //Add shroom to buffer
+
+        if (comp.ConsumedShrooms % 4 != 0) //ToDo add this onto init amd move ito component so it would be 3
+            return;
+
         if (comp.ConsumedShrooms <= comp.AmountShroomsToAscend) // if its not enough to ascend
             return;
 

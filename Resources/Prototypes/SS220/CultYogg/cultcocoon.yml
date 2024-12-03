@@ -21,9 +21,8 @@
   parent: [CultYoggCocoonBase, BaseItem]
   suffix: Spikegun
   components:
-  - type: SpawnItemsOnUse
-    items:
-      - id: SpikegunCultYogg
+  - type: CultYoggCocoon
+    item: SpikegunCultYogg
     sound:
       path: /Audio/Effects/unwrap.ogg
 
@@ -32,9 +31,8 @@
   parent: [CultYoggCocoonBase, BaseItem]
   suffix: Spitballer
   components:
-  - type: SpawnItemsOnUse
-    items:
-      - id: Spitballer
+  - type: CultYoggCocoon
+    item: Spitballer
     sound:
       path: /Audio/Effects/unwrap.ogg
 
@@ -43,9 +41,8 @@
   parent: [CultYoggCocoonBase, BaseItem]
   suffix: Horn
   components:
-  - type: SpawnItemsOnUse
-    items:
-      - id: HornCultYogg
+  - type: CultYoggCocoon
+    item: HornCultYogg
     sound:
       path: /Audio/Effects/unwrap.ogg
 
@@ -54,9 +51,8 @@
   parent: [CultYoggCocoonBase, BaseItem]
   suffix: Claw
   components:
-  - type: SpawnItemsOnUse
-    items:
-      - id: ClawCultYogg
+  - type: CultYoggCocoon
+    item: ClawCultYogg
     sound:
       path: /Audio/Effects/unwrap.ogg
 
@@ -65,9 +61,8 @@
   parent: [CultYoggCocoonBase, BaseItem]
   suffix: Beach
   components:
-  - type: SpawnItemsOnUse
-    items:
-      - id: BeachCultYogg
+  - type: CultYoggCocoon
+    item: BeachCultYogg
     sound:
       path: /Audio/Effects/unwrap.ogg
 

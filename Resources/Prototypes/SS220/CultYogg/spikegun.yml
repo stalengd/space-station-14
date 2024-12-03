@@ -4,6 +4,7 @@
   id: SpikegunCultYogg
   suffix: CultYogg
   components:
+    - type: CultYoggWeapon
     - type: AmmoCounter
     - type: Gun
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg

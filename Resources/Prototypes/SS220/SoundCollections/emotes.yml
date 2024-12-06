@@ -312,3 +312,9 @@
     - /Audio/SS220/CultYogg/nyarlathotep_voice2.ogg
     - /Audio/SS220/CultYogg/nyarlathotep_voice3.ogg
 
+- type: soundCollection
+  id: CultYoggCleansingSounds
+  files:
+    - /Audio/SS220/CultYogg/inhale_scream_1.ogg
+    - /Audio/SS220/CultYogg/inhale_scream_2.ogg
+    - /Audio/SS220/CultYogg/inhale_scream_3.ogg

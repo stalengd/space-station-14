@@ -1,4 +1,5 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
+
 using Content.Server.Humanoid;
 using Content.Server.Medical;
 using Content.Server.SS220.DarkForces.Saint.Reagent.Events;
@@ -17,13 +18,13 @@ using Content.Shared.SS220.CultYogg.MiGo;
 using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
 using System.Linq;
-
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.SS220.CultYogg.Cultists;
 
 public sealed class CultYoggSystem : SharedCultYoggSystem
 {
-
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly CultYoggRuleSystem _cultRule = default!;
@@ -283,7 +284,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     private bool TryReplaceMiGo()
     {
         //if any MiGo needs to be replaced add here
-        List<EntityUid> migoOnDelete = new();
+        List<EntityUid> migoOnDelete = [];
 
         var query = EntityQueryEnumerator<MiGoComponent>();
         while (query.MoveNext(out var uid, out var comp))
@@ -292,7 +293,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
                 migoOnDelete.Add(uid);
         }
 
-        if ((migoOnDelete.Count != 0) && TryComp<BodyComponent>(migoOnDelete[0], out var body)) //ToDo check for cancer coding
+        if (migoOnDelete.Count != 0 && TryComp<BodyComponent>(migoOnDelete[0], out var body)) //ToDo check for cancer coding
         {
             _body.GibBody(migoOnDelete[0], body: body);
             return true;
@@ -317,6 +318,10 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
 
         if (cleansedComp.AmountOfHolyWater >= cleansedComp.AmountToCleance)
         {
+            //After cleansing effect
+            _audio.PlayEntity(cleansedComp.CleansingCollection, uid, uid);
+            SpawnAttachedTo(cleansedComp.CleansingEffect, Transform(uid).Coordinates);
+
             //Removing stage visuals, cause later component will be removed
             var ev = new CultYoggDeleteVisualsEvent();
             RaiseLocalEvent(uid, ref ev);

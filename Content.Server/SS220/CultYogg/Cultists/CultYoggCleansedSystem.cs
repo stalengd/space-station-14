@@ -12,12 +12,6 @@ public sealed class CultYoggCleansedSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        SubscribeLocalEvent<CultYoggCleansedComponent, ComponentStartup>(OnCompInit);
-    }
-    private void OnCompInit(Entity<CultYoggCleansedComponent> uid, ref ComponentStartup args)
-    {
-        Spawn(uid.Comp.EffectPrototype, Transform(uid).Coordinates);
     }
     public override void Update(float frameTime)
     {

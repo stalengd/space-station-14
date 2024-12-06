@@ -3,6 +3,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using System.Numerics;
+using Robust.Shared.Audio;
 
 namespace Content.Shared.SS220.CultYogg.Cultists;
 
@@ -21,12 +22,16 @@ public sealed partial class CultYoggCleansedComponent : Component
     public TimeSpan? CleansingDecayEventTime;
 
     /// <summary>
+    /// Contains special sounds which be played when entity will be cleased
+    /// </summary>
+    [DataField]
+    public SoundSpecifier CleansingCollection = new SoundCollectionSpecifier("CultYoggCleansingSounds");
+
+    /// <summary>
     /// Visual effect to spawn when entity corrupted from this recipe gets reversed back
     /// </summary>
-    public EntProtoId EffectPrototype = "CultYoggCleansingEffect";
-
     [DataField]
-    public string Sprite = "/SS220/Effects/cult_yogg_cleansing.rsi/cleansing_effect.png";
+    public EntProtoId CleansingEffect = "CultYoggCleansingEffect";
 
     /// <summary>
     /// Amount of time requierd to requied for cleansind removal

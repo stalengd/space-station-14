@@ -6,7 +6,6 @@ using Robust.Shared.Audio.Systems;
 using Content.Shared.SS220.CultYogg.Corruption;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
-using JetBrains.FormatRipper.Elf;
 
 namespace Content.Server.SS220.CultYogg.Corruption;
 

@@ -31,6 +31,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Shared.Database;
 using Content.Server.Administration.Logs;
+using Content.Server.SS220.Objectives.Systems;
+using Content.Server.SS220.Objectives.Components;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -49,7 +51,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
     [Dependency] private readonly SharedRoleSystem _role = default!;
 
-    private List<List<String>> _sacraficialTiers = new();
+    private List<List<string>> _sacraficialTiers = [];
     public TimeSpan DefaultShuttleArriving { get; set; } = TimeSpan.FromSeconds(85);
 
     public override void Initialize()
@@ -84,6 +86,13 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         GenerateJobsList(component);
         //_adminLogger.Add(LogType.EventRan, LogImpact.High, $"CultYogg game rule has started picking up sacraficials");
         SetSacraficials(component);
+
+        var ev = new CultYoggReinitObjEvent();
+        var query = EntityQueryEnumerator<CultYoggSummonConditionComponent>();
+        while (query.MoveNext(out var ent, out var _))
+        {
+            RaiseLocalEvent(ent, ref ev); //Reinitialise objective if gamerule was forced
+        }
     }
 
     //Filling list of jobs fot better range

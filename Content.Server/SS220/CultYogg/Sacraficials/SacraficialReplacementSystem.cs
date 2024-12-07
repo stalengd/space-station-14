@@ -1,5 +1,7 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Server.SS220.GameTicking.Rules;
+using Content.Server.SS220.Objectives.Components;
+using Content.Server.SS220.Objectives.Systems;
 using Content.Shared.SS220.CultYogg.Sacraficials;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -25,8 +27,28 @@ public sealed partial class SacraficialReplacementSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CultYoggSacrificialComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<CultYoggSacrificialComponent, ComponentRemove>(OnRemove);
         SubscribeLocalEvent<CultYoggSacrificialComponent, PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<CultYoggSacrificialComponent, PlayerDetachedEvent>(OnPlayerDetached);
+    }
+    private void OnInit(Entity<CultYoggSacrificialComponent> ent, ref ComponentInit args)
+    {
+        var ev = new CultYoggUpdateSacrObjEvent();
+        var query = EntityQueryEnumerator<CultYoggSummonConditionComponent>();
+        while (query.MoveNext(out var uid, out var _))
+        {
+            RaiseLocalEvent(uid, ref ev);
+        }
+    }
+    private void OnRemove(Entity<CultYoggSacrificialComponent> ent, ref ComponentRemove args)
+    {
+        var ev = new CultYoggUpdateSacrObjEvent();
+        var query = EntityQueryEnumerator<CultYoggSummonConditionComponent>();
+        while (query.MoveNext(out var uid, out var _))
+        {
+            RaiseLocalEvent(uid, ref ev);
+        }
     }
     private void OnPlayerAttached(Entity<CultYoggSacrificialComponent> ent, ref PlayerAttachedEvent args)
     {

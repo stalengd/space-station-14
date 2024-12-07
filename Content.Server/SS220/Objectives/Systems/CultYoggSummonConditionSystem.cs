@@ -25,12 +25,10 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CultYoggSummonConditionComponent, ComponentInit>(OnInit);
-
         SubscribeLocalEvent<CultYoggSummonConditionComponent, ObjectiveAfterAssignEvent>(OnAfterAssign);
-
-        SubscribeLocalEvent<CultYoggSummonConditionComponent, CultYoggReinitObjEvent>(OnReInit);
-
         SubscribeLocalEvent<CultYoggSummonConditionComponent, ObjectiveGetProgressEvent>(OnGetProgress);
+        SubscribeLocalEvent<CultYoggSummonConditionComponent, CultYoggReinitObjEvent>(OnReInit);
+        SubscribeLocalEvent<CultYoggSummonConditionComponent, CultYoggUpdateSacrObjEvent>(OnSacrUpdate);
     }
     //check if gamerule was rewritten
     private void OnInit(Entity<CultYoggSummonConditionComponent> ent, ref ComponentInit args)
@@ -42,9 +40,12 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
     {
         SacraficialsUpdate(ent);
     }
+    private void OnSacrUpdate(Entity<CultYoggSummonConditionComponent> ent, ref CultYoggUpdateSacrObjEvent args)
+    {
+        SacraficialsUpdate(ent);
+    }
     private void OnReInit(Entity<CultYoggSummonConditionComponent> ent, ref CultYoggReinitObjEvent args)
     {
-        TaskNumberUpdate(ent);
         SacraficialsUpdate(ent);
     }
     private void OnGetProgress(Entity<CultYoggSummonConditionComponent> ent, ref ObjectiveGetProgressEvent args)
@@ -92,5 +93,10 @@ public sealed class CultYoggSummonConditionSystem : EntitySystem
 }
 [ByRefEvent, Serializable]
 public sealed class CultYoggReinitObjEvent : EntityEventArgs
+{
+}
+
+[ByRefEvent, Serializable]
+public sealed class CultYoggUpdateSacrObjEvent : EntityEventArgs
 {
 }

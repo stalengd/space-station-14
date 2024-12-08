@@ -863,6 +863,7 @@
     Medicine:
       effects:
       - !type:ChemHealEyeDamage
+      - !type:ChemRemoveHallucinationsEffect #SS220 CultYogg
 
 - type: reagent
   id: Cognizine

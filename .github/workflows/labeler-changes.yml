@@ -12,8 +12,6 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-    - name: Debug
-      run: printf "%s\n" "${{ toJson(github.event)}}"
     - uses: actions-ecosystem/action-add-labels@v1
       with:
         labels: "Status: Awaiting Changes"

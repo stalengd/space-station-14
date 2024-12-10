@@ -13,7 +13,7 @@ jobs:
       contents: write
     steps:
     - name: Debug
-      run: echo "${{ toJson(github.event) }}"
+      run: printf "%s\n" "${{ toJson(github.event)}}"
     - uses: actions-ecosystem/action-add-labels@v1
       with:
         labels: "Status: Awaiting Changes"

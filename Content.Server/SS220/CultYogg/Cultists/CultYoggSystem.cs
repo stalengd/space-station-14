@@ -229,6 +229,7 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
     }
     public void ModifyEatenShrooms(EntityUid uid, CultYoggComponent comp)//idk if it is canser or no, will be like that for a time
     {
+        RemComp<CultYoggCleansedComponent>(uid);
         if (HasComp<AcsendingComponent>(uid))
             return;
 
@@ -320,7 +321,6 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         {
             //After cleansing effect
             _audio.PlayEntity(cleansedComp.CleansingCollection, uid, uid);
-            SpawnAttachedTo(cleansedComp.CleansingEffect, Transform(uid).Coordinates);
 
             //Removing stage visuals, cause later component will be removed
             var ev = new CultYoggDeleteVisualsEvent();

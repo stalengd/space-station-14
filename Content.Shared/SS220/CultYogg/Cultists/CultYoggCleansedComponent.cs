@@ -1,7 +1,7 @@
 // © SS220, An EULA/CLA with a hosting restriction, full text: https://raw.githubusercontent.com/SerbiaStrong-220/space-station-14/master/CLA.txt
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 using System.Numerics;
 using Robust.Shared.Audio;
 
@@ -27,11 +27,8 @@ public sealed partial class CultYoggCleansedComponent : Component
     [DataField]
     public SoundSpecifier CleansingCollection = new SoundCollectionSpecifier("CultYoggCleansingSounds");
 
-    /// <summary>
-    /// Visual effect to spawn when entity corrupted from this recipe gets reversed back
-    /// </summary>
-    [DataField]
-    public EntProtoId CleansingEffect = "CultYoggCleansingEffect";
+    [DataField("sprite")]
+    public SpriteSpecifier.Rsi Sprite = new(new("SS220/Effects/cult_yogg_cleansing.rsi"), "cleansingEffect");
 
     /// <summary>
     /// Amount of time requierd to requied for cleansind removal

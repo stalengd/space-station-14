@@ -60,7 +60,7 @@ public sealed partial class MiGoComponent : Component
     /// <summary>
     ///Erect variables
     /// <summary>
-    public float HealingEffectTime = 15;//How long heal effect will occure
+    public TimeSpan HealingEffectTime = TimeSpan.FromSeconds(15);//How long heal effect will occure
 
     /// <summary>
     ///Erect variables

@@ -13,7 +13,7 @@ public sealed partial class CultYoggPodComponent : Component
     /// Time between each healing incident
     /// </summary>
     [DataField]
-    public float HealingFreq = 0.5f;
+    public TimeSpan HealingFreq = TimeSpan.FromSeconds(1);
 
     [DataField]
     public DamageSpecifier Heal = new DamageSpecifier // god forgive me for hardcoding values

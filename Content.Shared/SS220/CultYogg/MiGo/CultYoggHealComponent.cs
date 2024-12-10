@@ -2,6 +2,7 @@
 using Robust.Shared.GameStates;
 using System.Text.Json.Serialization;
 using Content.Shared.Damage;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.SS220.CultYogg.MiGo;
 
@@ -33,7 +34,10 @@ public sealed partial class CultYoggHealComponent : Component
     /// <summary>
     /// Time between each healing incident
     /// </summary>
-    public float TimeBetweenIncidents = 2.5f; // most balanced value
+    public TimeSpan TimeBetweenIncidents = TimeSpan.FromSeconds(2.5); // most balanced value
 
-    public float NextIncidentTime;//ToDo make it timespan
+    public TimeSpan? NextIncidentTime;
+
+    [DataField("sprite")]
+    public SpriteSpecifier.Rsi Sprite = new(new("SS220/Effects/cult_yogg_healing.rsi"), "healingEffect");
 }

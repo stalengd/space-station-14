@@ -71,18 +71,18 @@ public sealed class RaveSystem : SharedRaveSystem
         args.PushMarkup($"[color=green]{Loc.GetString("cult-yogg-shroom-markup", ("ent", uid))}[/color]");
     }
 
-    public void TryApplyRavenness(EntityUid uid, float time, StatusEffectsComponent? status = null)
+    public void TryApplyRavenness(EntityUid uid, TimeSpan time, StatusEffectsComponent? status = null)
     {
         if (!Resolve(uid, ref status, false))
             return;
 
         if (!_statusEffectsSystem.HasStatusEffect(uid, EffectKey, status))
         {
-            _statusEffectsSystem.TryAddStatusEffect<RaveComponent>(uid, EffectKey, TimeSpan.FromSeconds(time), true, status);
+            _statusEffectsSystem.TryAddStatusEffect<RaveComponent>(uid, EffectKey, time, true, status);
         }
         else
         {
-            _statusEffectsSystem.TryAddTime(uid, EffectKey, TimeSpan.FromSeconds(time), status);
+            _statusEffectsSystem.TryAddTime(uid, EffectKey, time, status);
         }
     }
 

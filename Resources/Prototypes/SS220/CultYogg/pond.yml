@@ -30,9 +30,8 @@
   - type: DrawableSolution
     solution: drink
   - type: Sprite
-    sprite: Structures/Storage/tanks.rsi
-    layers:
-      - state: watertank-2
+    sprite: SS220/Structures/CultYogg/yoggpond.rsi
+    state: pond
   - type: InteractionOutline
   - type: Transform
     noRot: true

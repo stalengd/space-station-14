@@ -11,6 +11,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.MiGo;
+using Robust.Shared.Timing;
 
 namespace Content.Server.SS220.CultYogg.MiGo;
 
@@ -24,6 +25,7 @@ public sealed class CultYoggHealSystem : SharedCultYoggHealSystem
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
+     [Dependency] private readonly IGameTiming _time = default!;
 
     public override void Initialize()
     {
@@ -33,23 +35,21 @@ public sealed class CultYoggHealSystem : SharedCultYoggHealSystem
     }
     private void SetupMiGoHeal(Entity<CultYoggHealComponent> uid, ref ComponentStartup args)
     {
-        uid.Comp.NextIncidentTime = uid.Comp.TimeBetweenIncidents;
+        uid.Comp.NextIncidentTime = _time.CurTime + uid.Comp.TimeBetweenIncidents;
     }
-    public override void Update(float frameTime)//ToDo rewrite as Timespan
+    public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
         var query = EntityQueryEnumerator<CultYoggHealComponent, MobStateComponent>();
         while (query.MoveNext(out var uid, out var healComp, out var _))
         {
-            healComp.NextIncidentTime -= frameTime;
-
-            if (healComp.NextIncidentTime > 0)
+            if (healComp.NextIncidentTime > _time.CurTime)
                 continue;
 
             Heal(uid, healComp);
 
-            healComp.NextIncidentTime += healComp.TimeBetweenIncidents;
+            healComp.NextIncidentTime = _time.CurTime + healComp.TimeBetweenIncidents;
         }
     }
     public void Heal(EntityUid uid, CultYoggHealComponent component)

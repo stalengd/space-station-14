@@ -50,7 +50,7 @@ namespace Content.Server.SS220.EntityEffects.Effects
 
             if (entityManager.HasComponent<HumanoidAppearanceComponent>(args.TargetEntity))
             {
-                entityManager.System<RaveSystem>().TryApplyRavenness(args.TargetEntity, time);
+                entityManager.System<RaveSystem>().TryApplyRavenness(args.TargetEntity, TimeSpan.FromSeconds(time));
             }
         }
         //ToDo check the guidebook

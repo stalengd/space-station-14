@@ -14,18 +14,18 @@ public abstract class SharedCultYoggHealSystem : EntitySystem
     {
         base.Initialize();
     }
-    public void TryApplyMiGoHeal(EntityUid uid, float time, StatusEffectsComponent? statusComp = null)
+    public void TryApplyMiGoHeal(EntityUid uid, TimeSpan time, StatusEffectsComponent? statusComp = null)
     {
         if (!Resolve(uid, ref statusComp, false))
             return;
 
         if (!_statusEffectsSystem.HasStatusEffect(uid, EffectkKey, statusComp))
         {
-            _statusEffectsSystem.TryAddStatusEffect<CultYoggHealComponent>(uid, EffectkKey, TimeSpan.FromSeconds(time), true, statusComp);
+            _statusEffectsSystem.TryAddStatusEffect<CultYoggHealComponent>(uid, EffectkKey, time, true, statusComp);
         }
         else
         {
-            _statusEffectsSystem.TryAddTime(uid, EffectkKey, TimeSpan.FromSeconds(time), statusComp);
+            _statusEffectsSystem.TryAddTime(uid, EffectkKey, time, statusComp);
         }
     }
 

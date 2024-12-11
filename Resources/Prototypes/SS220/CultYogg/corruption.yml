@@ -28,13 +28,20 @@
   id: BaseWeaponShotgun
   from:
     parentPrototypeId: BaseWeaponShotgun
-  result: CultYoggCocoonSpikegun
+  result: CultYoggCocoonSpitballer
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
   id: WeaponShotgunBulldog
   from:
     prototypeId: WeaponShotgunBulldog
+  result: CultYoggCocoonSpitballer
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: WeaponSprayNozzle
+  from:
+    prototypeId: WeaponSprayNozzle
   result: CultYoggCocoonSpitballer
   corruptionReverseEffect: ExorcismUncorruptEffect
 

@@ -107,7 +107,7 @@
   id: StrangeFruit
   name: seeds-strange-fruit-name
   noun: seeds-noun-spores
-  displayName: seeds-flyamanita-display-name
+  displayName: seeds-strange-fruit-display-name
   plantRsi: SS220/Objects/CultYogg/strangefruit.rsi
   packetPrototype: CultStrangeFruitSeed
   productPrototypes:

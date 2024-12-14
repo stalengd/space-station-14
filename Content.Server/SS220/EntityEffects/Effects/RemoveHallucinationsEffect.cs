@@ -20,6 +20,6 @@ namespace Content.Server.SS220.EntityEffects.Effects
             args.EntityManager.EventBus.RaiseLocalEvent(reagentArgs.TargetEntity, ev);
         }
 
-        protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("reagent-effect-guidebook-ss220-corrupt-mind", ("chance", Probability));
+        protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => Loc.GetString("reagent-effect-guidebook-ss220-remove-hallucinations", ("chance", Probability));
     }
 }

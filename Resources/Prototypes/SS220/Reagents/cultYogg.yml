@@ -12,4 +12,17 @@
     Poison:
       effects:
       - !type:ChemMiGomicelium
-        time: 500 #ToDo set timer
+        time: 150 #ToDo set timer
+
+- type: reagent
+  id: ElixirOfLiberation
+  name: reagent-name-elixir-of-liberation
+  group: Toxins
+  desc: reagent-desc-elixir-of-liberation
+  physicalDesc: reagent-physical-desc-putrid
+  flavor: menacing
+  color: "#afdd9a" #change color to a shroom color
+  metabolisms:
+    Poison:
+      effects:
+      - !type:ChemElixirOfLiberation

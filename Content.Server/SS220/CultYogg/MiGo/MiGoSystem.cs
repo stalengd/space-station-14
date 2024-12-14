@@ -172,9 +172,9 @@ public sealed partial class MiGoSystem : SharedMiGoSystem
             return;
         }
 
-        if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))//Its here bea
+        if (!_mind.TryGetMind(args.Target, out var mindId, out var mind))
         {
-            //_popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid); // commenting cause its spamming sevral times
+            _popup.PopupEntity(Loc.GetString("cult-yogg-no-mind"), args.Target, uid); // commenting cause its spamming sevral times
             return;
         }
 

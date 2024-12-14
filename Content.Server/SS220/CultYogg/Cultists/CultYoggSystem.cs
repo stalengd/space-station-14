@@ -15,6 +15,7 @@ using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.SS220.CultYogg.Cultists;
 using Content.Shared.SS220.CultYogg.MiGo;
+using Content.Shared.SS220.StuckOnEquip;
 using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
 using System.Linq;
@@ -258,6 +259,17 @@ public sealed class CultYoggSystem : SharedCultYoggSystem
         //IDK how to check if he already has this action, so i did this markup
         _popup.PopupEntity(Loc.GetString("cult-yogg-acsending-started"), uid, uid);
         EnsureComp<AcsendingComponent>(uid);
+    }
+    public void NullifyShroomEffect(EntityUid uid, CultYoggComponent comp)//idk if it is canser or no, will be like that for a time
+    {
+        RemComp<AcsendingComponent>(uid);
+
+        comp.ConsumedShrooms = 0;
+
+        //Remove all corrupted items
+        var ev = new DropAllStuckOnEquipEvent(uid);
+        RaiseLocalEvent(uid, ref ev, true);
+        _popup.PopupEntity(Loc.GetString("cult-yogg-acsending-stopped"), uid, uid);
     }
 
     //Check for avaliable amoiunt of MiGo or gib MiGo to replace

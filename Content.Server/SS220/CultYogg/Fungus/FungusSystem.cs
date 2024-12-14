@@ -215,7 +215,7 @@ public sealed class FungusSystem : EntitySystem
 
         var proto = _prototype.Index(entry.Id);
 
-        if(TryComp(uid, out FungusComponent? fungusComponent))
+        if (TryComp(uid, out FungusComponent? fungusComponent))
         {
             if (proto.TryGetComponent<SeedComponent>("Seed", out var seedComponent))
             {

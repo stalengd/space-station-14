@@ -36,7 +36,7 @@
   id: NullificationShroomSeedsCult
   components:
     - type: Seed
-      seedId: NullificationShroomspores
+      seedId: NullificationShroomSpores
     - type: Sprite
       sprite: SS220/Objects/CultYogg/nullification_shroom.rsi
 

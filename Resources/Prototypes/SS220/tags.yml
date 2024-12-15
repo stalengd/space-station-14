@@ -143,6 +143,10 @@
 - type: Tag
   id: Bed
 
+# engineering-update-thruster
+- type: Tag
+  id: ThrusterShuntingMachineCircuitboard
+
 #HOCebent
 - type: Tag
   id: CartridgeUnitary

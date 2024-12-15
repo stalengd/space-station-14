@@ -18,9 +18,9 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: WeaponRifleAk
+  id: CorruptBaseWeaponRifle
   from:
-    prototypeId: WeaponRifleAk
+    parentPrototypeId: BaseWeaponRifle
   result: CultYoggCocoonSpikegun
   corruptionReverseEffect: ExorcismUncorruptEffect
 
@@ -49,6 +49,13 @@
   id: WeaponImprovisedPneumaticCannon
   from:
     parentPrototypeId: WeaponImprovisedPneumaticCannon
+  result: CultYoggCocoonHorn
+  corruptionReverseEffect: ExorcismUncorruptEffect
+
+- type: corrupted
+  id: WeaponImprovisedPneumaticCannon
+  from:
+    prototypeId: WeaponImprovisedPneumaticCannon
   result: CultYoggCocoonHorn
   corruptionReverseEffect: ExorcismUncorruptEffect
 

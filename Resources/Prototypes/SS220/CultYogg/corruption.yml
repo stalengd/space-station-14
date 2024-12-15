@@ -46,7 +46,7 @@
   corruptionReverseEffect: ExorcismUncorruptEffect
 
 - type: corrupted
-  id: WeaponImprovisedPneumaticCannon
+  id: WeaponImprovisedPneumaticCannonParent
   from:
     parentPrototypeId: WeaponImprovisedPneumaticCannon
   result: CultYoggCocoonHorn

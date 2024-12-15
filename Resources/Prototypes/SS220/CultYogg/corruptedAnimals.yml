@@ -147,6 +147,11 @@
   result: CultGorillaCorrupted
 
 - type: corruptedAnimals
+  id: MobGorillaLargo #wtf he is not gorilla parent
+  corruptedAnimal: MobGorilla
+  result: CultGorillaCorrupted
+
+- type: corruptedAnimals
   id: MobHamster
   corruptedAnimal: MobHamster
   result: CultHamsterCorrupted

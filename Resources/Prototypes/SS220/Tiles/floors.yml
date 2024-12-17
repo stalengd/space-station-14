@@ -1113,7 +1113,7 @@
   - 0.0166
   - 0.0116
   - 0.0116
-  isSubfloor: true
+  isSubfloor: false
   footstepSounds:
     collection: FootstepSnow
   heatCapacity: 10000

@@ -177,7 +177,7 @@ public sealed class BatteryWeaponFireModesSystem : EntitySystem
                 var updateClientAmmoEvent = new UpdateClientAmmoEvent();
                 RaiseLocalEvent(uid, ref updateClientAmmoEvent);
 
-                Dirty(uid, projectileBatteryAmmoProvider);
+                Dirty(uid, projectileBatteryAmmoProviderComponent);
             }
         }
         else if (_prototypeManager.TryIndex<HitscanPrototype>(fireMode.Prototype, out _))

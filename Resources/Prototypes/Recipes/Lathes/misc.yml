@@ -183,7 +183,7 @@
 
 - type: latheRecipe
   parent: TileGreenCircuit
-  id: FloorBlueCircuit
+  id: TileBlueCircuit
   result: FloorTileItemBCircuit
 
 # - type: latheRecipe

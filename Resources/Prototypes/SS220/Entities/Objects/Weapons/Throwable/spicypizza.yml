@@ -34,7 +34,7 @@
     layers: 
     - state: spicy
   - type: Appearance
-  - type: ClusterGrenade
+  - type: ScatteringGrenade
     fillPrototype: ThrowingSliceSynd
     maxGrenadesCount: 10
     baseTriggerDelay: 10
@@ -169,7 +169,7 @@
     layers:
     - state: spicy
   - type: Appearance
-  - type: ClusterGrenade
+  - type: ScatteringGrenade
     fillPrototype: ThrowingSliceFood
     maxGrenadesCount: 10
     baseTriggerDelay: 10

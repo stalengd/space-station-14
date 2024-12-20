@@ -93,7 +93,7 @@
     fillBaseName: snot-
     changeColor: false
   - type: Appearance
-  - type: ClusterGrenade
+  - type: ScatteringGrenade
     fillPrototype: snotlet
     maxGrenadesCount: 30
     grenadeTriggerIntervalMax: 0

@@ -543,7 +543,7 @@
   - type: Sprite
     state: griffinprize
   # SS220 Speak for all toys
-  - type: SpeakOnUse
+  - type: SpeakOnTrigger
     pack: FigurinesGriffin
 
 - type: entity
@@ -555,7 +555,7 @@
   - type: Sprite
     state: owlprize
   # SS220 Speak for all toys
-  - type: SpeakOnUse
+  - type: SpeakOnTrigger
     pack: FigurinesOwl
 
 - type: entity
@@ -567,7 +567,7 @@
   - type: Sprite
     state: skeletonprize
   # SS220 Speak for all toys
-  - type: SpeakOnUse
+  - type: SpeakOnTrigger
     pack: FigurinesSceleton
 
 - type: entity
@@ -579,5 +579,5 @@
   - type: Sprite
     state: thiefcharacter
   # SS220 Speak for all toys
-  - type: SpeakOnUse
+  - type: SpeakOnTrigger
     pack: FigurinesTheif

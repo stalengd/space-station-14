@@ -1343,7 +1343,7 @@
   - type: TileFrictionModifier
     modifier: 0.001
   # ss220 PonderingOrb speak on use begin
-  - type: SpeakOnUse
+  - type: SpeakOnTrigger
     pack: PonderingOrbPhrases
   - type: UseDelay
     delay: 10

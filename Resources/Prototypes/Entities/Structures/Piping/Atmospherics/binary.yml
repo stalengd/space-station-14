@@ -67,6 +67,7 @@
   - type: Construction
     graph: GasBinary
     node: pressurepump
+  - type: StationAiWhitelist #SS220 AI Access
   - type: AmbientSound
     enabled: false
     volume: -9
@@ -109,6 +110,7 @@
             Off: { state: pumpVolume }
             Blocked: { state: pumpVolumeBlocked }
     - type: PipeColorVisuals
+    - type: StationAiWhitelist #SS220 AI Access
     - type: GasVolumePump
       enabled: false
     - type: UserInterface

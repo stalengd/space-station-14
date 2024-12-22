@@ -77,6 +77,10 @@
     - sprite: Mobs/Silicon/station_ai.rsi
       state: default
   - type: ShowJobIcons
+  # SS220 Holopad adapt begin
+  - type: TTS
+    randomVoicesList: Borg
+  # SS220 Holopad adapt end
 
 - type: entity
   id: AiHeldIntellicard

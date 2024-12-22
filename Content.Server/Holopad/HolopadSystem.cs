@@ -18,6 +18,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
+using System.Numerics;
 
 namespace Content.Server.Holopad;
 
@@ -331,7 +332,10 @@ public sealed class HolopadSystem : SharedHolopadSystem
         if (!TryComp<HolopadUserComponent>(uid, out var holopadUser))
             return;
 
-        SyncHolopadUserWithLinkedHolograms((uid.Value, holopadUser), ev.SpriteLayerData);
+        // SS220 Holopad adapt begin
+        //SyncHolopadUserWithLinkedHolograms((uid.Value, holopadUser), ev.SpriteLayerData);
+        SyncHolopadUserWithLinkedHolograms((uid.Value, holopadUser), ev.SpriteLayerData, ev.Scale);
+        // SS220 Holopad adapt end
     }
 
     #endregion
@@ -557,7 +561,10 @@ public sealed class HolopadSystem : SharedHolopadSystem
 
         if (TryComp<HolographicAvatarComponent>(user, out var avatar))
         {
-            SyncHolopadUserWithLinkedHolograms((user, holopadUser), avatar.LayerData);
+            // SS220 Holopad adapt begin
+            //SyncHolopadUserWithLinkedHolograms((user, holopadUser), avatar.LayerData);
+            SyncHolopadUserWithLinkedHolograms((user, holopadUser), avatar.LayerData, Vector2.One);
+            // SS220 Holopad adapt end
             return;
         }
 
@@ -625,7 +632,10 @@ public sealed class HolopadSystem : SharedHolopadSystem
         RaiseNetworkEvent(ev);
     }
 
-    private void SyncHolopadUserWithLinkedHolograms(Entity<HolopadUserComponent> entity, PrototypeLayerData[]? spriteLayerData)
+    // SS220 Holopad adapt begin
+    //private void SyncHolopadUserWithLinkedHolograms(Entity<HolopadUserComponent> entity, PrototypeLayerData[]? spriteLayerData)
+    private void SyncHolopadUserWithLinkedHolograms(Entity<HolopadUserComponent> entity, PrototypeLayerData[]? spriteLayerData, Vector2 scale)
+    // SS220 Holopad adapt end
     {
         foreach (var linkedHolopad in entity.Comp.LinkedHolopads)
         {
@@ -635,7 +645,12 @@ public sealed class HolopadSystem : SharedHolopadSystem
                     continue;
 
                 var netHologram = GetNetEntity(receivingHolopad.Comp.Hologram.Value);
-                var ev = new PlayerSpriteStateMessage(netHologram, spriteLayerData);
+                var ev = new PlayerSpriteStateMessage(netHologram, spriteLayerData)
+                // SS220 Holopad adapt begin
+                {
+                    Scale = scale
+                };
+                // SS220 Holopad adapt end
                 RaiseNetworkEvent(ev);
             }
         }

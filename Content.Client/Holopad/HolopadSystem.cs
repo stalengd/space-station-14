@@ -6,6 +6,8 @@ using Robust.Client.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using System.Linq;
+using System.Numerics;
+using Vector3 = Robust.Shared.Maths.Vector3;
 
 namespace Content.Client.Holopad;
 
@@ -112,16 +114,27 @@ public sealed class HolopadSystem : SharedHolopadSystem
         }
 
         // Return the recorded data to the server
-        var evResponse = new PlayerSpriteStateMessage(ev.TargetPlayer, spriteLayerData.ToArray());
+        var evResponse = new PlayerSpriteStateMessage(ev.TargetPlayer, spriteLayerData.ToArray())
+        // SS220 Holopad adapt begin
+        {
+            Scale = playerSprite.Scale,
+        };
+        // SS220 Holopad adapt end
         RaiseNetworkEvent(evResponse);
     }
 
     private void OnPlayerSpriteStateMessage(PlayerSpriteStateMessage ev)
     {
-        UpdateHologramSprite(GetEntity(ev.SpriteEntity), ev.SpriteLayerData);
+        // SS220 Holopad adapt begin
+        //UpdateHologramSprite(GetEntity(ev.SpriteEntity), ev.SpriteLayerData);
+        UpdateHologramSprite(GetEntity(ev.SpriteEntity), ev.SpriteLayerData, ev.Scale);
+        // SS220 Holopad adapt end
     }
 
-    private void UpdateHologramSprite(EntityUid uid, PrototypeLayerData[]? layerData = null)
+    // SS220 Holopad adapt begin
+    //private void UpdateHologramSprite(EntityUid uid, PrototypeLayerData[]? layerData = null)
+    private void UpdateHologramSprite(EntityUid uid, PrototypeLayerData[]? layerData = null, Vector2? scale = null)
+    // SS220 Holopad adapt end
     {
         if (!TryComp<SpriteComponent>(uid, out var hologramSprite))
             return;
@@ -149,6 +162,10 @@ public sealed class HolopadSystem : SharedHolopadSystem
 
             hologramSprite.AddLayer(layerData[i], i);
         }
+
+        // SS220 Holopad adapt begin
+        hologramSprite.Scale = scale.GetValueOrDefault(Vector2.One);
+        // SS220 Holopad adapt end
 
         UpdateHologramShader(uid, hologramSprite, holopadhologram);
     }

@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -95,6 +96,13 @@ public sealed class PlayerSpriteStateMessage : EntityEventArgs
     /// Data needed to reconstruct the player's sprite component layers
     /// </summary>
     public readonly PrototypeLayerData[]? SpriteLayerData;
+
+    // SS220 Holopad adapt begin
+    /// <summary>
+    /// Sprite scale
+    /// </summary>
+    public Vector2 Scale { get; init; } = Vector2.One;
+    // SS220 Holopad adapt end
 
     public PlayerSpriteStateMessage(NetEntity spriteEntity, PrototypeLayerData[]? spriteLayerData = null)
     {

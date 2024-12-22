@@ -21,6 +21,7 @@ using Robust.Shared.Replays;
 using System.Linq;
 using Content.Shared.Silicons.StationAi;
 using Content.Shared.Silicons.Borgs.Components;
+using Content.Shared.SS220.TTS;
 
 namespace Content.Server.Telephone;
 
@@ -107,6 +108,14 @@ public sealed class TelephoneSystem : SharedTelephoneSystem
         var name = Loc.GetString("speech-name-relay",
             ("speaker", Name(entity)),
             ("originalName", nameEv.VoiceName));
+
+        // SS220 Holopad adapt begin
+        if (TryComp<TTSComponent>(args.MessageSource, out var sourceTts))
+        {
+            var ttsComponent = EnsureComp<TTSComponent>(entity);
+            ttsComponent.VoicePrototypeId = sourceTts.VoicePrototypeId;
+        }
+        // SS220 Holopad adapt end
 
         var volume = entity.Comp.SpeakerVolume == TelephoneVolume.Speak ? InGameICChatType.Speak : InGameICChatType.Whisper;
         _chat.TrySendInGameICMessage(entity, args.Message, volume, ChatTransmitRange.GhostRangeLimit, nameOverride: name, checkRadioPrefix: false);

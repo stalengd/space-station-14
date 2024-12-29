@@ -41,6 +41,9 @@ using Robust.Shared.Audio.Systems;
 using Content.Server.AlertLevel;
 using Robust.Shared.Player;
 using Robust.Shared.Map;
+using Content.Server.EUI;
+using Robust.Server.Player;
+using Content.Server.SS220.CultYogg.DeCultReminder;
 
 namespace Content.Server.SS220.GameTicking.Rules;
 
@@ -62,6 +65,8 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     [Dependency] private readonly ServerGlobalSoundSystem _sound = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly AlertLevelSystem _alertLevel = default!;
+    [Dependency] private readonly EuiManager _euiManager = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     private List<List<string>> _sacraficialTiers = [];
     public TimeSpan DefaultShuttleArriving { get; set; } = TimeSpan.FromSeconds(85);
@@ -280,7 +285,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     private void SacraficialReplacement(ref SacraficialReplacementEvent args)
     {
-        GetCultGameRule(out var cultRuleComp);
+        var cultRuleComp = GetCultGameRule();
 
         if (cultRuleComp == null)
             return;
@@ -330,7 +335,7 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
         if (args.Target == null)
             return;
 
-        GetCultGameRule(out var cultRuleComp);
+        var cultRuleComp = GetCultGameRule();
 
         if (cultRuleComp == null)
             return;
@@ -386,22 +391,29 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
     private void DeCult(ref CultYoggDeCultingEvent args)
     {
-        GetCultGameRule(out var cultRuleComp);//ToDo bug potentialy if somebody will make cultist without gamerule, ask head dev
+        var cultRuleComp = GetCultGameRule();//ToDo bug potentialy if somebody will make cultist without gamerule, ask head dev
 
         if (cultRuleComp == null)
             return;
 
         DeMakeCultist(args.Entity, cultRuleComp);
     }
+
     public void DeMakeCultist(EntityUid uid, CultYoggRuleComponent component)
     {
         if (!_mind.TryGetMind(uid, out var mindId, out var mindComp))
             return;
 
-        if (!_role.MindHasRole<CultYoggRoleComponent>(mindId, out var mindSlave))
+        if (!_role.MindHasRole<CultYoggRoleComponent>(mindId, out var cultRoleEnt))
             return;
 
-        // _mind.TryRemoveObjective(mindId, mindComp, objective.Value);
+        foreach (var obj in component.ListofObjectives)
+        {
+            if (!_mind.TryFindObjective(mindId, obj, out var objUid))
+                continue;
+
+            _mind.TryRemoveObjective(mindId, mindComp, objUid.Value);
+        }
 
         _role.MindRemoveRole<CultYoggRoleComponent>(mindId);
 
@@ -418,6 +430,12 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
 
         RemComp<ShowCultYoggIconsComponent>(uid);
         RemComp<ZombieImmuneComponent>(uid);
+
+        if (mindComp.UserId != null &&
+            _playerManager.TryGetSessionById(mindComp.UserId.Value, out var session))
+        {
+            _euiManager.OpenEui(new DeCultReminderEui(), session);
+        }
     }
     #endregion
 
@@ -522,14 +540,17 @@ public sealed class CultYoggRuleSystem : GameRuleSystem<CultYoggRuleComponent>
     }
     #endregion
 
-    public void GetCultGameRule(out CultYoggRuleComponent? comp)
+    public CultYoggRuleComponent? GetCultGameRule()
     {
-        comp = null;
-        var query = QueryActiveRules();
-        while (query.MoveNext(out _, out _, out var cultComp, out _))
+        CultYoggRuleComponent? comp = null;
+
+        var query = QueryAllRules();
+        while (query.MoveNext(out _, out var cultComp, out _))
         {
             comp = cultComp;
         }
+
+        return comp;
     }
 }
 

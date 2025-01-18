@@ -43,6 +43,10 @@ public sealed class AdminWhoCommand : IConsoleCommand
             if (adminData.Stealth && !seeStealth)
                 continue;
 
+            if (!first)
+                sb.Append('\n');
+            first = false;
+
             sb.Append(admin.Name);
             if (adminData.Title is { } title)
                 sb.Append($": [{title}]");

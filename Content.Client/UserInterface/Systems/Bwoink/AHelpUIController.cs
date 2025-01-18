@@ -50,6 +50,7 @@ public sealed class AHelpUIController: UIController, IOnSystemChanged<BwoinkSyst
     public IAHelpUIHandler? UIHelper;
     private bool _discordRelayActive;
     private bool _hasUnreadAHelp;
+    private bool _bwoinkSoundEnabled;
     private string? _aHelpSound;
 
     public override void Initialize()
@@ -68,6 +69,7 @@ public sealed class AHelpUIController: UIController, IOnSystemChanged<BwoinkSyst
 
         _adminManager.AdminStatusUpdated += OnAdminStatusUpdated;
         _config.OnValueChanged(CCVars.AHelpSound, v => _aHelpSound = v, true);
+        _config.OnValueChanged(CCVars.BwoinkSoundEnabled, v => _bwoinkSoundEnabled = v, true);
     }
 
     private void AHelpVolumeCVarChanged(float volume)
@@ -162,8 +164,9 @@ public sealed class AHelpUIController: UIController, IOnSystemChanged<BwoinkSyst
              || (UIHelper!.IsAdmin && !message.IsSenderAdmin) // SS220
              || (!UIHelper!.IsAdmin))) // SS220
         {
-            if (_aHelpSound != null)
-                _audio.PlayGlobal(_aHelpSound, Filter.Local(), false, _AHelpParams);
+            if (_aHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
+                _audio.PlayGlobal(_aHelpSound, Filter.Local(), false, , _AHelpParams);
+
             _clyde.RequestWindowAttention();
         }
 

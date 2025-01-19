@@ -2116,10 +2116,15 @@
   components:
   - type: Pda
     id: PirateIDCard
-    state: pda-pirate
-  - type: PdaBorderColor #SS220 PDA-Resprite
-    borderColor: "#4b474f" #SS220 PDA-Resprite
-  - type: Sprite #SS220 PDA-Resprite-Start
+  #SS220 PDA-Resprite-Start
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-pirate
+  - type: PdaBorderColor
+    borderColor: "#4b474f"
+  - type: Sprite
     sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
@@ -2131,7 +2136,8 @@
       visible: false
     - state: "id_overlay"
       map: [ "enum.PdaVisualLayers.IdLight" ]
-      visible: false #SS220 PDA-Resprite-End
+      visible: false 
+  #SS220 PDA-Resprite-End
   - type: Appearance
     appearanceDataInit:
      enum.PdaVisuals.PdaType:

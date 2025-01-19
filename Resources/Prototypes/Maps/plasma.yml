@@ -54,7 +54,7 @@
             SecurityOfficer: [ 6, 8 ]
             Detective: [ 1, 2 ]
             SecurityCadet: [ 4, 4 ]
-            Lawyer: [ 1, 2 ]
+            #Lawyer: [ 1, 2 ] # SS220
             #supply
             Quartermaster: [ 1, 1 ]
             SalvageSpecialist: [ 4, 4 ]

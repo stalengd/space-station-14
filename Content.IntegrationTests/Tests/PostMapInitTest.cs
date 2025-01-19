@@ -72,7 +72,7 @@ namespace Content.IntegrationTests.Tests
             "Amber",
             "Loop",
             "Plasma",
-            "Elkridge"
+            "Elkridge",
 
             // SS220 Maps
             "Frankenstein",

@@ -2117,11 +2117,6 @@
   - type: Pda
     id: PirateIDCard
   #SS220 PDA-Resprite-Start
-  - type: Appearance
-    appearanceDataInit:
-     enum.PdaVisuals.PdaType:
-       !type:String
-       pda-pirate
   - type: PdaBorderColor
     borderColor: "#4b474f"
   - type: Sprite

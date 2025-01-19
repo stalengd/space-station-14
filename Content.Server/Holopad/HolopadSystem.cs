@@ -20,7 +20,6 @@ using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
-using System.Numerics;
 
 namespace Content.Server.Holopad;
 
@@ -307,7 +306,7 @@ public sealed class HolopadSystem : SharedHolopadSystem
                 if (receiverHolopad.Comp.Hologram == null)
                     continue;
 
-                _appearanceSystem.SetData(receiverHolopad.Comp.Hologram.Value.Owner, TypingIndicatorVisuals.State, ev.IsTyping);
+                _appearanceSystem.SetData(receiverHolopad.Comp.Hologram.Value.Owner, TypingIndicatorVisuals.State, ev.TypingState); // SS220 Typing indicator
             }
         }
     }
@@ -578,7 +577,7 @@ public sealed class HolopadSystem : SharedHolopadSystem
                 continue;
 
             if (user == null)
-                _appearanceSystem.SetData(linkedHolopad.Comp.Hologram.Value.Owner, TypingIndicatorVisuals.IsTyping, false);
+                _appearanceSystem.SetData(linkedHolopad.Comp.Hologram.Value.Owner, TypingIndicatorVisuals.State, TypingIndicatorState.None); // SS220 Typing indicator
 
             linkedHolopad.Comp.Hologram.Value.Comp.LinkedEntity = user;
             Dirty(linkedHolopad.Comp.Hologram.Value);

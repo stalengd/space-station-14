@@ -5,8 +5,6 @@ using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using System.Linq;
-using System.Numerics;
-using Vector3 = Robust.Shared.Maths.Vector3;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.Holopad;
@@ -48,7 +46,7 @@ public sealed class HolopadSystem : SharedHolopadSystem
         if (!HasComp<HolopadUserComponent>(uid))
             return;
 
-        var netEv = new HolopadUserTypingChangedEvent(GetNetEntity(uid.Value), ev.State == TypingIndicatorState.Typing);
+        var netEv = new HolopadUserTypingChangedEvent(GetNetEntity(uid.Value), ev.State); // SS220 Typing indicator
         RaiseNetworkEvent(netEv);
     }
 

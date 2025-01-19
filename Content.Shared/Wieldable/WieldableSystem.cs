@@ -204,7 +204,7 @@ public sealed class WieldableSystem : EntitySystem
         //ss220 weild fix end
 
         //ss220 StuckOnEquip begin
-        foreach (var handEnt in _handsSystem.EnumerateHeld(user, hands))
+        foreach (var handEnt in _hands.EnumerateHeld(user, hands))
         {
             if (TryComp<StuckOnEquipComponent>(handEnt, out var stuckOnEquipComp) && stuckOnEquipComp.InHandItem)
                 return false;

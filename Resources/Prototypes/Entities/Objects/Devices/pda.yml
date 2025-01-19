@@ -194,34 +194,6 @@
   - type: Icon
     state: pda-interntech
 
-- type: entity #SS220 PDA-start
-  parent: BasePDA
-  id: BlueShieldPDA
-  name: blue shield PDA
-  description: average style.
-  components:
-  - type: Pda
-    id: BlueShieldIDCard
-    state: pda-bs
-  - type: PdaBorderColor
-    borderColor: "#4b474f" #SS220 PDA-Resprite
-    accentHColor: "#175e99" #SS220 PDA-Resprite
-  - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
-    layers:
-    - map: [ "enum.PdaVisualLayers.Base" ]
-    - state: "screen-shield"
-      shader: "unshaded"
-    - state: "light_overlay"
-      map: [ "enum.PdaVisualLayers.Flashlight" ]
-      shader: "unshaded"
-      visible: false
-    - state: "id_overlay"
-      map: [ "enum.PdaVisualLayers.IdLight" ]
-      visible: false #SS220 PDA-Resprite-End
-  - type: Icon
-    state: pda-bs #SS220 PDA-end
-
 - type: entity
   parent: BaseMedicalPDA
   id: MedicalInternPDA

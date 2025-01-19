@@ -30,13 +30,10 @@ public sealed class AdminWhoCommand : IConsoleCommand
             seeStealth = playerData != null && playerData.CanStealth();
         }
 
-        // SS220 fix adminwho list
-        var adminList = new List<string>();
-
+        var sb = new StringBuilder();
+        var first = true;
         foreach (var admin in adminMgr.ActiveAdmins)
         {
-            var sb = new StringBuilder();
-
             var adminData = adminMgr.GetAdminData(admin)!;
             DebugTools.AssertNotNull(adminData);
 
@@ -59,10 +56,8 @@ public sealed class AdminWhoCommand : IConsoleCommand
                 if (afk.IsAfk(admin))
                     sb.Append(" [AFK]");
             }
-
-            adminList.Add(sb.ToString());
         }
 
-        shell.WriteLine(string.Join(Environment.NewLine, adminList));
+        shell.WriteLine(sb.ToString());
     }
 }

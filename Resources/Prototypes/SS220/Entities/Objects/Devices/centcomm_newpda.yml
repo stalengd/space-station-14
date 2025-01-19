@@ -25,6 +25,7 @@
       sprite: Objects/Devices/pda.rsi
       layers:
       - map: [ "enum.PdaVisualLayers.Base" ]
+        state: "pda" #ss220 fix
       - state: "screen-nt"
         shader: "unshaded"
       - state: "light_overlay"
@@ -62,6 +63,7 @@
       sprite: Objects/Devices/pda.rsi
       layers:
       - map: [ "enum.PdaVisualLayers.Base" ]
+        state: "pda" #ss220 fix
       - state: "screen-nt"
         shader: "unshaded"
       - state: "light_overlay"
@@ -128,6 +130,7 @@
       sprite: Objects/Devices/pda.rsi
       layers:
       - map: [ "enum.PdaVisualLayers.Base" ]
+        state: "pda" #ss220 fix
       - state: "screen-nt"
         shader: "unshaded"
       - state: "light_overlay"

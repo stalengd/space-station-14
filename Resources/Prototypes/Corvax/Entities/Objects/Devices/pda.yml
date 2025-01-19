@@ -19,6 +19,7 @@
       sprite: Objects/Devices/pda.rsi
       layers:
       - map: [ "enum.PdaVisualLayers.Base" ]
+        state: "pda" #ss220 fix
       - state: "screen-law" #SS220-Law Department
         shader: "unshaded"
       - state: "light_overlay"

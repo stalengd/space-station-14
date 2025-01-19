@@ -209,7 +209,11 @@
   components:
   - type: Pda
     id: UsspIDCard
-    state: pda-ussp-medical
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-ussp-medical
   - type: PdaBorderColor
     borderColor: "#A91417"
     accentVColor: "#447987"

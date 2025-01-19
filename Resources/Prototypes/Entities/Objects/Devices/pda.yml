@@ -1282,33 +1282,6 @@
   - type: Icon
     state: pda-security
 
-- type: entity #SS220-PDA-Start
-  parent: BasePDA
-  id: SecurityPilotPDA
-  name: КПК пилота СБ
-  description: Красный, чтобы скрыть пятна крови ассистента.
-  components:
-  - type: Pda
-    id: SecurityPilotIDCard
-    state: pda-security
-  - type: PdaBorderColor
-    borderColor: "#731611" #SS220 PDA-Resprite
-  - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
-    layers:
-    - map: [ "enum.PdaVisualLayers.Base" ]
-    - state: "screen-security"
-      shader: "unshaded"
-    - state: "light_overlay"
-      map: [ "enum.PdaVisualLayers.Flashlight" ]
-      shader: "unshaded"
-      visible: false
-    - state: "id_overlay"
-      map: [ "enum.PdaVisualLayers.IdLight" ]
-      visible: false #SS220 PDA-Resprite-End
-  - type: Icon
-    state: pda-security #SS220-PDA-End
-
 - type: entity
   parent: BaseSecurityPDA
   id: CentcomPDA
@@ -1365,12 +1338,18 @@
   components:
   - type: Pda
     id: DebugIDCard # SS220 admin memes
-    state: pda-clear #SS220 PDA-Resprite-Start
+  #SS220 PDA-Resprite-Start
     penSlot:
       startingItem: CentCommNewPen #SS220-CentcomFashion
       whitelist:
         tags:
-        - Write #SS220 PDA-Resprite-End
+        - Write 
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-clear
+  #SS220 PDA-Resprite-End
   - type: HealthAnalyzer
     scanDelay: 0
     silent: true
@@ -1406,41 +1385,23 @@
     - DoorBumpOpener
 
 - type: entity
-  parent: CentcomPDA
-  id: CentcomPDAFake
-  categories: [ HideSpawnMenu ] #SS220 New CentCom
-  suffix: Fake
-  components:
-  - type: Pda
-    id: CentcomIDCardSyndie
-    state: pda-centcom
-  - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
-    layers:
-    - map: [ "enum.PdaVisualLayers.Base" ]
-    - state: "screen-blue"
-      shader: "unshaded"
-    - state: "light_overlay"
-      map: [ "enum.PdaVisualLayers.Flashlight" ]
-      shader: "unshaded"
-      visible: false
-    - state: "id_overlay"
-      map: [ "enum.PdaVisualLayers.IdLight" ]
-      visible: false #SS220 PDA-Resprite-End
-
-- type: entity
   parent: BasePDA #SS220 PDA-Resprite
   id: DeathsquadPDA
   suffix: Death Squad
   components:
   - type: Pda
     id: CentcomIDCardDeathsquadOperative #SS220-DeathSquad Update
-    state: pda-deathsquad #SS220 PDA-Resprite
-  - type: PdaBorderColor #SS220 PDA-Resprite
-    borderColor: "#212129" #SS220 PDA-Resprite
-    accentHColor: "#4b0513" #SS220 PDA-Resprite
-    accentVColor: "#50abd9" #SS220 PDA-Resprite
-  - type: Sprite #SS220 PDA-Resprite-Start
+  #SS220 PDA-Resprite-Begin
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-deathsquad
+  - type: PdaBorderColor
+    borderColor: "#212129"
+    accentHColor: "#4b0513"
+    accentVColor: "#50abd9"
+  - type: Sprite
     sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
@@ -1454,7 +1415,8 @@
       map: [ "enum.PdaVisualLayers.IdLight" ]
       visible: false
   - type: Icon
-    state: pda-deathsquad #SS220 PDA-Resprite-End
+    state: pda-deathsquad 
+  #SS220 PDA-Resprite-End
   - type: Tag #  Ignore Chameleon tags
     tags:
     - DoorBumpOpener
@@ -1777,7 +1739,13 @@
   components:
   - type: Pda
     id: CBURNIDcard
-    state: pda-cburn #SS220 PDA-Resprite
+  #SS220 PDA-Resprite-Begin
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-cburn
+  #SS220 PDA-Resprite-End
   - type: PdaBorderColor
     borderColor: "#7a998d" #SS220 PDA-Resprite
 #    accentHColor: "#447987" #SS220 PDA-Resprite

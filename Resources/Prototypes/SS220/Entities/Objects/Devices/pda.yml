@@ -40,7 +40,11 @@
   components:
   - type: Pda
     id: SeniorServiceIDCard
-    state: pda-seniorservice
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-seniorservice
   - type: PdaBorderColor
     borderColor: "#374f7e" #SS220 PDA-Resprite
 #    accentHColor: "#447987" #SS220 PDA-Resprite
@@ -67,7 +71,11 @@
   components:
   - type: Pda
     id: MagistrateIDCard
-    state: pda-magistrate
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-magistrate
   - type: PdaBorderColor
     borderColor: "#414452"
     accentVColor: "#262c8a"
@@ -96,7 +104,11 @@
   components:
   - type: Pda
     id: CentcomIDCardDeathsquadCommander
-    state: pda-deathsquad
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-deathsquad
 
 - type: entity
   parent: DeathsquadPDA
@@ -105,7 +117,11 @@
   components:
   - type: Pda
     id: CentcomIDCardDeathsquadHealer
-    state: pda-deathsquad
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-deathsquad
 
 - type: entity
   parent: BasePDA
@@ -116,7 +132,11 @@
   components:
   - type: Pda
     id: RDIDCard
-    state: pda-rd-alt
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-rd-alt
   - type: PdaBorderColor
     borderColor: "#98afb8"
     accentHColor: "#542a6c"
@@ -166,3 +186,61 @@
       visible: false
   - type: Icon
     state: pda-bs
+
+- type: entity
+  parent: BasePDA
+  id: SecurityPilotPDA
+  name: КПК пилота СБ
+  description: Красный, чтобы скрыть пятна крови ассистента.
+  components:
+  - type: Pda
+    id: SecurityPilotIDCard
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-security
+  - type: PdaBorderColor
+    borderColor: "#731611"
+  - type: Sprite
+    sprite: Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+    - state: "screen-security"
+      shader: "unshaded"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      visible: false
+  - type: Icon
+    state: pda-security
+
+- type: entity
+  parent: CentcomPDA
+  id: CentcomPDAFake
+  categories: [ HideSpawnMenu ]
+  suffix: Fake
+  components:
+  - type: Pda
+    id: CentcomIDCardSyndie
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-centcom
+  - type: Sprite
+    sprite: Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+    - state: "screen-blue"
+      shader: "unshaded"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      visible: false

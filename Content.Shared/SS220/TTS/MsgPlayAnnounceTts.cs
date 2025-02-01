@@ -18,7 +18,9 @@ public sealed class MsgPlayAnnounceTts : NetMessage
 
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
     {
-        Data.ReadFromNetBuffer(buffer);
+        var data = new TtsAudioData();
+        data.ReadFromNetBuffer(buffer);
+        Data = data;
         AnnouncementSound = buffer.ReadString();
 
         var streamLength = buffer.ReadVariableInt32();

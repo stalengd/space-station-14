@@ -803,27 +803,11 @@ entities:
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
-<<<<<<< HEAD
-  - uid: 637
-    components:
-    - type: MetaData
-      name: Map Entity
-    - type: Transform
-    - type: Map
-      mapPaused: True
-    - type: PhysicsMap
-    - type: GridTree
-    - type: MovedGrids
-    - type: Broadphase
-    - type: OccluderTree
-    - type: LoadedMap
-=======
     - type: DeviceNetwork
       configurators: []
       deviceLists: []
       transmitFrequencyId: ShuttleTimer
       deviceNetId: Wireless
->>>>>>> off/master
 - proto: AirAlarm
   entities:
   - uid: 577

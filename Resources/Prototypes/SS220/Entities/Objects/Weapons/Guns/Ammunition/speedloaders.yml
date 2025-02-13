@@ -10,7 +10,7 @@
     layers:
       - state: rubber #ss-220 sprite fix
         map: [ "enum.GunVisualLayers.Base" ]
-      - state: base-6 #ss-220 sprite fix
+      - state: rubber-6 #ss-220 sprite fix
         map: [ "enum.GunVisualLayers.Mag" ]
   - type: MagazineVisuals
     magState: base #ss-220 sprite fix

@@ -21,10 +21,10 @@
     layers:
     - state: base-b
       map: ["enum.GunVisualLayers.Base"]
-    - state: magb-2
+    - state: mag-big-2
       map: ["enum.GunVisualLayers.Mag"]
   - type: MagazineVisuals
-    magState: magb
+    magState: mag-big
     steps: 4
     zeroVisible: false
   - type: Appearance

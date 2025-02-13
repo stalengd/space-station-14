@@ -8,13 +8,13 @@
     proto: CartridgeRiflePractice
   - type: Sprite
     layers:
-    - state: base-b
+    - state: base-big
       map: ["enum.GunVisualLayers.Base"]
-    - state: magb-2
+    - state: mag-big-2
       map: ["enum.GunVisualLayers.Mag"]
     - state: practice-b
   - type: MagazineVisuals
-    magState: magb
+    magState: mag-big
     steps: 3
     zeroVisible: false
   - type: Appearance
@@ -74,13 +74,13 @@
     proto: CartridgeCaselessRifleRubber
   - type: Sprite
     layers:
-    - state: base-b
+    - state: base-big
       map: ["enum.GunVisualLayers.Base"]
-    - state: magb-2
+    - state: mag-big-2
       map: ["enum.GunVisualLayers.Mag"]
     - state: rubber-b
   - type: MagazineVisuals
-    magState: magb
+    magState: mag-big
     steps: 3
     zeroVisible: false
   - type: Appearance

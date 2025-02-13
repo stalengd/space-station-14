@@ -13,9 +13,13 @@
 - type: latheRecipePack
   id: CircuitFloorsStatic
   recipes:
-  - FloorGreenCircuit
-  - FloorBlueCircuit
-  - FloorRedCircuit
+  # SS220-sheetifier-rework-start
+  #- FloorGreenCircuit
+  #- FloorBlueCircuit
+  #- FloorRedCircuit
+  - TileGreenCircuit
+  - TileBlueCircuit
+  #SS220-sheetifier-rework-end
 
 ## Dynamic
 
@@ -28,7 +32,7 @@
   - AnomalyLocatorWide
   - HoloprojectorField
   - SignallerAdvanced
-  - DeviceQuantumSpinInverter
+  #- DeviceQuantumSpinInverter #SS220 - Until better times
 
 - type: latheRecipePack
   id: ScienceClothing

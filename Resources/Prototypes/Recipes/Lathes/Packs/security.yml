@@ -97,7 +97,7 @@
   - BoxBeanbag
   - BoxShotgunIncendiary
   - BoxShotgunUranium
-  - BoxShellTranquilizer
+  #- BoxShellTranquilizer #SS220-no-tranq
   - MagazineBoxLightRifleIncendiary
   - MagazineBoxLightRifleUranium
   - MagazineBoxMagnumIncendiary

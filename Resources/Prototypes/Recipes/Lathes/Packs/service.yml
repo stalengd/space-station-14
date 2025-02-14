@@ -43,6 +43,7 @@
   - WeaponSprayNozzle
   - ClothingBackpackWaterTank
   - MegaSprayBottle
+  - TrashBagAdvanced #SS220 Borg Modules
 
 - type: latheRecipePack
   id: Instruments

@@ -43,6 +43,7 @@
   - DiseaseSwab
   - BodyBag
   - WhiteCane
+  - MedAutoinjector #ss220 Autoinjecors update
 
 - type: latheRecipePack
   id: RollerBedsStatic
@@ -50,6 +51,7 @@
   - RollerBedSpawnFolded
   - CheapRollerBedSpawnFolded
   - EmergencyRollerBedSpawnFolded
+  - VehicleWheelchairFolded #SS220 Readd-Vehicles
 
 - type: latheRecipePack
   id: MedicalClothingStatic

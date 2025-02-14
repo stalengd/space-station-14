@@ -31,6 +31,8 @@
   - ClothingUniformJumpskirtCaptain
   - ClothingUniformJumpsuitCapFormal
   - ClothingUniformJumpskirtCapFormalDress
+  - ClothingHeadBeretCap #SS220 CapBeret
+  - ClothingHeadCaptainCap #SS220 Captain's Cap tweak
   # HoP
   - ClothingHeadHatHopcap
   - ClothingUniformJumpsuitHoP
@@ -199,13 +201,25 @@
 - type: latheRecipePack
   id: ClothingCentComm
   recipes:
-  - ClothingHeadHatCentcomcap
-  - ClothingHeadHatCentcom
-  - ClothingUniformJumpsuitCentcomAgent
-  - ClothingUniformJumpsuitCentcomFormal
-  - ClothingUniformJumpskirtCentcomFormalDress
-  - ClothingUniformJumpsuitCentcomOfficer
-  - ClothingUniformJumpsuitCentcomOfficial
+  #SS220-Centcom-EmagLatheRecipes-Fix-Begin
+  # - ClothingHeadHatCentcomcap
+  # - ClothingHeadHatCentcom
+  # - ClothingUniformJumpsuitCentcomAgent
+  # - ClothingUniformJumpsuitCentcomFormal
+  # - ClothingUniformJumpskirtCentcomFormalDress
+  # - ClothingUniformJumpsuitCentcomOfficer
+  # - ClothingUniformJumpsuitCentcomOfficial
+  - ClothingHeadHatNavyFieldOfficerCap
+  - ClothingHeadHatBeretNanoTrasenOfficer
+  - ClothingHeadHatBeretNanoTrasenDiplomat
+  - ClothingUniformCentCommOfficer
+  - ClothingUniformJumpsuitCentcomOfficerTurtleneck
+  - ClothingUniformJumpskirtCentcomOfficerTurtleneck
+  - ClothingUniformNanotrasenDiplomat
+  - ClothingOuterWinterCentcomm
+  - ClothingNeckCloakFieldOfficerCentComm
+  - ClothingNeckScarfCentcomm
+#SS220-Centcom-EmagLatheRecipes-Fix-End
 
 - type: latheRecipePack
   id: ClothingSyndie
@@ -222,7 +236,7 @@
   - ClothingUniformJumpsuitPyjamaSyndicatePink
   - ClothingHeadPyjamaSyndicateRed
   - ClothingUniformJumpsuitPyjamaSyndicateRed
-  - ClothingOuterWinterCentcom
+  # - ClothingOuterWinterCentcom SS220-Centcom-EmagLatheRecipes-Fix
   - ClothingOuterWinterSyndie
   - ClothingOuterWinterSyndieCap
   - BedsheetSyndie

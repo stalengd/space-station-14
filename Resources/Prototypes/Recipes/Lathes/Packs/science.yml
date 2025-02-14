@@ -19,6 +19,10 @@
   #- FloorRedCircuit
   - TileGreenCircuit
   - TileBlueCircuit
+  - TilePurpleCircuit
+  - TileYellowCircuit
+  - TileOrangeCircuit
+  - TileRedCircuit
   #SS220-sheetifier-rework-end
 
 ## Dynamic
@@ -33,6 +37,7 @@
   - HoloprojectorField
   - SignallerAdvanced
   #- DeviceQuantumSpinInverter #SS220 - Until better times
+  - ThermalVisorRND # SS220 Thermals
 
 - type: latheRecipePack
   id: ScienceClothing
@@ -69,6 +74,7 @@
   - FauxTileAstroIce
   - FauxTileAstroSnow
   - FauxTileAstroAsteroidSand
+  - FauxTileAstroSand #SS220-beachCraftng
 
 # Only contains parts for making basic modular grenades, no actual explosives
 - type: latheRecipePack

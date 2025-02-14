@@ -45,6 +45,8 @@
   - BorgModuleHarvesting
   - BorgModuleDefibrillator
   - BorgModuleAdvancedTreatment
+  - BorgModuleFireAxe #SS220 Borg Modules
+  - BorgModuleProtoKineticAccelerator #SS220 Borg Modules
 
 - type: latheRecipePack
   id: MechParts

@@ -49,6 +49,11 @@
   - MagazineShotgunSlug
   - SpeedLoaderMagnum
   - SpeedLoaderMagnumEmpty
+  #ss220 more recipies begin
+  - SpeedLoaderLightRifle
+  - MagazineMagnumEmpty
+  - MagazineMagnum
+  #ss220 more recipies end
 
 - type: latheRecipePack
   id: SecurityWeaponsStatic
@@ -70,6 +75,7 @@
   - PowerCageMedium
   - PowerCageSmall
   - TelescopicShield
+  - ClothingEyesThermalGlassesSecurity #SS220 Thermals
 
 - type: latheRecipePack
   id: SecurityBoards
@@ -129,3 +135,5 @@
   - WeaponLaserCannon
   - WeaponLaserCarbine
   - WeaponXrayCannon
+  - WeaponEnergyCrossbow #SS220 Energy Crossbow
+  - WeaponTaser #SS220 taserback

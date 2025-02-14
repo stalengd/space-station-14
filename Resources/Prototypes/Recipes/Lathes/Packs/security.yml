@@ -80,7 +80,7 @@
 - type: latheRecipePack
   id: SecurityBoards
   recipes:
-  - ShuttleGunDusterCircuitboard
+  # - ShuttleGunDusterCircuitboard #SS220-Duster-Resprite
   - ShuttleGunFriendshipCircuitboard
   - ShuttleGunPerforatorCircuitboard
   - ShuttleGunSvalinnMachineGunCircuitboard
@@ -124,6 +124,8 @@
   - MagazineShotgunIncendiary
   - SpeedLoaderMagnumIncendiary
   - SpeedLoaderMagnumUranium
+  - MagazineMagnumIncendiary #ss220 more recipies
+  - MagazineMagnumUranium #ss220 more recipies
 
 - type: latheRecipePack
   id: SecurityWeapons

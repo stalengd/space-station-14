@@ -17,8 +17,7 @@
   - type: ActivatableUI
     key: enum.CryostorageUIKey.Key
   - type: AccessReader
-    breakOnAccessBreaker: false
-    breakOnEmag: true # 220 cryo
+    breakOnAccessBreaker: true # 220 cryo
     access: [["Command"]] # 220 cryo
   - type: InteractionOutline
   - type: Cryostorage

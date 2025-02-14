@@ -39,7 +39,7 @@
 - type: roleLoadout
   id: JobStationAi
   nameDataset: ai_names # SS220 Fix II Dataset
-  canCustomizeName: true
+  canCustomizeName: false
 
 - type: roleLoadout
   id: JobStationBorg

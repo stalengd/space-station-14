@@ -137930,6 +137930,8 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -16.5,41.5
       parent: 60
+    - type: ApcPowerReceiver
+      powerDisabled: true
 - proto: TegCirculator
   entities:
   - uid: 19188

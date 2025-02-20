@@ -8,11 +8,7 @@ jobs:
   remove_label:
     runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
-    permissions:
-      pull-requests: write
-      issues: write
-      contents: write
-      actions: write
+    permissions: write-all
     steps:
       - uses: actions/checkout@v4 
       - name: check all revs

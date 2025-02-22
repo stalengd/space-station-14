@@ -4,12 +4,13 @@ on:
   pull_request_review:
     types: [submitted]
 
+permissions: write-all
+
 jobs:
   remove_label:
     runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
     steps:
-      - uses: actions/checkout@v4 
       - name: check all revs
         id: check_approvals
         uses: actions/github-script@v7
@@ -37,7 +38,7 @@ jobs:
 
             for (const label of labelsToRemove) {
               if (currentLabels.includes(label)) {
-                await github.rest.issues.removeLabel({
+                await github.request("DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}", {
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: context.payload.pull_request.number,
@@ -47,7 +48,3 @@ jobs:
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: rm label 2
-        if: steps.check_approvals.outputs.result == 'true'
-        run: |
-            curl -L -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/SerbiaStrong-220/space-station-14/issues/${{github.event.pull_request.number}}/labels/'Status: Needs Review'

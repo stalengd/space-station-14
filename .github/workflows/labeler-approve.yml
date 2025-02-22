@@ -8,7 +8,6 @@ jobs:
   remove_label:
     runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
-    permissions: write-all
     steps:
       - uses: actions/checkout@v4 
       - name: check all revs

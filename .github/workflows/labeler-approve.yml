@@ -48,5 +48,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: rm label 2
+        if: steps.check_approvals.outputs.result == 'true'
         run: |
-            curl -L -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${{context.repo.owner}}/${{context.repo.repo}}/issues/${{context.payload.pull_request.number}}/labels/'Status: Needs Review'
+            curl -L -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/SerbiaStrong-220/space-station-14/issues/${{github.event.pull_request.number}}/labels/'Status: Needs Review'

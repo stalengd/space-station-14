@@ -17,6 +17,10 @@ hidden-desc-DnaCopyImplant-medical = [color=#52B4E9]Этот имплант со
 hidden-desc-DnaCopyImplant-research = [color=#D381C9]Имплант, позволяющий копировать и изменять ДНК, что дает возможность смены личности.[/color]
 hidden-desc-DnaCopyImplant-syndicate = [color=#E31735]Имплант с функцией клонирования ДНК, позволяющий носителю принять новую личность.[/color]
 
+hidden-desc-AdrenalImplant-medical = [color=#52B4E9]Этот имплант содержит медицинские препараты, способствующие восстановлению организма.[/color]
+hidden-desc-AdrenalImplant-research = [color=#D381C9]Имплант с запасом лечебных растворов, предназначенных для поддержки жизненных функций.[/color]
+hidden-desc-AdrenalImplant-syndicate = [color=#E31735]Имплант с инъекционным механизмом, содержащий жидкости для ускоренного восстановления организма.[/color]
+
 # Regular decriptions below
 
 ent-ThermalVisorImplanter = { ent-Implanter }
@@ -39,6 +43,15 @@ ent-BoxDnaCopyImplant = { ent-BoxCardboard }
 
 ent-PaperDnaCopyImplanter = { ent-Paper }
     .desc = { ent-Paper.desc }
+ent-AdrenalImplanter = { ent-Implanter }
+    .desc = { ent-Implanter.desc }
+    .suffix = Адреналин
+
+ent-AdrenalImplant = имплант Адреналина
+    .desc = Микрочип, который вживляют под кожу.
+
+ent-ActionActivateAdrenalImplant = Ввести жидкость
+    .desc = Вводит небольшую дозу разных лечащих веществ, эффект держится около 45 секунд. Можно ввести в предсмертном состоянии
 # Uplink locale
 
 uplink-thermal-glasses-name = Термальные очки
@@ -49,6 +62,9 @@ uplink-thermal-visor-implanter-desc = Новейшая разработка си
 
 uplink-dna-copy-implanter-name = Имплант копирования ДНК
 uplink-dna-copy-implanter-desc = Новейшая разработка синдиката, имплант позволяет скопировать внешность другого человека.
+
+uplink-adrenal-implanter-name = Имплант Адреналина
+uplink-adrenal-implanter-desc = Внутри импланта содержится жидкость, которая ускоренно восстанавливает организм. Впрыскивается по малейшему импульсу даже в предсмертном состоянии
 
 # silent shoes
 hidden-desc-SilentShoes-syndicate = [color=#e31735]Разработанные специально для шпионских миссий Синдиката, эти ботинки совершенно бесшумны на любых поверхностях[/color]

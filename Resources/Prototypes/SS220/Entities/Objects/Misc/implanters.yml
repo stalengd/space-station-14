@@ -25,3 +25,10 @@
   components:
     - type: Implanter
       implant: DnaCopyImplant
+
+- type: entity
+  id: AdrenalImplanter
+  parent: BaseImplantOnlyImplanterSyndi
+  components:
+  - type: Implanter
+    implant: AdrenalImplant

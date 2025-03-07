@@ -27,10 +27,7 @@
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/SS220/Announcements/infestation.ogg
-      params:
-        volume: -4
-  # SS220 MoreAnonces (sound and alert upgrades) end
+      path: /Audio/Announcements/Intern/aliens.ogg
     earliestStart: 15
     weight: 6
     duration: 50
@@ -55,10 +52,7 @@
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/SS220/Announcements/infestation.ogg
-      params:
-        volume: -4
-  # SS220 MoreAnonces (sound and alert upgrades) end
+      path: /Audio/Announcements/Intern/aliens.ogg
     earliestStart: 15
     weight: 6
     duration: 50
@@ -86,10 +80,7 @@
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/SS220/Announcements/infestation.ogg
-      params:
-        volume: -4
-  # SS220 MoreAnonces (sound and alert upgrades) end
+      path: /Audio/Announcements/Intern/aliens.ogg
     weight: 6
     duration: 50
   - type: VentCrittersRule
@@ -123,10 +114,7 @@
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/SS220/Announcements/infestation.ogg
-      params:
-        volume: -4
-  # SS220 MoreAnonces (sound and alert upgrades) end
+      path: /Audio/Announcements/Intern/aliens.ogg
     weight: 6
     duration: 50
   - type: VentCrittersRule
@@ -147,10 +135,7 @@
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/SS220/Announcements/infestation.ogg
-      params:
-        volume: -4
-  # SS220 MoreAnonces (sound and alert upgrades) end
+      path: /Audio/Announcements/Intern/aliens.ogg
     earliestStart: 15
     weight: 6
     duration: 50

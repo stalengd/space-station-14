@@ -48,8 +48,8 @@
 - type: entity
   parent: ClothingHandsGlovesBoxingRed
   id: ClothingHandsGlovesBoxingVox
-  name: vox boxing gloves
-  description: These pack a punch! They'll never make you eat lunch in the maints again! SCRAWWWW!!
+  name: бойцовские перчатки воксов
+  description: С этим вы будете в ударе! Вы больше никогда не проиграете в техах! СКРААААУ!!
   components:
   - type: Sprite
     sprite: Clothing/Hands/Gloves/Boxing/boxingblue.rsi

@@ -17,7 +17,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.SS220.Shuttles.Components;
 using Content.Server.Station.Components;
-using Content.Server.Station.Events;
+using Content.Server.Station.Events;f
 using Content.Server.Station.Systems;
 using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
@@ -393,7 +393,7 @@ public sealed partial class EmergencyShuttleSystem : EntitySystem
 
         var audioFile = result.ResultType == ShuttleDockResultType.NoDock
             ? "/Audio/Misc/notice1.ogg"
-            : "/Audio/Announcements/Intern/shuttledock.ogg";
+            : "/Audio/SS220/Announcements/Intern/events/shuttledock.ogg";
 
         // TODO: Need filter extensions or something don't blame me.
         _audio.PlayGlobal(audioFile, Filter.Broadcast(), true);

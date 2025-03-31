@@ -117,9 +117,7 @@
   - type: StationEvent
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAudio:
-      path: /Audio/Announcements/attention.ogg
-      params:
-        volume: -4
+      collection: InternAlert
   # SS220 MoreAnonces (sound and alert upgrades) end
     weight: 7
     duration: 1
@@ -134,9 +132,7 @@
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/Announcements/attention.ogg
-      params:
-        volume: -4
+      collection: InternAlert
   # SS220 MoreAnonces (sound and alert upgrades) end
     startAnnouncement: station-event-bureaucratic-error-announcement
     minimumPlayers: 25
@@ -155,9 +151,7 @@
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/Announcements/attention.ogg
-      params:
-        volume: -4
+      collection: InternAlert
   # SS220 MoreAnonces (sound and alert upgrades) end
     minimumPlayers: 15
     weight: 5
@@ -328,7 +322,7 @@
     startAnnouncement: station-event-power-grid-check-start-announcement
     endAnnouncement: station-event-power-grid-check-end-announcement
     startAudio:
-      path: /Audio/Announcements/Intern/poweroff.ogg
+      path: /Audio/SS220/Announcements/Intern/events/poweroff.ogg
       params:
         volume: -4
     duration: 60
@@ -344,7 +338,7 @@
     startAnnouncement: station-event-solar-flare-start-announcement
     endAnnouncement: station-event-solar-flare-end-announcement
     startAudio:
-      path: /Audio/Announcements/Intern/radiation.ogg # not exactly the same event, but close
+      path: /Audio/SS220/Announcements/Intern/events/radiation.ogg # not exactly the same event, but close
     duration: 120
     maxDuration: 240
   - type: SolarFlareRule
@@ -385,7 +379,7 @@
     startAnnouncement: station-event-vent-creatures-start-announcement
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAudio:
-      path: /Audio/Announcements/Intern/aliens.ogg
+      collection: InternAliens
     earliestStart: 20
     minimumPlayers: 15
     weight: 5
@@ -407,7 +401,7 @@
     startAnnouncement: station-event-vent-creatures-start-announcement
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAudio:
-      path: /Audio/Announcements/Intern/aliens.ogg
+      collection: InternAliens
     earliestStart: 20
     minimumPlayers: 15
     weight: 5
@@ -429,7 +423,7 @@
     startAnnouncement: station-event-vent-creatures-start-announcement
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAudio:
-      path: /Audio/Announcements/Intern/aliens.ogg
+      collection: InternAliens
     earliestStart: 20
     minimumPlayers: 15
     weight: 5
@@ -447,7 +441,7 @@
     startAnnouncement: station-event-vent-creatures-start-announcement
   # SS220 MoreAnonces (sound and alert upgrades) bgn
     startAudio:
-      path: /Audio/Announcements/Intern/aliens.ogg
+      collection: InternAliens
     earliestStart: 20
     minimumPlayers: 20
     weight: 1.5
@@ -544,7 +538,7 @@
     maxOccurrences: 1 # can only happen once per round
     startAnnouncement: station-event-communication-interception
     startAudio:
-      path: /Audio/Announcements/Intern/intercept.ogg
+      collection: InternAliens
     duration: null # the rule has to last the whole round not 1 second
     occursDuringRoundEnd: false
   - type: AlertLevelInterceptionRule
@@ -586,9 +580,7 @@
     startAnnouncementColor: "#18abf5"
     startAnnouncement: station-event-ion-storm-start-announcement
     startAudio:
-      path: /Audio/SS220/Announcements/i-storm1.ogg
-      params:
-        volume: -4
+      path: /Audio/SS220/Announcements/Intern/events/ionstorm.ogg
   # SS220 MoreAnonces (sound and alert upgrades) end
     weight: 8
     reoccurrenceDelay: 20

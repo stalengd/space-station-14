@@ -138,7 +138,7 @@
     minimumPlayers: 0
   - type: MeteorSwarm
     announcement: station-event-space-dust-start-announcement
-    announcementSound: /Audio/Announcements/Intern/meteors.ogg
+    announcementSound: /Audio/SS220/Announcements/Intern/events/meteors.ogg
     nonDirectional: true
     meteors:
       MeteorSpaceDust: 1
@@ -193,6 +193,8 @@
     weight: 0.05
   - type: MeteorSwarm
     announcement: station-event-meteor-urist-start-announcement
+    startAudio:
+      path: /Audio/SS220/Announcements/Intern/events/meteors.ogg
     meteors:
       MeteorUrist: 1
     waves:
@@ -209,7 +211,7 @@
   - type: StationEvent
     startAnnouncement: station-event-immovable-rod-start-announcement
     startAudio:
-      path: /Audio/Announcements/Intern/meteors.ogg
+      path: /Audio/SS220/Announcements/Intern/events/meteors.ogg
     weight: 3.5
     reoccurrenceDelay: 1
     duration: 1

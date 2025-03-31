@@ -6,7 +6,7 @@
   - type: StationEvent
     startAnnouncement: station-event-banana-rain-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      collection: InternAlert
     earliestStart: 20
     minimumPlayers: 15
     weight: 5

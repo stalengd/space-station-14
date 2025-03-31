@@ -183,6 +183,10 @@
     - Airlocks
     - WirePanels
     - Networking
+  # ss220 tts airlock
+  - type: TTS
+    randomVoicesList: Borg
+  # ss220 tts airlock
   - type: TypingIndicator
     proto: robot
   - type: Speech

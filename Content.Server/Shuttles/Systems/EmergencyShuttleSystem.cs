@@ -17,7 +17,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.SS220.Shuttles.Components;
 using Content.Server.Station.Components;
-using Content.Server.Station.Events;f
+using Content.Server.Station.Events;
 using Content.Server.Station.Systems;
 using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;

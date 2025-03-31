@@ -83,11 +83,6 @@
   - /Audio/SS220/Announcements/Intern/events/granomalies.ogg
 
 - type: soundCollection
-  id: PowerOn
-  files:
-  - /Audio/SS220/Announcements/Intern/events/poweron.ogg
-
-- type: soundCollection
   id: CommandReport
   files:
   - Audio/SS220/Announcements/Intern/commandreport/1.ogg
@@ -107,5 +102,5 @@
 - type: soundCollection
   id: InternAliens
   files:
-  - /Audio/SS220/Announcements/Intern/events/alients.ogg
+  - /Audio/SS220/Announcements/Intern/events/aliens.ogg
   - /Audio/SS220/Announcements/Intern/events/intercept.ogg

@@ -85,19 +85,19 @@
 - type: soundCollection
   id: CommandReport
   files:
-  - Audio/SS220/Announcements/Intern/commandreport/1.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/10.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/11.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/2.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/3.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/4.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/5.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/6.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/7.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/8.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/9.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/commandreport_beer.ogg
-  - Audio/SS220/Announcements/Intern/commandreport/commandreport_sleep.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/1.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/2.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/3.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/4.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/5.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/6.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/7.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/8.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/9.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/10.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/11.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/commandreport_beer.ogg
+  - /Audio/SS220/Announcements/Intern/commandreport/commandreport_sleep.ogg
 
 - type: soundCollection
   id: InternAliens

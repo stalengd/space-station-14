@@ -193,8 +193,6 @@
     weight: 0.05
   - type: MeteorSwarm
     announcement: station-event-meteor-urist-start-announcement
-    startAudio:
-      path: /Audio/SS220/Announcements/Intern/events/meteors.ogg
     meteors:
       MeteorUrist: 1
     waves:

@@ -16,7 +16,7 @@
     - id: GiftsVendingRestock
 
 # Game Rules
-    
+
 - type: entity
   id: CargoGiftsBase
   parent: BaseGameRule
@@ -213,8 +213,9 @@
       SecurityRiot: 2
       SecurityRestraints: 2
       SecurityNonLethal: 2
+      SecurityNonlethalThrowables: 1
 
-#ss220-gamma
+#ss220-gamma #AfterConflicts
 - type: entity
   id: GiftsGamma
   parent: CargoGiftsBase #SS220 GiftsGamma event fix

@@ -96,8 +96,8 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
         CameraDisconnectButton.OnPressed += _ => CameraDisconnect!();
 
         // SS220 Camera-Map begin
-        SelectorTabs.SetTabTitle((int) TabNumbers.CameraList, "Список");
-        SelectorTabs.SetTabTitle((int) TabNumbers.CameraMap, "Карта");
+        SelectorTabs.SetTabTitle((int) TabNumbers.CameraList, "������");
+        SelectorTabs.SetTabTitle((int) TabNumbers.CameraMap, "�����");
 
         MapViewerControls.AttachToViewer(MapViewer);
         // SS220 Camera-Map end
@@ -144,8 +144,6 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
 
     private void PopulateCameraList(Dictionary<string, Dictionary<string, (string, Vector2)>> cameras)
     {
-        SubnetList.Clear();
-
         // SS220 Camera-Map begin
         _camerasCache = cameras;
 
@@ -156,13 +154,18 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
                 if (address == _currentAddress)
                     _currentName = name;
 
-                if (subnetFreqId == _subnetFilter)
-                    AddCameraToList(name, address);
+                //if (subnetFreqId == _subnetFilter)
+                //    AddCameraToList(name, address);
             }
         }
         // SS220 Camera-Map end
 
-        SubnetList.SortItemsByText();
+        var entries = cameras.Select(i => new ItemList.Item(SubnetList) {
+            Text = $"{i.Value}: {i.Key}",
+            Metadata = i.Key
+        }).ToList();
+        entries.Sort((a, b) => string.Compare(a.Text, b.Text, StringComparison.Ordinal));
+        SubnetList.SetItems(entries, (a,b) => string.Compare(a.Text, b.Text));
     }
 
     private void SetCameraView(IEye? eye)
@@ -218,12 +221,6 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
             _subnetFilter = subnet;
 
         return SubnetSelector.ItemCount - 1;
-    }
-
-    private void AddCameraToList(string name, string address)
-    {
-        var item = SubnetList.AddItem($"{name}: {address}");
-        item.Metadata = address;
     }
 
     private void OnSubnetListSelect(ItemList.ItemListSelectedEventArgs args)

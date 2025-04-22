@@ -108,7 +108,7 @@ namespace Content.Shared.Localizations
         }
 
         private static readonly Regex PluralEsRule = new("^.*(s|sh|ch|x|z)$");
-        private static readonly Regex RussianPluralRule = new(@"\b\w+[бвгджзйклмнпрстфхцчшщъь]\b");
+        private static readonly Regex RussianPluralRule = new(@"\b\w+[�����������������������]\b");
 
 
         private ILocValue FormatMakePlural(LocArgs args)
@@ -142,16 +142,16 @@ namespace Content.Shared.Localizations
             if (RussianPluralRule.IsMatch(firstWord))
             {
                 if (split.Length == 1)
-                    return new LocValueString($"{firstWord}ы");
+                    return new LocValueString($"{firstWord}�");
                 else
-                    return new LocValueString($"{firstWord}ы {string.Join(" ", split.Skip(1))}");
+                    return new LocValueString($"{firstWord}� {string.Join(" ", split.Skip(1))}");
             }
             else
             {
                 if (split.Length == 1)
-                    return new LocValueString($"{firstWord}ы");
+                    return new LocValueString($"{firstWord}�");
                 else
-                    return new LocValueString($"{firstWord}ы {string.Join(" ", split.Skip(1))}");
+                    return new LocValueString($"{firstWord}� {string.Join(" ", split.Skip(1))}");
             }
         }
 
@@ -165,8 +165,8 @@ namespace Content.Shared.Localizations
             {
                 <= 0 => string.Empty,
                 1 => list[0],
-                2 => $"{list[0]} и {list[1]}", //SS220 Localize
-                _ => $"{string.Join(", ", list.GetRange(0, list.Count - 1))}, и {list[^1]}" //SS220 Localize
+                2 => $"{list[0]} � {list[1]}", //SS220 Localize
+                _ => $"{string.Join(", ", list.GetRange(0, list.Count - 1))}, � {list[^1]}" //SS220 Localize
             };
         }
 
@@ -197,8 +197,9 @@ namespace Content.Shared.Localizations
         /// </summary>
         public static string FormatPlaytime(TimeSpan time)
         {
+            time = TimeSpan.FromMinutes(Math.Ceiling(time.TotalMinutes));
             var hours = (int)time.TotalHours;
-            var minutes = time.Minutes; //ss220 formatting time in lobby
+            var minutes = time.Minutes;
             return Loc.GetString($"zzzz-fmt-playtime", ("hours", hours), ("minutes", minutes));
         }
 

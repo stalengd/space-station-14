@@ -12,6 +12,7 @@ using Content.Shared.Paper;
 using Content.Shared.SS220.Photocopier;
 using Content.Server.Administration.Logs;
 using Content.Shared.Database;
+using Content.Shared.DeviceNetwork.Components;
 
 namespace Content.Server.Fax.AdminUI;
 

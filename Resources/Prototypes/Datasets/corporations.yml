@@ -1,12 +1,5 @@
-- type: dataset
-  id: TraitorCorporations
+- type: localizedDataset
+  id: TraitorCorporations #AfterConflicts
   values:
-  - "CyberSun Industries"
-  - "Мародёры Горлекса"
-  - "MI13"
-  - "Tiger Cooperative"
-  - "S.E.L.F."
-  - "Animal Rights Consortium"
-  - "Donk Corporation"
-  - "Waffle Corporation"
-  - "Interdyne Pharmaceutics"
+    prefix: traitor-corporations-dataset-
+    count: 9

@@ -49,6 +49,7 @@
       sprite: /Textures/SS220/Interface/Actions/implants.rsi
       state: adrenal
     event: !type:UseAdrenalImplantEvent
+    useDelay: 30
 
 - type: entity
   id: ActionActivateThermalVision

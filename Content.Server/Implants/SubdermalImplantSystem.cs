@@ -38,6 +38,7 @@ using Content.Shared.Polymorph;
 using Content.Shared.SS220.PenScrambler;
 using Content.Shared.FixedPoint;
 using Content.Shared.SS220.Store;
+using Content.Shared.Charges.Components;
 
 namespace Content.Server.Implants;
 
@@ -365,9 +366,13 @@ public sealed class SubdermalImplantSystem : SharedSubdermalImplantSystem
         if (!_solutionContainer.TryGetSolution((args.Performer, solutionUserComp), ChemicalSolution, out var solutionUser))
             return;
 
-        //_solutionContainer.TryTransferSolution(solutionUser.Value,
-        //    solutionImplant.Value.Comp.Solution,
-        //    solutionImplant.Value.Comp.Solution.Volume / FixedPoint2.New(args.Action.Comp.Charges!.Value));
+        var quantity = solutionImplant.Value.Comp.Solution.Volume;
+        if (TryComp<LimitedChargesComponent>(args.Action, out var actionCharges))
+            quantity /= actionCharges.MaxCharges;
+
+        _solutionContainer.TryTransferSolution(solutionUser.Value,
+            solutionImplant.Value.Comp.Solution,
+            quantity);
 
         args.Handled = true;
     }

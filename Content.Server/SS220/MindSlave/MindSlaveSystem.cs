@@ -91,6 +91,8 @@ public sealed class MindSlaveSystem : EntitySystem
         SubscribeLocalEvent<MindSlaveMasterComponent, MobStateChangedEvent>(OnMasterDeadOrCrit);
         SubscribeLocalEvent<MindSlaveMasterComponent, BeingGibbedEvent>(OnMasterGibbed);
 
+        SubscribeLocalEvent<MindSlaveImplantComponent, ImplantImplantedEvent>(OnMindSlaveImplanted);
+
         SubscribeLocalEvent<SubdermalImplantComponent, MindSlaveRemoved>(OnMindSlaveRemoved);
     }
 
@@ -144,6 +146,17 @@ public sealed class MindSlaveSystem : EntitySystem
     private void OnCloned(Entity<MindSlaveComponent> entity, ref CloningEvent args)
     {
         TryRemoveSlave(entity);
+    }
+
+    private void OnMindSlaveImplanted(Entity<MindSlaveImplantComponent> entity, ref ImplantImplantedEvent args)
+    {
+        if (args.Implanted is not { } target ||
+            !TryComp<SubdermalImplantComponent>(entity, out var implantComponent) ||
+            implantComponent.user is not { } user)
+            return;
+
+        if (!TryMakeSlave(target, user))
+            _implant.ForceRemove(target, args.Implant);
     }
 
     private void OnMindSlaveRemoved(Entity<SubdermalImplantComponent> mind, ref MindSlaveRemoved args)

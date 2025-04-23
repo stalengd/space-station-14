@@ -17,6 +17,12 @@ public sealed partial class LabelComponent : Component, IPhotocopyableComponent 
     [DataField, AutoNetworkedField]
     public string? CurrentLabel { get; set; }
 
+    /// <summary>
+    /// Should the label show up in the examine menu?
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Examinable = true;
+
     // SS220 Photocopy begin
     public IPhotocopiedComponentData GetPhotocopiedData()
     {

@@ -396,21 +396,27 @@ public enum LogType
     /// A client has sent too many chat messages recently and is temporarily blocked from sending more.
     /// </summary>
     ChatRateLimited = 87,
+    //WarReceiveTC = 87, // SS220 Nukie-Declare-War // TODO: replace log
+    MessengerServer = 88, // SS220 MessengerServer
+    MessengerClientCartridge = 89,  // SS220 MessengerClientCartridge
+    SecutiyRecords = 90, // SS220 Criminal-Records
 
     /// <summary>
     /// A player changed temperature on atmos device.
     /// </summary>
-    AtmosTemperatureChanged = 88,
+    AtmosTemperatureChanged = 91,
 
     /// <summary>
     /// Something was sent over device network. Like broadcast.
     /// </summary>
-    DeviceNetwork = 89,
+    DeviceNetwork = 92,
 
     /// <summary>
     /// A player had a refund at the "store".
     /// </summary>
-    StoreRefund = 90,
+    StoreRefund = 93,
+
+    CryoStorage = 94, // 220 Cryo-Storage
 
     /// <summary>
     /// User was rate-limited for some spam action.
@@ -418,66 +424,63 @@ public enum LogType
     /// <remarks>
     /// This is a default value used by <c>PlayerRateLimitManager</c>, though users can use different log types.
     /// </remarks>
-    RateLimited = 91,
+    RateLimited = 95,
 
     /// <summary>
     /// A player did an item-use interaction of an item they were holding onto another object.
     /// </summary>
-    InteractUsing = 92,
+    InteractUsing = 96,
 
     /// <summary>
     /// Storage & entity-storage related interactions
     /// </summary>
-    Storage = 93,
+    Storage = 97,
 
     /// <summary>
     /// A player got hit by an explosion and was dealt damage.
     /// </summary>
-    ExplosionHit = 94,
+    ExplosionHit = 98,
 
     /// <summary>
     /// A ghost warped to an entity through the ghost warp menu.
     /// </summary>
-    GhostWarp = 95,
+    GhostWarp = 99,
 
     /// <summary>
     /// A player interacted with a PDA or its cartridge component
     /// </summary>
-    PdaInteract = 96,
+    PdaInteract = 100,
 
     /// <summary>
     /// An atmos networked device (such as a vent or pump) has had its settings changed, usually through an air alarm
     /// </summary>
-    AtmosDeviceSetting = 97,
+    AtmosDeviceSetting = 101,
 
     /// <summary>
     /// Commands related to admemes. Stuff like config changes, etc.
     /// </summary>
-    AdminCommands = 98,
+    AdminCommands = 102,
 
     /// <summary>
     /// A player was selected or assigned antag status
     /// </summary>
-    AntagSelection = 99,
+    AntagSelection = 103,
 
     /// <summary>
     /// Logs related to botany, such as planting and harvesting crops
     /// </summary>
-    Botany = 100,
+    Botany = 104,
     /// <summary>
     /// Artifact node got activated.
     /// </summary>
-    ArtifactNode = 101,
+    ArtifactNode = 105,
 
-    // SS220 log types begin
-    //WarReceiveTC, // SS220 Nukie-Declare-War // TODO: replace log
-    MessengerServer, // SS220 MessengerServer
-    MessengerClientCartridge,  // SS220 MessengerClientCartridge
-    SecutiyRecords, // SS220 Criminal-Records
+    //SS220 log types start
 
     /// <summary>
     /// Admin command executed.
     /// </summary>
     AdminCommand = 10000,
+
     //SS220 log types end
 }

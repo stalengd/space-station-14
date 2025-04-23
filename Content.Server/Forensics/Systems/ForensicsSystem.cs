@@ -22,6 +22,7 @@ using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 using Robust.Shared.Containers;
 using Content.Server.SS220.Forensics;
+using Content.Shared.Cloning.Events;
 
 namespace Content.Server.Forensics
 {
@@ -92,13 +93,18 @@ namespace Content.Server.Forensics
         //ss220 add cloning entity copy DNA from source start
         private void OnDNACloning(Entity<DnaComponent> ent, ref CloningEvent args)
         {
-            if (!TryComp<DnaComponent>(args.Target, out var sourceDnaComp))
+            if (!TryComp<DnaComponent>(args.CloneUid, out var sourceDnaComp))
                 return;
 
             sourceDnaComp.DNA = ent.Comp.DNA;
 
-            var ev = new GenerateDnaEvent { Owner = args.Target, DNA = ent.Comp.DNA };
-            RaiseLocalEvent(args.Target, ref ev);
+            if (ent.Comp.DNA == null)
+                RandomizeDNA((args.CloneUid, sourceDnaComp));
+            else
+            {
+                var ev = new GenerateDnaEvent { Owner = args.CloneUid, DNA = ent.Comp.DNA };
+                RaiseLocalEvent(args.CloneUid, ref ev);
+            }
         }
         //ss220 add cloning entity copy DNA from source end
 

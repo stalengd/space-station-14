@@ -17,8 +17,8 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using System.Numerics;
-using Content.Server.Disposal.Unit.Components;
 using Robust.Shared.Map;
+using Content.Shared.Disposal.Components;
 
 namespace Content.Server.Fluids.EntitySystems;
 

@@ -215,7 +215,8 @@ public partial class ChatSystem
     {
         // If emote is in AllowedEmotes, it will bypass whitelist and blacklist
         if (TryComp<SpeechComponent>(source, out var speech) &&
-            speech.AllowedEmotes.Contains(emote.ID))
+            speech.AllowedEmotes.Contains(emote.ID) &&
+            speech.ClothingEmotes.Contains(emote.ID)) //SS220 Clothing special emotes
         {
             return true;
         }
@@ -227,10 +228,9 @@ public partial class ChatSystem
             return false;
         }
 
-        if (!emote.Available &&
-            TryComp<SpeechComponent>(source, out var speech) &&
-            !speech.AllowedEmotes.Contains(emote.ID) &&
-            !speech.ClothingEmotes.Contains(emote.ID)) //SS220 Clothing special emotes
+        // Check if the emote is available for all
+        if (!emote.Available)
+        {
             return false;
         }
 

@@ -17,7 +17,7 @@ using Content.Server.SS220.MindSlave.Systems;
 using Content.Server.SS220.MindSlave.UI;
 using Content.Server.SS220.Telepathy;
 using Content.Shared.Alert;
-using Content.Shared.Cloning;
+using Content.Shared.Cloning.Events;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;

@@ -5,9 +5,7 @@ using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Content.Server.Cargo.Systems;
-using Content.Server.Cargo.Components;
-using System.Linq;
-using System.Collections.Generic;
+using Content.Shared.Cargo.Components;
 
 namespace Content.Server.Cargo.Commands
 {
@@ -55,14 +53,15 @@ namespace Content.Server.Cargo.Commands
         invalidArgs:
             shell.WriteLine("Expected invalid arguments!");
         }
+
         private void PrintCargoStationsInfo(IConsoleShell shell)
         {
             var bankQuery = _entityManager.EntityQueryEnumerator<StationBankAccountComponent>();
 
-            while (bankQuery.MoveNext(out var uid, out var bankComp))
-            {
-                shell.WriteLine($"BankEntity: {uid.Id}, Values: {bankComp.Balance}");
-            }
+            //while (bankQuery.MoveNext(out var uid, out var bankComp))
+            //{
+            //    shell.WriteLine($"BankEntity: {uid.Id}, Values: {bankComp.Balance}");
+            //}
         }
 
         public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
@@ -86,21 +85,21 @@ namespace Content.Server.Cargo.Commands
 
         private void ProccessMoney(IConsoleShell shell, int money, bool bSet, string station)
         {
-            if (EntityUid.TryParse(station, out var bankEnt) && _entityManager.TryGetComponent<StationBankAccountComponent>(bankEnt, out var bankComponent))
-            {
-                var cargoSystem = _entitySystemManager.GetEntitySystem<CargoSystem>();
+            //if (EntityUid.TryParse(station, out var bankEnt) && _entityManager.TryGetComponent<StationBankAccountComponent>(bankEnt, out var bankComponent))
+            //{
+            //    var cargoSystem = _entitySystemManager.GetEntitySystem<CargoSystem>();
 
 
-                var currentMoney = bankComponent.Balance;
+            //    var currentMoney = bankComponent.Balance;
 
-                cargoSystem.UpdateBankAccount(bankEnt, bankComponent, -currentMoney);
-                cargoSystem.UpdateBankAccount(bankEnt, bankComponent, bSet ? money : currentMoney + money);
+            //    cargoSystem.UpdateBankAccount(bankEnt, bankComponent, -currentMoney);
+            //    cargoSystem.UpdateBankAccount(bankEnt, bankComponent, bSet ? money : currentMoney + money);
 
-                shell.WriteLine($"Successfully changed EntityUid {station} cargo's money to {bankComponent.Balance}");
+            //    shell.WriteLine($"Successfully changed EntityUid {station} cargo's money to {bankComponent.Balance}");
                 
-                return;
-            }
-            shell.WriteError("Expected invalid EntityUid!");
+            //    return;
+            //}
+            //shell.WriteError("Expected invalid EntityUid!");
         }
     }
 }

@@ -7,6 +7,7 @@
     tags:
     - Document
     - Paper
+    - Trash # SS220-TaRaKaCheCki
   - type: Appearance
   - type: Flammable
     fireSpread: true
@@ -50,7 +51,7 @@
   - type: Item
     size: Tiny
   - type: PhysicalComposition
-  
+
 - type: entity
   name: paper
   parent: BasePaper

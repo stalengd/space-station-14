@@ -871,6 +871,7 @@
     borderColor: "#6c2525" #SS220 PDA-Resprite
     accentHColor: "#b7531e" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
+    sprite: SS220/Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -884,6 +885,7 @@
       map: [ "enum.PdaVisualLayers.IdLight" ]
       visible: false #SS220 PDA-Resprite-End
   - type: Icon
+    sprite: SS220/Objects/Devices/pda.rsi
     state: pda-library
   #ss220 add pdaidpainter start
   - type: Tag

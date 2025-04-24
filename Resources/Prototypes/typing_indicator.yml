@@ -16,7 +16,7 @@
 - type: typingIndicator
   id: guardian
   typingState: guardian0
-  idleState: guardian3 # Corvax-TypingIndicator
+  idleState: guardian2 # Corvax-TypingIndicator
 
 - type: typingIndicator
   id: holo

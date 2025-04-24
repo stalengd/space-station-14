@@ -11,7 +11,7 @@
        !type:String
        pda
   - type: Sprite
-    sprite: Objects/Devices/pda.rsi
+    sprite: SS220/Objects/Devices/pda.rsi #SS220 PDA-Resprite
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -26,7 +26,7 @@
 #      shader: "unshaded" #SS220 PDA-Resprite
       visible: false
   - type: Icon
-    sprite: Objects/Devices/pda.rsi
+    sprite: SS220/Objects/Devices/pda.rsi #SS220 PDA-Resprite
     state: pda
   - type: Pda
     paiSlot:
@@ -49,6 +49,7 @@
         - IdCard
   - type: PdaVisuals
   - type: Item
+    sprite: SS220/Objects/Devices/pda.rsi #SS220 PDA-Resprite
     size: Small
   - type: ContainerContainer
     containers:
@@ -59,6 +60,7 @@
       program-container: !type:Container
   - type: ItemSlots
   - type: Clothing
+    sprite: SS220/Objects/Devices/pda.rsi #SS220 PDA-Resprite
     quickEquip: false
     slots:
     - idcard
@@ -210,7 +212,6 @@
     borderColor: "#a4a3a6" #SS220 PDA-Resprite
     accentVColor: "#deb63d" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -252,7 +253,6 @@
     accentVColor: "#4977a6" #SS220 PDA-Resprite
     accentHColor: "#4977a6" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -296,7 +296,6 @@
     borderColor: "#717059" #SS220 PDA-Resprite
     accentVColor: "#A32D26" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -337,7 +336,6 @@
     borderColor: "#a4a3a6" #SS220 PDA-Resprite
     accentVColor: "#542a6c" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -378,7 +376,6 @@
     borderColor: "#a4a3a6" #SS220 PDA-Resprite
     accentVColor: "#44b369" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -418,7 +415,6 @@
   - type: PdaBorderColor
     borderColor: "#8f1d2c" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -461,7 +457,6 @@
     borderColor: "#44b369" #SS220 PDA-Resprite
     accentVColor: "#1e4a9c" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -510,7 +505,6 @@
   - type: PdaBorderColor
     borderColor: "#e5ace5" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -613,7 +607,6 @@
     borderColor: "#cbcdd1" #SS220 PDA-Resprite
     accentHColor: "#414452" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -653,8 +646,7 @@
        pda-chaplain
   - type: PdaBorderColor
     borderColor: "#4b474f" #SS220 PDA-Resprite
-  - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
+  - type: Sprite #SS220 PDA-Resprite-Starti
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -706,7 +698,6 @@
     borderColor: "#4b474f" #SS220 PDA-Resprite
     accentHColor: "#a77937" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -746,7 +737,6 @@
   - type: PdaBorderColor
     borderColor: "#a77937" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -787,7 +777,6 @@
     borderColor: "#414452" #SS220 PDA-Resprite
     accentHColor: "#6737ab" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -836,7 +825,6 @@
   - type: PdaBorderColor
     borderColor: "#4b474f" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -883,7 +871,6 @@
     borderColor: "#6c2525" #SS220 PDA-Resprite
     accentHColor: "#b7531e" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -941,7 +928,6 @@
     borderColor: "#414452" #SS220 PDA-Resprite
     accentVColor: "#262c8a" #SS220-Law Department
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -993,7 +979,6 @@
     borderColor: "#9738ae" #SS220 PDA-Resprite
     accentVColor: "#8e9093" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1039,7 +1024,6 @@
   - type: PdaBorderColor
     borderColor: "#dfac5c" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1086,7 +1070,6 @@
     borderColor: "#374f7e" #SS220 PDA-Resprite
 #    accentHColor: "#447987" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1127,7 +1110,6 @@
     borderColor: "#cbcdd1" #SS220 PDA-Resprite
     accentHColor: "#2a8c32" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1168,7 +1150,6 @@
     borderColor: "#d15b1b" #SS220 PDA-Resprite
 #    accentVColor: "#A32D26" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1209,7 +1190,6 @@
     borderColor: "#cbcdd1" #SS220 PDA-Resprite
     accentHColor: "#4977a6" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1251,7 +1231,6 @@
     accentHColor: "#4977a6" #SS220 PDA-Resprite
     accentVColor: "#4977a6" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1307,7 +1286,6 @@
     accentHColor: "#2a4557" #SS220 PDA-Resprite
     accentVColor: "#2a4557" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1348,7 +1326,6 @@
     borderColor: "#cbcdd1" #SS220 PDA-Resprite
     accentVColor: "#bf5319" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1390,7 +1367,6 @@
     accentHColor: "#542a6c" #SS220 PDA-Resprite
 #    accentVColor: "#8900c9" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1431,7 +1407,6 @@
     borderColor: "#cbcdd1" #SS220 PDA-Resprite
     accentVColor: "#542a6c" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1472,7 +1447,6 @@
     borderColor: "#4b474f" #SS220 PDA-Resprite
     accentHColor: "#731611" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1521,7 +1495,6 @@
     borderColor: "#731611" #SS220 PDA-Resprite
     accentHColor: "#cbcdd1" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1561,7 +1534,6 @@
   - type: PdaBorderColor
     borderColor: "#731611" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1607,7 +1579,6 @@
   - type: PdaBorderColor
     borderColor: "#29722e" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1660,7 +1631,6 @@
     scanDelay: 0
     silent: true
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1710,7 +1680,6 @@
     accentHColor: "#4b0513"
     accentVColor: "#50abd9"
   - type: Sprite
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1789,7 +1758,6 @@
     borderColor: "#1a89ad" #SS220 PDA-Resprite
 #    accentVColor: "#447987" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1829,7 +1797,6 @@
   - type: PdaBorderColor
     borderColor: "#1d6637" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1878,7 +1845,6 @@
     borderColor: "#4b474f" #SS220 PDA-Resprite
     accentHColor: "#730600" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1919,7 +1885,6 @@
     accentHColor: "#dfac5c" #SS220 PDA-Resprite
 #    accentVColor: "#447987" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1956,7 +1921,6 @@
   - type: Pda
     id: ERTChaplainIDCard
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -1980,7 +1944,6 @@
   - type: Pda
     id: ERTEngineerIDCard
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2004,7 +1967,6 @@
   - type: Pda
     id: ERTJanitorIDCard
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2028,7 +1990,6 @@
   - type: Pda
     id: ERTMedicIDCard
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2061,7 +2022,6 @@
   - type: Pda
     id: ERTSecurityIDCard
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2095,7 +2055,6 @@
 #    accentHColor: "#447987" #SS220 PDA-Resprite
 #    accentVColor: "#447987" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2128,7 +2087,6 @@
     borderColor: "#d7d7d0"
     accentVColor: "#447987"
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2254,7 +2212,6 @@
     borderColor: "#5e321c" #SS220 PDA-Resprite
     accentHColor: "#a77937" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2304,7 +2261,6 @@
     accentHColor: "#cbcdd1" #SS220 PDA-Resprite
     accentVColor: "#cbcdd1" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2360,7 +2316,6 @@
   - type: PdaBorderColor
     borderColor: "#8dcccc" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2401,7 +2356,6 @@
     borderColor: "#deb63d" #SS220 PDA-Resprite
     accentHColor: "#d15b1b" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2443,7 +2397,6 @@
     accentHColor: "#542a6c" #SS220 PDA-Resprite
 #    accentVColor: "#8900c9" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2485,7 +2438,6 @@
     accentHColor: "#4977a6" #SS220 PDA-Resprite
     accentVColor: "#bf5319" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2526,7 +2478,6 @@
     borderColor: "#731611" #SS220 PDA-Resprite
     accentHColor: "#cbcdd1" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2562,7 +2513,6 @@
   - type: PdaBorderColor
     borderColor: "#4b474f"
   - type: Sprite
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix
@@ -2602,7 +2552,6 @@
     accentHColor: "#730600" #SS220 PDA-Resprite
     accentVColor: "#cbcdd1" #SS220 PDA-Resprite
   - type: Sprite #SS220 PDA-Resprite-Start
-    sprite: Objects/Devices/pda.rsi
     layers:
     - map: [ "enum.PdaVisualLayers.Base" ]
       state: "pda" #ss220 fix

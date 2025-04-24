@@ -63,9 +63,11 @@
 - type: typingIndicator
   id: gingerbread
   typingState: gingerbread0
+  idleState: gingerbread1 # SS220 idle state
   offset: 0, 0.125
 
 - type: typingIndicator
   id: diona
   typingState: diona0
+  idleState: diona1 # SS220 idle state
   offset: 0, 0.125

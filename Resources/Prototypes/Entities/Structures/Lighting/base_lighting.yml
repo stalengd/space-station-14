@@ -607,7 +607,7 @@
     radius: 8
     energy: 3
     softness: 0.5
-    color: "#ffde46"
+    color: "#ffea19" # SS220 color
   - type: DamageOnInteract
     damage:
       types:
@@ -623,7 +623,7 @@
     radius: 8
     energy: 3
     softness: 0.5
-    color: "#ffde46"
+    color: "#ffea19" # SS220 color
 
 - type: entity
   id: PoweredlightPink
@@ -772,35 +772,6 @@
     color: "#39ff14" #SS220-Mapping-Light-Fix, Неоновый зелёный
 
 #SS220-New-Crystals-start
-- type: entity
-  id: PoweredlightYellow
-  suffix: Yellow
-  parent: Poweredlight
-  components:
-  - type: PoweredLight
-    hasLampOnSpawn: LightTubeCrystalYellow
-  - type: PointLight
-    radius: 8
-    energy: 3
-    softness: 0.5
-    color: "#ffea19" #Неоновый жёлтый
-  - type: DamageOnInteract
-    damage:
-      types:
-        Heat: 2
-    popupText: powered-light-component-burn-hand
-
-- type: entity
-  id: AlwaysPoweredlightYellow
-  suffix: Always Powered, Yellow
-  parent: AlwaysPoweredWallLight
-  components:
-  - type: PointLight
-    radius: 8
-    energy: 3
-    softness: 0.5
-    color: "#ffea19" #Неоновый жёлтый
-
 - type: entity
   id: PoweredlightPurple
   suffix: Purple

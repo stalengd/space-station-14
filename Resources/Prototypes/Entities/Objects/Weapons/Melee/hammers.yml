@@ -7,6 +7,13 @@
   - type: Sprite
     sprite: Objects/Weapons/Melee/sledgehammer.rsi
     state: icon
+  #SS220 new sound_drop effect begin
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/SS220/Effects/Drop/sledgehammer.ogg ##new sound_drop effect, add MIXnikita
+      params:
+        volume: 2
+  #SS220 new sound_drop effect end
   - type: MeleeWeapon
     wideAnimationRotation: -135
     damage:

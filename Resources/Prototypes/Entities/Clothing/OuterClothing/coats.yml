@@ -635,11 +635,6 @@
   name: senior physician lab coat
 
 - type: entity
-  parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterCoatLabSeniorPhysician]
-  id: ClothingOuterCoatLabSeniorPhysicianOpened
-  name: senior physician lab coat
-
-- type: entity
   parent: ClothingOuterStorageBase
   id: ClothingOuterCoatSpaceAsshole
   name: the coat of space asshole

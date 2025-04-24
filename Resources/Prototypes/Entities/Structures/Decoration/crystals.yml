@@ -236,15 +236,15 @@
 
 - type: entity
   id: CrystalYellow
-  parent: CrystalGreen
+  parent: CrystalBase #SS220-Crystal-fix
   suffix: yellow
   components:
     - type: Sprite
-      color: "#ffde46"
+      color: "#ffea19" #SS220 color
     - type: PointLight
       radius: 3
       energy: 3
-      color: "#ffde46"
+      color: "#ffea19" #SS220 color
     - type: Destructible
       thresholds:
         - trigger:
@@ -290,35 +290,7 @@
             - !type:DoActsBehavior
                acts: [ "Destruction" ]
 
-#SS220-New-Crystals-start
-- type: entity
-  id: CrystalYellow
-  parent: CrystalBase #SS220-Crystal-fix
-  suffix: yellow
-  components:
-    - type: Sprite
-      color: "#ffea19" #Неоновый жёлтый
-    - type: PointLight
-      radius: 3
-      energy: 3
-      color: "#ffea19" #Неоновый жёлтый
-    - type: Destructible
-      thresholds:
-        - trigger:
-            !type:DamageTrigger
-            damage: 20
-          behaviors:
-            - !type:PlaySoundBehavior
-              sound:
-                collection: GlassBreak
-            - !type:SpawnEntitiesBehavior
-              spawn:
-                ShardCrystalYellow:
-                  min: 1
-                  max: 2
-            - !type:DoActsBehavior
-               acts: [ "Destruction" ]
-
+#SS220-New-Crystals-start #AfterConflicts
 - type: entity
   id: CrystalPurple
   parent: CrystalBase #SS220-Crystal-fix

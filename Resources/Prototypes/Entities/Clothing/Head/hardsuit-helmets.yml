@@ -256,29 +256,6 @@
         Heat: 0.9
 
 - type: entity
-  parent: ClothingHeadHardsuitWithLightBase
-  id: ClothingHeadHelmetHardsuitSecurityRed
-  name: head of security's hardsuit helmet
-  description: Security hardsuit helmet with the latest top secret NT-HUD software. Belongs to the HoS.
-  components:
-  - type: BreathMask #ss-220 fix
-  - type: Sprite
-    sprite: SS220/Clothing/Head/Hardsuits/security-red.rsi #ss220-security-hardsuit-resprite
-  - type: Clothing
-    sprite: SS220/Clothing/Head/Hardsuits/security-red.rsi #ss220-security-hardsuit-resprite
-  - type: PointLight
-    color: "#facb3e" #ss220-security-hardsuit-resprite
-  - type: PressureProtection
-    highPressureMultiplier: 0.45
-    lowPressureMultiplier: 10000
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.8
-        Slash: 0.8
-        Piercing: 0.8
-
-- type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
   id: ClothingHeadHelmetHardsuitBrigmedic
   name: brigmedic hardsuit helmet
@@ -406,17 +383,18 @@
     damageCoefficient: 0  #ss-220 armReb
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ] #Contra
+  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
   id: ClothingHeadHelmetHardsuitSecurityRed
   name: head of security's hardsuit helmet
   description: Security hardsuit helmet with the latest top secret NT-HUD software. Belongs to the HoS.
   components:
+  - type: BreathMask #ss-220 fix
   - type: Sprite
-    sprite: Clothing/Head/Hardsuits/wizard.rsi
+    sprite: SS220/Clothing/Head/Hardsuits/security-red.rsi #ss220-security-hardsuit-resprite
   - type: Clothing
-    sprite: Clothing/Head/Hardsuits/wizard.rsi
+    sprite: SS220/Clothing/Head/Hardsuits/security-red.rsi #ss220-security-hardsuit-resprite
   - type: PointLight
-    color: "#ffadfb"
+    color: "#facb3e" #ss220-security-hardsuit-resprite
   - type: PressureProtection
     highPressureMultiplier: 0.60
     lowPressureMultiplier: 1000

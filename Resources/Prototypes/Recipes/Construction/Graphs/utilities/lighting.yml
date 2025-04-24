@@ -54,7 +54,7 @@
               name: yellow crystal shard
               icon:
                 sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard1
+                state: shard #SS220-Crystal-resprite
               doAfter: 1
     - node: icon
       entity: LightTubeCrystalYellow
@@ -321,26 +321,6 @@
     entity: LightBulbCrystalGreen
 
 #SS220-New-Crystals-start #AfterConflicts
-- type: constructionGraph
-  id: YellowLight
-  start: start
-  graph:
-    - node: start
-      edges:
-        - to: icon
-          steps:
-            - material: Glass
-              amount: 2
-              doAfter: 1
-            - tag: CrystalYellow
-              name: yellow crystal shard
-              icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard #SS220-Crystal-resprite
-              doAfter: 1
-    - node: icon
-      entity: LightTubeCrystalYellow
-
 - type: constructionGraph
   id: PurpleLight
   start: start

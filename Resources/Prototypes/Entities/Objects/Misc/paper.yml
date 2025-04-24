@@ -475,9 +475,8 @@
   id: BoxFolderCentCom
   name: CentComm folder
   parent: BoxFolderBase
-  categories: [ DoNotMap ]
-  description: CentComm's miserable little pile of secrets!
   categories: [ HideSpawnMenu ] #SS220 New CentCom
+  description: CentComm's miserable little pile of secrets!
   components:
   - type: Sprite
     layers:

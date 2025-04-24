@@ -153,3 +153,13 @@
   result: MagazinePistolHighCapacity
   materials:
     Steel: 240
+
+- type: latheRecipe
+  id: WeaponTaser
+  result: WeaponTaser
+  completetime: 5
+  materials:
+    Steel: 700
+    Plastic: 300
+    Gold: 250
+    Silver: 500

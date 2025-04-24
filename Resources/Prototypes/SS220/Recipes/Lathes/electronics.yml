@@ -93,3 +93,18 @@
     Glass: 450
     Gold: 300
     Uranium: 500
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: MedicalScannerMachineCircuitboard
+  result: MedicalScannerMachineCircuitboard
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: CloningPodMachineCircuitboard
+  result: CloningPodMachineCircuitboard
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: CloningConsoleComputerCircuitboard
+  result: CloningConsoleComputerCircuitboard

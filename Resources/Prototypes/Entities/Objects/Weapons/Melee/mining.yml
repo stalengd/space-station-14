@@ -210,7 +210,7 @@
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 10
+        Slash: 12.5 # SS220 Throwable Changes
   - type: DisarmMalus
     malus: 0.225
   - type: ThrowingAngle
@@ -220,16 +220,6 @@
     types:
       - Knife
 #SS220-knife-cutter-fix-end
-# SS220 Throwable Changes begin
-  - type: LandAtCursor
-  - type: EmbeddableProjectile
-    sound: /Audio/Weapons/star_hit.ogg
-    offset: -0.15,0.0
-  - type: DamageOtherOnHit
-    damage:
-      types:
-        Slash: 12.5
-# SS220 Throwable Changes end
 
 # Like a crusher... but better
 - type: entity

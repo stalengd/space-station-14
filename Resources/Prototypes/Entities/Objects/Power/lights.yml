@@ -358,12 +358,19 @@
     - id: ShardCrystalBlue
 
 - type: entity
-  parent: BaseLightTubeCrystal
+  parent: LightTubeCrystalCyan # SS220 Crystals
   name: yellow crystal light tube
   id: LightTubeCrystalYellow
   components:
   - type: LightBulb
-    color: "#ffde46"
+    # SS220 Crystals begin
+    color: "#ffea19" #Неоновый жёлтый
+    lightEnergy: 3
+    lightRadius: 8
+    lightSoftness: 0.5
+    BurningTemperature: 350
+    PowerUse: 60
+    # SS220 Crystals end
   - type: Construction
     graph: YellowLight
     node: icon
@@ -611,26 +618,6 @@
     - id: ShardCrystalGreen
 
 #SS220-New-Crystals-start #AfterConflicts
-- type: entity
-  parent: LightTubeCrystalCyan
-  name: yellow crystal light tube
-  id: LightTubeCrystalYellow
-  components:
-  - type: LightBulb
-    color: "#ffea19" #Неоновый жёлтый
-    lightEnergy: 3
-    lightRadius: 8
-    lightSoftness: 0.5
-    BurningTemperature: 350
-    PowerUse: 60
-  - type: Construction
-    graph: YellowLight
-    node: icon
-  - type: ToolRefinable
-    refineResult:
-    - id: SheetGlass1
-    - id: ShardCrystalYellow
-
 - type: entity
   parent: LightTubeCrystalCyan
   name: purple crystal light tube

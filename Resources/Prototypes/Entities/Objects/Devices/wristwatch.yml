@@ -10,7 +10,7 @@
     - state: wristwatch
     - map: [ "enum.ClockVisualLayers.MinuteHand"]
     - map: [ "enum.ClockVisualLayers.HourHand"]
-  - type: Clock
+  # - type: Clock SS220 Clocks
   - type: Item
     sprite: Objects/Devices/wristwatch.rsi
     size: Small

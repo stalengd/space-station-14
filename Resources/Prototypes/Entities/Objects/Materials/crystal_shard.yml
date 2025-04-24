@@ -77,11 +77,11 @@
   id: ShardCrystalYellow
   components:
   - type: Sprite
-    color: "#ffde46"
+    color: "#ffea19" #SS220 color
   - type: PointLight
     radius: 2
     energy: 2.5
-    color: "#ffde46"
+    color: "#ffea19" #SS220 color
   - type: Tag
     tags:
       - Trash
@@ -168,22 +168,6 @@
       - CrystalRed
 
 #SS220-New-Crystals-start
-- type: entity
-  parent: ShardCrystalBase
-  id: ShardCrystalYellow
-  name: yellow crystal shard
-  components:
-  - type: Sprite
-    color: "#ffea19" #Неоновый жёлтый
-  - type: PointLight
-    radius: 2
-    energy: 2.5
-    color: "#ffea19" #Неоновый жёлтый
-  - type: Tag
-    tags:
-      - Trash
-      - CrystalYellow
-
 - type: entity
   parent: ShardCrystalBase
   id: ShardCrystalPurple

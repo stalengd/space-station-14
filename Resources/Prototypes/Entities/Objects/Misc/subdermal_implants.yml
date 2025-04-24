@@ -658,9 +658,6 @@
   components:
    - type: SubdermalImplant
    - type: MindShieldImplant
-   - type: Tag
-     tags:
-       - MindShield
     # hidden-desc-begin, also yeah mapping slide in 1 space =|
    - type: HiddenDescription
      entries:

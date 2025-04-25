@@ -133,7 +133,7 @@ namespace Content.Server.SS220.CargoMoneyCommand
             }
 
             var curBalance = bankComp.Accounts[account];
-            shell.WriteLine($"Successfully changed balance of {account} in {bank} bank to {curBalance}");
+            shell.WriteLine($"Successfully changed balance of {account} account in {bank} bank to {curBalance}");
         }
     }
 }

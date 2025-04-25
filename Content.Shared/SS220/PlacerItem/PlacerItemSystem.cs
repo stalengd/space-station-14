@@ -5,6 +5,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Physics;
 using Content.Shared.RCD.Systems;
 using Content.Shared.SS220.PlacerItem.Components;
 using Content.Shared.Tag;
@@ -12,6 +13,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
@@ -177,7 +179,7 @@ public sealed partial class PlacerItemSystem : EntitySystem
             foreach (var otherFixture in otherFixtures.Fixtures.Values)
             {
                 if (!otherFixture.Hard || otherFixture.CollisionLayer <= 0 ||
-                    ourFixture.CollisionLayer != otherFixture.CollisionLayer)
+                    (ourFixture.CollisionLayer & otherFixture.CollisionLayer) == 0)
                     continue;
 
                 var otherXformComp = Transform(otherUid);

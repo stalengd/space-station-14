@@ -45,7 +45,6 @@ public sealed class PlayTimeTrackingSystem : EntitySystem
         base.Initialize();
 
         _tracking.CalcTrackers += CalcTrackers;
-        _adminManager.OnPermsChanged += AdminManager_OnPermsChanged; //SS220-aghost-playtime
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundEnd);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
@@ -61,13 +60,6 @@ public sealed class PlayTimeTrackingSystem : EntitySystem
         SubscribeLocalEvent<GetDisallowedJobsEvent>(OnGetDisallowedJobs);
         _adminManager.OnPermsChanged += AdminPermsChanged;
     }
-
-    //SS220-aghost-playtime begin
-    private void AdminManager_OnPermsChanged(Administration.AdminPermsChangedEventArgs obj)
-    {
-        _tracking.QueueRefreshTrackers(obj.Player);
-    }
-    //SS220-aghost-playtime end
 
     public override void Shutdown()
     {

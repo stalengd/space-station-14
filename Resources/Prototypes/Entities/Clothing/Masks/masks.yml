@@ -21,7 +21,7 @@
     hideOnToggle: true
 
 - type: entity
-  parent: [ClothingMaskGas, BaseSecurityContraband] #Contra
+  parent: [ClothingMaskGas, BaseSecurityContraband]
   id: ClothingMaskGasSecurity
   name: security gas mask
   description: A standard issue Security gas mask.
@@ -250,7 +250,7 @@
     node: mask
 
 - type: entity
-  parent: [ClothingMaskClown, BaseSecurityContraband] #Contra
+  parent: [ClothingMaskClown, BaseSecurityContraband]
   id: ClothingMaskClownSecurity
   name: security clown wig and mask
   description: A debatably oxymoronic but protective mask and wig.
@@ -379,7 +379,7 @@
     accent: StutteringAccent
 
 - type: entity
-  parent: [ ClothingMaskGas, BaseSecurityContraband ] #Contra
+  parent: [ ClothingMaskGas, BaseSecurityContraband ]
   id: ClothingMaskGasSwat
   name: swat gas mask
   description: A elite issue Security gas mask.

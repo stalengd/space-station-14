@@ -29,7 +29,7 @@
 
 #Basic Helmet (Security Helmet)
 - type: entity
-  parent: [ClothingHeadHelmetArmoredBase, BaseSecurityContraband] #Contra
+  parent: [ClothingHeadHelmetArmoredBase, BaseSecurityContraband]
   id: ClothingHeadHelmetBasic
   name: helmet
   description: Standard security gear. Protects the head from impacts.
@@ -51,7 +51,7 @@
 
 #Mercenary Helmet
 - type: entity
-  parent: [ ClothingHeadHelmetArmoredBase, BaseMajorContraband ] #Contra
+  parent: [ ClothingHeadHelmetArmoredBase, BaseMajorContraband ]
   id: ClothingHeadHelmetMerc
   name: mercenary helmet
   description: The combat helmet is commonly used by mercenaries, is strong, light and smells like gunpowder and the jungle.
@@ -63,7 +63,7 @@
 
 #SWAT Helmet
 - type: entity
-  parent: [ClothingHeadHelmetBase, BaseSecurityContraband] #Contra
+  parent: [ClothingHeadHelmetBase, BaseSecurityContraband]
   id: ClothingHeadHelmetSwat
   name: SWAT helmet
   description: An extremely robust helmet, commonly used by paramilitary forces. This one has the Nanotrasen logo emblazoned on the top.
@@ -99,7 +99,7 @@
 
 #Light Riot Helmet
 - type: entity
-  parent: [ClothingHeadHelmetBase, BaseSecurityContraband] #Contra
+  parent: [ClothingHeadHelmetBase, BaseSecurityContraband]
   id: ClothingHeadHelmetRiot
   name: light riot helmet
   description: It's a helmet specifically designed to protect against close range attacks.
@@ -158,7 +158,7 @@
 
 #Cult Helmet
 - type: entity
-  parent: [ClothingHeadHelmetBase, BaseMajorContraband] #Contra
+  parent: [ClothingHeadHelmetBase, BaseMajorContraband]
   id: ClothingHeadHelmetCult
   name: cult helmet
   description: A robust, evil-looking cult helmet.
@@ -305,7 +305,7 @@
 
 #Chitinous Helmet
 - type: entity
-  parent: [ ClothingHeadHelmetBase, BaseMajorContraband] #Contra
+  parent: [ ClothingHeadHelmetBase, BaseMajorContraband]
   id: ClothingHeadHelmetLing
   name: chitinous helmet
   description: An all-consuming chitinous mass of armor.
@@ -325,7 +325,7 @@
 #ERT HELMETS
 #ERT Leader Helmet
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingHeadHelmetArmoredBase ] #Contra
+  parent: [ BaseCentcommContraband, ClothingHeadHelmetArmoredBase ]
   id: ClothingHeadHelmetERTLeader
   name: ERT leader helmet
   description: An in-atmosphere helmet worn by the leader of a Nanotrasen Emergency Response Team. Has blue highlights.
@@ -418,7 +418,7 @@
 
 #Bone Helmet
 - type: entity
-  parent: [ ClothingHeadHelmetArmoredBase, BaseMinorContraband ] #Contra
+  parent: [ ClothingHeadHelmetArmoredBase, BaseMinorContraband ]
   id: ClothingHeadHelmetBone
   name: bone helmet
   description: Cool-looking helmet made of skull of your enemies.
@@ -432,7 +432,7 @@
     node: helmet
 
 - type: entity
-  parent: [ ClothingHeadHelmetArmoredBase, BaseMinorContraband ] #Contra
+  parent: [ ClothingHeadHelmetArmoredBase, BaseMinorContraband ]
   id: ClothingHeadHelmetPodWars
   name: ironclad II helmet
   description: An ironclad II helmet, a relic of the pod wars.

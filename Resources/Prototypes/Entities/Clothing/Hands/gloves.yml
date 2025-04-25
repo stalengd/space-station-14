@@ -454,7 +454,7 @@
     price: 0
 
 - type: entity
-  parent: [ClothingHandsBase, BaseSecurityContraband] #Contra
+  parent: [ClothingHandsBase, BaseSecurityContraband]
   id: ClothingHandsGlovesForensic
   name: forensic gloves
   description: Do not leave fibers or fingerprints. If you work without them, you're A TERRIBLE DETECTIVE.

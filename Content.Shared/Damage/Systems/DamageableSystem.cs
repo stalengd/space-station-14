@@ -214,12 +214,10 @@ namespace Content.Shared.Damage
                 }
             }
 
-            damage = ApplyUniversalAllModifiers(damage);
-
-            // SS220 Stamina armor begin
+            // SS220 Stamina begin
             if (damage.DamageDict.TryGetValue("Stamina", out var staminavalue))
-                _stamina.TakeStaminaDamage(uid.Value, staminavalue.Float());
-            // SS220 Stamina armor end
+                _stamina.TakeStaminaDamage(uid.Value, staminavalue.Float(), source: origin);
+            // SS220 Stamina end
 
             // TODO DAMAGE PERFORMANCE
             // Consider using a local private field instead of creating a new dictionary here.

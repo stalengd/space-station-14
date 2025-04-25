@@ -96,8 +96,8 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
         CameraDisconnectButton.OnPressed += _ => CameraDisconnect!();
 
         // SS220 Camera-Map begin
-        SelectorTabs.SetTabTitle((int) TabNumbers.CameraList, "������");
-        SelectorTabs.SetTabTitle((int) TabNumbers.CameraMap, "�����");
+        SelectorTabs.SetTabTitle((int) TabNumbers.CameraList, "Список");
+        SelectorTabs.SetTabTitle((int) TabNumbers.CameraMap, "Карта");
 
         MapViewerControls.AttachToViewer(MapViewer);
         // SS220 Camera-Map end
@@ -147,6 +147,7 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
         // SS220 Camera-Map begin
         _camerasCache = cameras;
 
+        var entries = new List<ItemList.Item>();
         foreach (var (subnetFreqId, subnetCameras) in cameras)
         {
             foreach (var (address, (name, _)) in subnetCameras)
@@ -154,16 +155,23 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
                 if (address == _currentAddress)
                     _currentName = name;
 
-                //if (subnetFreqId == _subnetFilter)
-                //    AddCameraToList(name, address);
+                if (subnetFreqId == _subnetFilter)
+                {
+                    var item = new ItemList.Item(SubnetList)
+                    {
+                        Text = $"{name}: {address}",
+                        Metadata = address
+                    };
+                    entries.Add(item);
+                }
             }
         }
-        // SS220 Camera-Map end
 
-        var entries = cameras.Select(i => new ItemList.Item(SubnetList) {
-            Text = $"{i.Value}: {i.Key}",
-            Metadata = i.Key
-        }).ToList();
+        //var entries = cameras.Select(i => new ItemList.Item(SubnetList) {
+        //    Text = $"{i.Value}: {i.Key}",
+        //    Metadata = i.Key
+        //}).ToList();
+        // SS220 Camera-Map end
         entries.Sort((a, b) => string.Compare(a.Text, b.Text, StringComparison.Ordinal));
         SubnetList.SetItems(entries, (a,b) => string.Compare(a.Text, b.Text));
     }

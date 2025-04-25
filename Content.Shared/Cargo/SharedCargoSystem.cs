@@ -55,6 +55,16 @@ public abstract class SharedCargoSystem : EntitySystem
         }
         return distribution;
     }
+
+    //SS220 cargomoney command begin
+    public bool BankHasAccount(Entity<StationBankAccountComponent?> stationBank, ProtoId<CargoAccountPrototype> account)
+    {
+        if(!Resolve(stationBank, ref stationBank.Comp))
+            return false;
+
+        return stationBank.Comp.Accounts.ContainsKey(account);
+    }
+    //SS220 cargomoney command end
 }
 
 [NetSerializable, Serializable]

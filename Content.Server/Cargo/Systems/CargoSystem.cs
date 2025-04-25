@@ -18,6 +18,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;
 
 namespace Content.Server.Cargo.Systems;
 
@@ -119,4 +120,22 @@ public sealed partial class CargoSystem : SharedCargoSystem
 
         Dirty(ent);
     }
+
+    // SS220 Cargomoney command begin
+    public void SetBankAccountBalance(
+        Entity<StationBankAccountComponent?> ent,
+        int balance,
+        ProtoId<CargoAccountPrototype> account,
+        bool dirty = true)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        if (!ent.Comp.Accounts.ContainsKey(account))
+            return;
+
+        ent.Comp.Accounts[account] = 0;
+        UpdateBankAccount(ent, balance, account, dirty);
+    }
+    // SS220 Cargomoney command end
 }

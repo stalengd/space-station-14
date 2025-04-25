@@ -150,7 +150,7 @@
         acts: [ "Destruction" ]
   - type: CableVisualizer
     statePrefix: mvcable_
-    extraLayerPrefix: mvstripes_
+    # extraLayerPrefix: mvstripes_  #ss220-engineering-update-power
 
 - type: entity
   id: CableMVUncuttable

@@ -294,9 +294,9 @@
     - id: DoubleEmergencyOxygenTankFilled
     - id: MedkitAdvancedFilled
     - id: SyndiHypo
-    - id: EpinephrineChemistryBottle
+    - id: ChemistryBottleEpinephrine
       amount: 2
-    - id: OmnizineChemistryBottle
+    - id: ChemistryBottleOmnizine
 
 - type: startingGear
   id: EbentSpaceWarsMedicGear

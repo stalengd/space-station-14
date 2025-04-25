@@ -1,8 +1,11 @@
 using Content.Server.Fax;
+using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Corvax.CCCVars;
 using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking;
+using Content.Shared.Paper;
+using Content.Shared.SS220.Photocopier;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
@@ -76,14 +79,41 @@ namespace Content.Server.Corvax.StationGoal
         /// <returns>True if at least one fax received paper</returns>
         public bool SendStationGoal(EntityUid ent, StationGoalPrototype goal)
         {
-            var printout = new FaxPrintout(
-                Loc.GetString(goal.Text, ("station", MetaData(ent).EntityName), ("rand_planet_name", GetRandomPlanetName())), //SS220 Random planet name
-                Loc.GetString("station-goal-fax-paper-name"),
-                null,
-                null,
-                "paper_stamp-centcom",
-                [new() { StampedName = Loc.GetString("stamp-component-stamped-name-centcom"), StampedColor = Color.FromHex("#006600") }]
-            );
+            // SS220 Photocopy begin
+            //var printout = new FaxPrintout(
+            //    Loc.GetString(goal.Text, ("station", MetaData(ent).EntityName), ("rand_planet_name", GetRandomPlanetName())), //SS220 Random planet name
+            //    Loc.GetString("station-goal-fax-paper-name"),
+            //    null,
+            //    null,
+            //    "paper_stamp-centcom",
+            //    [new() { StampedName = Loc.GetString("stamp-component-stamped-name-centcom"), StampedColor = Color.FromHex("#006600") }]
+            //);
+            if (!TryComp<StationDataComponent>(ent, out var stationData))
+                return false;
+
+            var dataToCopy = new Dictionary<Type, IPhotocopiedComponentData>();
+            var paperDataToCopy = new PaperPhotocopiedData()
+            {
+                Content = Loc.GetString(goal.Text, ("station", MetaData(ent).EntityName), ("rand_planet_name", GetRandomPlanetName())), //SS220 Random planet name
+                StampState = "paper_stamp-centcom",
+                StampedBy = [
+                    new()
+                    {
+                        StampedName = Loc.GetString("stamp-component-stamped-name-centcom"),
+                        StampedColor = Color.FromHex("#dca019") //SS220-CentcomFashion-Changed the stamp color
+                    }
+                ]
+            };
+            dataToCopy.Add(typeof(PaperComponent), paperDataToCopy);
+
+            var metaData = new PhotocopyableMetaData()
+            {
+                EntityName = Loc.GetString("station-goal-fax-paper-name"),
+                PrototypeId = "PaperNtFormCc"
+            };
+
+            var printout = new PhotocopyableFaxPrintout(dataToCopy, metaData);
+            // SS220 Photocopy end
 
             var wasSent = false;
             var query = EntityQueryEnumerator<FaxMachineComponent>();

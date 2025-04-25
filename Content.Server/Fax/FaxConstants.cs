@@ -30,4 +30,9 @@ public static class FaxConstants
     public const string FaxPaperStampedByData = "fax_data_stamped_by";
     public const string FaxSyndicateData = "fax_data_i_am_syndicate";
     public const string FaxPaperLockedData = "fax_data_locked";
+
+    // SS220 Photocopy begin
+    public const string FaxPaperDataToCopy = "fax_data_to_copy";
+    public const string FaxPaperMetaData = "fax_data_meta";
+    // SS220 Photocopy end
 }

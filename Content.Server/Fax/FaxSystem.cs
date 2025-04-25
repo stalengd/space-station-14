@@ -289,18 +289,28 @@ public sealed class FaxSystem : EntitySystem
 
                     break;
                 case FaxConstants.FaxPrintCommand:
-                    if (!args.Data.TryGetValue(FaxConstants.FaxPaperNameData, out string? name) ||
-                        !args.Data.TryGetValue(FaxConstants.FaxPaperContentData, out string? content))
+                    // SS220 photocopy begin
+                    //if (!args.Data.TryGetValue(FaxConstants.FaxPaperNameData, out string? name) ||
+                    //    !args.Data.TryGetValue(FaxConstants.FaxPaperContentData, out string? content))
+                    //    return;
+
+                    //args.Data.TryGetValue(FaxConstants.FaxPaperLabelData, out string? label);
+                    //args.Data.TryGetValue(FaxConstants.FaxPaperStampStateData, out string? stampState);
+                    //args.Data.TryGetValue(FaxConstants.FaxPaperStampedByData, out List<StampDisplayInfo>? stampedBy);
+                    //args.Data.TryGetValue(FaxConstants.FaxPaperPrototypeData, out string? prototypeId);
+                    //args.Data.TryGetValue(FaxConstants.FaxPaperLockedData, out bool? locked);
+
+                    //var printout = new FaxPrintout(content, name, label, prototypeId, stampState, stampedBy, locked ?? false);
+                    //Receive(uid, printout, args.SenderAddress);
+
+                    if (!args.Data.TryGetValue(FaxConstants.FaxPaperDataToCopy, out Dictionary<Type, IPhotocopiedComponentData>? dataToCopy) ||
+                        !args.Data.TryGetValue(FaxConstants.FaxPaperMetaData, out PhotocopyableMetaData? metaDataToCopy))
                         return;
 
-                    args.Data.TryGetValue(FaxConstants.FaxPaperLabelData, out string? label);
-                    args.Data.TryGetValue(FaxConstants.FaxPaperStampStateData, out string? stampState);
-                    args.Data.TryGetValue(FaxConstants.FaxPaperStampedByData, out List<StampDisplayInfo>? stampedBy);
-                    args.Data.TryGetValue(FaxConstants.FaxPaperPrototypeData, out string? prototypeId);
-                    args.Data.TryGetValue(FaxConstants.FaxPaperLockedData, out bool? locked);
-
-                    var printout = new FaxPrintout(content, name, label, prototypeId, stampState, stampedBy, locked ?? false);
+                    var printout = new PhotocopyableFaxPrintout(dataToCopy, metaDataToCopy);
                     Receive(uid, printout, args.SenderAddress);
+
+                    // SS220 photocopy end
 
                     break;
             }
@@ -451,14 +461,26 @@ public sealed class FaxSystem : EntitySystem
         TryComp<LabelComponent>(sendEntity, out var labelComponent);
         TryComp<NameModifierComponent>(sendEntity, out var nameMod);
 
+        // SS220 Photocopy begin
         // TODO: See comment in 'Send()' about not being able to copy whole entities
-        var printout = new FaxPrintout(paper.Content,
-                                       nameMod?.BaseName ?? metadata.EntityName,
-                                       labelComponent?.CurrentLabel,
-                                       metadata.EntityPrototype?.ID ?? component.PrintPaperId,
-                                       paper.StampState,
-                                       paper.StampedBy,
-                                       paper.EditingDisabled);
+        //var printout = new FaxPrintout(paper.Content,
+        //                               nameMod?.BaseName ?? metadata.EntityName,
+        //                               labelComponent?.CurrentLabel,
+        //                               metadata.EntityPrototype?.ID ?? component.PrintPaperId,
+        //                               paper.StampState,
+        //                               paper.StampedBy,
+        //                               paper.EditingDisabled);
+
+
+        if (!_photocopierSystem.TryGetPhotocopyableMetaData(sendEntity.Value, out var metaData))
+            return;
+
+        var dataToCopy = _photocopierSystem.GetDataToCopyFromEntity(sendEntity.Value);
+        if (dataToCopy.Count == 0)
+            return;
+
+        var printout = new PhotocopyableFaxPrintout(dataToCopy, metaData);
+        // SS220 Photocopy end
 
         component.PrintingQueue.Enqueue(printout);
         component.SendTimeoutRemaining += component.SendTimeout;
@@ -508,7 +530,7 @@ public sealed class FaxSystem : EntitySystem
         var dataToCopy = _photocopierSystem.GetDataToCopyFromEntity(sendEntity.Value);
         if (dataToCopy.Count == 0)
             return;
-        // SS220 Photocopy begin
+        // SS220 Photocopy end
 
         //ss220 autogamma update
         var faxEvent = new FaxSendAttemptEvent(uid, component.DestinationFaxAddress, component.FaxName);
@@ -530,6 +552,8 @@ public sealed class FaxSystem : EntitySystem
             { FaxConstants.FaxPaperLabelData, labelComponent?.CurrentLabel },
             { FaxConstants.FaxPaperContentData, paper.Content },
             { FaxConstants.FaxPaperLockedData, paper.EditingDisabled },
+            { FaxConstants.FaxPaperDataToCopy, dataToCopy }, // SS220 Photocopy
+            { FaxConstants.FaxPaperMetaData, metaData } // SS220 Photocopy
         };
 
         if (metadata.EntityPrototype != null)
@@ -598,46 +622,54 @@ public sealed class FaxSystem : EntitySystem
         var printout = component.PrintingQueue.Dequeue();
 
         // SS220 Photocopy begin
+        //var entityToSpawn = printout.PrototypeId.Length == 0 ? component.PrintPaperId.ToString() : printout.PrototypeId;
+        //var printed = EntityManager.SpawnEntity(entityToSpawn, Transform(uid).Coordinates);
+
         EntityUid printed;
 
         var coords = Transform(uid).Coordinates;
-        var possiblyPrinted = _photocopierSystem.SpawnCopy(coords, printout.MetaData, printout.DataToCopy);
-        if (possiblyPrinted != null)
+
+        if (printout is PhotocopyableFaxPrintout photocopied)
+        {
+            var possiblyPrinted = _photocopierSystem.SpawnCopy(coords, photocopied.MetaData, photocopied.DataToCopy);
+            if (possiblyPrinted == null)
+                return;
+
             printed = possiblyPrinted.Value;
+        }
         else
         {
             var entityToSpawn = printout.PrototypeId.Length == 0 ? component.PrintPaperId.ToString() : printout.PrototypeId;
             printed = EntityManager.SpawnEntity(entityToSpawn, Transform(uid).Coordinates);
-        }
 
-        //var entityToSpawn = printout.PrototypeId.Length == 0 ? component.PrintPaperId.ToString() : printout.PrototypeId;
-        //var printed = EntityManager.SpawnEntity(entityToSpawn, Transform(uid).Coordinates);
-        // SS220 Photocopy end
-
-        if (TryComp<PaperComponent>(printed, out var paper))
-        {
-            _paperSystem.SetContent((printed, paper), printout.Content);
-
-            // Apply stamps
-            if (printout.StampState != null)
+            if (TryComp<PaperComponent>(printed, out var paper))
             {
-                foreach (var stamp in printout.StampedBy)
+                _paperSystem.SetContent((printed, paper), printout.Content);
+
+                // Apply stamps
+                if (printout.StampState != null)
                 {
-                    _paperSystem.TryStamp((printed, paper), stamp, printout.StampState);
+                    foreach (var stamp in printout.StampedBy)
+                    {
+                        _paperSystem.TryStamp((printed, paper), stamp, printout.StampState);
+                    }
                 }
+
+                paper.EditingDisabled = printout.Locked;
             }
 
-            paper.EditingDisabled = printout.Locked;
+            _metaData.SetEntityName(printed, printout.Name);
+
+            if (printout.Label is { } label)
+            {
+                _labelSystem.Label(printed, label);
+            }
         }
 
-        _metaData.SetEntityName(printed, printout.Name);
-
-        if (printout.Label is { } label)
-        {
-            _labelSystem.Label(printed, label);
-        }
-
-        _adminLogger.Add(LogType.Action, LogImpact.Low, $"\"{component.FaxName}\" {ToPrettyString(uid):tool} printed {ToPrettyString(printed):subject}: {printout.Content}");
+        var logContent = GetPaperContent(printed) ?? string.Empty;
+        _adminLogger.Add(LogType.Action, LogImpact.Low, $"\"{component.FaxName}\" {ToPrettyString(uid):tool} printed {ToPrettyString(printed):subject}: {logContent}");
+        //_adminLogger.Add(LogType.Action, LogImpact.Low, $"\"{component.FaxName}\" {ToPrettyString(uid):tool} printed {ToPrettyString(printed):subject}: {printout.Content}");
+        // SS220 Photocopy end
     }
 
 

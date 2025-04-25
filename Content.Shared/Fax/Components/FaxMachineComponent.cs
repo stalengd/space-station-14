@@ -152,8 +152,8 @@ public sealed partial class FaxMachineComponent : Component
     public EntProtoId PrintOfficePaperId = "PaperOffice";
 }
 
-[DataDefinition]
-public sealed partial class FaxPrintout
+[DataDefinition, Virtual] // SS220 Make virtual
+public partial class FaxPrintout
 {
     [DataField(required: true)]
     public string Name { get; private set; } = default!;
@@ -176,19 +176,11 @@ public sealed partial class FaxPrintout
     [DataField]
     public bool Locked { get; private set; }
 
-    // SS220 Photocopy begin
-    [DataField("dataToCopy")]
-    public Dictionary<Type, IPhotocopiedComponentData>? DataToCopy { get; private set; }
-
-    [DataField("metaData")]
-    public PhotocopyableMetaData? MetaData { get; private set; }
-    // SS220 Photocopy end
-
-    private FaxPrintout()
+    protected FaxPrintout() // SS220 Make protected
     {
     }
 
-    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false, Dictionary<Type, IPhotocopiedComponentData>? dataToCopy = null, PhotocopyableMetaData? metaData = null)
+    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false)
     {
         Content = content;
         Name = name;
@@ -197,8 +189,6 @@ public sealed partial class FaxPrintout
         StampState = stampState;
         StampedBy = stampedBy ?? new List<StampDisplayInfo>();
         Locked = locked;
-        DataToCopy = dataToCopy;
-        MetaData = metaData;
     }
 }
 

@@ -63,17 +63,39 @@ namespace Content.Server.Nuke
                     continue;
                 }
 
-                var printout = new FaxPrintout(
-                    paperContent,
-                    Loc.GetString("nuke-codes-fax-paper-name"),
-                    null,
-                    null,
-                    "paper_stamp-centcom",
-                    new List<StampDisplayInfo>
+                // SS220 Photocopy begin
+                //var printout = new FaxPrintout(
+                //    paperContent,
+                //    Loc.GetString("nuke-codes-fax-paper-name"),
+                //    null,
+                //    null,
+                //    "paper_stamp-centcom",
+                //    new List<StampDisplayInfo>
+                //    {
+                //        new StampDisplayInfo { StampedName = Loc.GetString("stamp-component-stamped-name-centcom"), StampedColor = Color.FromHex("#BB3232") },
+                //    }
+                //);
+                var dataToCopy = new Dictionary<Type, IPhotocopiedComponentData>();
+                var paperDataToCopy = new PaperPhotocopiedData()
+                {
+                    Content = paperContent,
+                    StampState = "paper_stamp-centcom",
+                    StampedBy = new List<StampDisplayInfo>
                     {
-                        new StampDisplayInfo { StampedName = Loc.GetString("stamp-component-stamped-name-centcom"), StampedColor = Color.FromHex("#BB3232") },
+                        new StampDisplayInfo { StampedName = Loc.GetString("stamp-component-stamped-name-centcom"), StampedColor = Color.FromHex("#dca019") }, //SS220-CentcomFashion-Changed the stamp color
                     }
-                );
+                };
+                dataToCopy.Add(typeof(PaperComponent), paperDataToCopy);
+
+                var metaData = new PhotocopyableMetaData()
+                {
+                    EntityName = Loc.GetString("nuke-codes-fax-paper-name"),
+                    PrototypeId = "PaperNtFormCcSecure"
+                };
+
+                var printout = new PhotocopyableFaxPrintout(dataToCopy, metaData);
+                // SS220 Photocopy end
+
                 _faxSystem.Receive(faxEnt, printout, null, fax);
 
                 wasSent = true;

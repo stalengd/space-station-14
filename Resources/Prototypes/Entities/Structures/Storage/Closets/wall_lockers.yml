@@ -28,6 +28,8 @@
   name: emergency nitrogen wall closet
   description: It's full of life-saving equipment. Assuming, that is, that you breathe nitrogen.
   components:
+  - type: Sprite
+    sprite: Structures/Storage/wall_locker.rsi
   - type: Appearance
   - type: EntityStorageVisuals
     stateBaseClosed: n2

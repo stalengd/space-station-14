@@ -64,7 +64,19 @@ namespace Content.IntegrationTests.Tests
             "/Maps/Shuttles/ShuttleEvent/honki.yml", // Contains golden honker, clown's rubber stamp
             "/Maps/Shuttles/ShuttleEvent/instigator.yml", // Contains EXP-320g "Friendship"
             "/Maps/Shuttles/ShuttleEvent/syndie_evacpod.yml", // Contains syndicate rubber stamp
+            // SS220 maps begin
+            "/Maps/Shuttles/infiltrator.yml",
+            // SS220 maps end
         };
+
+        // SS220 Add DoNotMapWhitelistDirectories begin
+        private static readonly string[] DoNotMapWhitelistDirectories =
+        {
+            "/Maps/EventMaps",
+            "/Maps/EventShuttles",
+            "/Maps/SS220",
+        };
+        // SS220 Add DoNotMapWhitelistDirectories end
 
         private static readonly string[] GameMaps =
         {
@@ -285,6 +297,23 @@ namespace Content.IntegrationTests.Tests
         {
             if (DoNotMapWhitelist.Contains(map.ToString()))
                 return;
+
+            // SS220 Add DoNotMapWhitelistDirectories begin
+            foreach (var dir in DoNotMapWhitelistDirectories)
+            {
+                var mapSegments = map.EnumerateSegments();
+                var dirSegments = new ResPath(dir).EnumerateSegments();
+                var doNotMapDirectory = true;
+                for (var i = 0; i < dirSegments.Length; i++)
+                {
+                    if (mapSegments[i] != dirSegments[i])
+                        doNotMapDirectory = false;
+                }
+
+                if (doNotMapDirectory)
+                    return;
+            }
+            // SS220 Add DoNotMapWhitelistDirectories end
 
             var yamlEntities = node["entities"];
             if (!protoManager.TryIndex<EntityCategoryPrototype>("DoNotMap", out var dnmCategory))

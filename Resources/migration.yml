@@ -702,3 +702,4 @@ DrinkEspressoMartiniGlass: DrinkEspressoMartini
 DrinkMoscowMuleGlass: DrinkMoscowMule
 #SS220 delete duplicates corvax drinks end
 WristwatchGold: ClothingWristWatchGold # SS220 wristwatch
+SupermatterGrenade: SingularityGrenade # SS220 fix

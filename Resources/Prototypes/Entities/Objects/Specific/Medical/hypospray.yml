@@ -66,10 +66,12 @@
   - type: UseDelay
     delay: 0.5
   - type: Appearance
-  - type: SolutionContainerVisuals
-    maxFillLevels: 4
-    fillBaseName: hypo_fill
-    solutionName: hypospray
+  #SS220-resprite-syndihypo begin
+  # - type: SolutionContainerVisuals
+  #   maxFillLevels: 4
+  #   fillBaseName: hypo_fill
+  #   solutionName: hypospray
+  #SS220-resprite-syndihypo end
 
 - type: entity
   name: borghypo

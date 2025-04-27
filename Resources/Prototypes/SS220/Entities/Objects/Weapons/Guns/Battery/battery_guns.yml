@@ -157,7 +157,8 @@
     fireCost: 10
   - type: MagazineVisuals
     magState: pulse-mag
-    steps: 4
+    steps: 5
+  - type: Appearance
   - type: BatteryWeaponFireModes
     fireModes:
     - proto: BulletLaserDestroy

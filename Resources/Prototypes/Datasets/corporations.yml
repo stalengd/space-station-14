@@ -1,5 +1,5 @@
 - type: localizedDataset
-  id: TraitorCorporations #AfterConflicts
+  id: TraitorCorporations
   values:
     prefix: traitor-corporations-dataset-
     count: 9

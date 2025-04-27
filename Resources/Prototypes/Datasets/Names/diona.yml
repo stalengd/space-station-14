@@ -1,11 +1,11 @@
 - type: localizedDataset
-  id: NamesDionaFirst #AfterConflicts
+  id: NamesDionaFirst
   values:
     prefix: names-diona-first-dataset-
     count: 89
 
 - type: localizedDataset
-  id: NamesDionaLast #AfterConflicts
+  id: NamesDionaLast
   values:
     prefix: names-diona-last-dataset-
     count: 122

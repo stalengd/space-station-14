@@ -35,8 +35,8 @@
 #      state: icon
 #    - type: RandomMetadata
 #      nameSegments:
-#        - NamesFirstMilitaryLeader
-#        - NamesLastMilitary
+#        - NamesMilitaryFirstLeader
+#        - NamesMilitaryLast
 #    - type: RandomHumanoidSpawner
 #      settings: DeathSquad
 #SS220-Deathsquad-Update-End

@@ -1,5 +1,5 @@
 ﻿- type: localizedDataset
-  id: Adjectives #AfterConflicts
+  id: Adjectives
   values:
     prefix: adjectives-dataset-
-    count: 396
+    count: 956 # Corvax-MRP-Edit

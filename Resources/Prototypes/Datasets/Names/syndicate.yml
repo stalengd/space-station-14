@@ -1,17 +1,17 @@
 - type: localizedDataset
-  id: NamesSyndicateNormal #AfterConflicts
+  id: NamesSyndicateNormal
   values:
     prefix: names-syndicate-normal-dataset-
     count: 25
 
 - type: localizedDataset
-  id: NamesSyndicateElite #AfterConflicts
+  id: NamesSyndicateElite
   values:
     prefix: names-syndicate-elite-dataset-
     count: 23
 
 - type: localizedDataset
-  id: NamesSyndicatePrefix #AfterConflicts
+  id: NamesSyndicatePrefix
   values:
     prefix: names-syndicate-prefix-dataset-
     count: 2

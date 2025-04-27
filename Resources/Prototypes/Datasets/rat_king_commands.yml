@@ -1,23 +1,23 @@
 - type: localizedDataset
-  id: RatKingCommandStay #AfterConflicts
+  id: RatKingCommandStay
   values:
     prefix: rat-king-command-stay-
     count: 3
 
 - type: localizedDataset
-  id: RatKingCommandFollow #AfterConflicts
+  id: RatKingCommandFollow
   values:
     prefix: rat-king-command-follow-
     count: 2
 
 - type: localizedDataset
-  id: RatKingCommandCheeseEm #AfterConflicts
+  id: RatKingCommandCheeseEm
   values:
     prefix: rat-king-command-cheese-
     count: 4
 
 - type: localizedDataset
-  id: RatKingCommandLoose #AfterConflicts
+  id: RatKingCommandLoose
   values:
     prefix: rat-king-command-loose-
     count: 2

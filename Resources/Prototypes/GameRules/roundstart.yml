@@ -43,16 +43,6 @@
     - id: DummyNonAntag
       prob: 0.3
 
-#SS220 survival minimum players begin #AfterConflicts
-- type: entity
-  categories: [ GameRules ]
-  parent: BaseGameRule
-  id: SurvivalRule
-  components:
-  - type: GameRule
-    minPlayers: 30
-#SS220 survival minimum players end
-
 - type: entity
   id: DeathMatch31
   parent: BaseGameRule
@@ -380,15 +370,6 @@
     - prefRoles: [ InitialInfected, Traitor, Thief, HeadRev ]
       max: 2
       playerRatio: 30
-
-# SS220 begin #AfterConflicts
-- type: entity
-  id: EmergencyShuttleAutoCall
-  parent: BaseGameRule
-  categories: [ GameRules ]
-  components:
-  - type: EmergencyShuttleAutoCallRule
-# SS220 end
 
 # event schedulers
 

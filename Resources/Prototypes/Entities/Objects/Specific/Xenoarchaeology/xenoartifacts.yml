@@ -26,6 +26,10 @@
   - type: XenoArtifact
     effectsTable: !type:NestedSelector
       tableId: XenoArtifactEffectsDefaultTable
+    # SS220-BonusForFullyDiscovered - start
+    bonusTable: !type:NestedSelector
+      tableId: XenoArtifactBonusForFullyDiscoveredTable
+    # SS220-BonusForFullyDiscovered - end
   - type: Damageable
   - type: Actions
   - type: Physics

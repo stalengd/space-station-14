@@ -165,6 +165,14 @@ public sealed partial class XenoArtifactComponent : Component
     /// </summary>
     [DataField]
     public EntProtoId<InstantActionComponent> SelfActivateAction = "ActionArtifactActivate";
+
+    // SS220-BonusForFullyDiscovered - start
+    [ViewVariables]
+    public bool IsBonusIssued = false;
+
+    [DataField]
+    public EntityTableSelector? BonusTable;
+    // SS220-BonusForFullyDiscovered - end
 }
 
 /// <summary>

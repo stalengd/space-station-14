@@ -60,6 +60,7 @@ public abstract partial class SharedXenoArtifactSystem
             return;
 
         node.Comp.Locked = false;
+        CheckFullyDiscoveredBonus(artifact); // SS220-BonusForFullyDiscovered
         RebuildCachedActiveNodes((artifact, artifact));
         Dirty(node);
     }

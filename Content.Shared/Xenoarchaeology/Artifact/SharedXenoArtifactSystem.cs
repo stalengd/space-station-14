@@ -1,5 +1,6 @@
 using Content.Shared.Actions;
 using Content.Shared.Popups;
+using Content.Shared.Throwing;
 using Content.Shared.Xenoarchaeology.Artifact.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
@@ -21,6 +22,7 @@ public abstract partial class SharedXenoArtifactSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!; // SS220-BonusForFullyDiscovered
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -62,4 +64,45 @@ public abstract partial class SharedXenoArtifactSystem : EntitySystem
         ent.Comp.Suppressed = val;
         Dirty(ent);
     }
+
+    // SS220-BonusForFullyDiscovered - start
+    private void CheckFullyDiscoveredBonus(Entity<XenoArtifactComponent> artifact)
+    {
+        if (!_net.IsServer)
+            return;
+
+        foreach (var segment in artifact.Comp.CachedSegments)
+        {
+            foreach (var netEnt in segment)
+            {
+                if (!TryComp<XenoArtifactNodeComponent>(GetEntity(netEnt), out var nodeComponent))
+                    continue;
+
+                // If at least 1 node is blocked it does not issue a bonus.
+                if (nodeComponent.Locked)
+                    return;
+            }
+        }
+
+        artifact.Comp.IsBonusIssued = true;
+        SpawnBonus(artifact);
+    }
+
+    private void SpawnBonus(Entity<XenoArtifactComponent> artifact)
+    {
+        var spawns = _entityTable.GetSpawns(artifact.Comp.BonusTable);
+
+        foreach (var proto in spawns)
+        {
+            if (!TrySpawnNextTo(proto, artifact, out var item))
+                continue;
+
+            var xform = Transform(item.Value);
+            var throwing = xform.LocalRotation.ToWorldVec() * 5f; // magic number throwing force
+            var direction = xform.Coordinates.Offset(throwing);
+
+            _throwing.TryThrow(item.Value, direction);
+        }
+    }
+    // SS220-BonusForFullyDiscovered - end
 }

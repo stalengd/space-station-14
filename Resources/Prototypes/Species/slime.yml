@@ -12,8 +12,8 @@
 #SS220-new-species-naming begin
   maleFirstNames: NamesSlimeFirstMale
   femaleFirstNames: NamesSlimeFirstFemale
-  maleLastNames: names_slime_last
-  femaleLastNames: names_slime_last
+  maleLastNames: NamesSlimeLast
+  femaleLastNames: NamesSlimeLast
 #SS220-new-species-naming end
 
 - type: speciesBaseSprites

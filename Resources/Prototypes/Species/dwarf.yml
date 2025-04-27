@@ -11,6 +11,6 @@
 #SS220-new-species-naming begin
   maleFirstNames: NamesDwarfMale
   femaleFirstNames: NamesDwarfFemale
-  maleLastNames: names_dwarf_last
-  femaleLastNames: names_dwarf_last
+  maleLastNames: NamesDwarfLast
+  femaleLastNames: NamesDwarfLast
 #SS220-new-species-naming end

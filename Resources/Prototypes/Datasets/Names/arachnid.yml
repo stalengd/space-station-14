@@ -7,5 +7,5 @@
 - type: localizedDataset
   id: NamesArachnidLast
   values:
-    prefix: names-arachnid-last-dataset-
-    count: 68
+    prefix: ss220-names-arachnid-last-dataset- #ss220-arachnid-lore-names
+    count: 16 #ss220-arachnid-lore-names

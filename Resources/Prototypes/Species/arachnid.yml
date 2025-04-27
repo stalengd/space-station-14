@@ -10,8 +10,8 @@
   skinColoration: Hues
   maleFirstNames: NamesArachnidMale #ss220-arachnid-lore-names
   femaleFirstNames: NamesArachnidFemale #ss220-arachnid-lore-names
-  maleLastNames: names_arachnid_last # Corvax-LastnameGender
-  femaleLastNames: names_arachnid_last # Corvax-LastnameGender
+  maleLastNames: NamesArachnidLast # Corvax-LastnameGender
+  femaleLastNames: NamesArachnidLast # Corvax-LastnameGender
 
 - type: speciesBaseSprites
   id: MobArachnidSprites

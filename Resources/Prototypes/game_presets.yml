@@ -229,7 +229,8 @@
   - SubGamemodesRuleNoWizard #No Dual Wizards at the start, midround is fine
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  # - SpaceTrafficControlEventScheduler # SS220-NoUnknownShuttles
+  - SpaceTrafficControlFriendlyEventScheduler # SS220-LostSouls
   - BasicRoundstartVariation
 
 - type: gamePreset

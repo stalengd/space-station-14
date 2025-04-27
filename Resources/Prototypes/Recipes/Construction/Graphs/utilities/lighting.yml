@@ -114,7 +114,7 @@
               name: black crystal shard
               icon:
                 sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard1
+                state: shard #SS220-Crystal-resprite
               doAfter: 1
     - node: icon
       entity: LightTubeCrystalBlack
@@ -174,7 +174,7 @@
         name: cyan crystal shard
         icon:
           sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          state: shard #SS220-Crystal-resprite
           color: #52ff39
         doAfter: 1
   - node: icon

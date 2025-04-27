@@ -11,8 +11,8 @@
   maleFirstNames: NamesMothFirstMale
   femaleFirstNames: NamesMothFirstFemale
   #SS220-new-species-naming begin
-  maleLastNames: names_moth_last
-  femaleLastNames: names_moth_last
+  maleLastNames: NamesMothLast
+  femaleLastNames: NamesMothLast
   # lastNames: NamesMothLast
   #SS220-new-species-naming end
 

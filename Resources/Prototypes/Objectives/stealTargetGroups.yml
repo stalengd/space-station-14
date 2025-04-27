@@ -353,60 +353,58 @@
 
 # Thief Animal
 
-# SS220 Delete thief objective animals begin
-# - type: stealTargetGroup
-#   id: AnimalIan
-#   name: steal-target-groups-animal-ian
-#   sprite:
-#     sprite: Mobs/Pets/corgi.rsi
-#     state: ian
+- type: stealTargetGroup
+  id: AnimalIan
+  name: steal-target-groups-animal-ian
+  sprite:
+    sprite: Mobs/Pets/corgi.rsi
+    state: ian
 
-# - type: stealTargetGroup
-#   id: AnimalNamedCat
-#   name: steal-target-groups-animal-named-cat
-#   sprite:
-#     sprite: Mobs/Pets/bingus.rsi
-#     state: bingus
+- type: stealTargetGroup
+  id: AnimalNamedCat
+  name: steal-target-groups-animal-named-cat
+  sprite:
+    sprite: Mobs/Pets/bingus.rsi
+    state: bingus
 
-# - type: stealTargetGroup
-#   id: AnimalMcGriff
-#   name: steal-target-groups-animal-mc-griff
-#   sprite:
-#     sprite: Mobs/Pets/mcgriff.rsi
-#     state: mcgriff
+- type: stealTargetGroup
+  id: AnimalMcGriff
+  name: steal-target-groups-animal-mc-griff
+  sprite:
+    sprite: Mobs/Pets/mcgriff.rsi
+    state: mcgriff
 
-# - type: stealTargetGroup
-#   id: AnimalWalter
-#   name: steal-target-groups-animal-walter
-#   sprite:
-#     sprite: Mobs/Pets/walter.rsi
-#     state: walter
+- type: stealTargetGroup
+  id: AnimalWalter
+  name: steal-target-groups-animal-walter
+  sprite:
+    sprite: Mobs/Pets/walter.rsi
+    state: walter
 
-# - type: stealTargetGroup
-#   id: AnimalMorty
-#   name: steal-target-groups-animal-morty
-#   sprite:
-#     sprite: Mobs/Animals/possum.rsi
-#     state: possum
+- type: stealTargetGroup
+  id: AnimalMorty
+  name: steal-target-groups-animal-morty
+  sprite:
+    sprite: Mobs/Animals/possum.rsi
+    state: possum
 
-# - type: stealTargetGroup
-#   id: AnimalRenault
-#   name: steal-target-groups-animal-renault
-#   sprite:
-#     sprite: Mobs/Animals/fox.rsi
-#     state: fox
+- type: stealTargetGroup
+  id: AnimalRenault
+  name: steal-target-groups-animal-renault
+  sprite:
+    sprite: Mobs/Animals/fox.rsi
+    state: fox
 
-# - type: stealTargetGroup
-#   id: AnimalShiva
-#   name: steal-target-groups-animal-shiva
-#   sprite:
-#     sprite: Mobs/Pets/shiva.rsi
-#     state: shiva
+- type: stealTargetGroup
+  id: AnimalShiva
+  name: steal-target-groups-animal-shiva
+  sprite:
+    sprite: Mobs/Pets/shiva.rsi
+    state: shiva
 
-# - type: stealTargetGroup
-#   id: AnimalTropico
-#   name: steal-target-groups-animal-tropico
-#   sprite:
-#     sprite: Mobs/Animals/crab.rsi
-#     state: crab
-# SS220 Delete thief objective animals end
+- type: stealTargetGroup
+  id: AnimalTropico
+  name: steal-target-groups-animal-tropico
+  sprite:
+    sprite: Mobs/Animals/crab.rsi
+    state: crab

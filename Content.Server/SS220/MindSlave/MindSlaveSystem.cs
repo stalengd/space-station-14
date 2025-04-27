@@ -67,9 +67,6 @@ public sealed class MindSlaveSystem : EntitySystem
     [ValidatePrototypeId<NpcFactionPrototype>]
     private const string SyndicateFactionId = "Syndicate";
 
-    [ValidatePrototypeId<TagPrototype>]
-    private const string MindSlaveImplantTag = "MindSlave";
-
     private readonly SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/Ambience/Antag/traitor_start.ogg");
 
     [ValidatePrototypeId<AlertPrototype>]
@@ -335,7 +332,7 @@ public sealed class MindSlaveSystem : EntitySystem
             EntityUid? mindslaveImplant = null;
             foreach (var implant in implants)
             {
-                if (!_tag.HasTag(implant, MindSlaveImplantTag))
+                if (!HasComp<MindSlaveImplantComponent>(implant))
                     continue;
 
                 mindslaveImplant = implant;

@@ -35,9 +35,6 @@
       "name": "ert_security"
     },
     {
-      "name": "deathsquad"
-    },
-    {
       "name": "gold"
     },
     {
@@ -105,12 +102,6 @@
     },
     {
       "name": "idlawyer"
-    },
-    {
-      "name": "idiaa"
-    },
-    {
-      "name": "idmagistrate"
     },
     {
       "name": "idmedicaldoctor"
@@ -183,9 +174,6 @@
     },
     {
       "name": "idintern-tech"
-    },
-    {
-      "name": "idblueshield"
     },
     {
       "name": "idadmin"
@@ -285,21 +273,12 @@
       "directions": 4
     },
     {
-      "name": "ussp"
-    },
-    {
-      "name": "ussp_med"
-    },
-    {
       "name": "green-inhand-left",
       "directions": 4
     },
     {
       "name": "green-inhand-right",
       "directions": 4
-    },
-	{
-	  "name": "idseniorservice"
-	}
+    }
   ]
 }

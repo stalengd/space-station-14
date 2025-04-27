@@ -18,10 +18,6 @@
       "directions": 4
     },
     {
-      "name": "equipped-IDCARD",
-      "directions": 4
-    },
-    {
       "name": "inhand-left",
       "directions": 4
     },
@@ -42,9 +38,6 @@
       "name": "pda"
     },
     {
-      "name": "pda-admiral"
-    },
-    {
       "name": "pda-atmos"
     },
     {
@@ -60,13 +53,7 @@
       "name": "pda-cargo"
     },
     {
-      "name": "pda-cburn"
-    },
-    {
       "name": "pda-ce"
-    },
-    {
-      "name": "pda-ce_dark"
     },
     {
       "name": "pda-chaplain"
@@ -87,13 +74,7 @@
       "name": "pda-cook"
     },
     {
-      "name": "pda-deathsquad"
-    },
-    {
       "name": "pda-detective"
-    },
-    {
-      "name": "pda-diplomat"
     },
     {
       "name": "pda-engineer"
@@ -111,19 +92,21 @@
       "name": "pda-hydro"
     },
     {
-      "name": "pda-iaa"
-    },
-    {
       "name": "pda-janitor"
     },
     {
       "name": "pda-lawyer"
     },
     {
-      "name": "pda-library"
-    },
-    {
-      "name": "pda-magistrate"
+      "name": "pda-library",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
       "name": "pda-medical"
@@ -144,10 +127,25 @@
       "name": "pda-qm"
     },
     {
-      "name": "pda-rd"
+      "name": "pda-r",
+      "delays": [
+        [
+          0.8,
+          0.8
+        ]
+      ]
     },
     {
-      "name": "pda-rd-alt"
+      "name": "pda-r-library",
+      "delays": [
+        [
+          0.8,
+          0.8
+        ]
+      ]
+    },
+    {
+      "name": "pda-rd"
     },
     {
       "name": "pda-roboticist"
@@ -159,7 +157,15 @@
       "name": "pda-security"
     },
     {
-      "name": "pda-brigmedic"
+      "name": "pda-brigmedic",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
       "name": "pda-syndi"
@@ -168,7 +174,15 @@
       "name": "pda-syndi-agent"
     },
     {
-      "name": "pda-centcom"
+      "name": "pda-centcom",
+      "delays": [
+        [
+          1.2,
+          1.2,
+          1.2,
+          1.2
+        ]
+      ]
     },
     {
       "name": "pda-virology"
@@ -198,16 +212,10 @@
       "name": "pda-interntech"
     },
     {
-      "name": "pda-bs"
-    },
-    {
       "name": "pda-zookeeper"
     },
     {
       "name": "pda-ert"
-    },
-    {
-      "name": "pda-centcomnew"
     },
     {
       "name": "pda-cluwne"
@@ -234,6 +242,10 @@
           0.3
         ]
       ]
+    },
+    {
+      "name": "equipped-IDCARD",
+      "directions": 4
     }
   ]
 }

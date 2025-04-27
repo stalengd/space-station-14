@@ -13,5 +13,5 @@
 - type: localizedDataset
   id: NamesMothLast
   values:
-    prefix: ss220-names-moth-last-dataset- # SS220 moth names
+    prefix: ss220-names-moth-last- # SS220 moth names
     count: 34 # SS220 moth names

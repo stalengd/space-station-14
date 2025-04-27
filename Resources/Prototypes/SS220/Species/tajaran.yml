@@ -10,8 +10,8 @@
   markingLimits: MobTajaranMarkingLimits
   dollPrototype: MobTajaranDummy
   skinColoration: Hues
-  maleFirstNames: tajaran_first_male
-  femaleFirstNames: tajaran_first_female
+  maleFirstNames: NamesTajaranFirstMale
+  femaleFirstNames: NamesTajaranFirstFemale
   maleLastNames: tajaran_second_unisex
   femaleLastNames: tajaran_second_unisex
   buttScanTexture: /Textures/SS220/Interface/Butts/tajaran.png

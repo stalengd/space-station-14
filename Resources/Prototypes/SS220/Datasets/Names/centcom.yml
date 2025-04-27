@@ -1,10 +1,10 @@
-- type: localizetDataset
+- type: localizedDataset
   id: NamesFirstCentcomAgent
   values:
     prefix: names-centcom-agent-first-dataset-
     count: 54
 
-- type: localizetDataset
+- type: localizedDataset
   id: NamesLastCentcomAgent
   values:
     prefix: names-centcom-agent-last-dataset-
@@ -12,7 +12,7 @@
 
 ### Diplomat
 
-- type: localizetDataset
+- type: localizedDataset
   id: NamesFirstDiplomatMale
   values:
     prefix: names-diplomat-first-male-dataset-
@@ -68,7 +68,7 @@
 #   - Кира
 #   - Клавдия
 
-- type: localizetDataset
+- type: localizedDataset
   id: NamesLastDiplomatMale
   values:
     prefix: names-diplomat-last-male-dataset-
@@ -117,13 +117,13 @@
 #   - Майор
 #   - Лейтенант
 
-- type: localizetDataset
+- type: localizedDataset
   id: NamesFirstBSOMember
   values:
     prefix: names-bso-member-first-dataset-
     count: 5
 
-- type: localizetDataset
+- type: localizedDataset
   id: NamesLastBSOMember
   values:
     prefix: names-bso-member-last-dataset-

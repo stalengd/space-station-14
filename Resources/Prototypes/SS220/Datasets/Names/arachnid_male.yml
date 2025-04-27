@@ -1,5 +1,5 @@
 - type: localizedDataset
   id: NamesArachnidMale
   values:
-   perdix: names-arachnid-male-
+   prefix: names-arachnid-male-
    count: 64

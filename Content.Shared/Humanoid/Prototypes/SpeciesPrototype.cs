@@ -92,15 +92,15 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField]
     public ProtoId<LocalizedDatasetPrototype> FemaleFirstNames { get; private set; } = "NamesFirstFemale";
 
-    // Corvax-LastnameGender-Start: Split lastname field by gender
+    // Corvax-LastnameGender-Start: Split lastname field by genderr
     //[DataField]
     //public ProtoId<LocalizedDatasetPrototype> LastNames { get; private set; } = "NamesLast";
 
     [DataField]
-    public string MaleLastNames { get; private set; } = "names_last_male";
+    public ProtoId<LocalizedDatasetPrototype> MaleLastNames { get; private set; } = "NamesHumanLastMale";
 
     [DataField]
-    public string FemaleLastNames { get; private set; } = "names_last_female";
+    public ProtoId<LocalizedDatasetPrototype> FemaleLastNames { get; private set; } = "NamesHumanLastFemale";
     // Corvax-LastnameGender-End
 
     [DataField]

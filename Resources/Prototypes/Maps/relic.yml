@@ -53,7 +53,7 @@
             SecurityOfficer: [ 1, 2 ]
             Detective: [ 1, 1 ]
             SecurityCadet: [ 2, 2 ] #intern, not counted
-            Lawyer: [ 1, 1 ]
+            #Lawyer: [ 1, 1 ] #SS220 no spawn points
             #supply (2)
             CargoTechnician: [ 2, 2 ]
             #civilian (1+)

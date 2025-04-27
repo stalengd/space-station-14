@@ -52,7 +52,7 @@
             SecurityOfficer: [ 8, 8 ]
             Detective: [ 1, 1 ]
             SecurityCadet: [ 4, 4 ] #intern, not counted
-            Lawyer: [ 3, 3 ]
+            #Lawyer: [ 3, 3 ] #SS220 no spawn points
             #supply (7)
             SalvageSpecialist: [ 3, 3 ]
             CargoTechnician: [ 4, 4 ]

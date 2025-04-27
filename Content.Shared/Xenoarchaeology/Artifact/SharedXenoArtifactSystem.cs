@@ -78,7 +78,7 @@ public abstract partial class SharedXenoArtifactSystem : EntitySystem
                 if (!TryComp<XenoArtifactNodeComponent>(GetEntity(netEnt), out var nodeComponent))
                     continue;
 
-                // If at least 1 node is blocked it does not issue a bonus.
+                // If at least 1 node is locked it does not issue a bonus.
                 if (nodeComponent.Locked)
                     return;
             }

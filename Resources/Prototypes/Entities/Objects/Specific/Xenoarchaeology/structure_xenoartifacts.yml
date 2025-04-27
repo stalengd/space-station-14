@@ -48,11 +48,3 @@
       min: 9
       max: 13
 
-- type: entity
-  parent: BaseXenoArtifactStructure
-  id: EasyXenoArtifact
-  components:
-  - type: XenoArtifact
-    nodeCount:
-      min: 2
-      max: 3

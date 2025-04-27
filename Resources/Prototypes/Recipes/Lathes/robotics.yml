@@ -160,7 +160,7 @@
   parent: BaseGoldBorgModuleRecipe
   id: BorgModuleAdvancedCleaning
   result: BorgModuleAdvancedCleaning
-  category: Robotics
+  categories: [ Robotics ]
   completetime: 3
   materials:
     Steel: 250

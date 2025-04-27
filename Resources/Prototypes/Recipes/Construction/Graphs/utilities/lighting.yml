@@ -195,7 +195,7 @@
         name: blue crystal shard
         icon:
           sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          state: shard #SS220-Crystal-resprite
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalBlue
@@ -215,7 +215,7 @@
         name: yellow crystal shard
         icon:
           sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          state: shard #SS220-Crystal-resprite
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalYellow
@@ -235,7 +235,7 @@
         name: pink crystal shard
         icon:
           sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          state: shard #SS220-Crystal-resprite
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalPink
@@ -255,7 +255,7 @@
         name: orange crystal shard
         icon:
           sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          state: shard #SS220-Crystal-resprite
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalOrange
@@ -275,7 +275,7 @@
         name: black crystal shard
         icon:
           sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          state: shard #SS220-Crystal-resprite
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalBlack
@@ -295,7 +295,7 @@
         name: red crystal shard
         icon:
           sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          state: shard #SS220-Crystal-resprite
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalRed
@@ -315,7 +315,7 @@
         name: green crystal shard
         icon:
           sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          state: shard #SS220-Crystal-resprite
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalGreen

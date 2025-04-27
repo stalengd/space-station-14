@@ -12,8 +12,8 @@
   skinColoration: Hues
   maleFirstNames: NamesTajaranFirstMale
   femaleFirstNames: NamesTajaranFirstFemale
-  maleLastNames: tajaran_second_unisex
-  femaleLastNames: tajaran_second_unisex
+  maleLastNames: NamesTajaranSecondUnisex
+  femaleLastNames: NamesTajaranSecondUnisex
   buttScanTexture: /Textures/SS220/Interface/Butts/tajaran.png
   youngAge: 25
   oldAge: 55

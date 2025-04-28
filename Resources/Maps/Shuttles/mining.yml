@@ -1,17 +1,6 @@
 meta:
-  format: 7
-  category: Grid
-  engineVersion: 254.1.0
-  forkId: ""
-  forkVersion: ""
-  time: 04/27/2025 20:25:17
-  entityCount: 156
-maps: []
-grids:
-- 1
-orphans:
-- 1
-nullspace: []
+  format: 6
+  postmapinit: false
 tilemap:
   0: Space
   69: FloorSteel
@@ -1166,6 +1155,14 @@ entities:
     - type: Transform
       pos: -5.5,-0.5
       parent: 1
+    - type: DeviceLinkSource
+      linkedPorts:
+        24:
+        - Pressed: Toggle
+        22:
+        - Pressed: Toggle
+        23:
+        - Pressed: Toggle
 - proto: SignalButtonExt2
   entities:
   - uid: 111
@@ -1173,6 +1170,14 @@ entities:
     - type: Transform
       pos: 0.5,-0.5
       parent: 1
+    - type: DeviceLinkSource
+      linkedPorts:
+        26:
+        - Pressed: Toggle
+        27:
+        - Pressed: Toggle
+        25:
+        - Pressed: Toggle
 - proto: SMESBasic
   entities:
   - uid: 112

@@ -328,7 +328,7 @@
   id: WizardSpawn
   components:
   - type: StationEvent
-    weight: 1 # rare
+    weight: 0.1 # SS 220 0.1 weight wiz spawn midround
     duration: 1
     earliestStart: 30
     reoccurrenceDelay: 60

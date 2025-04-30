@@ -29,7 +29,7 @@ public sealed partial class TechnologyDatabaseComponent : Component
     public List<string> SupportedDisciplines = new();
 
     [DataField("allowUnlimitedTechnoligies"), ViewVariables(VVAccess.ReadWrite)]
-    public bool AllowUnlimitedTechnoligies = true;
+    public bool AllowUnlimitedTechnoligies = false; // SS220 Disable unlimited techs
 
     /// <summary>
     /// The ids of all the technologies which have been unlocked.

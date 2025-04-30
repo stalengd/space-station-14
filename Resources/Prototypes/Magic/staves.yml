@@ -42,6 +42,10 @@
     sprite: Objects/Weapons/Guns/Basic/staves.rsi
     layers:
     - state: animation
+  # SS 220 add Delay to Animation Stafe bgn
+  - type: UseDelay
+    delay: 15
+  # SS 220 add Delay to Animation Stafe end
   - type: ActionOnInteract
     actions:
     - ActionAnimateSpell

@@ -19,7 +19,7 @@
   - type: Transform
     anchored: false
   - type: Physics
-    bodyType: KinematicController ## SS220 Anomaly-movement
+    bodyType: Dynamic ## SS220 Anomaly fix and tether gravy gun used remove
     bodyStatus: InAir
   - type: Fixtures
     fixtures:

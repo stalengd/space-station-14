@@ -1441,7 +1441,7 @@
     #Telecrystal: 1
   #ss220 1 tc uplink sales fix end
   cost:
-    Telecrystal: 5 #ss220-uplink-discounts
+    Telecrystal: 4 #ss220 change uplink price after usptream 72
   categories:
     - UplinkImplants
 
@@ -1669,9 +1669,9 @@
   productEntity: ClothingOuterVestWeb
   discountCategory: usualDiscounts
   discountDownTo:
-    Telecrystal: 3 #ss220-uplink-discounts
+    Telecrystal: 2 #ss220 change uplink price after usptream 72
   cost:
-    Telecrystal: 5 #ss220-uplink-discounts
+    Telecrystal: 3 #ss220 change uplink price after usptream 72
   categories:
   - UplinkWearables
 

@@ -6,7 +6,7 @@
   - type: LimitedCharges
     maxCharges: 5
   - type: EntityTargetAction
-    useDelay: 0
+    useDelay: 15 # add Delay to Animation Stafe end
     itemIconStyle: BigAction
     whitelist:
       components:

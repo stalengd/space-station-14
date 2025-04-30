@@ -1199,7 +1199,7 @@
     key: enum.FundingAllocationConsoleUiKey.Key
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
-    access: [["HeadOfPersonnel"]]
+    access: [["Quartermaster"]] # SS220 QM funding expert
   - type: UserInterface
     interfaces:
       enum.FundingAllocationConsoleUiKey.Key:

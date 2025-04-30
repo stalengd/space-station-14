@@ -114,6 +114,12 @@
         - RawMaterial
         - Ingot
   - type: OreSiloClient
+  # SS220 Add silo linking in mapping begin
+  - type: DeviceNetwork
+    deviceNetId: Private
+    receiveFrequencyId: OreSilo
+    transmitFrequencyId: OreSilo
+  # SS220 Add silo linking in mapping end
   - type: Lathe
     idleState: icon
     runningState: building
@@ -189,6 +195,12 @@
         - RawMaterial
         - Ingot
   - type: OreSiloClient
+  # SS220 Add silo linking in mapping begin
+  - type: DeviceNetwork
+    deviceNetId: Private
+    receiveFrequencyId: OreSilo
+    transmitFrequencyId: OreSilo
+  # SS220 Add silo linking in mapping end
   - type: Lathe
     idleState: icon
     runningState: building
@@ -279,6 +291,12 @@
         - RawMaterial
         - Ingot
   - type: OreSiloClient
+  # SS220 Add silo linking in mapping begin
+  - type: DeviceNetwork
+    deviceNetId: Private
+    receiveFrequencyId: OreSilo
+    transmitFrequencyId: OreSilo
+  # SS220 Add silo linking in mapping end
   - type: RequireProjectileTarget
 
 - type: entity
@@ -328,6 +346,12 @@
       - RawMaterial
       - Ingot
   - type: OreSiloClient
+  # SS220 Add silo linking in mapping begin
+  - type: DeviceNetwork
+    deviceNetId: Private
+    receiveFrequencyId: OreSilo
+    transmitFrequencyId: OreSilo
+  # SS220 Add silo linking in mapping end
   - type: GuideHelp
     guides:
     - Robotics
@@ -417,6 +441,12 @@
         - RawMaterial
         - Ingot
   - type: OreSiloClient
+  # SS220 Add silo linking in mapping begin
+  - type: DeviceNetwork
+    deviceNetId: Private
+    receiveFrequencyId: OreSilo
+    transmitFrequencyId: OreSilo
+  # SS220 Add silo linking in mapping end
   - type: LatheAnnouncing
     channels: [Security]
 
@@ -454,6 +484,12 @@
           - RawMaterial
           - Ingot
     - type: OreSiloClient
+    # SS220 Add silo linking in mapping begin
+    - type: DeviceNetwork
+      deviceNetId: Private
+      receiveFrequencyId: OreSilo
+      transmitFrequencyId: OreSilo
+    # SS220 Add silo linking in mapping end
 
 - type: entity
   id: MedicalTechFab
@@ -493,6 +529,12 @@
   - type: StealTarget
     stealGroup: MedicalTechFabCircuitboard
   - type: OreSiloClient
+  # SS220 Add silo linking in mapping begin
+  - type: DeviceNetwork
+    deviceNetId: Private
+    receiveFrequencyId: OreSilo
+    transmitFrequencyId: OreSilo
+  # SS220 Add silo linking in mapping end
   - type: LatheAnnouncing
     channels: [Medical]
 

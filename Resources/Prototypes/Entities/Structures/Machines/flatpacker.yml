@@ -45,6 +45,12 @@
       - RawMaterial
       - Ingot
   - type: OreSiloClient
+  # SS220 Add silo linking in mapping begin
+  - type: DeviceNetwork
+    deviceNetId: Private
+    receiveFrequencyId: OreSilo
+    transmitFrequencyId: OreSilo
+  # SS220 Add silo linking in mapping end
   - type: AmbientSound
     enabled: false
     volume: 5

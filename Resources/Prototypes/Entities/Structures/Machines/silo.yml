@@ -4,6 +4,13 @@
   name: material silo
   description: An advanced machine, capable of using bluespace technology to transmit materials to nearby machines.
   components:
+  # SS220 Add silo linking in mapping begin
+  - type: DeviceNetwork
+    deviceNetId: Private
+    receiveFrequencyId: OreSilo
+    transmitFrequencyId: OreSilo
+  - type: DeviceList
+  # SS220 Add silo linking in mapping end
   - type: Sprite
     sprite: Structures/Machines/silo.rsi
     snapCardinals: true
@@ -18,7 +25,8 @@
           True: { state: silo_active }
           False: { state: silo }
   - type: OreSilo
-    entireGrid: true # OreSilo works across the entire grid begin
+    entireGrid: true # SS220 OreSilo works across the entire grid begin
+    synchronizeWithDeviceList: true # SS220 Add silo linking in mapping
   - type: MaterialStorage
     whitelist:
       tags:

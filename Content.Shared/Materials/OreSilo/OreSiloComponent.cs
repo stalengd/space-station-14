@@ -32,6 +32,14 @@ public sealed partial class OreSiloComponent : Component
     [DataField, AutoNetworkedField]
     public bool EntireGrid = false;
     // SS220 OreSilo works across the entire grid end
+
+    // SS220 Add silo linking in mapping begin
+    /// <summary>
+    /// Should the <see cref="Clients"/> be synchronized with the <see cref="DeviceNetwork.Components.DeviceListComponent.Devices"/>
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool SynchronizeWithDeviceList = false;
+    // SS220 Add silo linking in mapping end
 }
 
 [Serializable, NetSerializable]

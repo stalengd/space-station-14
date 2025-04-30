@@ -1,4 +1,7 @@
+using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Pinpointer;
+using Content.Shared.DeviceNetwork.Components;
+using Content.Shared.DeviceNetwork.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Materials.OreSilo;
 using Robust.Server.GameStates;
@@ -13,6 +16,7 @@ public sealed class OreSiloSystem : SharedOreSiloSystem
     [Dependency] private readonly NavMapSystem _navMap = default!;
     [Dependency] private readonly PvsOverrideSystem _pvsOverride = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _userInterface = default!;
+    [Dependency] private readonly DeviceListSystem _deviceList = default!; // SS220 Add silo linking in mapping
 
     private const float OreSiloPreloadRangeSquared = 225f; // ~1 screen
 
@@ -20,6 +24,20 @@ public sealed class OreSiloSystem : SharedOreSiloSystem
     private readonly HashSet<(NetEntity, string, string)> _clientInformation = new();
     private readonly HashSet<EntityUid> _silosToAdd = new();
     private readonly HashSet<EntityUid> _silosToRemove = new();
+
+    // SS220 Add silo linking in mapping begin
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<OreSiloComponent, DeviceListUpdateEvent>(OnDeviceListUpdated);
+    }
+
+    private void OnDeviceListUpdated(Entity<OreSiloComponent> entity, ref DeviceListUpdateEvent args)
+    {
+        SynchronizeWithDeviceList(entity, true);
+    }
+    // SS220 Add silo linking in mapping end
 
     protected override void UpdateOreSiloUi(Entity<OreSiloComponent> ent)
     {
@@ -125,4 +143,29 @@ public sealed class OreSiloSystem : SharedOreSiloSystem
             }
         }
     }
+
+    // SS220 Add silo linking in mapping begin
+    protected override void SynchronizeWithDeviceList(Entity<OreSiloComponent> entity, bool? deviceListPriority = null)
+    {
+        if (!entity.Comp.SynchronizeWithDeviceList ||
+            !TryComp<DeviceListComponent>(entity, out var deviceList))
+            return;
+
+        switch (deviceListPriority)
+        {
+            case null:
+                UpdateClientsList(entity, deviceList.Devices, merge: true);
+                _deviceList.UpdateDeviceList(entity, entity.Comp.Clients, merge: true);
+                break;
+
+            case true:
+                UpdateClientsList(entity, deviceList.Devices);
+                break;
+
+            case false:
+                _deviceList.UpdateDeviceList(entity, entity.Comp.Clients);
+                break;
+        }
+    }
+    // SS220 Add silo linking in mapping end
 }

@@ -1,6 +1,7 @@
 using Content.Shared.Power.EntitySystems;
 using JetBrains.Annotations;
 using Robust.Shared.Utility;
+using System.Linq;
 
 namespace Content.Shared.Materials.OreSilo;
 
@@ -15,6 +16,7 @@ public abstract class SharedOreSiloSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
+        SubscribeLocalEvent<OreSiloComponent, MapInitEvent>(OnMapInit); // SS220 Add silo linking in mapping
         SubscribeLocalEvent<OreSiloComponent, ToggleOreSiloClientMessage>(OnToggleOreSiloClient);
         SubscribeLocalEvent<OreSiloComponent, ComponentShutdown>(OnSiloShutdown);
         Subs.BuiEvents<OreSiloComponent>(OreSiloUiKey.Key,
@@ -31,6 +33,13 @@ public abstract class SharedOreSiloSystem : EntitySystem
         _clientQuery = GetEntityQuery<OreSiloClientComponent>();
     }
 
+    // SS220 Add silo linking in mapping begin
+    private void OnMapInit(Entity<OreSiloComponent> entity, ref MapInitEvent args)
+    {
+        SynchronizeWithDeviceList(entity);
+    }
+    // SS220 Add silo linking in mapping end
+
     private void OnToggleOreSiloClient(Entity<OreSiloComponent> ent, ref ToggleOreSiloClientMessage args)
     {
         var client = GetEntity(args.Client);
@@ -40,34 +49,44 @@ public abstract class SharedOreSiloSystem : EntitySystem
 
         if (ent.Comp.Clients.Contains(client)) // remove client
         {
-            clientComp.Silo = null;
-            Dirty(client, clientComp);
-            ent.Comp.Clients.Remove(client);
-            Dirty(ent);
+            // SS220 Add silo linking in mapping begin
+            //clientComp.Silo = null;
+            //Dirty(client, clientComp);
+            //ent.Comp.Clients.Remove(client);
+            //Dirty(ent);
 
-            UpdateOreSiloUi(ent);
+            //UpdateOreSiloUi(ent);
+
+            RemoveClient(ent, (client, clientComp));
+            // SS220 Add silo linking in mapping end
         }
         else // add client
         {
             if (!CanTransmitMaterials((ent, ent), client))
                 return;
 
-            var clientMats = _materialStorage.GetStoredMaterials(client, true);
-            var inverseMats = new Dictionary<string, int>();
-            foreach (var (mat, amount) in clientMats)
-            {
-                inverseMats.Add(mat, -amount);
-            }
-            _materialStorage.TryChangeMaterialAmount(client, inverseMats, localOnly: true);
-            _materialStorage.TryChangeMaterialAmount(ent.Owner, clientMats);
+            // SS220 Add silo linking in mapping begin
+            //var clientMats = _materialStorage.GetStoredMaterials(client, true);
+            //var inverseMats = new Dictionary<string, int>();
+            //foreach (var (mat, amount) in clientMats)
+            //{
+            //    inverseMats.Add(mat, -amount);
+            //}
+            //_materialStorage.TryChangeMaterialAmount(client, inverseMats, localOnly: true);
+            //_materialStorage.TryChangeMaterialAmount(ent.Owner, clientMats);
 
-            ent.Comp.Clients.Add(client);
-            Dirty(ent);
-            clientComp.Silo = ent;
-            Dirty(client, clientComp);
+            //ent.Comp.Clients.Add(client);
+            //Dirty(ent);
+            //clientComp.Silo = ent;
+            //Dirty(client, clientComp);
 
-            UpdateOreSiloUi(ent);
+            //UpdateOreSiloUi(ent);
+
+            AddClient(ent, (client, clientComp));
+            // SS220 Add silo linking in mapping end
         }
+
+        SynchronizeWithDeviceList(ent, false); // SS220 Add silo linking in mapping
     }
 
     private void OnBoundUIOpened(Entity<OreSiloComponent> ent, ref BoundUIOpenedEvent args)
@@ -143,6 +162,7 @@ public abstract class SharedOreSiloSystem : EntitySystem
         silo.Clients.Remove(ent);
         Dirty(ent.Comp.Silo.Value, silo);
         UpdateOreSiloUi((ent.Comp.Silo.Value, silo));
+        SynchronizeWithDeviceList((ent.Comp.Silo.Value, silo), false); // SS220 Add silo linking in mapping
     }
 
     /// <summary>
@@ -166,4 +186,66 @@ public abstract class SharedOreSiloSystem : EntitySystem
 
         return true;
     }
+
+    // SS220 Add silo linking in mapping begin
+    protected virtual void SynchronizeWithDeviceList(Entity<OreSiloComponent> entity, bool? deviceNetworkPriority = null)
+    {
+    }
+
+    public void AddClient(Entity<OreSiloComponent> silo, Entity<OreSiloClientComponent> client)
+    {
+        var clientMats = _materialStorage.GetStoredMaterials(client.Owner, true);
+        var inverseMats = new Dictionary<string, int>();
+        foreach (var (mat, amount) in clientMats)
+        {
+            inverseMats.Add(mat, -amount);
+        }
+        _materialStorage.TryChangeMaterialAmount(client.Owner, inverseMats, localOnly: true);
+        _materialStorage.TryChangeMaterialAmount(silo.Owner, clientMats);
+
+        silo.Comp.Clients.Add(client);
+        Dirty(silo);
+        client.Comp.Silo = silo;
+        Dirty(client);
+
+        UpdateOreSiloUi(silo);
+    }
+
+    public void RemoveClient(Entity<OreSiloComponent> silo, Entity<OreSiloClientComponent> client)
+    {
+        client.Comp.Silo = null;
+        Dirty(client);
+        silo.Comp.Clients.Remove(client);
+        Dirty(silo);
+
+        UpdateOreSiloUi((silo, silo.Comp));
+    }
+
+    public void UpdateClientsList(Entity<OreSiloComponent> entity, IEnumerable<EntityUid> clients, bool merge = false)
+    {
+        var oldClients = entity.Comp.Clients.ToList();
+        var newClients = clients.ToHashSet();
+
+        if (merge)
+            newClients.UnionWith(entity.Comp.Clients);
+
+        foreach (var client in oldClients)
+        {
+            if (newClients.Contains(client) ||
+                !TryComp<OreSiloClientComponent>(client, out var clientComp))
+                continue;
+
+            RemoveClient(entity, (client, clientComp));
+        }
+
+        foreach (var client in newClients)
+        {
+            if (entity.Comp.Clients.Contains(client) ||
+                !TryComp<OreSiloClientComponent>(client, out var clientComp))
+                continue;
+
+            AddClient(entity, (client, clientComp));
+        }
+    }
+    // SS220 Add silo linking in mapping end
 }

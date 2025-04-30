@@ -38,14 +38,14 @@ public sealed class EventManagerSystem : EntitySystem
     [Obsolete("use overload taking EnityTableSelector instead or risk unexpected results")]
     public void RunRandomEvent()
     {
-        // SS220 �������� �� ����������� �������� ������� � ������� �������
+        // SS220 Проверка на отключенные случаные события в текущем пресете
         if (GameTicker.CurrentPreset != null && GameTicker.CurrentPreset.DisableRandomEvents)
         {
             var errStr = Loc.GetString("station-event-system-run-random-event-disablerandevents");
             Log.Error(errStr);
             return;
         }
-        // SS220 �������� �� ����������� �������� ������� � ������� �������
+        // SS220 Проверка на отключенные случаные события в текущем пресете
 
         var randomEvent = PickRandomEvent();
 

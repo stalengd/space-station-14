@@ -898,8 +898,8 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         if (findEnglish)
         {
-            newMessage = string.Empty;
-            newEmoteStr = "�������";
+            emoteStr = "кашляет";
+            return string.Empty;
         }
 
         emoteStr = newEmoteStr;

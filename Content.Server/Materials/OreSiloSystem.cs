@@ -31,7 +31,12 @@ public sealed class OreSiloSystem : SharedOreSiloSystem
         var xform = Transform(ent);
 
         // Sneakily uses override with TComponent parameter
-        _entityLookup.GetEntitiesInRange(xform.Coordinates, ent.Comp.Range, _clientLookup);
+        // SS220 OreSilo works across the entire grid begin
+        if (ent.Comp.EntireGrid && xform.GridUid is { } gridUid)
+            _entityLookup.GetGridEntities(gridUid, _clientLookup);
+        else
+            _entityLookup.GetEntitiesInRange(xform.Coordinates, ent.Comp.Range, _clientLookup);
+        // SS220 OreSilo works across the entire grid end
 
         foreach (var client in _clientLookup)
         {

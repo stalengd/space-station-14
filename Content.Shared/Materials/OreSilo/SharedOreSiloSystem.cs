@@ -160,7 +160,8 @@ public abstract class SharedOreSiloSystem : EntitySystem
         if (_transform.GetGrid(client) != _transform.GetGrid(silo.Owner))
             return false;
 
-        if (!_transform.InRange((silo.Owner, silo.Comp2), client, silo.Comp1.Range))
+        if (!silo.Comp1.EntireGrid && // SS220 OreSilo works across the entire grid
+            !_transform.InRange((silo.Owner, silo.Comp2), client, silo.Comp1.Range))
             return false;
 
         return true;

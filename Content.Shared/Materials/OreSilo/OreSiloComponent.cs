@@ -24,6 +24,14 @@ public sealed partial class OreSiloComponent : Component
     /// </remarks>
     [DataField, AutoNetworkedField]
     public float Range = 20f;
+
+    // SS220 OreSilo works across the entire grid begin
+    /// <summary>
+    /// If it true, then instead of the <see cref="Range"/>, it will select the entities from the entire grid.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool EntireGrid = false;
+    // SS220 OreSilo works across the entire grid end
 }
 
 [Serializable, NetSerializable]

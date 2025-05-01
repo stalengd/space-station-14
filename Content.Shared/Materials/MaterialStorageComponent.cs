@@ -62,6 +62,14 @@ public sealed partial class MaterialStorageComponent : Component
     [DataField]
     public SoundSpecifier? InsertingSound;
 
+    // SS220 Add access check for material eject begin
+    /// <summary>
+    /// Sound to play when denied access to the turret.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier AccessDeniedSound = new SoundPathSpecifier("/Audio/Machines/custom_deny.ogg");
+    // SS220 Add access check for material eject end
+
     /// <summary>
     /// How long the inserting animation will play
     /// </summary>

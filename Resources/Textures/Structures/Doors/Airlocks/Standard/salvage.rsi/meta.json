@@ -20,6 +20,10 @@
             "name": "closed_unlit"
         },
         {
+            "name": "open_unlit",
+            "directions": 4
+        },
+        {
             "name": "closing",
             "delays": [
                 [

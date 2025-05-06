@@ -40,3 +40,4 @@ Make sure to take this Changelog template out of the comment block in order for 
 - remove: Убрано веселье!
 - tweak: Изменено веселье!
 - fix: Исправлено веселье!
+-->
